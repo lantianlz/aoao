@@ -1,0 +1,40 @@
+{% extends "message/base_message.html" %}
+
+{% load custom_tags %}
+{% load custom_filters %}
+
+{% block title %}收到的赞{% endblock %}
+
+{% block css %}{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+	
+});
+</script>
+{% endblock %}
+
+{% block left %}
+{% if likes %}
+<ul class="list-group">
+	{% for like in likes %}
+	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
+		<a href="{{like.from_user.get_url}}">
+			<img class="img-rounded avatar-35 pa" alt="{{like.from_user.nick}}" src="{{like.from_user.get_avatar_65}}">
+		</a>
+		<div class="pl-45">
+			<div>
+				用户<a href="{{like.from_user.get_url}}" class="co5 pr-5 pl-5">{{like.from_user.nick}}</a>赞了你的游记
+				<a href="{{like.journey.get_url}}" class="co5 pr-5 pl-5">{{like.journey.title}}</a>
+			</div>
+			<div class="co2 f12 pt-5">{{like.create_time}}</div>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+{{page_params|paging:request}}
+{% else %}
+<div class="blank10"></div>
+<div class="alert alert-info popmsg box-shadow-224 border-radius-0">暂无</div>
+{% endif %}
+{% endblock left %}
