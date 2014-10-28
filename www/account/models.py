@@ -115,7 +115,7 @@ class UserChangeLog(models.Model):
 
 
 class LastActive(models.Model):
-    last_active_source_choices = ((0, u'web页面'), (1, u'手机app'))
+    last_active_source_choices = ((0, u'web页面'), (1, u'手机app'), (2, u"微信端"))
 
     user_id = models.CharField(max_length=32, unique=True)
     ip = models.CharField(max_length=32, null=True)
@@ -124,6 +124,13 @@ class LastActive(models.Model):
 
     class Meta:
         ordering = ["-last_active_time"]
+
+class ActiveDay(models.Model):
+    user_id = models.CharField(max_length=32, unique=True)
+    active_day = models.DateField(db_index=True)
+
+    class Meta:
+        unique_together = [("user_id", "active_day"),]
 
 
 class BlackList(models.Model):
@@ -150,8 +157,9 @@ class ExternalToken(models.Model):
     user_id = models.CharField(max_length=32, db_index=True)
     source = models.CharField(max_length=16, db_index=True, choices=source_choices)
     access_token = models.CharField(max_length=128, db_index=True)
-    external_user_id = models.CharField(max_length=64, db_index=True)
     refresh_token = models.CharField(max_length=128, db_index=True)
+    external_user_id = models.CharField(max_length=64, db_index=True)
+    union_id = models.CharField(max_length=64, null=True)   #供微信多个公众号使用
     nick = models.CharField(max_length=64, null=True)
     user_url = models.CharField(max_length=128, null=True)
     expire_time = models.DateTimeField()
@@ -189,11 +197,4 @@ class InvitationUser(models.Model):
         ordering = ["-id"]
 
 
-class RecommendUser(models.Model):
-    user_id = models.CharField(max_length=32, unique=True)
-    sort_num = models.IntegerField(default=0, db_index=True)
-    create_time = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["-sort_num", "id"]
 """
