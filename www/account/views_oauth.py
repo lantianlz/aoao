@@ -79,3 +79,39 @@ def oauth_sina(request):
             return render_to_response('account/login.html', locals(), context_instance=RequestContext(request))
 
         return HttpResponse(u'code is %s' % code)
+
+
+def oauth_weixin(request):
+    from www.misc.oauth2.weixin import Consumer
+    client = Consumer()
+
+    code = request.REQUEST.get('code')
+    if not code:
+        print client.authorize()
+        return HttpResponseRedirect(client.authorize())
+    else:
+        # 获取access_token
+        dict_result = client.token(code)
+        access_token = dict_result.get('access_token')
+        print access_token
+
+        # 获取用户信息
+        # openid = client.get_openid(access_token)
+        # user_info = client.request_api(access_token, '/user/get_user_info', data=dict(access_token=access_token, openid=openid))
+        # user_info = format_external_user_info(user_info, 'qq')
+        # flag, result = UserBase().get_user_by_external_info(source='qq', access_token=access_token, external_user_id=openid,
+        #                                                     refresh_token=dict_result['refresh_token'], nick=user_info['nick'],
+        #                                                     ip=utils.get_clientip(request), expire_time=dict_result['expires_in'],
+        #                                                     user_url=user_info['url'], gender=user_info['gender'])
+        # if flag:
+        #     user = result
+        #     user.backend = 'www.middleware.user_backend.AuthBackend'
+        #     auth.login(request, user)
+        #     next_url = request.session.get('next_url') or '/'
+        #     request.session.update(dict(next_url=''))
+        #     return HttpResponseRedirect(next_url)
+        # else:
+        #     error_msg = result or u'qq账号登陆失败，请重试'
+        #     return render_to_response('account/login.html', locals(), context_instance=RequestContext(request))
+
+        return HttpResponse(u'code is %s\n\n%s' % (code, str(access_token)))
