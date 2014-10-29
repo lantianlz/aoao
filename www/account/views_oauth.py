@@ -82,18 +82,19 @@ def oauth_sina(request):
 
 
 def oauth_weixin(request):
+    import logging
     from www.misc.oauth2.weixin import Consumer
     client = Consumer()
 
     code = request.REQUEST.get('code')
     if not code:
-        print client.authorize()
+        logging.error(client.authorize())
         return HttpResponseRedirect(client.authorize())
     else:
         # 获取access_token
         dict_result = client.token(code)
         access_token = dict_result.get('access_token')
-        print access_token
+        logging.error(access_token)
 
         # 获取用户信息
         # openid = client.get_openid(access_token)
