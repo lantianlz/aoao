@@ -34,8 +34,8 @@ class Consumer(object):
                                 redirect_uri=self.redirect_uri, state=self.state)
 
     def authorize(self):
-        return ('https://open.weixin.qq.com/connect/oauth2/authorize?response_type=%(response_type)s&appid=%(appid)s'
-                '&redirect_uri=%(redirect_uri)s&state=%(state)s&scope=snsapi_base#wechat_redirect') % self.dict_format
+        return ('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s'
+                '&redirect_uri=%(redirect_uri)s&response_type=%(response_type)s&scope=snsapi_base&state=%(state)s#wechat_redirect') % self.dict_format
 
     def token(self, code):
         self.dict_format.update(dict(code=code))
