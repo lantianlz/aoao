@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 
                        url(r'^$', 'www.account.views.login'),
                        url(r'^account/', include('www.account.urls')),
+                       url(r'^weixin/', include('www.weixin.urls')),
 
                        # url(r'^journey/', include('www.journey.urls')),
                        # url(r'^activity/', include('www.activity.urls')),
