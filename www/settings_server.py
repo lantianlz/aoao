@@ -29,7 +29,7 @@ EMAIL_HOST_USER = 'service@aoaoxc.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_HOST = 'smtp.exmail.qq.com'
 EMAIL_PORT = '25'
-NOTIFICATION_EMAIL = ['web@zhixuan.com']
+NOTIFICATION_EMAIL = ['web@aoaoxc.com']
 
 if LOCAL_FLAG:
     DB_USER, DB_PWD, DB_HOST = 'root', '***', ''
