@@ -16,7 +16,8 @@ urlpatterns = patterns('',
                        url(r'^save_img$', 'www.misc.views.save_img'),
                        url(r'^crop_img$', 'www.misc.views.crop_img'),
 
-                       url(r'^$', 'www.account.views.login'),
+                       url(r'^$', 'www.car_wash.views.index'),
+                       url(r'^car_wash/', include('www.car_wash.urls')),
                        url(r'^account/', include('www.account.urls')),
 
                        # url(r'^journey/', include('www.journey.urls')),
