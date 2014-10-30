@@ -1,0 +1,35 @@
+{
+    "button": [
+        {
+            "type": "view", 
+            "name": "立即洗车", 
+            "url": "http://192.168.0.103:8002/account/oauth/weixin"
+        }, 
+        {
+            "name": "更多", 
+            "sub_button": [
+                {
+                    "type": "view", 
+                    "name": "正式环境", 
+                    "url": "http://www.aoaoxc.com/account/oauth/weixin"
+                },
+                {
+                    "type": "view", 
+                    "name": "直接跳转", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
+                }
+            ]
+        }
+    ]
+}
+
+
+
+<xml>
+<ToUserName><![CDATA[gh_4fae99286289]]></ToUserName>
+<FromUserName><![CDATA[o07dat0ujliP84s4GPsLFXOrAcbk]]></FromUserName>
+<CreateTime>1403067969</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[CLICK]]></Event>
+<EventKey><![CDATA[hotest]]></EventKey>
+</xml>

@@ -19,6 +19,7 @@ urlpatterns = patterns('',
                        url(r'^$', 'www.car_wash.views.index'),
                        url(r'^car_wash/', include('www.car_wash.urls')),
                        url(r'^account/', include('www.account.urls')),
+                       url(r'^weixin/', include('www.weixin.urls')),
 
                        # url(r'^journey/', include('www.journey.urls')),
                        # url(r'^activity/', include('www.activity.urls')),
