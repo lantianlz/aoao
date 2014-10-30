@@ -2,21 +2,21 @@
     "button": [
         {
             "type": "view", 
-            "name": "洗车码", 
-            "url": "http://www.aoaoxc.com/account/oauth/weixin"
+            "name": "立即洗车", 
+            "url": "http://192.168.0.103:8002/account/oauth/weixin"
         }, 
         {
             "name": "更多", 
             "sub_button": [
                 {
                     "type": "view", 
-                    "name": "每日精选", 
-                    "url": "http://www.zhixuan.com/important"
+                    "name": "正式环境", 
+                    "url": "http://www.aoaoxc.com/account/oauth/weixin"
                 },
                 {
                     "type": "view", 
-                    "name": "最新问答", 
-                    "url": "http://www.zhixuan.com/question"
+                    "name": "直接跳转", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
                 }
             ]
         }

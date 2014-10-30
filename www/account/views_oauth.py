@@ -94,7 +94,7 @@ def oauth_weixin(request):
         # 获取access_token
         dict_result = client.token(code)
         access_token = dict_result.get('access_token')
-        logging.error(access_token)
+        logging.error(dict_result)
 
         # 获取用户信息
         # openid = client.get_openid(access_token)
@@ -115,4 +115,4 @@ def oauth_weixin(request):
         #     error_msg = result or u'qq账号登陆失败，请重试'
         #     return render_to_response('account/login.html', locals(), context_instance=RequestContext(request))
 
-        return HttpResponse(u'code is %s\n\n%s' % (code, str(access_token)))
+        return HttpResponse(u'code is %s' % (code, ))
