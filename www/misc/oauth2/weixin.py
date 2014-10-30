@@ -16,7 +16,7 @@ import logging
 CLIENT_ID = 'wx0d227d4f9b19658a'
 CLIENT_SECRET = '513bdaf5b6022df4913f4cb5543fa688'
 API_URL = 'https://api.weixin.qq.com'
-REDIRECT_URI = '%s/account/oauth/weixin' % (settings.MAIN_DOMAIN if settings.LOCAL_FLAG == False else "http://192.168.0.102:8002")
+REDIRECT_URI = '%s/account/oauth/weixin' % (settings.MAIN_DOMAIN if settings.LOCAL_FLAG == False else "http://192.168.0.103:8002")
 
 
 class Consumer(object):
@@ -60,19 +60,10 @@ class Consumer(object):
         else:
             rep = requests.post(request_url, data=data, timeout=30)
         content = rep.content
-        # print request_url
-        # print content
         try:
             return json.loads(content)
         except:
             return content
 
     def get_openid(self, access_token):
-        content = self.request_api(access_token, '/oauth2.0/me', data=dict(access_token=access_token))
-        openid = ''
-        if 'openid' in content:
-            re_str = u'"openid":"(.+)"'
-            openids = re.findall(re_str, content)
-            if openids:
-                openid = openids[0]
-        return openid
+        pass

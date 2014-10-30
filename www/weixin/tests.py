@@ -30,7 +30,7 @@ def main():
     # print wb.get_weixin_access_token(app_key="zhixuan_test")
 
     from www.tasks import async_send_email_worker
-    async_send_email_worker.delay('lantian-lz@163.com', title="来自智选", content="邮件发送")
+    async_send_email_worker.delay('lantian-lz@163.com', title="来自嗷嗷洗车", content="邮件发送")
 
     from common.utils import replace_href_to_open_blank
     body = """
@@ -40,7 +40,7 @@ def main():
     <p><img src="http://img0.zhixuan.com/editor_28e65d6205cd11e485ab00163e003240" data-ke-src="http://img0.zhixuan.com/editor_28e65d6205cd11e485ab00163e003240" alt="大智慧" title="大智慧" class="pointer" align="" height="93" width="206"> </p>
     <p><strong>通达信</strong>下载地址：<a href="http://www.tdx.com.cn/soft/vip" data-ke-src="http://www.tdx.com.cn/soft/vip" target="_blank">http://www.tdx.com.cn/soft/vip</a> </p>
     """
-    print replace_href_to_open_blank(body)
+    # print replace_href_to_open_blank(body)
 
 if __name__ == '__main__':
     main()

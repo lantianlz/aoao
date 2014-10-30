@@ -91,7 +91,7 @@ class WexinBase(object):
         # content = (u'欢迎关注智选，这里有最新鲜的投资资讯、最睿智的投资问答。\n'
         #            u'点击底部菜单立即开启智选之旅，智选定不负你的关注')
         content = (u'嗷嗷洗车\n'
-                   u'让洗车嗷嗷简单\n'
+                   u'让洗车嗷嗷简单'
                    )
         return self.get_base_content_response(to_user, from_user,
                                               content=content)

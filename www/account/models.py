@@ -43,6 +43,7 @@ class Profile(models.Model):
     domain = models.CharField(max_length=32, unique=True, null=True)
     birthday = models.DateField(default='2000-01-01', db_index=True)
     gender = models.IntegerField(verbose_name=u'性别', default=0, choices=gender_choices, db_index=True)
+    city_id = models.IntegerField(default=0, db_index=True)
     avatar = models.CharField(verbose_name=u'头像', max_length=256, default='')
     email_verified = models.BooleanField(verbose_name=u'邮箱是否验证过', default=False)
     mobile_verified = models.BooleanField(verbose_name=u'手机是否验证过', default=False)
@@ -153,12 +154,12 @@ class UserCount(models.Model):
 
 
 class ExternalToken(models.Model):
-    source_choices = ((u"qq", u"QQ"), (u"sina", u"新浪微博"))
+    source_choices = ((u"qq", u"QQ"), (u"sina", u"新浪微博"), (u"weixin", u"微信"))
 
     user_id = models.CharField(max_length=32, db_index=True)
     source = models.CharField(max_length=16, db_index=True, choices=source_choices)
-    access_token = models.CharField(max_length=512, db_index=True)
-    refresh_token = models.CharField(max_length=512, db_index=True)
+    access_token = models.CharField(max_length=255, db_index=True)
+    refresh_token = models.CharField(max_length=255, null=True)
     external_user_id = models.CharField(max_length=64, db_index=True)
     union_id = models.CharField(max_length=64, null=True)  # 供微信多个公众号使用
     nick = models.CharField(max_length=64, null=True)

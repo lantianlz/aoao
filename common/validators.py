@@ -33,14 +33,15 @@ def vnick(value, min_len=2, max_len=12, check_ban=True):
     @attention: 验证昵称
     """
     if check_ban:
-        ban_keywords = [u'测试', u'test', u'开户', u'佣金', u'手续费']
+        ban_keywords = [u'测试', u'test', u'嗷嗷']
         for key in ban_keywords:
             if key in value:
                 raise VerifyError, u"昵称不能含有关键字 %s ！" % key
 
-    re_str = u'^[\w\-\_\u4e00-\u9fa5]{%s,%s}$' % (min_len, max_len)
-    if not re.match(re_str, value):
-        raise VerifyError, u"昵称只能是%s~%s位中文、字母、数字、下划线或减号！" % (min_len, max_len)
+    if not value.startswith("weixin_"):
+        re_str = u'^[\w\-\_\u4e00-\u9fa5]{%s,%s}$' % (min_len, max_len)
+        if not re.match(re_str, value):
+            raise VerifyError, u"昵称只能是%s~%s位中文、字母、数字、下划线或减号！" % (min_len, max_len)
 
 
 def vpassword(value):

@@ -21,11 +21,6 @@ urlpatterns = patterns('',
                        url(r'^account/', include('www.account.urls')),
                        url(r'^weixin/', include('www.weixin.urls')),
 
-                       # url(r'^journey/', include('www.journey.urls')),
-                       # url(r'^activity/', include('www.activity.urls')),
-                       # url(r'^sight/', include('www.sight.urls')),
-                       # url(r'^answer/', include('www.answer.urls')),
-                       # url(r'^message/', include('www.message.urls')),
                        # url(r'^admin/', include('www.admin.urls')),
 
                        url(r'^n/(?P<nick>.*)$', 'www.account.views.get_user_by_nick'),
