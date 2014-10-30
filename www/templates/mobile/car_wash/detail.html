@@ -5,12 +5,47 @@
 {% block container %}
 
 <div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32">
-	<div class="col-xs-3 text-left pl-5"><a href="/"><i class="fa fa-angle-left pr-3"></i>返回</a></div>
+	<div class="col-xs-3 text-left pl-5"><a class="go-back"><i class="fa fa-angle-left pr-3"></i>返回</a></div>
 	<div class="col-xs-6">华胜洗车行(高新店)</div>
 	<div class="col-xs-3"></div>
 </div>
 <div class="row pt-30 pb-50">
-	<img src="{{MEDIA_URL}}img/xch1.jpg" class="w h">
+	<!-- <img src="{{MEDIA_URL}}img/xch1.jpg" class="w h"> -->
+
+	<div id="carousel-example-generic" class="carousel slide mt-15" data-ride="carousel">
+	    <ol class="carousel-indicators">
+	        
+	        <li class="" data-slide-to="0" data-target="#carousel-example-generic"></li>
+	        
+	        <li class="" data-slide-to="1" data-target="#carousel-example-generic"></li>
+	        
+	        <li class="active" data-slide-to="2" data-target="#carousel-example-generic"></li>
+	        
+	    </ol>
+	    <div class="carousel-inner" role="listbox">
+	        
+	        <div class="item">
+	            <img class="w h" src="{{MEDIA_URL}}img/xch1.jpg">
+	        </div>
+	        
+	        <div class="item">
+	           	<img class="w h" src="{{MEDIA_URL}}img/xch1.jpg">
+	        </div>
+	        
+	        <div class="item active">
+	            <img class="w h" src="{{MEDIA_URL}}img/xch1.jpg">
+	        </div>
+	        
+	    </div>
+	    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+	        <span class="fa fa-chevron-left pa" style="top: 50%;"></span>
+	        <span class="sr-only">Previous</span>
+	    </a>
+	    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+	        <span class="fa fa-chevron-right pa" style="top: 50%;"></span>
+	        <span class="sr-only">Next</span>
+	    </a>
+	</div>
 
 	<div class="bgc-ffffff mt-15 pl-5">
 		<div class="text-danger fb f15 pt-10 pb-10 pl-5 border-bottom bdc-e6e6e6">
@@ -33,7 +68,7 @@
 		</div>
 		<div class="pt-3 pb-3 pr">
 			<i class="pa fa fa-phone pt-3 pl-3 co1"></i>
-			<span class="pl-25">电话: 400101330</span>
+			<div class="pl-25">电话: <a href="tel:400101330">400101330</a></div>
 		</div>
 		
 	</div>
@@ -43,7 +78,7 @@
 
 {% block nav %}
 	<ul class="list-inline row mr-0 ml-0 mb-0 h50 w pf bgc-f8f8f8 border-1 bdc-e6e6e6" style="bottom: 0;">
-		<li class="col-xs-6">
+		<li class="col-xs-4">
 			<div class="text-center">
 				<i class="fa fa-rmb f12 co1"></i><span class="co2 f18 fb">15</span>
 				<i class="fa fa-rmb f14 line-through co1"></i><span class="f14 line-through co1">30</span>
@@ -52,8 +87,14 @@
 				5座轿车，特惠价
 			</div>
 		</li>
-		<li class="col-xs-6">
-			<button type="button" class="btn btn-danger btn-lg mt-5 pt-5 btn-block">购买</button>
+		<li class="col-xs-4 pt-10">
+			<select class="input-sm">
+				<option value="0">5座轿车</option>
+				<option value="1">SUV或7座</option>
+			</select>
+		</li>
+		<li class="col-xs-4 pt-10">
+			<button type="button" class="btn btn-danger btn-sm btn-block pl-5 pr-5">购买</button>
 		</li>
 	</ul>
 	{% endblock %}

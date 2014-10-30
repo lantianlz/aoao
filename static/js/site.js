@@ -612,4 +612,8 @@ $(document).ready(function(){
         alert(e);
     }
 
+    $('.go-back').bind('click', function(){
+        history.go(-1);
+    });
+
 });
