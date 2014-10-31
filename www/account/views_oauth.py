@@ -93,13 +93,13 @@ def oauth_weixin(request):
 
     code = request.REQUEST.get('code')
     if not code:
-        logging.error(client.authorize())
+        # logging.error(client.authorize())
         return HttpResponseRedirect(client.authorize())
     else:
         # 获取access_token
         dict_result = client.token(code)
         access_token = dict_result.get('access_token')
-        logging.error(dict_result)
+        # logging.error(dict_result)
 
         # 获取用户信息
         openid = dict_result.get("openid")

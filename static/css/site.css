@@ -149,6 +149,14 @@ body {
 .w350{width: 350px;}
 .min-w500{min-width: 500px;}
 
+.blank0 {height:0;clear:both;font-size:0;overflow:hidden;}
+.blank5 {height:5px;clear:both;font-size:0;overflow:hidden;}
+.blank10 {height:10px;clear:both;font-size:0;overflow:hidden;}
+.blank15 {height:15px;clear:both;font-size:0;overflow:hidden;}
+.blank20 {height:20px;clear:both;font-size:0;overflow:hidden;}
+.blank30 {height:30px;clear:both;font-size:0;overflow:hidden;}
+.blank40 {height:40px;clear:both;font-size:0;overflow:hidden;}
+
 .avatar-25{
 	width: 25px;
 	height: 25px;
