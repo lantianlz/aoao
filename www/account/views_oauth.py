@@ -96,6 +96,8 @@ def oauth_weixin(request):
         # logging.error(client.authorize())
         return HttpResponseRedirect(client.authorize())
     else:
+        weixin_state = request.GET.get("state")
+
         # 获取access_token
         dict_result = client.token(code)
         access_token = dict_result.get('access_token')
@@ -113,8 +115,12 @@ def oauth_weixin(request):
             user = result
             user.backend = 'www.middleware.user_backend.AuthBackend'
             auth.login(request, user)
-            next_url = request.session.get('next_url') or '/'
-            request.session.update(dict(next_url=''))
+
+            dict_next = {"home": "/", "wash_code": ""}
+            # next_url = request.session.get('next_url') or '/'
+            # request.session.update(dict(next_url=''))
+            next_url = dict_next.get(weixin_state) or "/"
+
             return HttpResponseRedirect(next_url)
         else:
             error_msg = result or u'微信登陆失败，请重试'

@@ -27,7 +27,7 @@ class Consumer(object):
         self.api_url = API_URL
         self.response_type = response_type
         self.redirect_uri = urllib.quote_plus(REDIRECT_URI)
-        self.state = 'aoaoxc_state'
+        self.state = 'home'
         self.grant_type = 'authorization_code'
         self.dict_format = dict(appid=self.client_id, client_secret=self.client_secret,
                                 response_type=self.response_type, api_url=self.api_url, grant_type=self.grant_type,

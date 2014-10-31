@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.6.17)
 # Database: www_aoaoxc
-# Generation Time: 2014-10-31 12:22:50 +0000
+# Generation Time: 2014-10-31 12:51:50 +0000
 # ************************************************************
 
 
@@ -22,6 +22,8 @@
 
 # Dump of table city_city
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `city_city`;
 
 CREATE TABLE `city_city` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
