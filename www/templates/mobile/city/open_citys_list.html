@@ -5,26 +5,21 @@
 {% block container %}
 <div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32">
 	<div class="col-xs-3 text-left pl-5"><a class="go-back"><i class="fa fa-angle-left pr-3"></i>返回</a></div>
-	<div class="col-xs-6">选择省份</div>
+	<div class="col-xs-6">开放城市</div>
 	<div class="col-xs-3"></div>
 </div>
 
 <div class="row pt-30 pb-50">
 	<ul class="list-group pt-10">
-		<a href="/city/province/1" class="list-group-item">
-			北京市
+		{% for city in citys %}
+		<a href="javascript:void(0)" class="list-group-item">
+			{{city.city}}
 		</a>
-		<a href="/city/province/2" class="list-group-item">
-			四川省
-		</a>
-		<a href="/city/province/3" class="list-group-item">
-			湖北省
-		</a>
-		<a href="/city/province/3" class="list-group-item">
-			广东省
-		</a>
-		<a href="/city/province/3" class="list-group-item">
-			西藏自治区
+		{% endfor %}
+	</ul>
+	<ul class="list-group">
+		<a href="/city/provinces_list" class="list-group-item">
+			其他城市
 		</a>
 	</ul>
 </div>

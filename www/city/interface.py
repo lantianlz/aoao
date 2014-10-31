@@ -29,6 +29,9 @@ class CityBase(object):
     def get_all_districts(self):
         return City.objects.filter(location_type=3)
 
+    def get_all_show_citys(self):
+        return City.objects.filter(location_type=2, is_show=True)
+
     def get_all_city_group_by_province(self):
         data = []
         areas = self.get_all_areas()
@@ -44,8 +47,11 @@ class CityBase(object):
             data.append([area, data_citys])
         return data
 
-    def get_citys_by_province(self, province_id):
-        return self.get_all_citys().filter(province=province_id)
+    def get_citys_by_province(self, province_id, is_show=None):
+        ps = dict(province=province_id)
+        if is_show is not None:
+            ps.update(dict(is_show=is_show))
+        return self.get_all_citys().filter(**ps)
 
     def get_city_by_pinyin_abbr(self, pinyin_abbr):
         if pinyin_abbr:
