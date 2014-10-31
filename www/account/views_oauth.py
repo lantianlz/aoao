@@ -99,7 +99,7 @@ def oauth_weixin(request):
         # 获取access_token
         dict_result = client.token(code)
         access_token = dict_result.get('access_token')
-        logging.error(dict_result)
+        # logging.error(dict_result)
 
         # 获取用户信息
         openid = dict_result.get("openid")
