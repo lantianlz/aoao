@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'www.custom_tags',
     'www.account',
     'www.message',
+    'www.city',
     'www.admin',
 )
 

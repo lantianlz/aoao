@@ -13,7 +13,7 @@ from www.misc import consts
 
 
 dict_err = {
-    60100: u'暂无绑定的设备，请取消关注公众号后重新扫描二维码',
+    70100: u'暂无绑定的设备，请取消关注公众号后重新扫描二维码',
 }
 dict_err.update(consts.G_DICT_ERROR)
 

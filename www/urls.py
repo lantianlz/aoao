@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^car_wash/', include('www.car_wash.urls')),
                        url(r'^account/', include('www.account.urls')),
                        url(r'^weixin/', include('www.weixin.urls')),
+                       url(r'^city/', include('www.city.urls')),
 
                        # url(r'^admin/', include('www.admin.urls')),
 
