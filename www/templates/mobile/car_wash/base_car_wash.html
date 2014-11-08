@@ -47,8 +47,8 @@ body{
 				<span class="inline-block w f13">洗车码</span>
 			</a>
 		</li>
-		<li class="col-xs-3">
-			<a href="/" class="w inline-block h50 text-center co1">
+		<li class="col-xs-3 {% if 'coupon' in request.path %}active{% endif %}">
+			<a href="/car_wash/coupon" class="w inline-block h50 text-center co1">
 				<i class="fa fa-rmb pt-5 f20"></i>
 				<span class="inline-block w f13">优惠券</span>
 			</a>
