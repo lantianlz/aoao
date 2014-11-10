@@ -26,6 +26,26 @@ def order_detail(request, order_detail_id=None, template_name="mobile/car_wash/o
 	return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def coupon(request, province_id=None, template_name='mobile/car_wash/coupon.html'):
+def coupon(request, template_name='mobile/car_wash/coupon.html'):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def account(request, template_name='mobile/car_wash/account.html'):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def record_deal(request, template_name='mobile/car_wash/record_deal.html'):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def about(request, template_name='mobile/car_wash/about.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))

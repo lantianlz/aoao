@@ -17,11 +17,13 @@ body{
 }
 
 .list-group-item:first-child{
-	border-radius: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
 }
 
 .list-group-item:last-child{
-	border-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
 }
 
 .active a{
@@ -53,8 +55,8 @@ body{
 				<span class="inline-block w f13">优惠券</span>
 			</a>
 		</li>
-		<li class="col-xs-3">
-			<a href="/" class="w inline-block h50 text-center co1">
+		<li class="col-xs-3 {% if 'account' in request.path %}active{% endif %}">
+			<a href="/car_wash/account" class="w inline-block h50 text-center co1">
 				<i class="fa fa-user pt-5 f20"></i>
 				<span class="inline-block w f13">账户</span>
 			</a>

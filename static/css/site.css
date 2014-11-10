@@ -31,9 +31,14 @@ body {
 .f25{font-size: 25px;}
 .f30{font-size: 30px;}
 .f40{font-size: 40px;}
+.f50{font-size: 50px;}
+.f70{font-size: 70px;}
+.f75{font-size: 75px;}
+.f80{font-size: 80px;}
 
 .line-height-25{line-height: 25px;}
 .line-height-32{line-height: 32px;}
+.line-height-42{line-height: 42px;}
 .line-height-70{line-height: 70px;}
 
 .co1{color: #919191;}
@@ -41,8 +46,9 @@ body {
 .co3{color: #aaaaaa;}
 .co4{color: #FDD147;}
 .co5{color: #ffffff;}
-.co6{color: #65c3ed;}
-.co7{color: #222222;}
+.co6{color: #65c3ed;}	/*蓝色*/
+.co7{color: #222222;} 
+.co8{color: #EF8A55;} 	/*优惠券码*/
 
 .mr-0{margin-right: 0px;}
 .mr-10{margin-right: 10px;}
@@ -72,6 +78,7 @@ body {
 .pt-25{padding-top: 25px;}
 .pt-30{padding-top: 30px;}
 .pt-40{padding-top: 40px;}
+.pt-45{padding-top: 45px;}
 .pt-50{padding-top: 50px;}
 .pt-55{padding-top: 55px;}
 .pl-0{padding-left: 0;}
@@ -141,10 +148,11 @@ body {
 .bdc-999999{border-color: #999999;}
 .bdc-65c3ed{border-color: #65c3ed;}
 
-.bd-t-l-2{border-top-left-radius: 2px;}
-.bd-t-r-2{border-top-right-radius: 2px;}
-.bd-b-l-2{border-bottom-left-radius: 2px;}
-.bd-b-r-2{border-bottom-right-radius: 2px;}
+.bdr-4{border-radius: 4px;}
+.bdr-t-l-2{border-top-left-radius: 2px;}
+.bdr-t-r-2{border-top-right-radius: 2px;}
+.bdr-b-l-2{border-bottom-left-radius: 2px;}
+.bdr-b-r-2{border-bottom-right-radius: 2px;}
 
 .pa{position: absolute;}
 .pr{position: relative;}

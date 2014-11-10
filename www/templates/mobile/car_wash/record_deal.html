@@ -1,0 +1,49 @@
+{% extends "mobile/car_wash/base_car_wash.html" %}
+
+{% block title_all %}嗷嗷洗车{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.list-group-item:first-child{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.list-group-item:last-child{
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32">
+	<div class="col-xs-3 text-left pl-15"><a class="go-back f15"><i class="fa f20 fa-angle-left pr-3"></i>返回</a></div>
+	<div class="col-xs-6">充值记录</div>
+	<div class="col-xs-3"></div>
+</div>
+
+<ul class="list-group pt-50 pb-50 pl-15 pr-15">
+	<li class="list-group-item row">
+		<div class="col-xs-7 pl-0">
+			<div class="f15">建设银行-转入</div>
+			<div class="f12 co3 pt-5">2014-11-11 15:23:45</div>
+		</div>
+		<div class="col-xs-5 pr-0 co6 text-right f20 line-height-42">+50.00</div>
+	</li>
+	<li class="list-group-item row">
+		<div class="col-xs-7 pl-0">
+			<div class="f15">洗车码购买-转出</div>
+			<div class="f12 co3 pt-5">2014-11-11 15:23:45</div>
+		</div>
+		<div class="col-xs-5 pr-0 co2 text-right f20 line-height-42">-30.00</div>
+	</li>
+	<li class="list-group-item row">
+		<div class="col-xs-7 pl-0">
+			<div class="f15">洗车码购买-转出</div>
+			<div class="f12 co3 pt-5">2014-11-11 15:23:45</div>
+		</div>
+		<div class="col-xs-5 pr-0 co2 text-right f20 line-height-42">-30.00</div>
+	</li>
+</ul>
+{% endblock %}

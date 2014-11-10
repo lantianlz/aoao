@@ -1,0 +1,50 @@
+{% extends "mobile/car_wash/base_car_wash.html" %}
+
+{% block title_all %}嗷嗷洗车{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.list-group-item:first-child{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.list-group-item:last-child{
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32">
+	<div class="col-xs-3 text-left pl-15"><a class="go-back f15"><i class="fa f20 fa-angle-left pr-3"></i>返回</a></div>
+	<div class="col-xs-6">关于我们</div>
+	<div class="col-xs-3"></div>
+</div>
+
+<div class="pb-50 pt-50 row pl-15 pr-15">
+	<div class="col-xs-offset-4 col-xs-4 pt-20">
+		<img class="w h" src="{{MEDIA_URL}}img/logo.png">
+	</div>
+	<div class="col-xs-offset-4 col-xs-4 pt-5 text-center f16">
+		<span>嗷嗷洗车</span>
+	</div>
+
+	<div class="col-xs-12 pt-15">
+		<p>欢迎您来到智选。请您仔细阅读以下条款，如果您对本协议的任何条款表示异议，您可以选择不进入智选。当您注册成功，无论是进入智选，还是在智选上发布任何内容（即「内容」），均意味着您（即「用户」）完全接受本协议项下的全部条款。</p>
+		<p>如果不同意智选对本协议相关条款所做的修改，用户有权并应当停止使用智选。如果用户继续使用智选，则视为用户接受智选对本协议相关条款所做的修改。</p>
+	</div>
+
+	<div class="col-xs-12 pt-15 text-center">
+		官方网站: <a href="#">www.aoaoxc.com</a>
+	</div>
+	<div class="col-xs-12 pt-5 text-center">
+		客服电话: 400-568-521
+	</div>
+
+	<div class="col-xs-12 pt-5 text-center">
+		Copyright &copy; 2013 - 2014
+	</div>
+</div>
+{% endblock %}
