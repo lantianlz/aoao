@@ -16,16 +16,25 @@
 </style>
 {% endblock %}
 
+{% block topbar %}{% endblock %}
+
 {% block container %}
 <div class="row pt-0 pb-50">
 	<div class="col-xs-12 pt-15 pl-15 pr-15 ">
 		<div class="row pt-30 pl-0 pr-0 bgc-ffffff border-1 bdc-d0d0d0 bdr-4">
-			<div class="col-xs-offset-1 col-xs-10 co3 f16 pl-0 pr-0">账户余额</div>
+			<div class="col-xs-offset-1 col-xs-10 co3 f14 pl-0 pr-0">账户余额(元)</div>
 			<div class="col-xs-offset-1 col-xs-10 f70 co8 pl-0 pr-0">326.00</div>
 		</div>
 	</div>
 
 	<ul class="list-group col-xs-12 pr-15 pl-15 mt-10 mb-10">
+		<a class="list-group-item bdc-d0d0d0 pr" href="/car_wash/pay">
+			<span class="fa fa-rmb pl-3 pr-3 f16 pa pt-3"></span>
+			<div class="pl-25">
+				<span>充值</span>
+				<span class="pull-right f20 fa fa-angle-right co3"></span>
+			</div>
+		</a>
 		<a class="list-group-item bdc-d0d0d0 pr" href="/car_wash/record_deal">
 			<span class="fa fa-list-alt pr-3 f16 pa pt-3"></span>
 			<div class="pl-25">
@@ -35,7 +44,7 @@
 		</a>
 	</ul>
 	<ul class="list-group col-xs-12 pr-15 pl-15 mt-0 mb-10">
-		<a class="list-group-item bdc-d0d0d0 pr">
+		<a class="list-group-item bdc-d0d0d0 pr" href="/car_wash/setting">
 			<span class="fa fa-gear pr-3 f16 pa pt-3"></span>
 			<div class="pl-25">
 				<span>账户设置</span>
@@ -45,7 +54,7 @@
 	</ul>
 	<ul class="list-group col-xs-12 pr-15 pl-15 mt-0 mb-10">
 		<a class="list-group-item bdc-d0d0d0 pr" href="/car_wash/bind_mobile">
-			<span class="fa fa-mobile pr-3 f20 pa pt-0"></span>
+			<span class="fa fa-mobile pl-3 pr-3 f20 pa pt-0"></span>
 			<div class="pl-25">
 				<span>绑定手机</span>
 				<span class="pull-right f20 fa fa-angle-right co3"></span>

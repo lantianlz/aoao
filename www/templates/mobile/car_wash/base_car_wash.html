@@ -33,8 +33,21 @@ body{
 {% block css %}{% endblock %}
 {% endblock %}
 
+{% block base_js %}
+{% block javascript %}{% endblock %}
+{% endblock %}
+
 {% block base_container %}
+	{% block topbar %}
+	<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32">
+		<div class="col-xs-3 text-left pl-15"><a class="go-back f15"><i class="fa f20 fa-angle-left pr-3"></i>返回</a></div>
+		<div class="col-xs-6">{% block bar_title %}{% endblock %}</div>
+		<div class="col-xs-3"></div>
+	</div>
+	{% endblock %}
+
 	{% block container %}{% endblock %}
+
 	{% block nav %}
 	<ul class="list-inline row mr-0 ml-0 mb-0 h50 w pf bgc-f8f8f8 border-1 bdc-e6e6e6" style="bottom: 0;">
 		<li class="col-xs-3 {% if '/' == request.path %}active{% endif %}">
