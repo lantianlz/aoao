@@ -16,31 +16,45 @@
 </style>
 {% endblock %}
 
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+	// 点击整行选择支付方式
+	$('.checkbox-inline').bind('click', function(){
+		$('.gender').attr('checked', false);
+		$(this).find('.gender').attr('checked', true);
+	});
+
+});
+</script>
+{% endblock %}
+
 {% block bar_title %}账户设置{% endblock %}
 
 {% block container %}
 <div class="pb-50 pt-50 row pl-15 pr-15">
 	<form>
 		<div class="form-group">
-		    <label for="username">用户名:</label>
-		    <input type="email" class="form-control" id="username" placeholder="限4-16个字符，一个汉字为两个字符">
+		    <label for="username">姓名:</label>
+		    <input type="email" class="form-control input-lg" id="username" placeholder="2-8个汉字以内">
 	  	</div>
 	  	<div class="form-group">
-		    <label for="username">性别:</label>
+		    <label>性别:</label>
 		    <div>
-			    <label class="radio-inline pr-15">
-				  	<input type="radio" name="gender" value="1"> 男
+			    <label class="checkbox-inline pr-15">
+				  	<input class="gender" type="checkbox" name="gender" value="1"> 男
 				</label>
-				<label class="radio-inline pr-15">
-				  	<input type="radio" name="gender" value="2"> 女
+				<label class="checkbox-inline pr-15">
+				  	<input class="gender" type="checkbox" name="gender" value="2"> 女
 				</label>
-				<label class="radio-inline pr-15">
-				  	<input type="radio" name="gender" value="0" checked="checked"> 未设置
+				<label class="checkbox-inline pr-15">
+				  	<input class="gender" type="checkbox" name="gender" value="0" checked="checked"> 未设置
 				</label>
 			</div>
 	  	</div>
 	  	<div class="form-group">
-	  		<button type="submit" class="btn btn-block btn-orange">确  定</button>
+	  		<button type="submit" class="btn btn-block btn-orange btn-lg">确  定</button>
 	  	</div>
   	</form>
 </div>

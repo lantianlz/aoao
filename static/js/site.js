@@ -193,6 +193,28 @@ if (!String.format) {
         return postData;
     };
 
+    /*
+        格式化价钱
+
+        用例:
+        $.ZXUtils.formatPrice(12.5);
+    */
+    $.QXUtils.formatPrice = function(price){
+        var price = Math.round(parseFloat(price) * 100) / 100;
+
+        price = price + '';
+
+        if(price.indexOf('.') > -1){
+            if(price.split('.')[1].length == 1){
+                return price + '0';
+            } else {
+                return price;
+            }
+        } else {
+            return price + '.00';
+        }
+    };
+
 
     // 分享插件
     $.QXShare = {
