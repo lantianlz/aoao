@@ -31,8 +31,8 @@ class CarWash(models.Model):
     des = models.TextFiled(null=True)  # 简介
     note = models.TextFiled(null=True)   # 温馨提示，使用提醒
     rating = models.IntegerField(default=0, db_index=True)  # 评分
+    lowest_sale_price = models.FloatField(db_index=True)  # 最低售价
     lowest_origin_price = models.FloatField()  # 最低原价
-    lowest_sale_price = models.FloatField()  # 最低售价
     order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
     imgs = models.TextFiled()  # 多张轮播图融为一个字段
 
@@ -42,7 +42,7 @@ class CarWash(models.Model):
     vip_info = models.CharField(max_length=64, null=True)
 
     sort_num = models.IntegerField(default=0, db_index=True)
-    state = models.BooleanField(default=True, null=True)
+    state = models.BooleanField(default=True, db_index=True)
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -68,11 +68,31 @@ class ServiceType(models.Model):
     """
     @note: 服务类型
     """
+    name = models.CharField(max_length=32, unique=True)
+    group = models.IntegerField(default=0, db_index=True)  # 大类
+    sort_num = models.IntegerField(default=0, db_index=True)
+    state = models.BooleanField(default=True, db_index=True)
 
 
 class ServicePrice(models.Model):
 
     """
     @note: 服务价格
-    商品、原价、销售价、结算价
     """
+    car_wash = models.ForeignKey("CarWash")
+    service_type = models.ForeignKey("ServiceType")
+
+    sale_price = models.FloatField(db_index=True)  # 售价
+    origin_price = models.FloatField(db_index=True)  # 原价
+    clear_price = models.FloatField(db_index=True)  # 和厂商结算价
+    sort_num = models.IntegerField(default=0, db_index=True)
+    state = models.BooleanField(default=True, db_index=True)
+
+    class Meta:
+        ordering = ["sort_num", "sale_price"]
+        unique_together = [("car_wash", "service_type"), ]
+
+"""
+订单
+优惠码
+"""

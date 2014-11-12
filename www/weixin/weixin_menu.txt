@@ -3,7 +3,7 @@
         {
             "type": "view", 
             "name": "立即洗车", 
-            "url": "http://192.168.0.103:8002/account/oauth/weixin"
+            "url": "http://192.168.0.199:8002/account/oauth/weixin"
         }, 
         {
             "name": "更多", 
@@ -11,7 +11,7 @@
                 {
                     "type": "view", 
                     "name": "测试直接跳转", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.103%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
                 },
                 {
                     "type": "view", 
