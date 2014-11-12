@@ -111,10 +111,11 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'www.custom_tags',
+    'www.admin',
     'www.account',
     'www.message',
     'www.city',
-    'www.admin',
+    'www.car_wash',
 )
 
 AUTHENTICATION_BACKENDS = ('www.middleware.user_backend.AuthBackend',)
@@ -141,6 +142,7 @@ LOGGING = {
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 SESSION_COOKIE_HTTPONLY = True
 # SESSION_COOKIE_DOMAIN = '.aoaoxc.com' if not LOCAL_FLAG else '.a.com'
+SESSION_COOKIE_NAME = 'sessionid_aoaoxc'
 
 import logging
 logging.basicConfig(format='%(asctime)s %(message)s ---------- %(pathname)s:%(module)s.%(funcName)s Line:%(lineno)d',

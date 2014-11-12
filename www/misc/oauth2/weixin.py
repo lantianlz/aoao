@@ -16,7 +16,7 @@ import logging
 CLIENT_ID = 'wx0d227d4f9b19658a'
 CLIENT_SECRET = '513bdaf5b6022df4913f4cb5543fa688'
 API_URL = 'https://api.weixin.qq.com'
-REDIRECT_URI = '%s/account/oauth/weixin' % (settings.MAIN_DOMAIN if settings.LOCAL_FLAG == False else "http://192.168.0.103:8002")
+REDIRECT_URI = '%s/account/oauth/weixin' % (settings.MAIN_DOMAIN if settings.LOCAL_FLAG == False else "http://192.168.0.199:8002")
 
 
 class Consumer(object):
