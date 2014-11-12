@@ -28,17 +28,17 @@ class CarWash(models.Model):
     longitude = models.CharField(max_length=32, null=True)  # 经度
     latitude = models.CharField(max_length=32, null=True)  # 纬度
     wash_type = models.IntegerField(default=0, db_index=True, choices=wash_type_choices)    # 洗车方式
-    des = models.TextFiled(null=True)  # 简介
-    note = models.TextFiled(null=True)   # 温馨提示，使用提醒
+    des = models.TextField(null=True)  # 简介
+    note = models.TextField(null=True)   # 温馨提示，使用提醒
     rating = models.IntegerField(default=0, db_index=True)  # 评分
     lowest_sale_price = models.FloatField(db_index=True)  # 最低售价
     lowest_origin_price = models.FloatField()  # 最低原价
     order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
-    imgs = models.TextFiled()  # 多张轮播图融为一个字段
+    imgs = models.TextField()  # 多张轮播图融为一个字段
 
     valid_date_start = models.DateTimeField(null=True)  # 有效期开始时间
     valid_date_end = models.DateTimeField(null=True)  # 有效期结束时间
-    is_vip = models.BoolField(default=False)
+    is_vip = models.BooleanField(default=False)
     vip_info = models.CharField(max_length=64, null=True)
 
     sort_num = models.IntegerField(default=0, db_index=True)
@@ -60,7 +60,7 @@ class CarWashBank(models.Model):
     tel = models.CharField(max_length=16)
     bank_name = models.CharField(max_length=16)
     bank_card = models.CharField(max_length=32)
-    balance_date = models.DateFiled(null=True)  # 结算日期
+    balance_date = models.DateField(null=True)  # 结算日期
 
 
 class ServiceType(models.Model):
