@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import datetime
 
 # from pprint import pprint
 from django.http import HttpResponse, HttpResponseRedirect
@@ -115,6 +116,7 @@ def oauth_weixin(request):
             user = result
             user.backend = 'www.middleware.user_backend.AuthBackend'
             auth.login(request, user)
+            UserBase().update_user_last_login_time(user.id, ip=utils.get_clientip(request), last_active_source=2)
 
             dict_next = {"home": "/", "wash_code": ""}
             # next_url = request.session.get('next_url') or '/'

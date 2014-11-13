@@ -10,7 +10,7 @@ from common import utils, debug, validators, cache
 from www.misc.decorators import cache_required
 from www.misc import consts
 from www.tasks import async_send_email
-from www.account.models import User, Profile, UserCount, LastActive, ExternalToken
+from www.account.models import User, Profile, UserCount, LastActive, ActiveDay, ExternalToken
 
 dict_err = {
     10100: u'邮箱重复',
@@ -372,6 +372,17 @@ class UserBase(object):
             except LastActive.DoesNotExist:
                 LastActive.objects.create(user_id=user_id, last_active_time=datetime.datetime.now(),
                                           ip=ip, last_active_source=last_active_source)
+            now_date = datetime.datetime.now().date()
+            try:
+                ActiveDay.objects.get(user_id=user_id, active_day=now_date)
+            except ActiveDay.DoesNotExist:
+                ActiveDay.objects.create(user_id=user_id, active_day=now_date)
+
+    def update_user_last_login_time(self, user_id, ip=None, last_active_source=0):
+        user_login = self.get_user_login_by_id(user_id)
+        user_login.last_login = datetime.datetime.now()
+        user_login.save()
+        self.update_user_last_active_time(user_id, ip, last_active_source)
 
     def get_all_users(self):
         '''
