@@ -2,6 +2,7 @@
 import datetime
 
 from django.db import models
+from django.conf import settings
 
 
 class Company(models.Model):
@@ -30,11 +31,11 @@ class CarWash(models.Model):
     wash_type = models.IntegerField(default=0, db_index=True, choices=wash_type_choices)    # 洗车方式
     des = models.TextField(null=True)  # 简介
     note = models.TextField(null=True)   # 温馨提示，使用提醒
-    rating = models.IntegerField(default=0, db_index=True)  # 评分
     lowest_sale_price = models.FloatField(db_index=True)  # 最低售价
     lowest_origin_price = models.FloatField()  # 最低原价
-    order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
     imgs = models.TextField()  # 多张轮播图融为一个字段
+    rating = models.IntegerField(default=0, db_index=True)  # 评分
+    order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
 
     valid_date_start = models.DateTimeField(null=True)  # 有效期开始时间
     valid_date_end = models.DateTimeField(null=True)  # 有效期结束时间
@@ -47,6 +48,25 @@ class CarWash(models.Model):
 
     def __unicode__(self):
         return '%s, %s' % (self.id, self.name)
+
+    def get_url(self):
+        return "/car_wash/%s" % self.id
+
+    def get_district(self):
+        from www.city.interface import CityBase
+        return CityBase().get_district_by_id(self.district_id)
+
+    def get_price_minus(self):
+        return self.lowest_origin_price - self.lowest_sale_price
+
+    def get_cover(self):
+        import re
+
+        tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
+        imgs = tag_img.findall(self.imgs)
+        if imgs:
+            return imgs[0]
+        return '%s/img/xch1.jpg' % settings.MEDIA_URL
 
 
 class CarWashBank(models.Model):

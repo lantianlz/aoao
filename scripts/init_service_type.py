@@ -12,7 +12,7 @@ sys.path.extend([os.path.abspath(os.path.join(SITE_ROOT, '../')),
 os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 
-def main():
+def init_service_type():
     from www.car_wash.interface import ServiceTypeBase
     datas = [u"标准洗车(5座)", u"标准洗车(7座)", u"精致洗车(5座)", u"精致洗车(7座)"]
     for data in datas:
@@ -21,4 +21,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    init_service_type()
