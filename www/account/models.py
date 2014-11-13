@@ -101,6 +101,9 @@ class Profile(models.Model):
         '''
         return []
 
+    def get_city_id(self):
+        return self.city_id or 1974
+
     def __unicode__(self):
         return u'%s, %s' % (self.id, self.nick)
 

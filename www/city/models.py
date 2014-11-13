@@ -27,3 +27,14 @@ class City(models.Model):
 
     def get_url(self):
         return ''
+
+    def get_short_name(self):
+        keys = [u"市", u"自治州", u"地区", u"区", u"县", u"其他"]
+        name = u"未知类型"
+        if self.location_type == 2:
+            name = self.city
+        elif self.location_type == 3:
+            name = self.district
+        for key in keys:
+            name = name.replace(key, '')
+        return name
