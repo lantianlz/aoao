@@ -28,12 +28,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-	var setPrice = function(price, bgColor){
-		$('.btn-price').css({'backgroundColor': '', 'borderColor': '', 'color': '#777777'});
-		$('.bg-price').css('backgroundColor', bgColor);
-		$('.price').html(price);
-	};
-
 	// 点击金额切换颜色
 	$('.btn-price').bind('click', function(){
 		var price = $(this).data('price'),
@@ -70,7 +64,7 @@ $(document).ready(function(){
 		$('.bg-price').css('backgroundColor', "#BEBEBE");
 	});
 
-	// 
+	// 手动点击其他价格的checkbox
 	$('.other-price-check').bind('click', function(){
 		if($(this).attr('checked')){
 			$('.other-price').val(0);
