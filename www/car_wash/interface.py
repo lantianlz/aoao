@@ -91,7 +91,7 @@ class ServicePriceBase(object):
             sale_price = float(sale_price)
             origin_price = float(origin_price)
             clear_price = float(clear_price)
-            assert sale_price < origin_price
+            assert sale_price <= origin_price
         except:
             return 99800, dict_err.get(99800)
 
@@ -106,6 +106,12 @@ class ServicePriceBase(object):
         sp = ServicePrice.objects.create(**ps)
 
         return 0, sp
+
+    def get_service_prices_by_car_wash(self, car_wash, state=None):
+        ps = dict(car_wash=car_wash)
+        if state is not None:
+            ps.update(state=state)
+        return ServicePrice.objects.select_related("service_type").filter(**ps)
 
 
 class ServiceTypeBase(object):
