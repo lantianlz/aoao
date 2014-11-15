@@ -14,7 +14,7 @@ spb = interface.ServicePriceBase()
 
 
 def index(request, template_name='mobile/car_wash/index.html'):
-    city_id = request.user.get_city_id() if request.user.is_authenticated() else 1974
+    city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
     city = CityBase().get_city_by_id(city_id)
     car_washs = cwb.get_car_washs_by_city_id(city_id)
 

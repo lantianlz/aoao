@@ -59,6 +59,9 @@
 		</a>
 		</ul>
 		{% endfor %}
-	
+	{% if not car_washs %}
+   	<div class="alert alert-info mr-5 ml-5">暂无</div>
+	{% endif %}
 </div>
+
 {% endblock %}
