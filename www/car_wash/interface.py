@@ -79,8 +79,10 @@ class CarWashBase(object):
         car_wash = CarWash.objects.create(**ps)
         return 0, car_wash
 
-    def get_car_washs_by_city_id(self, city_id, order_by="id"):
-        return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by)
+    def get_car_washs_by_city_id(self, city_id, order_by_value="0"):
+        dict_order_by = {"0": "id", "1": "lowest_sale_price", "2": "-order_count"}
+        order_by_field = dict_order_by.get(order_by_value)
+        return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by_field)
 
 
 class ServicePriceBase(object):
