@@ -7,94 +7,68 @@
 {% block container %}
 <div class="row pt-30 pb-50">
 
-	<!-- 轮播图 -->
-	<div id="carousel-example-generic" class="carousel slide mt-15" data-ride="carousel">
-	    <ol class="carousel-indicators">
-	        <li class="active" data-slide-to="0" data-target="#carousel-example-generic"></li>
-	        <li class="" data-slide-to="1" data-target="#carousel-example-generic"></li>
-	        <li class="" data-slide-to="2" data-target="#carousel-example-generic"></li>
-	    </ol>
-	    <div class="carousel-inner" role="listbox">
-	        <div class="item active">
-	            <img class="w h" src="{{MEDIA_URL}}img/xch2.jpg">
-	        </div>
-	        <div class="item">
-	           	<img class="w h" src="{{MEDIA_URL}}img/xch3.jpg">
-	        </div>
-	        <div class="item">
-	            <img class="w h" src="{{MEDIA_URL}}img/xch4.jpg">
-	        </div>
-	    </div>
-	    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-	        <span class="fa fa-chevron-left pa" style="top: 50%;"></span>
-	        <span class="sr-only">上一张</span>
-	    </a>
-	    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-	        <span class="fa fa-chevron-right pa" style="top: 50%;"></span>
-	        <span class="sr-only">下一张</span>
-	    </a>
-	</div>
-	<!-- 轮播图结束 -->
+    <!-- 轮播图 -->
+    <div id="carousel-example-generic" class="carousel slide mt-15" data-ride="carousel">
+        {% if car_wash.get_imgs_len > 1 %}
+        <ol class="carousel-indicators">
+            {% for img in car_wash.get_imgs %}
+            <li class="{% if forloop.first %}active{% endif %}" data-slide-to="{{forloop.counter0}}" data-target="#carousel-example-generic"></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        
+        <div class="carousel-inner" role="listbox">
+            {% for img in car_wash.get_imgs %}
+            <div class="item {% if forloop.first %}active{% endif %}">
+                <img class="w h" src="{{img}}">
+            </div>
+            {% endfor %}
+        </div>
 
-	<div class="bgc-ffffff mt-0 pl-5 mb-10 row">
-		<div class="pt-10 pb-10 pr col-xs-6 pl-0 f16">
-			<i class="pa fa fa-clock-o pt-3 pl-3 co1"></i>
-			<span class="pl-25">{{car_wash.business_hours}}</span>
-		</div>
-		<div class="pt-10 pb-10 pr col-xs-6 pl-0 f16">
-			<i class="pa fa fa-phone pt-3 pl-3 co1"></i>
-			<span class="pl-25"><a href="tel:400101330">{{car_wash.tel}}</a></span>
-		</div>
-		<div class="pt-10 pb-10 pr col-xs-12 pl-0 border-top bdc-e6e6e6 f16">
-			<i class="pa fa fa-map-marker pt-3 pl-5 co1"></i>
-			<span class="pl-25">{{car_wash.addr}}</span>
-		</div>
-	</div>
-	<div class="co1 pt-10 pl-5">洗车类别列表(嗷嗷洗车专属价)</div>
-	<div class="bgc-ffffff mt-5 pl-0">
-		<ul class="list-group">
-			<a class="list-group-item pl-5" href="/car_wash/buy">
-				<div class="row">
-					<div class="col-xs-6 pl-5 text-left f16">标准洗车(5座)</div>
-					<div class="col-xs-6 pr-0 text-right">
-						<i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">15</span>
-						<i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">30</span>
-						<i class="fa fa-angle-right f20 pl-10 co3"></i>
-					</div>
-				</div>
-			</a>
-			<a class="list-group-item pl-5" href="/car_wash/buy">
-				<div class="row">
-					<div class="col-xs-6 pl-5 text-left f16">标准洗车(7座)</div>
-					<div class="col-xs-6 pr-0 text-right">
-						<i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">20</span>
-						<i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">40</span>
-						<i class="fa fa-angle-right f20 pl-10 co3"></i>
-					</div>
-				</div>
-			</a>
-			<a class="list-group-item pl-5" href="/car_wash/buy">
-				<div class="row">
-					<div class="col-xs-6 pl-5 text-left f16">精致洗车(5座)</div>
-					<div class="col-xs-6 pr-0 text-right">
-						<i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">25</span>
-						<i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">50</span>
-						<i class="fa fa-angle-right f20 pl-10 co3"></i>
-					</div>
-				</div>
-			</a>
-			<a class="list-group-item pl-5" href="/car_wash/buy">
-				<div class="row">
-					<div class="col-xs-6 pl-5 text-left f16">精致洗车(7座)</div>
-					<div class="col-xs-6 pr-0 text-right">
-						<i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">35</span>
-						<i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">70</span>
-						<i class="fa fa-angle-right f20 pl-10 co3"></i>
-					</div>
-				</div>
-			</a>
-		</ul>
-	</div>
+        {% if car_wash.get_imgs_len > 1 %}
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="fa fa-chevron-left pa" style="top: 50%;"></span>
+            <span class="sr-only">上一张</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="fa fa-chevron-right pa" style="top: 50%;"></span>
+            <span class="sr-only">下一张</span>
+        </a>
+        {% endif %}
+    </div>
+    <!-- 轮播图结束 -->
+
+    <div class="bgc-ffffff mt-0 pl-5 mb-10 row">
+        <div class="pt-10 pb-10 pr col-xs-6 pl-0 f16">
+            <i class="pa fa fa-clock-o pt-3 pl-3 co1"></i>
+            <span class="pl-25">{{car_wash.business_hours}}</span>
+        </div>
+        <div class="pt-10 pb-10 pr col-xs-6 pl-0 f16">
+            <i class="pa fa fa-phone pt-3 pl-3 co1"></i>
+            <span class="pl-25"><a href="tel:{{car_wash.tel}}">{{car_wash.tel}}</a></span>
+        </div>
+        <div class="pt-10 pb-10 pr col-xs-12 pl-0 border-top bdc-e6e6e6 f16">
+            <i class="pa fa fa-map-marker pt-3 pl-5 co1"></i>
+            <span class="pl-25">{{car_wash.addr}}</span>
+        </div>
+    </div>
+    <div class="co1 pt-10 pl-5">洗车服务列表(嗷嗷洗车专属价)</div>
+    <div class="bgc-ffffff mt-5 pl-0">
+        <ul class="list-group">
+            {% for sp in service_prices %}
+            <a class="list-group-item pl-5" href="/car_wash/buy">
+                <div class="row">
+                    <div class="col-xs-6 pl-5 text-left f16">{{sp.service_type.name}}</div>
+                    <div class="col-xs-6 pr-0 text-right">
+                        <i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">{{sp.sale_price}}</span>
+                        <i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">{{sp.origin_price}}</span>
+                        <i class="fa fa-angle-right f20 pl-10 co3"></i>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}
 

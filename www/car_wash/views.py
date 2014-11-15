@@ -10,6 +10,7 @@ from www.city.interface import CityBase
 from www.car_wash import interface
 
 cwb = interface.CarWashBase()
+spb = interface.ServicePriceBase()
 
 
 def index(request, template_name='mobile/car_wash/index.html'):
@@ -24,6 +25,7 @@ def detail(request, car_wash_id=None, template_name='mobile/car_wash/detail.html
     car_wash = cwb.get_car_wash_by_id(car_wash_id)
     if not car_wash:
         raise Http404
+    service_prices = spb.get_service_prices_by_car_wash(car_wash)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -71,6 +73,7 @@ def setting(request, template_name='mobile/car_wash/setting.html'):
 def pay(request, template_name='mobile/car_wash/pay.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 
 def buy(request, template_name='mobile/car_wash/buy.html'):
 

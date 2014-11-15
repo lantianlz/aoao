@@ -22,7 +22,8 @@ SERVER_NAME = 'AOAOXC_WEB0' if not LOCAL_FLAG else 'DEVELOPER'
 SERVER_DOMAIN = 'aoaoxc.com' if not LOCAL_FLAG else 'a.com:8000'
 MAIN_DOMAIN = 'http://www.%s' % SERVER_DOMAIN
 
-IMG0_DOMAIN = 'http://qimg0.qiniudn.com'
+IMG0_DOMAIN = 'http://img0.aoaoxc.com'
+IMG0_DOMAIN = 'http://aoaoxc-img0.qiniudn.com'
 
 EMAIL_FROM = u'"嗷嗷洗车" <service@aoaoxc.com>'
 EMAIL_HOST_USER = 'service@aoaoxc.com'

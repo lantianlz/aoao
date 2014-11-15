@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import re
 
 from django.db import models
 from django.conf import settings
@@ -60,13 +61,22 @@ class CarWash(models.Model):
         return self.lowest_origin_price - self.lowest_sale_price
 
     def get_cover(self):
-        import re
 
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
         imgs = tag_img.findall(self.imgs)
         if imgs:
             return imgs[0]
-        return '%s/img/xch1.jpg' % settings.MEDIA_URL
+        return '%simg/xch3.jpg' % settings.MEDIA_URL
+
+    def get_imgs(self):
+        tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
+        imgs = tag_img.findall(self.imgs)
+        if not imgs:
+            return ['%simg/xch3.jpg' % settings.MEDIA_URL, ]
+        return imgs
+
+    def get_imgs_len(self):
+        return self.get_imgs().__len__()
 
 
 class CarWashBank(models.Model):
