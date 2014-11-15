@@ -66,13 +66,13 @@ class CarWash(models.Model):
         imgs = tag_img.findall(self.imgs)
         if imgs:
             return imgs[0]
-        return '%simg/xch3.jpg' % settings.MEDIA_URL
+        return '%simg/default_car_wash_100.png' % settings.MEDIA_URL
 
     def get_imgs(self):
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
         imgs = tag_img.findall(self.imgs)
         if not imgs:
-            return ['%simg/xch3.jpg' % settings.MEDIA_URL, ]
+            return ['%simg/default_car_wash_640.png' % settings.MEDIA_URL, ]
         return imgs
 
     def get_imgs_len(self):

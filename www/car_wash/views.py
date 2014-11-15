@@ -78,7 +78,3 @@ def pay(request, template_name='mobile/car_wash/pay.html'):
 def buy(request, template_name='mobile/car_wash/buy.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-def unopen_city(request, template_name='mobile/city/unopen_city.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))

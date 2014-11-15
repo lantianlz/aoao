@@ -131,7 +131,7 @@ class LastActive(models.Model):
 
 
 class ActiveDay(models.Model):
-    user_id = models.CharField(max_length=32, unique=True)
+    user_id = models.CharField(max_length=32, db_index=True)
     active_day = models.DateField(db_index=True)
 
     class Meta:

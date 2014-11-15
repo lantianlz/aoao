@@ -7,7 +7,7 @@ from www.misc.decorators import cache_required
 from www.city.models import City
 
 dict_err = {
-    50100: u'',
+    50100: u'不存在的城市',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -183,4 +183,13 @@ class CityBase(object):
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
+        return 0, dict_err.get(0)
+
+    def add_vote_count(self, city, count=1):
+        if not isinstance(city, City):
+            city = self.get_city_by_id(city)
+            if not city:
+                return 50100, dict_err.get(50100)
+        city.vote_count += 1
+        city.save()
         return 0, dict_err.get(0)
