@@ -639,8 +639,10 @@ $(document).ready(function(){
         if(document.referrer.indexOf('192.168.0.104')>-1){
             history.go(-1);
         } else {
-            if(PARENT_URL && PARENT_URL != ""){
+            if(typeof(PARENT_URL) != "undefined" && PARENT_URL != ""){
                 window.location.href = PARENT_URL;
+            } else {
+                window.location.href = "/";
             }
         }
         
