@@ -27,13 +27,13 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-
+	PARENT_URL = "/car_wash/account";
 	// 点击金额切换颜色
 	$('.btn-price').bind('click', function(){
 		var price = $(this).data('price'),
 			color = $(this).data('color');
 
-		$('.btn-price').css({'backgroundColor': '', 'borderColor': '', 'color': '#777777'});
+		$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
 		$(this).css({'backgroundColor': color, 'borderColor': color, 'color': '#ffffff'});
 		$('.bg-price').css('backgroundColor', color);
 		$('.price').html($.QXUtils.formatPrice(price));
@@ -60,7 +60,7 @@ $(document).ready(function(){
 		$('.price').html($.QXUtils.formatPrice(price));
 
 		$('.other-price-check').attr('checked', true);
-		$('.btn-price').css({'backgroundColor': '', 'borderColor': '', 'color': '#777777'});
+		$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
 		$('.bg-price').css('backgroundColor', "#BEBEBE");
 	});
 
@@ -68,7 +68,8 @@ $(document).ready(function(){
 	$('.other-price-check').bind('click', function(){
 		if($(this).attr('checked')){
 			$('.other-price').val(0);
-			$('.btn-price').css({'backgroundColor': '', 'borderColor': '', 'color': '#777777'});
+			$('.price').html("0.00");
+			$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
 			$('.bg-price').css('backgroundColor', "#BEBEBE");
 		} else {
 			$('.other-price').val('');

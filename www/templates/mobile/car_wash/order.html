@@ -4,7 +4,15 @@
 
 {% block css %}
 <style type="text/css">
+.list-group-item:first-child{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
 
+.list-group-item:last-child{
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
 </style>
 {% endblock %}
 
@@ -12,16 +20,16 @@
 
 {% block container %}
 <div class="row pf text-center f14 border-1 pt-3 bdc-e6e6e6 bgc-f8f8f8 z99 w h40">
-	<div class="col-xs-6 pr-0 pt-2">
-		<a class="bgc-65c3ed co5 block pb-2 pt-2 border-left border-bottom border-top bdc-65c3ed bdr-t-l-2 bdr-b-l-2" href="#">服务中</a>
+	<div class="col-xs-6 pr-0 pt-0">
+		<a class="bgc-65c3ed co5 block pb-5 pt-5 border-left border-bottom border-top bdc-65c3ed bdr-t-l-4 bdr-b-l-4" href="#">服务中</a>
 	</div>
-	<div class="col-xs-6 pl-0 pt-2">
-		<a class="pb-2 pt-2 block bgc-ffffff co6 border-right border-bottom border-top bdc-d0d0d0 bdr-t-r-2 bdr-b-r-2" href="#">已完成</a>
+	<div class="col-xs-6 pl-0 pt-0">
+		<a class="pb-5 pt-5 block bgc-ffffff co6 border-right border-bottom border-top bdc-d0d0d0 bdr-t-r-4 bdr-b-r-4" href="#">已完成</a>
 	</div>
 </div>
 
-<div class="row pt-30 pb-50">
-	<ul class="list-group pt-10 pl-15 pr-15">
+<div class="row pt-40 pb-50">
+	<ul class="list-group mb-10 pl-15 pr-15">
 		<a class="list-group-item mt-10" href="/car_wash/order/1">
 			<div class="">
 				<div class="fb f15">华胜洗车行(高新店)</div>
@@ -31,6 +39,8 @@
 				</div>
 			</div>
 		</a>
+	</ul>
+	<ul class="list-group mb-10 pl-15 pr-15">
 		<a class="list-group-item mt-10" href="/car_wash/order/1">
 			<div class="">
 				<div class="fb f15">华胜洗车行(高新店)</div>
@@ -40,7 +50,6 @@
 				</div>
 			</div>
 		</a>
-		
 	</ul>
 </div>
 {% endblock %}

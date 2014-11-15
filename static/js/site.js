@@ -634,8 +634,16 @@ $(document).ready(function(){
         alert(e);
     }
 
+    // 统一返回按钮事件处理
     $('.go-back').bind('click', function(){
-        history.go(-1);
+        if(document.referrer.indexOf('192.168.0.104')>-1){
+            history.go(-1);
+        } else {
+            if(PARENT_URL && PARENT_URL != ""){
+                window.location.href = PARENT_URL;
+            }
+        }
+        
     });
 
 });

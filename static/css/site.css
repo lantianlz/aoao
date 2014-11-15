@@ -158,6 +158,10 @@ body {
 .bdr-t-r-2{border-top-right-radius: 2px;}
 .bdr-b-l-2{border-bottom-left-radius: 2px;}
 .bdr-b-r-2{border-bottom-right-radius: 2px;}
+.bdr-t-l-4{border-top-left-radius: 4px;}
+.bdr-t-r-4{border-top-right-radius: 4px;}
+.bdr-b-l-4{border-bottom-left-radius: 4px;}
+.bdr-b-r-4{border-bottom-right-radius: 4px;}
 
 .pa{position: absolute;}
 .pr{position: relative;}
