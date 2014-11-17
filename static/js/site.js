@@ -197,7 +197,7 @@ if (!String.format) {
         格式化价钱
 
         用例:
-        $.ZXUtils.formatPrice(12.5);
+        $.QXUtils.formatPrice(12.5);
     */
     $.QXUtils.formatPrice = function(price){
         var price = Math.round(parseFloat(price) * 100) / 100;
@@ -214,6 +214,23 @@ if (!String.format) {
             return price + '.00';
         }
     };
+
+    /*
+        获取url参数
+
+        用例:
+        $.QXUtils.getQueryString('name');
+    */
+    $.QXUtils.getQueryString = function(name){
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"),
+            r = window.location.search.substr(1).match(reg);
+        
+        if(r != null){
+            return decodeURI(r[2]);
+        }
+
+        return null;
+    }
 
 
     // 分享插件
@@ -509,6 +526,49 @@ if (!String.format) {
     };
 
 
+    $.QXMap = {
+        version: '1.0.0',
+        author: 'stranger',
+        description: '地图组件'
+    };
+    $.QXMap.locationByName = function(addressName, mapObj){
+        var map = mapObj;
+
+        //地址解析器
+        var myGeo = new BMap.Geocoder();
+        
+        myGeo.getPoint(addressName, function(point){
+            
+            if(point){
+                //启用滚轮放大缩小
+                map.enableScrollWheelZoom();
+                //初始化地图,设置中心点坐标和地图级别
+                map.centerAndZoom(point, 16);
+                //添加平移缩放控件
+                map.addControl(new BMap.NavigationControl());
+                //添加地图缩略图控件
+                map.addControl(new BMap.OverviewMapControl());
+
+                //创建标注（类似定位小红旗）
+                var marker = new BMap.Marker(point);
+                //标注提示文本
+                //var label = new BMap.Label(lableName, {"offset":new BMap.Size(20,-20)});
+                //marker.setLabel(label); //添加提示文本
+
+                //创建消息框
+                var infoWindow = new BMap.InfoWindow(addressName);
+                //绑定标注单击事件，设置显示的消息框
+                marker.addEventListener("click", function(){
+                    this.openInfoWindow(infoWindow);
+                });
+
+                //把标注添加到地图
+                map.addOverlay(marker);
+            }
+        }, "成都");
+    };
+
+
 })(jQuery);
 
 
@@ -538,7 +598,7 @@ function createEditor(selector){
             items : [
                 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|', 
                 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|', 
-                'image', 'multiimage', 'link', '|', //'emoticons_zx',
+                'image', 'multiimage', 'link', '|',
                 'fullscreen'
             ],
             afterCreate : function() { 
@@ -580,37 +640,6 @@ if(jQuery.validator){
 
 
 $(document).ready(function(){
-
-	var dropdownTimeout = null,
-        showDropdown = function(target){
-            $(target).addClass('open');
-        },
-        hideDropdown = function(target){
-            $(target).removeClass('open');
-        };
-
-	// 电脑访问添加鼠标事件
-    if($.QXUtils.isDesktop()){
-        $('.user-menu .dropdown-toggle')
-        .bind('mouseenter', function(){showDropdown('.user-menu')})
-        .bind('mouseleave', function(){hideDropdown('.user-menu')})
-        .bind('click', function(e){
-            window.location.href = $(this).attr('href');
-        });
-
-        $('.user-menu .dropdown-menu')
-        .bind('mouseenter', function(){showDropdown('.user-menu')})
-        .bind('mouseleave', function(){hideDropdown('.user-menu')});
-
-
-        $('.message-menu .dropdown-toggle')
-        .bind('mouseenter', function(){showDropdown('.message-menu')})
-        .bind('mouseleave', function(){hideDropdown('.message-menu')});
-
-        $('.message-menu .dropdown-menu')
-        .bind('mouseenter', function(){showDropdown('.message-menu')})
-        .bind('mouseleave', function(){hideDropdown('.message-menu')});
-    }
 
     // 给不支持placeholder的浏览器添加此属性
     $('input, textarea').placeholder();
