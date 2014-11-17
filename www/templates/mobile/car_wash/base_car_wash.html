@@ -27,7 +27,11 @@ body{
 }
 
 .active a{
-	color: #65c3ed;
+	color: #EF8A55;
+}
+
+a:hover{
+	color: #EF8A55;
 }
 </style>
 {% block css %}{% endblock %}
@@ -40,7 +44,7 @@ body{
 {% block base_container %}
 	{% block topbar %}
 	<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40 line-height-32 pr">
-		<a class="go-back f15 pa z99 pointer" style="left: 15px; top: 5px;"><i class="fa f20 fa-angle-left pr-3"></i>返回</a>
+		<a class="go-back f15 pa z99 pointer co8" style="left: 15px; top: 5px;"><i class="fa f20 fa-angle-left pr-3"></i>返回</a>
 		<div class="col-xs-12 pr-0 pl-0 text-center">{% block bar_title %}{% endblock %}</div>
 	</div>
 	{% endblock %}

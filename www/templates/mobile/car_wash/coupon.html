@@ -5,52 +5,82 @@
 {% block css %}
 <style type="text/css">
 
+.coupons .bg{
+	background-color: #EF8A55;
+}
+
+.coupons .state{
+	color: #919191;
+}
+
+.coupons .des{
+	color: #919191;
+}
+
+.coupons .title{
+	color: #222;
+}
+
+.coupons .un-active .bg{
+	background-color: #e6e6e6;
+}
+
+.coupons .un-active .state{
+	color: #d7d7d7;
+}
+
+.coupons .un-active .des{
+	color: #d7d7d7;
+}
+
+.coupons .un-active .title{
+	color: #d7d7d7;
+}
+
 </style>
 {% endblock %}
 
 {% block topbar %}{% endblock %}
 
 {% block container %}
-<ul class="list-group pl-15 pr-15 pt-5">
+<ul class="list-group pl-15 pr-15 pt-5 coupons">
 	<li class="list-group-item pl-0 pr-0 pt-0 pb-0 mt-10">
 		<div class="row pl-5 pr-5 pt-5 pb-5">
-			<div class="col-xs-3 pl-0 pr-0 bgc-C0DFEF h70">
+			<div class="col-xs-3 pl-0 pr-0 bg h70">
 				<div class="line-height-70 text-center">
 				<i class="fa fa-rmb f25 co5"></i>
 				<span class="f25 co5">10</span>
 				</div>
 			</div>
-			
-			<div class="col-xs-9 pl-10 pr-0">
-				<div class="f16">洗车专用</div>
-				<div class="f12 pt-5 co1">密码: 9998 5236 5225</div>
-				<div class="f12 pt-5 co1">抵用券仅限洗车项目使用、特惠场次不可用</div>
+			<div class="col-xs-9 pl-10 pr-0 des">
+				<div class="f16 title">洗车专用</div>
+				<div class="f12 pt-5">密码: 9998 5236 5225</div>
+				<div class="f12 pt-5">抵用券仅限洗车项目使用、特惠场次不可用</div>
 			</div>
-
 		</div>	
-		<div class="co1 f12 text-right bgc-f4f4f4 pb-5 pr-5 pt-5">
-			<i class="fa fa-clock-o pr-3"></i>有效期至 2014-12-31
+		<div class="state row co1 f12 bgc-f4f4f4 pb-5 pr-5 pt-5 pl-5">
+			<span class="state pull-left"><i class="fa fa-clock-o pr-3"></i>未使用</span>
+			<span class="pull-right">有效期至 2014-12-31</span>
 		</div>
 	</li>
 
-	<li class="list-group-item pl-0 pr-0 pt-0 pb-0 mt-10">
+	<li class="list-group-item pl-0 pr-0 pt-0 pb-0 mt-10 un-active">
 		<div class="row pl-5 pr-5 pt-5 pb-5">
-			<div class="col-xs-3 pl-0 pr-0 bgc-F5CCC5 h70">
+			<div class="col-xs-3 pl-0 pr-0 bg h70">
 				<div class="line-height-70 text-center">
 				<i class="fa fa-rmb f25 co5"></i>
 				<span class="f25 co5">20</span>
 				</div>
 			</div>
-			
-			<div class="col-xs-9 pl-10 pr-0">
-				<div class="f16">洗车专用</div>
-				<div class="f12 pt-5 co1">密码: 9998 5236 5225</div>
-				<div class="f12 pt-5 co1">抵用券仅限洗车项目使用、特惠场次不可用</div>
+			<div class="col-xs-9 pl-10 pr-0 des">
+				<div class="f16 title">洗车专用</div>
+				<div class="f12 pt-5">密码: 9998 5236 5225</div>
+				<div class="f12 pt-5">抵用券仅限洗车项目使用、特惠场次不可用</div>
 			</div>
-
 		</div>	
-		<div class="co1 f12 text-right bgc-f4f4f4 pb-5 pr-5 pt-5">
-			<i class="fa fa-clock-o pr-3"></i>有效期至 2014-12-31
+		<div class="state row co1 f12 text-right bgc-f4f4f4 pl-5 pb-5 pr-5 pt-5">
+			<span class="pull-left"><i class="fa fa-clock-o pr-3"></i>已过期</span>
+			<span class="pull-right">有效期至 2014-10-31</span>
 		</div>
 	</li>
 </ul>

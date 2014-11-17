@@ -13,6 +13,18 @@
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
 }
+
+.tab.active{
+	background-color: #EF8A55;
+	border-color: #EF8A55;
+	color: #ffffff;
+}
+
+.tab{
+	background-color: #ffffff;
+	border-color: #d0d0d0;
+	color: #EF8A55;
+}
 </style>
 {% endblock %}
 
@@ -21,10 +33,10 @@
 {% block container %}
 <div class="row pf text-center f14 border-1 pt-3 bdc-e6e6e6 bgc-f8f8f8 z99 w h40">
 	<div class="col-xs-6 pr-0 pt-0">
-		<a class="bgc-65c3ed co5 block pb-5 pt-5 border-left border-bottom border-top bdc-65c3ed bdr-t-l-4 bdr-b-l-4" href="#">服务中</a>
+		<a class="active tab block pb-5 pt-5 border-left border-bottom border-top bdc-EF8A55 bdr-t-l-4 bdr-b-l-4" href="#">服务中</a>
 	</div>
 	<div class="col-xs-6 pl-0 pt-0">
-		<a class="pb-5 pt-5 block bgc-ffffff co6 border-right border-bottom border-top bdc-d0d0d0 bdr-t-r-4 bdr-b-r-4" href="#">已完成</a>
+		<a class="tab pb-5 pt-5 block border-right border-bottom border-top bdr-t-r-4 bdr-b-r-4" href="#">已完成</a>
 	</div>
 </div>
 
