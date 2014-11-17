@@ -5,26 +5,26 @@
 {% block css %}
 <style type="text/css">
 .list-group-item:first-child{
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 .list-group-item:last-child{
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 </style>
 {% endblock %}
 
-{% block bar_title %}等待开放{% endblock %}
+{% block bar_title %}{{city.get_short_name}}(待开放){% endblock %}
 
 {% block container %}
 <div class="pt-50 pb-50 pl-15 pr-15 text-center">
-	<h3 class="pt-20">你选择的城市</h3>
-	<h1 class="co8">荆州</h1>
-	<a href="/city/provinces_list"><h5>[更换城市]</h5></a>
-	<h5 class="co3">尚未开通，敬请期待</h5>
-	<h5 class="pt-50">荆州已经有<span class="f20 co8">188</span>人投票</h5>
-	<h5 class="co3">我们会尽快开通票数最高的城市</h5>
+    <h3 class="pt-20">你选择的城市</h3>
+    <h1 class="co8">{{city.get_short_name}}</h1>
+    <a href="/city/provinces_list"><h5>[更换城市]</h5></a>
+    <h5 class="co3">尚未开通，敬请期待</h5>
+    <h5 class="pt-50">{{city.get_short_name}}已经有<span class="f20 co8">{{city.vote_count}}</span>人投票</h5>
+    <h5 class="co3">我们会尽快开通得票数较高的城市</h5>
 </div>
 {% endblock %}

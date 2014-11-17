@@ -503,6 +503,18 @@ class UserBase(object):
                     et.save()
         return et
 
+    def change_user_city(self, user_id, city_id):
+        '''
+        @note: 修改城市信息
+        '''
+        user = self.get_user_by_id(user_id)
+        user.city_id = city_id
+        user.save()
+
+        # 更新缓存
+        self.get_user_by_id(user.id, must_update_cache=True)
+        return 0, user
+
 
 def user_profile_required(func):
     '''
