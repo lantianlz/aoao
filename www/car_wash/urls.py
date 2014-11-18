@@ -15,4 +15,6 @@ urlpatterns = patterns('www.car_wash.views',
                        url(r'^pay$', 'pay'),
                        url(r'^buy$', 'buy'),
                        url(r'^location$', 'location'),
+                       url(r'^get_car_washs$', 'get_car_washs'),
+                       
                        )

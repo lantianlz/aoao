@@ -5,7 +5,7 @@ from django.http import HttpResponse, Http404  # , HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from www.misc.decorators import member_required
+from www.misc.decorators import member_required, common_ajax_response
 from www.city.interface import CityBase
 from www.car_wash import interface
 
@@ -88,3 +88,19 @@ def buy(request, template_name='mobile/car_wash/buy.html'):
 def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def get_car_washs(request):
+    data = [{
+        'id': '1',
+        'url': '/car_wash/1',
+        'name': u'嗷嗷洗车行',
+        'cover': '/static/img/default_car_wash_100.png',
+        'district': u'武侯',
+        'wash_type': u'机器',
+        'lowest_sale_price': '20.0',
+        'lowest_origin_price': '30.0',
+        'price_minus': '10.0'
+    }]
+    data = []
+    return HttpResponse(json.dumps(data))

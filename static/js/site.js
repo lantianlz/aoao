@@ -39,55 +39,6 @@ if (!String.format) {
     };
 
     /*
-        去掉所有的html标签
-        target: 要操作的字符串
-
-        用例:
-        $.QXUtils.clearHtmlTags('<div>1</div>');
-    */
-    $.QXUtils.clearHtmlTags = function(target){
-        if(!target){
-            return '';
-        }
-        return target.replace(/<[^>].*?>/g,"");
-    };
-
-    /*
-        去掉所有的转义字符
-        target: 要操作的字符串
-
-        用例:
-        $.QXUtils.clearEscapeCharacters('<div>1</div>');
-    */
-    $.QXUtils.clearEscapeCharacters = function(target){
-        if(!target){
-            return '';
-        }
-        return target.replace(/&[^;].*?;/g, '');
-    };
-
-    /*
-        屏幕宽度小于 768 归于手机
-    */
-    $.QXUtils.isPhone = function(){
-        return ($(window).width() < 768) ? true : false;
-    };
-
-    /*
-        屏幕宽度 大于768 而 小于1024 归于平板
-    */
-    $.QXUtils.isPad = function(){
-        return (768 <= $(window).width() && $(window).width() <= 1024) ? true : false;
-    };
-
-    /*
-        屏幕宽度大于 1024 归于桌面
-    */
-    $.QXUtils.isDesktop = function(){
-        return (1024 < $(window).width()) ? true : false;
-    };
-
-    /*
         字典映射
 
         用例：
@@ -231,73 +182,6 @@ if (!String.format) {
 
         return null;
     }
-
-
-    // 分享插件
-    $.QXShare = {
-        version: '1.0.0',
-        author: 'stranger',
-        description: '分享插件'
-    };
-    /*
-        分享到微博
-        url: 要分享的url
-        title: 要分享的描述
-        pic: 图片地址
-        notOpenWin: 是否要弹出窗口
-        
-        用例：
-        $.QXShare.sinaWeibo('www.a.com', 'test', '1.jpg', true);
-    */
-    $.QXShare.sinaWeibo = function(url, title, pic, notOpenWin){
-        var clearTitle = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(title)),
-            sinaUrl = String.format(
-                "http://service.weibo.com/share/share.php?url={0}&title={1}&pic={2}&appkey={3}&ralateUid={4}&searchPic=false",
-                url,
-                (clearTitle.length >= 110) ? (clearTitle.substring(0, 110) + '...') : clearTitle,
-                pic ? pic : '',
-                '504150080',
-                '5251589524'
-            );
-
-        notOpenWin = notOpenWin ? notOpenWin : false;
-        if(!notOpenWin){
-            window.open(sinaUrl, '_blank');
-        }
-
-        return sinaUrl;
-    };
-
-    /*
-        分享到qq
-        url: 要分享的url
-        title: 要分享的描述
-        desc: 要分享的描述
-        notOpenWin: 是否要弹出窗口
-
-        用例：
-        $.QXShare.qq('www.a.com', 'test', 'test', true);
-    */
-    $.QXShare.qq = function(url, title, desc, notOpenWin){
-        var clearTitle = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(title)),
-            clearDesc = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(desc)),
-            qqUrl = String.format(
-                "http://connect.qq.com/widget/shareqq/index.html?url={0}&title={1}&desc={2}&source={3}",
-                url,
-                (clearTitle.length >= 110) ? (clearTitle.substring(0, 110) + '...') : clearTitle,
-                clearDesc ? clearDesc : '在且行上看到点好东西, 推荐你看看',
-                'shareqq'
-            );
-
-        notOpenWin = notOpenWin ? notOpenWin : false;
-
-        if(!notOpenWin){
-            window.open(qqUrl, '_blank');
-        } 
-
-        return qqUrl;
-    };
-
 
     /* 
         网站提示插件
@@ -524,50 +408,6 @@ if (!String.format) {
             }
         };
     };
-
-
-    $.QXMap = {
-        version: '1.0.0',
-        author: 'stranger',
-        description: '地图组件'
-    };
-    $.QXMap.locationByName = function(addressName, mapObj){
-        var map = mapObj;
-
-        //地址解析器
-        var myGeo = new BMap.Geocoder();
-        
-        myGeo.getPoint(addressName, function(point){
-            
-            if(point){
-                //启用滚轮放大缩小
-                map.enableScrollWheelZoom();
-                //初始化地图,设置中心点坐标和地图级别
-                map.centerAndZoom(point, 16);
-                //添加平移缩放控件
-                map.addControl(new BMap.NavigationControl());
-                //添加地图缩略图控件
-                map.addControl(new BMap.OverviewMapControl());
-
-                //创建标注（类似定位小红旗）
-                var marker = new BMap.Marker(point);
-                //标注提示文本
-                //var label = new BMap.Label(lableName, {"offset":new BMap.Size(20,-20)});
-                //marker.setLabel(label); //添加提示文本
-
-                //创建消息框
-                var infoWindow = new BMap.InfoWindow(addressName);
-                //绑定标注单击事件，设置显示的消息框
-                marker.addEventListener("click", function(){
-                    this.openInfoWindow(infoWindow);
-                });
-
-                //把标注添加到地图
-                map.addOverlay(marker);
-            }
-        }, "成都");
-    };
-
 
 })(jQuery);
 
