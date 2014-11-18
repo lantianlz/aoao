@@ -32,16 +32,19 @@ def detail(request, car_wash_id=None, template_name='mobile/car_wash/detail.html
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+@member_required
 def order(request, province_id=None, template_name='mobile/car_wash/order.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+@member_required
 def order_detail(request, order_detail_id=None, template_name="mobile/car_wash/order_detail.html"):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+@member_required
 def coupon(request, template_name='mobile/car_wash/coupon.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -81,9 +84,6 @@ def buy(request, template_name='mobile/car_wash/buy.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-def unopen_city(request, template_name='mobile/city/unopen_city.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 def location(request, template_name='mobile/car_wash/location.html'):
 

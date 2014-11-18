@@ -2,6 +2,7 @@
 import datetime
 import re
 
+from common import utils
 from django.db import models
 from django.conf import settings
 
@@ -133,21 +134,22 @@ class Coupon(models.Model):
     """
     coupon_type_choices = ((0, u'优惠特定金额'), (1, u'优惠至特定金额'))
     use_type_choices = ((0, u'洗车专用'), (1, u''))
+    platform_choices = ((0, u'无限制'), (1, u'微信端专用'))
     state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'))
 
     code = models.CharField(max_length=64, unique=True)  # 优惠券编码
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)
-    user_id = models.CharField(max_length=36, db_index=True, null=True)  # 用户
-    discount = models.FloatField(default=0)  # 优惠幅度(小于1代表折扣率，大于1代表折扣金额)
+    discount = models.FloatField(db_index=True)  # 优惠幅度(小于1代表折扣率，大于1代表折扣金额)
     expiry_time = models.DateTimeField()  # 失效时间
     minimum_amount = models.FloatField(default=0)  # 最低消费额
-    car_wash = models.ForeignKey("CarWash")
+    user_id = models.CharField(max_length=36, db_index=True, null=True)  # 用户
+    car_wash = models.ForeignKey("CarWash", null=True)
 
     service_group = models.IntegerField(default=0, choices=group_choices)  # 使用类型
+    platform = models.IntegerField(default=0, db_index=True, choices=platform_choices)  # 使用平台
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时间
     state = models.IntegerField(default=1, db_index=True, choices=state_choices)
     email_flag = models.BooleanField(default=False)  # 标记是否发送过优惠卷过期提醒消息
-    data_body = models.TextField(default='')
 
     class Meta:
         ordering = ['-id', ]
@@ -164,8 +166,13 @@ class Coupon(models.Model):
         '''
         note = u'全场通用，无限制条件'
         if self.coupon_type == 0:
-            note = u'最低消费%s元' % self.minimum_amount
-        else:
-            car_wash = self.car_wash
-            note = u'仅限洗车行 <a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
+            note = u"凭此优惠券，下单时可立减现金%s元" % utils.smart_show_float(self.discount)
+        elif self.coupon_type == 1:
+            note = u"凭此优惠券，可享受%s元洗车" % utils.smart_show_float(self.discount)
+
+        if self.minimum_amount > 0 and self.minimum_amount != self.discount:
+            note += u' (最低消费%s元)' % utils.smart_show_float(self.minimum_amount)
+        car_wash = self.car_wash
+        if car_wash:
+            note = u', 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
         return note

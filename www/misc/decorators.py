@@ -26,6 +26,7 @@ def member_required(func):
             if request.is_ajax():
                 return HttpResponse('need_login')
             else:
+                return HttpResponse(u'请先登录')
                 try:
                     url = urllib.quote_plus(request.get_full_path())
                 except:
@@ -45,9 +46,9 @@ def staff_required(func):
     def _decorator(request, *args, **kwargs):
         if not (hasattr(request, 'user') and request.user.is_authenticated() and request.user.is_staff()):
             if request.is_ajax():
-                return HttpResponse('need_staff')
+                return HttpResponse(u'need_staff')
             else:
-                HttpResponse(u'需要管理员权限才可')
+                return HttpResponse(u'需要管理员权限才可')
 
         return func(request, *args, **kwargs)
     return _decorator

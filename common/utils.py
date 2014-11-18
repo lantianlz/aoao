@@ -91,8 +91,8 @@ def get_next_url(request):
             referrer = list(urlparse(referrer))[2]
             if referrer != request.path:
                 if referrer not in ('/', '/regist', '/reset_password', '/forget_password'):
-                            # referrer的query参数不能丢失
-                            next_url = referrer + '?' + list(urlparse(referrer))[4]
+                    # referrer的query参数不能丢失
+                    next_url = referrer + '?' + list(urlparse(referrer))[4]
     # 部分链接不能跳转
     next_url = next_url or "/"
     for key in ("regist", "create"):
@@ -267,6 +267,15 @@ def get_random_code(length=16):
     return postfix
 
 
+def get_radmon_int(length):
+    length = int(length)
+    assert length > 0
+    data = ""
+    for i in range(length):
+        data += str(random.randint(0, 9))
+    return data
+
+
 def exec_command(command, timeout=25):
     import commands
     content = commands.getoutput(command)
@@ -327,3 +336,20 @@ def get_chinese_length(text):
         else:
             str_count += 1
     return str_count / 2
+
+
+def smart_show_float(value, point_len=2):
+    """
+    @note: 智能显示浮点数，17.00->17
+    """
+    value = float(value)
+    int_value = int(value)
+
+    if value - int_value == 0:
+        return int_value
+    else:
+        if point_len == 1:
+            return "%.1f" % value
+
+        if point_len == 2:
+            return "%.2f" % value

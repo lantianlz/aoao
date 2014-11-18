@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import time
-import random
-import requests
-import json
-import logging
-from django.conf import settings
+import datetime
 
-from common import cache, debug
+from common import utils
 from www.misc import consts
 
-from www.car_wash.models import CarWash, ServicePrice, ServiceType
+from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -18,6 +13,8 @@ dict_err = {
     20102: u'洗车行名称重复',
     20103: u'洗车行不存在或者已删除',
     20104: u'该洗车行已添加此服务类型',
+
+    20205: u'小概率事件发生，优惠券编码重复，请重新添加',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -151,3 +148,13 @@ class ServiceTypeBase(object):
         st.sort_num = sort_num
         st.save()
         return 0, st
+
+
+class CouponBase(object):
+
+    def add_coupon(self, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash=None):
+        assert float(discount) >= 0 and expiry_time > datetime.datetime.now()
+
+        code = utils.get_radmon_int(length=12)
+        if Coupon.objects.filter(code=code):
+            return 20205, dict_err.get(20205)
