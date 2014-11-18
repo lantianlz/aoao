@@ -149,8 +149,9 @@ def change_http_data(content):
 
 
 # 格式化时间输出
-from common.utils import time_format
+from common.utils import time_format, smart_show_float
 register.filter('time_format', time_format)
+register.filter('smart_show_float', smart_show_float)
 
 
 @register.filter

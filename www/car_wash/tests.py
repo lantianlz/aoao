@@ -11,12 +11,14 @@ sys.path.extend([os.path.abspath(os.path.join(SITE_ROOT, '../')),
 os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 import random
+import datetime
 from common import utils
 from www.car_wash import interface
 
 stb = interface.ServiceTypeBase()
 cwb = interface.CarWashBase()
 spb = interface.ServicePriceBase()
+cb = interface.CouponBase()
 
 city_id = 1974
 district_id = 3247
@@ -41,13 +43,30 @@ def add_sp():
         print spb.add_service_price(car_wash=car_wash, service_type_id=2, sale_price=20, origin_price=40, clear_price=25)
 
 
+def add_cou():
+    user_id = "d081652b603211e48a41685b35d0bf16"
+    datas = [
+        [0, 5, user_id, 0, ""],
+        [0, 15, user_id, 0, ""],
+
+        [1, 0, user_id, 0, ""],
+        [1, 5, user_id, 0, ""],
+        [1, 10, user_id, 0, ""],
+    ]
+    for data in datas:
+        coupon_type, discount, user_id, minimum_amount, car_wash_id = data
+        expiry_time = datetime.datetime.now() + datetime.timedelta(days=random.randint(30, 90))
+        errcode, result = cb.add_coupon(coupon_type, discount, expiry_time, user_id, minimum_amount, car_wash_id)
+        if errcode:
+            print errcode, result.encode("utf8")
+
+
 def main():
     # print stb.add_service_type(name=u"标准洗车(5座)")
-    # print stb.modify_service_type(1, u"标准洗车(5座)")
+
     # add_cw()
     # add_sp()
-    # print utils.get_radmon_int(10)
-    # print utils.smart_show_float(17.98)
+    add_cou()
 
 if __name__ == '__main__':
     main()

@@ -133,14 +133,13 @@ class Coupon(models.Model):
     @note: 优惠券
     """
     coupon_type_choices = ((0, u'优惠特定金额'), (1, u'优惠至特定金额'))
-    use_type_choices = ((0, u'洗车专用'), (1, u''))
     platform_choices = ((0, u'无限制'), (1, u'微信端专用'))
     state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'))
 
     code = models.CharField(max_length=64, unique=True)  # 优惠券编码
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)
     discount = models.FloatField(db_index=True)  # 优惠幅度(小于1代表折扣率，大于1代表折扣金额)
-    expiry_time = models.DateTimeField()  # 失效时间
+    expiry_time = models.DateTimeField(db_index=True)  # 失效时间
     minimum_amount = models.FloatField(default=0)  # 最低消费额
     user_id = models.CharField(max_length=36, db_index=True, null=True)  # 用户
     car_wash = models.ForeignKey("CarWash", null=True)
@@ -152,7 +151,7 @@ class Coupon(models.Model):
     email_flag = models.BooleanField(default=False)  # 标记是否发送过优惠卷过期提醒消息
 
     class Meta:
-        ordering = ['-id', ]
+        ordering = ['expiry_time', ]
 
     def __unicode__(self):
         return str(self.code)
