@@ -93,13 +93,16 @@ class CarWashBank(models.Model):
     balance_date = models.DateField(null=True)  # 结算日期
 
 
+group_choices = ((0, u'洗车专用'), (1, u''))
+
+
 class ServiceType(models.Model):
 
     """
     @note: 服务类型
     """
     name = models.CharField(max_length=32, unique=True)
-    group = models.IntegerField(default=0, db_index=True)  # 大类
+    group = models.IntegerField(default=0, db_index=True, choices=group_choices)  # 大类
     sort_num = models.IntegerField(default=0, db_index=True)
     state = models.BooleanField(default=True, db_index=True)
 
@@ -129,16 +132,18 @@ class Coupon(models.Model):
     @note: 优惠券
     """
     coupon_type_choices = ((0, u'优惠特定金额'), (1, u'优惠至特定金额'))
-    state_choices = ((0, u'未领取'), (1, u'未使用'), (2, u'已使用'))
+    use_type_choices = ((0, u'洗车专用'), (1, u''))
+    state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'))
 
     code = models.CharField(max_length=64, unique=True)  # 优惠券编码
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)
     user_id = models.CharField(max_length=36, db_index=True, null=True)  # 用户
-    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠幅度，小于1代表折扣率，大于1代表折扣金额
+    discount = models.FloatField(default=0)  # 优惠幅度(小于1代表折扣率，大于1代表折扣金额)
     expiry_time = models.DateTimeField()  # 失效时间
-    minimum_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 最低消费额
+    minimum_amount = models.FloatField(default=0)  # 最低消费额
     car_wash = models.ForeignKey("CarWash")
 
+    service_group = models.IntegerField(default=0, choices=group_choices)  # 使用类型
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时间
     state = models.IntegerField(default=1, db_index=True, choices=state_choices)
     email_flag = models.BooleanField(default=False)  # 标记是否发送过优惠卷过期提醒消息
@@ -153,7 +158,7 @@ class Coupon(models.Model):
     def is_expiry(self):
         return self.expiry_time < datetime.datetime.now()
 
-    def get_user_note(self):
+    def get_note(self):
         '''
         @note: 获取使用说明
         '''
@@ -164,7 +169,3 @@ class Coupon(models.Model):
             car_wash = self.car_wash
             note = u'仅限洗车行 <a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
         return note
-
-"""
-订单
-"""
