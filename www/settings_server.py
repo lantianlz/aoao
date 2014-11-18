@@ -19,8 +19,8 @@ SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.extend([os.path.abspath(os.path.join(SITE_ROOT, '../'))])
 
 SERVER_NAME = 'AOAOXC_WEB0' if not LOCAL_FLAG else 'DEVELOPER'
-SERVER_DOMAIN = 'aoaoxc.com' if not LOCAL_FLAG else 'a.com:8000'
-MAIN_DOMAIN = 'http://www.%s' % SERVER_DOMAIN
+SERVER_DOMAIN = 'aoaoxc.com' if not LOCAL_FLAG else '192.168.0.199:8002'
+MAIN_DOMAIN = ('http://www.%s' % SERVER_DOMAIN) if not LOCAL_FLAG else ('http://%s' % SERVER_DOMAIN)
 
 IMG0_DOMAIN = 'http://img0.aoaoxc.com'
 IMG0_DOMAIN = 'http://aoaoxc-img0.qiniudn.com'

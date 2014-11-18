@@ -10,23 +10,18 @@
             "sub_button": [
                 {
                     "type": "view", 
-                    "name": "测试直接跳转", 
+                    "name": "李政本地", 
                     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
+                },
+                {
+                    "type": "view", 
+                    "name": "小雷本地", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.104%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
                 },
                 {
                     "type": "view", 
                     "name": "正式环境首页", 
                     "url": "http://www.aoaoxc.com"
-                },
-                {
-                    "type": "view", 
-                    "name": "正式环境", 
-                    "url": "http://www.aoaoxc.com/account/oauth/weixin"
-                },
-                {
-                    "type": "view", 
-                    "name": "直接跳转", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
                 }
             ]
         }
