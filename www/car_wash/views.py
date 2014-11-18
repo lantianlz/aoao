@@ -102,5 +102,5 @@ def get_car_washs(request):
         'lowest_origin_price': '30.0',
         'price_minus': '10.0'
     }]
-    data = []
+    #data = []
     return HttpResponse(json.dumps(data))
