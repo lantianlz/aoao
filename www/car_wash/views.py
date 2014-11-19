@@ -65,11 +65,6 @@ def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def about(request, template_name='mobile/car_wash/about.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
 def setting(request, template_name='mobile/car_wash/setting.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -88,6 +83,9 @@ def buy(request, template_name='mobile/car_wash/buy.html'):
 def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+# ===================================================ajax部分=================================================================#
 
 
 def get_car_washs(request):

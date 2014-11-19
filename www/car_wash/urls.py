@@ -7,14 +7,15 @@ urlpatterns = patterns('www.car_wash.views',
                        url(r'^order$', 'order'),
                        url(r'^order/(?P<order_detail_id>\d+)$', 'order_detail'),
                        url(r'^coupon$', 'coupon'),
+                       url(r'^location$', 'location'),
+                       url(r'^buy$', 'buy'),
+                       url(r'^get_car_washs$', 'get_car_washs'),
+
                        url(r'^account$', 'account'),
                        url(r'^record_deal$', 'record_deal'),
-                       url(r'^bind_mobile$', 'bind_mobile'),
-                       url(r'^about$', 'about'),
-                       url(r'^setting$', 'setting'),
                        url(r'^pay$', 'pay'),
-                       url(r'^buy$', 'buy'),
-                       url(r'^location$', 'location'),
-                       url(r'^get_car_washs$', 'get_car_washs'),
-                       
+
+                       url(r'^bind_mobile$', 'bind_mobile'),
+                       url(r'^setting$', 'setting'),
+
                        )

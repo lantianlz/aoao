@@ -7,3 +7,4 @@
 6.七牛域名修改
 7.js和css无用的去掉引用
 8.member_required判读
+9.404and500

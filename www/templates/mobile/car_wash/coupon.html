@@ -73,9 +73,9 @@
 		</div>
 	</li>
 	{% endfor %}
+	{% if not coupons %}
+	<div class="blank10"></div>
+	<div class="alert alert-info mr-5 ml-5">暂无</div>
+	{% endif %}
 </ul>
-{% if not coupons %}
-<div class="blank10"></div>
-<div class="alert alert-info mr-5 ml-5">暂无</div>
-{% endif %}
 {% endblock %}
