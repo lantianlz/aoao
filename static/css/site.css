@@ -134,6 +134,8 @@ body {
 .bgc-F5CCC5{background-color: #F5CCC5;}
 .bgc-EF8A55{background-color: #EF8A55;} /*按钮橙色*/
 .bgc-272829{background-color: #272829;} /*底部*/
+.bgc-333333{background-color: #333333;}
+.bgc-e9e9e9{background-color: #e9e9e9;}
 
 .border-1{border: solid 1px;}
 .border-5{border: solid 5px;}
@@ -166,6 +168,10 @@ body {
 .bdr-t-r-4{border-top-right-radius: 4px;}
 .bdr-b-l-4{border-bottom-left-radius: 4px;}
 .bdr-b-r-4{border-bottom-right-radius: 4px;}
+
+.box-shadow-224{
+	box-shadow: 2px 2px 4px #666;
+}
 
 .pa{position: absolute;}
 .pr{position: relative;}
@@ -252,4 +258,29 @@ body {
 .qx-warning-notice{
   background-color: #EEA31F;
   border-color: #EEA31F;
+}
+
+.qx-nav-pills{
+    border-bottom: 2px solid #d9d9d9;
+}
+.qx-nav-pills>li>a{
+    border-radius: 0px;
+    margin-bottom: -2px;
+}
+.qx-nav-pills>li>a:hover{
+    background-color: transparent;
+    border-bottom: 2px solid #428bca;
+}
+.qx-nav-pills>li.active>a:hover{
+    color: #428bca;
+    background-color: transparent;
+}
+.qx-nav-pills>li.active>a{
+    background-color: transparent;
+    color: #428bca;
+    border-bottom: 2px solid #428bca;
+}
+
+.black-blue{
+	color: #222;
 }
