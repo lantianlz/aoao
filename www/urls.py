@@ -21,6 +21,7 @@ urlpatterns = patterns('',
                        url(r'^account/', include('www.account.urls')),
                        url(r'^weixin/', include('www.weixin.urls')),
                        url(r'^city/', include('www.city.urls')),
+                       url(r'^cash/', include('www.cash.urls')),
 
                        url(r'^admin/', include('www.admin.urls')),
 
