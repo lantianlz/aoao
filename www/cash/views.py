@@ -6,16 +6,16 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 
-def cash_index(request, template_name='mobile/car_wash/account.html'):
+def cash_index(request, template_name='mobile/cash/cash_index.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def record_deal(request, template_name='mobile/car_wash/record_deal.html'):
+def user_cash_record(request, template_name='mobile/cash/user_cash_record.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def pay(request, template_name='mobile/car_wash/pay.html'):
+def recharge(request, template_name='mobile/cash/recharge.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
