@@ -27,7 +27,7 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	PARENT_URL = "/car_wash/account";
+	PARENT_URL = "/cash/";
 	// 点击金额切换颜色
 	$('.btn-price').bind('click', function(){
 		var price = $(this).data('price'),
@@ -117,7 +117,7 @@ $(document).ready(function(){
 	</div>
 
 	<ul class="list-group col-xs-12 mt-15 mb-10 pr-0">
-		<li class="list-group-item bdc-d0d0d0 pr" href="/car_wash/pay">
+		<li class="list-group-item bdc-d0d0d0 pr">
 			<div class="row pay-item">
 				<div class="col-xs-3 pr-0 pl-0"><img src="{{MEDIA_URL}}img/weixin.png"></div>
 				<div class="col-xs-6 line-height-32 f16">微信支付</div>
@@ -126,7 +126,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</li>
-		<li class="list-group-item bdc-d0d0d0 pr" href="/car_wash/record_deal">
+		<li class="list-group-item bdc-d0d0d0 pr">
 			<div class="row pay-item">
 				<div class="col-xs-3 pr-0 pl-0"><img src="{{MEDIA_URL}}img/zhifubao.png"></div>
 				<div class="col-xs-6 line-height-32 f16">支付宝支付</div>

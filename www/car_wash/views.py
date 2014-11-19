@@ -50,12 +50,12 @@ def coupon(request, template_name='mobile/car_wash/coupon.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def account(request, template_name='mobile/car_wash/account.html'):
+def buy(request, template_name='mobile/car_wash/buy.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def record_deal(request, template_name='mobile/car_wash/record_deal.html'):
+def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -66,21 +66,6 @@ def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
 
 
 def setting(request, template_name='mobile/car_wash/setting.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
-def pay(request, template_name='mobile/car_wash/pay.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
-def buy(request, template_name='mobile/car_wash/buy.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
-def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
