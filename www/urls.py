@@ -22,7 +22,7 @@ urlpatterns = patterns('',
                        url(r'^weixin/', include('www.weixin.urls')),
                        url(r'^city/', include('www.city.urls')),
 
-                       # url(r'^admin/', include('www.admin.urls')),
+                       url(r'^admin/', include('www.admin.urls')),
 
                        url(r'^n/(?P<nick>.*)$', 'www.account.views.get_user_by_nick'),
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),

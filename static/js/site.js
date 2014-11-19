@@ -201,20 +201,20 @@ if (!String.format) {
     */
     $.QXNotice.TopNotice = function(type, content, closeSeconds){
         var noticeHtml = [
-                '<div class="alert alert-dismissable pf box-shadow-224 border-radius-2 co3 zx-top-notice qx-{0}-notice">',
+                '<div class="alert alert-dismissable pf box-shadow-224 border-radius-2 co5 zx-top-notice qx-{0}-notice">',
                     '<button type="button" class="close" aria-hidden="true">',
-                        '<span class="glyphicon glyphicon-remove-circle co3 f18 pointer"></span>',
+                        '<span class="fa fa-times co5 f18 pointer"></span>',
                     '</button>',
-                    '<span class="glyphicon {1} pa pr-10 f20" style="left: 25px; top: 15px;"></span>',
+                    '<span class="fa {1} pa pr-10 f20" style="left: 25px; top: 15px;"></span>',
                     '<span class="notice-content pl-50">{2}</span>',
                 '</div>'
             ].join(''),
             // 图标
             signDict = {
-                'success': 'glyphicon-ok', 
-                'error': 'glyphicon-exclamation-sign',
-                'warning': 'glyphicon-warning-sign',
-                'info': 'glyphicon-info-sign'
+                'success': 'fa-check', 
+                'error': 'fa-minus-circle',
+                'warning': 'fa-warning',
+                'info': 'fa-info-circle'
             },
             sign = signDict[type ? type : 'info'];
 
