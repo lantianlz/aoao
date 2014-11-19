@@ -133,6 +133,7 @@ body {
 .bgc-C0DFEF{background-color: #C0DFEF;}
 .bgc-F5CCC5{background-color: #F5CCC5;}
 .bgc-EF8A55{background-color: #EF8A55;} /*按钮橙色*/
+.bgc-272829{background-color: #272829;} /*底部*/
 
 .border-1{border: solid 1px;}
 .border-5{border: solid 5px;}
@@ -231,4 +232,24 @@ body {
 	color: #fff;
 	background-color: #EF8A55;
 	border-color: #EF8A55;
+}
+
+.qx-info-notice{
+  background-color: #56A8C7;
+  border-color: #56A8C7;
+}
+
+.qx-success-notice{
+  background-color: #65B153;
+  border-color: #0FA70D;
+}
+
+.qx-error-notice{
+  background-color: #C94C42;
+  border-color: #B43A30;
+}
+
+.qx-warning-notice{
+  background-color: #EEA31F;
+  border-color: #EEA31F;
 }

@@ -24,7 +24,7 @@ def show_index(request):
         return question_home(request)
 
 
-def login(request, template_name='account/login.html'):
+def login(request, template_name='pc/account/login.html'):
     email = request.POST.get('email', '').strip()
     password = request.POST.get('password', '').strip()
 
@@ -46,7 +46,7 @@ def login(request, template_name='account/login.html'):
     user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
     # 手机客户端换模板
     if user_agent_dict['os']['family'] in ('Android', 'iOS'):
-        template_name = 'account/login.html'
+        template_name = 'pc/account/login.html'
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
