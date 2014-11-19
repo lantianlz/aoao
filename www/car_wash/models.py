@@ -134,7 +134,7 @@ class Coupon(models.Model):
     """
     coupon_type_choices = ((0, u'优惠特定金额'), (1, u'优惠至特定金额'))
     platform_choices = ((0, u'无限制'), (1, u'微信端专用'))
-    state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'))
+    state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'), (3, u'已过期'))
 
     code = models.CharField(max_length=64, unique=True)  # 优惠券编码
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)
@@ -151,13 +151,24 @@ class Coupon(models.Model):
     email_flag = models.BooleanField(default=False)  # 标记是否发送过优惠卷过期提醒消息
 
     class Meta:
-        ordering = ['expiry_time', ]
+        ordering = ['state', "expiry_time"]
 
     def __unicode__(self):
         return str(self.code)
 
-    def is_expiry(self):
+    def check_is_expiry(self):
         return self.expiry_time < datetime.datetime.now()
+
+    def get_state_show(self):
+        if self.state != 1:
+            return self.get_state_display()
+
+        if self.check_is_expiry():
+            if self.state != 3:
+                self.state = 3
+                self.save()
+
+        return self.get_state_display()
 
     def get_note(self):
         '''
