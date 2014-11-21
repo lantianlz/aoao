@@ -135,19 +135,6 @@ class WexinBase(object):
                 if event_key == 'hotest':
                     return self.get_hotest_response(to_user, from_user)
 
-        # 语音识别上传
-        recognitions = jq('recognition')
-        if recognitions:
-            recognition = recognitions[0].text.lower()
-            logging.error(u'收到用户发送的语音数据，内容如下：%s' % recognition)
-            if u'干货' in recognition or u'精选' in recognition or u'来一发' in recognition or u'资讯' in recognition:
-                questions = QuestionBase().get_all_important_question()
-                question = questions[random.randint(0, len(questions) - 1)]
-                items = self.get_base_news_item_response() % dict(title=question.iq_title.replace('%', '%%'), des='', picurl=question.img,
-                                                                  hrefurl='%s%s' % (settings.MAIN_DOMAIN, question.get_url()))
-
-                return self.get_base_base_news_response(items) % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()), articles_count=1)
-
         # 文字识别
         msg_types = jq('msgtype')
         if msg_types:

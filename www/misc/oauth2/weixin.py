@@ -6,15 +6,12 @@
 '''
 import requests
 import urllib
-import re
 import json
-from pprint import pprint
+# import logging
+# from pprint import pprint
 
 from django.conf import settings
-import logging
 
-CLIENT_ID = 'wx0d227d4f9b19658a'
-CLIENT_SECRET = '513bdaf5b6022df4913f4cb5543fa688'
 API_URL = 'https://api.weixin.qq.com'
 REDIRECT_URI = '%s/account/oauth/weixin' % settings.MAIN_DOMAIN
 
@@ -22,8 +19,11 @@ REDIRECT_URI = '%s/account/oauth/weixin' % settings.MAIN_DOMAIN
 class Consumer(object):
 
     def __init__(self, response_type='code'):
-        self.client_id = CLIENT_ID
-        self.client_secret = CLIENT_SECRET
+        from www.weixin.interface import dict_weixin_app
+        app_key = "aoaoxc_test" if settings.LOCAL_FLAG else "aoaoxc"
+
+        self.client_id = dict_weixin_app[app_key]["app_id"]
+        self.client_secret = dict_weixin_app[app_key]["app_secret"]
         self.api_url = API_URL
         self.response_type = response_type
         self.redirect_uri = urllib.quote_plus(REDIRECT_URI)
@@ -64,6 +64,3 @@ class Consumer(object):
             return json.loads(content)
         except:
             return content
-
-    def get_openid(self, access_token):
-        pass
