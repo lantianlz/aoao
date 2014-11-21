@@ -1,7 +1,7 @@
 {% extends "pc/admin/home.html" %}
 {% load custom_tags %}
 {% load custom_filters %}
-{% block title %}用户管理{% endblock %}
+{% block title %}洗车行管理{% endblock %}
 
 {% block css %}
 <style type="text/css">
@@ -12,81 +12,68 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-    var User = Backbone.Model.extend({
+    var CarWash = Backbone.Model.extend({
         defaults: {
-            'num': 1,
-            'userId': '',
-            'userAvatar': '',
-            'userAvatar300': '',
-            'userNick': '',
-            'userDesc': '',
-            'userEmail': '',
-            'questionCount': 0,
-            'answerCount': 0,
-            'likeCount': 0,
-            'followers': 0,
-            'following': 0,
-            'isRecommend': false,
-            'isAdmin': false,
-            'isCustomerManager': false,
-            'lastActive': '',
-            'state': true,
-            'ip': ''
+            
         }
     });
 
-    var Users = Backbone.Collection.extend({
-        model: User,
+    var CarWashs = Backbone.Collection.extend({
+        model: CarWash,
 
         _modelMaps: {
             'num': 'num',
-            'userId': 'user_id',
-            'userAvatar': 'user_avatar',
-            'userAvatar300': 'user_avatar_300',
-            'userNick': 'user_nick',
-            'userDesc': 'user_des',
-            'userEmail': 'user_email',
-            'userGender': 'user_gender',
-            'birthday': 'birthday',
-            'questionCount': 'question_count',
-            'answerCount': 'answer_count',
-            'likeCount': 'liked_count',
-            'followers': 'follower_count',
-            'following': 'following_count',
-            'isRecommend': 'is_recommend',
-            'isAdmin': 'is_admin',
-            'isManager': 'is_manager',
-            'isCustomerManager': 'is_customer_manager',
-            'lastActive': 'last_active',
+            'carWashId': 'car_wash_id',
+            'name': 'name',
+            'businessHours': 'business_hours',
+            'cityId': 'city_id',
+            'cityName': 'city_name',
+            'districtId': 'district_id',
+            'districtName': 'district_name',
+            'tel': 'tel',
+            'addr': 'addr',
+            'longitude': 'longitude',
+            'latitude': 'latitude',
+            'washType': 'wash_type',
+            'des': 'des',
+            'note': 'note',
+            'lowestSalePrice': 'lowest_sale_price',
+            'lowestOriginPrice': 'lowest_origin_price',
+            'imgs': 'imgs',
+            'rating': 'rating',
+            'orderCount': 'order_count',
+            'validDateStart': 'valid_date_start',
+            'validDateEnd': 'valid_date_end',
+            'isVip': 'is_vip',
+            'vipInfo': 'vip_info',
+            'sortNum': 'sort_num',
             'state': 'state',
-            'ip': 'ip',
-            'source': 'source',
-            'registerDate': 'register_date'
+            'createTime': 'create_time'
         },
 
-        search: function(userNick, pageIndex){
+        search: function(name, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/user/search", 
-                {'user_nick': userNick||'', 'page_index': pageIndex||1}, 
+                "/admin/car_wash/search", 
+                {'name': name||'', 'page_index': pageIndex||1}, 
                 function(data){
                     
                     me.pageIndex = pageIndex;
                     me.pageCount = data.page_count;
-                    me.userNick = userNick||'';
+                    me.name = name||'';
 
                     me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
 
-        getOne: function(userId, callback){
+        getOne: function(carWashId, callback){
             var me = this;
 
             ajaxSend(
-                "/admin/user/get_user_by_id", 
-                {'user_id': userId},
+                "/admin/car_wash/get_car_wash_by_id", 
+                {'car_wash_id': carWashId},
                 function(data){
                     if(callback){
                         callback($.QXUtils.dictMap(data, me._modelMaps));
@@ -95,31 +82,16 @@ $(document).ready(function(){
             );
         },
 
-        // 删除
-        removeUser: function(userId, callback){
-            var me = this;
-
-            ajaxSend(
-                "/admin/user/remove_user", 
-                {'user_id': userId},
-                function(data){
-                    if(callback){
-                        callback(data);
-                    }
-                }
-            );
-        },
-
         //
-        modifyUser: function(data, callback){
+        modifyCarWash: function(data, callback){
             var me = this;
 
             ajaxSend(
-                "/admin/user/modify_user?" + data, 
-                {},
-                function(data){
+                "/admin/car_wash/modify_car_wash", 
+                data,
+                function(response){
                     if(callback){
-                        callback(data);
+                        callback(response);
                     }
                 }
             );
@@ -128,15 +100,15 @@ $(document).ready(function(){
     });
     
     var ListView = Backbone.View.extend({
-        el: '#user_list',
+        el: '#car_wash_list',
 
-        template: _.template($('#user_list_template').html()),
+        template: _.template($('#car_wash_list_template').html()),
 
         pagination: new $.QXPagination.PaginationView(),
 
         events: {
-            'click .search-user': 'searchUser',
-            'click .pointer': 'modifyUser'
+            'click .search-car_wash': 'searchCarWash',
+            'click .pointer': 'modifyCarWash'
         },
 
         initialize: function(){
@@ -147,30 +119,30 @@ $(document).ready(function(){
             var data = this.collection.toJSON();
             
             this.showPanel();
-            this.$('tbody').html(this.template({'users': data}));
+            this.$('tbody').html(this.template({'carWashs': data}));
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.userNick
+                'search/' + this.collection.name
             );
         },
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#user_list"]').tab('show');
+            $('.qx-nav-pills a[href="#car_wash_list"]').tab('show');
         },
 
-        searchUser: function(){
-            var userNick = this.$('.key-word').val();
+        searchCarWash: function(){
+            var name = this.$('.key-word').val();
 
-            router.navigate(String.format('/search/{0}/1', userNick), {trigger: true});
+            router.navigate(String.format('/search/{0}/1', name), {trigger: true});
         },
 
-        modifyUser: function(sender){
+        modifyCarWash: function(sender){
             var target = $(sender.currentTarget),
-                userId = target.data('user_id');
+                carWashId = target.data('car_wash_id');
 
-            router.navigate('/modify/' + userId, {trigger: true});
+            router.navigate('/modify/' + carWashId, {trigger: true});
         }
         
     });
@@ -178,9 +150,9 @@ $(document).ready(function(){
 
     var ModifyView = Backbone.View.extend({
         
-        el: '#modify_user',
+        el: '#modify_car_wash',
 
-        template: _.template($('#modify_user_template').html()),
+        template: _.template($('#modify_car_wash_template').html()),
 
         events: {
             'click .save': 'save',
@@ -189,7 +161,7 @@ $(document).ready(function(){
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#modify_user"]').tab('show');
+            $('.qx-nav-pills a[href="#modify_car_wash"]').tab('show');
         },
 
         // 渲染
@@ -209,10 +181,10 @@ $(document).ready(function(){
         },
 
         // 显示提问信息
-        modifyUser: function(userId){
+        modifyCarWash: function(carWashId){
             var me = this;
 
-            this.collection.getOne(userId, function(data){
+            this.collection.getOne(carWashId, function(data){
 
                 if(data){
                     me.render(data);
@@ -226,13 +198,13 @@ $(document).ready(function(){
 
         // 保存
         save: function(){
-            var userId = this.$('form').data('user_id'),
+            var carWashId = this.$('form').data('car_wash_id'),
                 me = this;
 
-            me.collection.modifyUser(this.$('form').serialize(), function(data){
+            me.collection.modifyCarWash(this.$('form').serialize(), function(data){
                 if(data.errcode === 0){
                     $.QXNotice.SuccessTopNotice('操作成功');
-                    router.navigate('modify/' + userId, {'trigger': true});
+                    router.navigate('modify/' + carWashId, {'trigger': true});
                 } else {
                     $.QXNotice.ErrorTopNotice(data.errmsg);
                 }
@@ -245,24 +217,24 @@ $(document).ready(function(){
     var Router = Backbone.Router.extend({
         routes: {
             "":                              "search",
-            "search/(:userNick)/:pageIndex": "search",
-            "modify/:userId":                "modify"
+            "search/(:name)/:pageIndex": "search",
+            "modify/:carWashId":                "modify"
         },
 
         // 获取推荐用户
-        search: function(userNick, pageIndex){
-            users.search(userNick||'', pageIndex||1);
+        search: function(name, pageIndex){
+            carWashs.search(name||'', pageIndex||1);
         },
 
-        modify: function(userId){
-            modifyView.modifyUser(userId);
+        modify: function(carWashId){
+            modifyView.modifyCarWash(carWashId);
         }
 
     });
 
-    var users = new Users(),
-        listView = new ListView({collection: users}),
-        modifyView = new ModifyView({collection: users}),
+    var carWashs = new CarWashs(),
+        listView = new ListView({collection: carWashs}),
+        modifyView = new ModifyView({collection: carWashs}),
         router = new Router();
 
     Backbone.history.start();
@@ -274,21 +246,21 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#user_list" class="black-blue" data-toggle="pill">用户列表</a>
+        <a href="#car_wash_list" class="black-blue" data-toggle="pill">洗车行列表</a>
     </li>
     <li>
-        <a href="#modify_user" class="black-blue" data-toggle="pill">修改用户信息</a>
+        <a href="#modify_car_wash" class="black-blue" data-toggle="pill">修改洗车行信息</a>
     </li>
 </ul>
 
 <div class="tab-content">
     <!-- 用户列表 -->
-    <div class="tab-pane fade pt-15 in active" id="user_list">
+    <div class="tab-pane fade pt-15 in active" id="car_wash_list">
         <div class="pl-0 pb-10 col-md-3">
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入用户呢称..." />
+                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行呢称..." />
                 <span class="input-group-btn">
-                    <button class="btn btn-default search-user" type="button">查询</button>
+                    <button class="btn btn-default search-car_wash" type="button">查询</button>
                 </span>
             </div>
         </div>
@@ -296,12 +268,12 @@ $(document).ready(function(){
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>头像</th>
-                    <th>用户名称</th>
-                    <th>邮箱</th>
-                    <th>来源</th>
-                    <th>是否管理员</th>
-                    <th>上次活跃时间</th>
+                    <th>名称</th>
+                    <th>城市</th>
+                    <th>营业时间</th>
+                    <th>电话</th>
+                    <th>订单数量</th>
+                    <th>状态</th>
                 </tr>
             </thead>
             <tbody>
@@ -317,46 +289,34 @@ $(document).ready(function(){
     </div>
 
     <!-- 修改用户信息 -->
-    <div class="tab-pane fade pt-15" id="modify_user">
+    <div class="tab-pane fade pt-15" id="modify_car_wash">
         
     </div>
 </div>
 
-<script type="text/template" id="user_list_template">
-<% _.each(users, function(user){ %>
+<script type="text/template" id="car_wash_list_template">
+<% _.each(carWashs, function(carWash){ %>
     <tr>
-        <td><%= user.num %></td>
+        <td><%= carWash.num %></td>
+        <td><%= carWash.name %></td>
+        <td><%= carWash.cityName %></td>
+        <td><%= carWash.businessHours %></td>
+        <td><%= carWash.tel %></td>
+        <td><%= carWash.orderCount %></td>
         <td>
-            <a target="_blank" href="/p/<%= user.userId %>">
-                <img src="<%= user.userAvatar %>" class="avatar-35 avatar-circle" >
-            </a>
-        </td>
-        <td class="pointer" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
-        <td>
-            <%= user.userEmail %>
-        </td>
-        <td>
-            <%= user.source %>
-        </td>
-        <td>
-            <% if (user.isAdmin) { %>
-                <a href="/admin/permission#modifyUserPermission/<%= user.userId %>" title="修改管理员权限">
-                    <span class="glyphicon glyphicon-ok co-zx"></span>
-                </a>
-            <% } else if(!user.isAdmin && user.state) { %>
-                <a href="/admin/permission#addAdmin/<%= user.userId %>" title="设置管理员"><span class="glyphicon glyphicon-ok co10 pointer"></span></a>
+            <% if(carWash.state){ %>
+                <span class="fa fa-check co6"></span>
+            <% } else { %>
+                <span class="fa fa-time co2"></span>
             <% } %>
-        </td>
-        <td>
-            <%= user.lastActive %>
         </td>
     </tr>
 <% }) %>
 </script>
 
-<script type="text/template" id="modify_user_template">
-<form class="form-horizontal" data-user_id='<%= userId %>' role="form" method="post" action="">
-    <input type="hidden" name="user_id" value="<%= userId %>" />
+<script type="text/template" id="modify_car_wash_template">
+<form class="form-horizontal" role="form" method="post" action="">
+    <input type="hidden" name="car_wash_id" value="<%= carWashId %>" />
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">用户头像</label>
         <div class="col-sm-5">

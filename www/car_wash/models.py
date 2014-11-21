@@ -18,7 +18,7 @@ class CarWash(models.Model):
     """
     @note: 洗车行
     """
-    wash_type_choices = ((0, u'人工'), (1, u'机器'), (2, u''), )
+    wash_type_choices = ((0, u'人工'), (1, u'机器'), )
 
     company = models.ForeignKey("Company", null=True)   # 洗车行对应的集团公司
     city_id = models.IntegerField(db_index=True)

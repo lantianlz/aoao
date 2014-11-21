@@ -83,6 +83,9 @@ class CarWashBase(object):
         return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by_field)
 
 
+    def search_car_washs_for_admin(self, name=""):
+        return CarWash.objects.filter(name__contains=name)
+
 class ServicePriceBase(object):
 
     @car_wash_required

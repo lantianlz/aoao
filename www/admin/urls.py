@@ -25,3 +25,12 @@ urlpatterns += patterns('www.admin.views_permission',
                         url(r'^permission/get_all_administrators$', 'get_all_administrators'),
                         url(r'^permission$', 'permission'),
                         )
+
+# 洗车行
+urlpatterns += patterns('www.admin.views_car_wash',
+
+                        url(r'^car_wash/modify_car_wash$', 'modify_car_wash'),
+                        url(r'^car_wash/get_car_wash_by_id$', 'get_car_wash_by_id'),
+                        url(r'^car_wash/search$', 'search'),
+                        url(r'^car_wash$', 'car_wash'),
+                        )
