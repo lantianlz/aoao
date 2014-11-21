@@ -9,7 +9,7 @@ class UserCash(models.Model):
     @note: 用户现金账户
     """
     user_id = models.CharField(max_length=32, unique=True)
-    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0, db_index=True)
 
 
 class CarWashCash(models.Model):
@@ -18,7 +18,7 @@ class CarWashCash(models.Model):
     @note: 洗车行现金账户
     """
     car_wash_id = models.IntegerField(unique=True)
-    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0, db_index=True)
 
 
 operation_choices = ((0, u"转入"), (1, u"转出"))
