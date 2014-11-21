@@ -24,9 +24,8 @@ def car_wash_required(func):
     def _decorator(self, car_wash, *args, **kwargs):
         car_wash = car_wash
         if not isinstance(car_wash, CarWash):
-            try:
-                car_wash = CarWashBase().get_car_wash_by_id(car_wash)
-            except CarWash.DoesNotExist:
+            car_wash = CarWashBase().get_car_wash_by_id(car_wash)
+            if not car_wash:
                 return 20103, dict_err.get(20103)
         return func(self, car_wash, *args, **kwargs)
     return _decorator

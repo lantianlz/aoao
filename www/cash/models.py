@@ -35,10 +35,14 @@ class UserCashRecord(models.Model):
     current_balance = models.DecimalField(max_digits=20, decimal_places=2, db_index=True)
     operation = models.IntegerField(choices=operation_choices, db_index=True)  # 转入or转出
     notes = models.CharField(max_length=256)    # 流水介绍
+    ip = models.CharField(max_length=32, null=True)
     create_time = models.DateTimeField(auto_now_add=True, db_index=True)  # 创建时间
 
+    class Meta:
+        ordering = ['-id']
 
-class CarWashRecord(models.Model):
+
+class CarWashCashRecord(models.Model):
 
     """
     @note: 洗车现金账户流水
@@ -48,4 +52,5 @@ class CarWashRecord(models.Model):
     current_balance = models.DecimalField(max_digits=20, decimal_places=2, db_index=True)
     operation = models.IntegerField(choices=operation_choices, db_index=True)  # 转入or转出
     notes = models.CharField(max_length=256)    # 流水介绍
+    ip = models.CharField(max_length=32, null=True)
     create_time = models.DateTimeField(auto_now_add=True, db_index=True)  # 创建时间
