@@ -24,9 +24,8 @@ def car_wash_required(func):
     def _decorator(self, car_wash, *args, **kwargs):
         car_wash = car_wash
         if not isinstance(car_wash, CarWash):
-            try:
-                car_wash = CarWashBase().get_car_wash_by_id(car_wash)
-            except CarWash.DoesNotExist:
+            car_wash = CarWashBase().get_car_wash_by_id(car_wash)
+            if not car_wash:
                 return 20103, dict_err.get(20103)
         return func(self, car_wash, *args, **kwargs)
     return _decorator
@@ -45,6 +44,16 @@ def service_type_required(func):
 
 
 class CarWashBase(object):
+
+    def format_car_washs_for_ajax(self, objs):
+        datas = []
+        for obj in objs:
+            datas.append(dict(id=obj.id, url=obj.get_url(), name=obj.name, cover=obj.get_cover(),
+                              district=obj.get_district().district, wash_type=obj.get_wash_type_display(),
+                              lowest_sale_price=obj.lowest_sale_price, lowest_origin_price=obj.lowest_origin_price,
+                              price_minus=obj.get_price_minus()
+                              ))
+        return datas
 
     def get_car_wash_by_id(self, id, state=True):
         try:
