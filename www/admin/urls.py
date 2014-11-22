@@ -28,9 +28,30 @@ urlpatterns += patterns('www.admin.views_permission',
 
 # 洗车行
 urlpatterns += patterns('www.admin.views_car_wash',
-
+                        url(r'^car_wash/add_car_wash$', 'add_car_wash'),
                         url(r'^car_wash/modify_car_wash$', 'modify_car_wash'),
                         url(r'^car_wash/get_car_wash_by_id$', 'get_car_wash_by_id'),
                         url(r'^car_wash/search$', 'search'),
                         url(r'^car_wash$', 'car_wash'),
+                        )
+
+# 城市
+urlpatterns += patterns('www.admin.views_city',
+
+                        url(r'^city/city/get_citys_by_name$', 'get_citys_by_name'),
+                        url(r'^city/city/get_districts_by_city$', 'get_districts_by_city'),
+                        url(r'^city/city/modify_note$', 'modify_note'),
+                        url(r'^city/city/modify_city$', 'modify_city'),
+                        url(r'^city/city/get_city_by_id$', 'get_city_by_id'),
+                        url(r'^city/city/search$', 'search'),
+                        url(r'^city/city$', 'city'),
+                        )
+
+# 区
+urlpatterns += patterns('www.admin.views_district',
+
+                        url(r'^city/district/modify_district$', 'modify_district'),
+                        url(r'^city/district/get_district_by_id$', 'get_district_by_id'),
+                        url(r'^city/district/search$', 'search'),
+                        url(r'^city/district$', 'district'),
                         )

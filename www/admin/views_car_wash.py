@@ -11,6 +11,7 @@ from common import utils, page
 from misc.decorators import staff_required, common_ajax_response, verify_permission
 
 from www.car_wash.interface import CarWashBase
+from www.city.interface import CityBase
 
 @verify_permission('')
 def car_wash(request, template_name='pc/admin/car_wash.html'):
@@ -25,13 +26,16 @@ def format_car_wash(objs, num):
 
     for x in objs:
         num += 1
+
+        city = CityBase().get_city_by_id(x.city_id)
+
         data.append({
             'num': num,
             'car_wash_id': x.id,
             'name': x.name,
             'business_hours': x.business_hours,
             'city_id': x.city_id,
-            'city_name': '',
+            'city_name': city.city if city else '',
             'district_id': x.district_id,
             'district_name': '',
             'tel': x.tel,
@@ -58,7 +62,7 @@ def format_car_wash(objs, num):
     return data
 
 
-@verify_permission('query_user')
+@verify_permission('query_car_wash')
 def search(request):
     name = request.REQUEST.get('name')
     page_index = int(request.REQUEST.get('page_index', 1))
@@ -76,47 +80,71 @@ def search(request):
         mimetype='application/json'
     )
 
+@verify_permission('add_car_wash')
+@common_ajax_response
+def add_car_wash(request):
+    city_id = request.REQUEST.get('city_id')
+    district_id = request.REQUEST.get('district_id')
+    name = request.REQUEST.get('name')
+    business_hours = request.REQUEST.get('business_hours')
+    tel = request.REQUEST.get('tel')
+    addr = request.REQUEST.get('addr')
+    lowest_sale_price = request.REQUEST.get('lowest_sale_price')
+    lowest_origin_price = request.REQUEST.get('lowest_origin_price')
+    longitude = request.REQUEST.get('longitude')
+    latitude = request.REQUEST.get('latitude')
+    imgs = request.REQUEST.get('imgs')
+    wash_type = request.REQUEST.get('wash_type')
+    des = request.REQUEST.get('des')
+    note = request.REQUEST.get('note')
+    sort_num = request.REQUEST.get('sort_num')
+    state = request.REQUEST.get('state')
+    state = True if state == "1" else False
 
-@verify_permission('query_user')
+    flag, msg = CarWashBase().add_car_wash(city_id, district_id, name, business_hours, tel, 
+        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
+        wash_type, des, note, sort_num, state)
+
+    return flag, msg.id if flag == 0 else msg
+
+
+@verify_permission('query_car_wash')
 def get_car_wash_by_id(request):
-    user_id = request.REQUEST.get('user_id')
-    data = ''
+    car_wash_id = request.REQUEST.get('car_wash_id')
 
-    user = UserBase().get_user_by_id(user_id)
-    if user:
-        user = UserBase().format_user_full_info(user.id)
+    obj = CarWashBase().get_car_wash_by_id(car_wash_id, None)
 
-        data = {
-            'user_id': user.id,
-            'user_avatar': user.get_avatar_25(),
-            'user_avatar_300': user.get_avatar_300(),
-            'user_nick': user.nick,
-            'user_des': user.des,
-            'user_email': user.email,
-            'user_gender': user.gender,
-            'birthday': str(user.birthday),
-            'is_admin': user.is_admin,
-            'last_active': str(user.last_active),
-            'state': user.state,
-            'source': user.source_display,
-            'ip': user.ip,
-            'register_date': str(user.create_time)
-        }
+    data = ""
+
+    if obj:
+        data = format_car_wash([obj], 1)[0]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
-@verify_permission('modify_user')
+@verify_permission('modify_car_wash')
 @common_ajax_response
 def modify_car_wash(request):
 
-    user_id = request.REQUEST.get('user_id')
-    nick = request.REQUEST.get('nick')
-    gender = request.REQUEST.get('gender')
-    birthday = request.REQUEST.get('birthday')
+    car_wash_id = request.REQUEST.get("car_wash_id")
+    city_id = request.REQUEST.get('city_id')
+    district_id = request.REQUEST.get('district_id')
+    name = request.REQUEST.get('name')
+    business_hours = request.REQUEST.get('business_hours')
+    tel = request.REQUEST.get('tel')
+    addr = request.REQUEST.get('addr')
+    lowest_sale_price = request.REQUEST.get('lowest_sale_price')
+    lowest_origin_price = request.REQUEST.get('lowest_origin_price')
+    longitude = request.REQUEST.get('longitude')
+    latitude = request.REQUEST.get('latitude')
+    imgs = request.REQUEST.get('imgs')
+    wash_type = request.REQUEST.get('wash_type')
     des = request.REQUEST.get('des')
-    state = int(request.REQUEST.get('state'))
+    note = request.REQUEST.get('note')
+    sort_num = request.REQUEST.get('sort_num')
+    state = request.REQUEST.get('state')
+    state = True if state == "1" else False
 
-    user = UserBase().get_user_by_id(user_id)
-
-    return UserBase().change_profile(user, nick, gender, birthday, des, state)
+    return CarWashBase().modify_car_wash(car_wash_id, city_id, district_id, name, business_hours, tel, 
+        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
+        wash_type, des, note, sort_num, state)
