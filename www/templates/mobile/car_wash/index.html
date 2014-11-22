@@ -54,7 +54,7 @@ $(document).ready(function(){
 	    g_ajax_processing_obj_id = $('.get-more').setUUID().attr('id');
         ajaxSend(
         	"/car_wash/get_car_washs", 
-        	{'page_index': pageIndex+1}, 
+        	{'page': pageIndex + 1, "order_by_value":$(".sort").val()}, 
         	function(data){
         		if(data.length > 0){
         			var str = "";
@@ -74,6 +74,7 @@ $(document).ready(function(){
         			});
 
         			$(str).insertBefore(me.parent());
+        			me.data("page_index", pageIndex + 1)
         		} else {
         			me.parent().remove();
         		}

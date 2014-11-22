@@ -45,6 +45,16 @@ def service_type_required(func):
 
 class CarWashBase(object):
 
+    def format_car_washs_for_ajax(self, objs):
+        datas = []
+        for obj in objs:
+            datas.append(dict(id=obj.id, url=obj.get_url(), name=obj.name, cover=obj.get_cover(),
+                              district=obj.get_district().district, wash_type=obj.get_wash_type_display(),
+                              lowest_sale_price=obj.lowest_sale_price, lowest_origin_price=obj.lowest_origin_price,
+                              price_minus=obj.get_price_minus()
+                              ))
+        return datas
+
     def get_car_wash_by_id(self, id, state=True):
         try:
             ps = dict(id=id)
