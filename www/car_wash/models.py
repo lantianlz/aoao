@@ -186,3 +186,52 @@ class Coupon(models.Model):
         if car_wash:
             note = u', 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
         return note
+
+
+class Order(models.Model):
+
+    """
+    @note: 订单
+    """
+    source_type_choices = ((0, u'购买'), (1, u'抽奖'), (2, u'兑换'))
+    pay_type_choices = ((0, u'未支付'), (1, u'支付宝支付'), (2, u'微信支付'))
+    order_state_choices = ((0, u'未确认'), (1, u'未付款'), (2, u'已付款'), (10, u'已使用'), (11, u'已退款'), )
+
+    trade_id = models.CharField(max_length=32, db_index=True, unique=True)  # 非自增id,可以修改
+    source_type = models.IntegerField(default=0, choices=source_type_choices, db_index=True)
+    user_id = models.CharField(max_length=32, db_index=True)
+
+    service_price = models.ForeignKey("ServicePrice")
+    car_wash = models.ForeignKey("CarWash")  # 冗余字段
+    count = models.IntegerField(default=1)
+    total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 总的结算金额
+    coupon = models.ForeignKey('Coupon', null=True, blank=True)
+    discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵 咕咚码的优惠价格
+    pay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 应付金额   最终需要用户支付金额
+    payed_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # 支付接口回调反馈的实际付款金额
+    pay_time = models.DateTimeField(null=True, blank=True)  # 支付接口回调的时间
+
+    pay_type = models.IntegerField(default=0, choices=pay_type_choices, db_index=True)  # 支付方式
+    pay_info = models.CharField(max_length=256, null=True, blank=True)  # 用户支付成功后保存支付信息
+    order_state = models.IntegerField(default=0, choices=order_state_choices, db_index=True)  # 订单状态,默认为未确认状态
+    is_admin_modify_pay_fee = models.BooleanField(default=False)  # 管理员是否修改应付金额
+    ip = models.IPAddressField(null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-id', ]
+
+
+class OrderCode(models.Model):
+    code_type_choices = ((0, u'洗车码'), (1, u'养车码'), )
+    state_choices = ((0, u'未使用'), (1, u'已使用'), (2, u'已退款'))
+
+    user_id = models.CharField(max_length=32, db_index=True)
+    order = models.ForeignKey("Order")
+    car_wash = models.ForeignKey("CarWash")
+    code = models.CharField(max_length=64, unique=True)
+    code_type = models.IntegerField(default=0, choices=code_type_choices, db_index=True)
+    state = models.IntegerField(default=0, choices=state_choices, db_index=True)
+
+    use_time = models.DateTimeField(null=True, db_index=True)  # 使用时间
+    operate_user_id = models.CharField(max_length=32, null=True, db_index=True)  # 兑换操作人
