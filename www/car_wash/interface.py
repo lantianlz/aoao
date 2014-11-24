@@ -72,7 +72,7 @@ class CarWashBase(object):
         assert lowest_sale_price <= lowest_origin_price
 
     def add_car_wash(self, city_id, district_id, name, business_hours, tel, addr,
-                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0):
+                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
         try:
             self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price)
         except:
@@ -90,6 +90,39 @@ class CarWashBase(object):
         dict_order_by = {"0": "id", "1": "lowest_sale_price", "2": "-order_count"}
         order_by_field = dict_order_by.get(order_by_value)
         return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by_field)
+
+
+    def search_car_washs_for_admin(self, name=""):
+        return CarWash.objects.filter(name__contains=name)
+
+
+    def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
+                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
+        if not car_wash_id:
+            return 99800, dict_err.get(99800)
+
+        obj = self.get_car_wash_by_id(car_wash_id, None)
+        if not obj:
+            return 20103, dict_err.get(20103)
+
+        try:
+            self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price)
+        except:
+            return 99801, dict_err.get(99801)
+
+        temp = CarWash.objects.filter(name=name)
+        if temp and temp[0].id != obj.id:
+            return 20102, dict_err.get(20102)
+
+        ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
+                  lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
+                  wash_type=wash_type, note=note, sort_num=sort_num, state=state)
+
+        for k, v in ps.items():
+            setattr(obj, k, v)
+
+        obj.save()
+        return 0, dict_err.get(0)
 
 
 class ServicePriceBase(object):

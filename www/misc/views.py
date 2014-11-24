@@ -59,10 +59,11 @@ def qiniu_img_return(request):
 @member_required
 def save_img(request):
     imgFile = request.FILES.get('imgFile')
+    img_type = request.REQUEST.get('img_type')
     flag = False
 
     try:
-        flag, img_name = qiniu_client.upload_img(imgFile, img_type='editor')
+        flag, img_name = qiniu_client.upload_img(imgFile, img_type=img_type if img_type else 'editor')
     except Exception, e:
         debug.get_debug_detail(e)
 

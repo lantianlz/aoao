@@ -1,0 +1,744 @@
+{% extends "pc/admin/home.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}洗车行管理{% endblock %}
+
+{% block css %}
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    var CarWash = Backbone.Model.extend({
+        defaults: {
+            
+        }
+    });
+
+    var CarWashs = Backbone.Collection.extend({
+        model: CarWash,
+
+        _modelMaps: {
+            'num': 'num',
+            'carWashId': 'car_wash_id',
+            'name': 'name',
+            'businessHours': 'business_hours',
+            'cityId': 'city_id',
+            'cityName': 'city_name',
+            'districtId': 'district_id',
+            'districtName': 'district_name',
+            'tel': 'tel',
+            'addr': 'addr',
+            'longitude': 'longitude',
+            'latitude': 'latitude',
+            'washType': 'wash_type',
+            'des': 'des',
+            'note': 'note',
+            'lowestSalePrice': 'lowest_sale_price',
+            'lowestOriginPrice': 'lowest_origin_price',
+            'imgs': 'imgs',
+            'rating': 'rating',
+            'orderCount': 'order_count',
+            'validDateStart': 'valid_date_start',
+            'validDateEnd': 'valid_date_end',
+            'isVip': 'is_vip',
+            'vipInfo': 'vip_info',
+            'sortNum': 'sort_num',
+            'state': 'state',
+            'createTime': 'create_time'
+        },
+
+        search: function(name, pageIndex){
+            var me = this;
+
+            ajaxSend(
+                "/admin/car_wash/search", 
+                {'name': name||'', 'page_index': pageIndex||1}, 
+                function(data){
+                    
+                    me.pageIndex = pageIndex;
+                    me.pageCount = data.page_count;
+                    me.name = name||'';
+
+                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                }
+            );
+        },
+
+        getOne: function(carWashId, callback){
+            var me = this;
+
+            ajaxSend(
+                "/admin/car_wash/get_car_wash_by_id", 
+                {'car_wash_id': carWashId},
+                function(data){
+                    if(callback){
+                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                    }
+                }
+            );
+        },
+
+        //
+        modifyCarWash: function(data, callback){
+            var me = this;
+
+            ajaxSend(
+                "/admin/car_wash/modify_car_wash", 
+                data,
+                function(response){
+                    if(callback){
+                        callback(response);
+                    }
+                }
+            );
+        },
+
+        addCarWash: function(data, callback){
+            ajaxSend(
+                "/admin/car_wash/add_car_wash", 
+                data,
+                function(response){
+                    if(callback){
+                        callback(response);
+                    }
+                }
+            );
+        }
+        
+    });
+    
+    var ListView = Backbone.View.extend({
+        el: '#car_wash_list',
+
+        template: _.template($('#car_wash_list_template').html()),
+
+        pagination: new $.QXPagination.PaginationView(),
+
+        events: {
+            'click .search': 'searchCarWash',
+            'click .pointer': 'modifyCarWash'
+        },
+
+        initialize: function(){
+            this.listenTo(this.collection, 'reset', this.render);
+        },
+
+        render: function(){
+            var data = this.collection.toJSON();
+            
+            this.showPanel();
+            this.$('tbody').html(this.template({'carWashs': data}));
+            this.pagination.render(
+                this.collection.pageIndex||1, 
+                this.collection.pageCount, 
+                'search/' + this.collection.name
+            );
+        },
+
+        // 显示面板
+        showPanel: function(){
+            $('.qx-nav-pills a[href="#car_wash_list"]').tab('show');
+        },
+
+        searchCarWash: function(){
+            var name = this.$('.key-word').val();
+
+            router.navigate(String.format('/search/{0}/1', name), {trigger: true});
+        },
+
+        modifyCarWash: function(sender){
+            var target = $(sender.currentTarget),
+                carWashId = target.data('car_wash_id');
+
+            router.navigate('/modify/' + carWashId, {trigger: true});
+        }
+        
+    });
+    
+
+    var ModifyView = Backbone.View.extend({
+        
+        el: '#modify_car_wash',
+
+        template: _.template($('#modify_car_wash_template').html()),
+
+        events: {
+            'click .save': 'save',
+            'click .remove': 'remove'
+        },
+
+        // 显示面板
+        showPanel: function(){
+            $('.qx-nav-pills a[href="#modify_car_wash"]').tab('show');
+        },
+
+        cityTextBox: null,
+        initCityTextBox: function(name, value){
+            var me = this;
+
+            this.cityTextBox = $.QXTextboxList.create('#city_modify', {
+                max: 1,
+                placeholder: '选择所属城市',
+                url: '/admin/city/city/get_citys_by_name',
+                param: 'city_name',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.cityTextBox.add(name, value);
+            }
+
+            // 绑定添加城市事件，用于自动取出城市下面的所有区域
+            this.cityTextBox.target.onAdd = function(target){
+                me.initDistrict(target.getValue()[0]);
+            }
+        },
+
+        initDistrict: function(cityId, districtId){
+            var me = this;
+            ajaxSend(
+                "/admin/city/city/get_districts_by_city", 
+                {'city_id': cityId},
+                function(data){
+                    var html = [];
+                    html.push('<option value="0">未选择</option>');
+
+                    $.map(data, function(i){
+                        
+                        html.push(String.format('<option value="{0}">{1}</option>', i.district_id, i.district_name));
+                    });
+                    me.$('.district').html(html.join(''));
+
+                    me.$('.district').val(districtId);
+                }
+            );
+
+        },
+
+        // 渲染
+        render: function(data){
+            this.$el.html(this.template(data));
+
+            this.initCityTextBox(data.cityName, data.cityId);
+            this.initDistrict(data.cityId, data.districtId);
+            createEditor('#img_modify', "car_wash");
+        },
+
+        // 显示提问信息
+        modifyCarWash: function(carWashId){
+            var me = this;
+
+            this.collection.getOne(carWashId, function(data){
+
+                if(data){
+                    me.render(data);
+                    me.showPanel();
+                } else {
+                    $.QXNotice.ErrorTopNotice('没有找到对应的洗车行!');
+                }
+            });
+        },
+
+        // 保存
+        save: function(){
+            var carWashId = this.$('form input[type=hidden]').val(),
+                me = this;
+
+            me.collection.modifyCarWash($.QXUtils.formToDict(this.$('form')), function(data){
+                if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功');
+                    router.navigate('modify/' + carWashId, {'trigger': true});
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            })
+        }
+
+    });
+
+
+    var AddView = Backbone.View.extend({
+        el: 'body',
+
+        template: _.template($('#add_car_wash_template').html()),
+
+        cityTextBox: null,
+        initCityTextBox: function(name, value){
+            var me = this;
+
+            this.cityTextBox = $.QXTextboxList.create('#city_add', {
+                max: 1,
+                placeholder: '选择所属城市',
+                url: '/admin/city/city/get_citys_by_name',
+                param: 'city_name',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.cityTextBox.add(name, value);
+            }
+
+            // 绑定添加城市事件，用于自动取出城市下面的所有区域
+            this.cityTextBox.target.onAdd = function(target){
+                me.initDistrict(target.getValue()[0]);
+            }
+        },
+
+        initDistrict: function(cityId){
+            var me = this;
+            ajaxSend(
+                "/admin/city/city/get_districts_by_city", 
+                {'city_id': cityId},
+                function(data){
+                    var html = [];
+                    html.push('<option value="0">未选择</option>');
+
+                    $.map(data, function(i){
+                        
+                        html.push(String.format('<option value="{0}">{1}</option>', i.district_id, i.district_name));
+                    });
+                    me.$('.district').html(html.join(''));
+                }
+            );
+
+        },
+
+        showPanel: function(){
+            var me = this;
+
+            me.render();
+        },
+
+        render: function(){
+            var me = this;
+
+            $('#add_car_wash_modal').remove();
+            
+            $('body').append(this.template());
+
+            // 绑定事件
+            $('#add_car_wash_modal .cancel').bind('click', function(){
+                history.go(-1);
+            });
+            $('#add_car_wash_modal .ok').bind('click', function(){
+                me.addCarWash();
+            });
+            
+            $('#add_car_wash_modal').modal({'show': true, 'backdrop': 'static'});
+
+            me.initCityTextBox();
+            createEditor('#img_add', "car_wash");
+        },
+
+        addCarWash: function(){
+            var me = this;
+
+            carWashs.addCarWash($.QXUtils.formToDict(this.$('form')), function(data){
+                if(data.errcode === 0){
+                    router.navigate('modify/' + data.errmsg, {trigger: true});
+                    $('#add_car_wash_modal').modal('hide');
+                    $.QXNotice.SuccessTopNotice("操作成功");
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            })
+        }
+
+    });
+
+
+    var Router = Backbone.Router.extend({
+        routes: {
+            "":                          "search",
+            "search/(:name)/:pageIndex": "search",
+            "modify/:carWashId":         "modify",
+            "add":                       "add"
+        },
+
+        // 获取推荐用户
+        search: function(name, pageIndex){
+            carWashs.search(name||'', pageIndex||1);
+        },
+
+        modify: function(carWashId){
+            modifyView.modifyCarWash(carWashId);
+        },
+
+        add: function(){
+            addView.showPanel();
+        }
+
+    });
+
+    var carWashs = new CarWashs(),
+        listView = new ListView({collection: carWashs}),
+        modifyView = new ModifyView({collection: carWashs}),
+        addView = new AddView(),
+        router = new Router();
+
+    Backbone.history.start();
+});
+
+</script>
+{% endblock %}
+
+{% block right %}
+<ul class="nav nav-pills pt-15 qx-nav-pills">
+    <li class="active">
+        <a href="#car_wash_list" class="black-blue" data-toggle="pill">洗车行列表</a>
+    </li>
+    <li>
+        <a href="#modify_car_wash" class="black-blue" data-toggle="pill">修改洗车行信息</a>
+    </li>
+    <li class="pull-right">
+        <a href="#add" class="black-blue">添加洗车行</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- 用户列表 -->
+    <div class="tab-pane fade pt-15 in active" id="car_wash_list">
+        <div class="pl-0 pb-10 col-md-3">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行呢称..." />
+                <span class="input-group-btn">
+                    <button class="btn btn-default search" type="button">查询</button>
+                </span>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>名称</th>
+                    <th>城市</th>
+                    <th>营业时间</th>
+                    <th>电话</th>
+                    <th>订单数量</th>
+                    <th>评分</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <ul class="pagination pagination-sm qx-pagination">
+                
+            </ul>
+        </div>
+    </div>
+
+    <!-- 修改用户信息 -->
+    <div class="tab-pane fade pt-15" id="modify_car_wash">
+        
+    </div>
+</div>
+
+<script type="text/template" id="car_wash_list_template">
+<% _.each(carWashs, function(carWash){ %>
+    <tr class="pointer" data-car_wash_id="<%= carWash.carWashId %>">
+        <td><%= carWash.num %></td>
+        <td><%= carWash.name %></td>
+        <td><%= carWash.cityName %></td>
+        <td><%= carWash.businessHours %></td>
+        <td><%= carWash.tel %></td>
+        <td><%= carWash.orderCount %></td>
+        <td><%= carWash.rating %></td>
+        <td>
+            <% if(carWash.state){ %>
+                <span class="fa fa-check co6"></span>
+            <% } else { %>
+                <span class="fa fa-times co2"></span>
+            <% } %>
+        </td>
+    </tr>
+<% }) %>
+</script>
+
+<script type="text/template" id="modify_car_wash_template">
+<form class="form-horizontal" role="form" method="post" action="">
+    <input type="hidden" name="car_wash_id" value="<%= carWashId %>" />
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="name" value='<%= name %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">营业时间</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="business_hours" value='<%= businessHours %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">所属城市</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="city_id" id="city_modify" value=''>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">所属区</label>
+        <div class="col-sm-3">
+            <select class="form-control input-sm district" name="district_id">
+                
+            </select>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">联系电话</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="tel" value='<%= tel %>'>
+        </div>
+    </div>
+    
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">最低售价</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="lowest_sale_price" value='<%= lowestSalePrice %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">最低原价</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="lowest_origin_price" value='<%= lowestOriginPrice %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">经度</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="longitude" value='<%= longitude %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">纬度</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="latitude" value='<%= latitude %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">服务方式</label>
+        <div class="col-sm-3">
+            <select class="form-control input-sm" name="wash_type">
+                {% for type in wash_type_choices %}
+                <option value="{{type.value}}" <% if({{type.value}} == washType){ %>selected<% } %> >{{type.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">地址</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="addr" value='<%= addr %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">轮播图</label>
+        <div class="col-sm-10">
+            <textarea style="height: 200px;" class="form-control" id="img_modify" name="imgs"><%= imgs %></textarea>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">简介</label>
+        <div class="col-sm-10">
+            <textarea style="height: 200px;" class="form-control" name="des"><%= des %></textarea>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">温馨提示</label>
+        <div class="col-sm-10">
+            <textarea style="height: 200px;" class="form-control" name="note"><%= note %></textarea>
+        </div>
+    </div>
+    
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">评分</label>
+        <div class="col-sm-9">
+            <!-- <input type="text" class="form-control" name="rating" value='<%= rating %>'> -->
+            <p class="form-control-static"><%= rating %></p>
+        </div>
+    </div>
+
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">订单数量</label>
+        <div class="col-sm-9">
+            <!-- <input type="text" class="form-control" name="order_count" value='<%= orderCount %>'> -->
+            <p class="form-control-static"><%= orderCount %></p>
+        </div>
+    </div>
+    
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">排序</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="sort_num" value='<%= sortNum %>'>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0">
+        <label class="col-sm-2 control-label">状态</label>
+        <div class="col-sm-9">
+            <label class="radio-inline">
+                <input type="radio" name="state" value="1" <% if(state == "1"){ %>checked="checked"<% } %> > 有效
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="state" value="0" <% if(state == "0"){ %>checked="checked"<% } %> > 无效
+            </label>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <div class="col-sm-12">
+            <button type="button" class="btn btn-primary save">提交你的修改</button>
+        </div>
+    </div>
+</form>
+</script>
+
+
+<script type="text/template" id="add_car_wash_template">
+<div class="modal fade" id="add_car_wash_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pb-5">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+                <h4 class="modal-title">添加洗车行</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" method="post" action="">
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">营业时间</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="business_hours" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">所属城市</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="city_id" id="city_add" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">所属区</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm district" name="district_id">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">联系电话</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="tel" value=''>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">最低售价</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="lowest_sale_price" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">最低原价</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="lowest_origin_price" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">经度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="longitude" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">纬度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="latitude" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">服务方式</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm" name="wash_type">
+                                {% for type in wash_type_choices %}
+                                <option value="{{type.value}}">{{type.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="addr" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">轮播图</label>
+                        <div class="col-sm-10">
+                            <textarea style="height: 200px;" class="form-control" id="img_add" name="imgs"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">简介</label>
+                        <div class="col-sm-10">
+                            <textarea style="height: 200px;" class="form-control" name="des"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">温馨提示</label>
+                        <div class="col-sm-10">
+                            <textarea style="height: 200px;" class="form-control" name="note"></textarea>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">评分</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="rating" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">订单数量</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="order_count" value='0'>
+                        </div>
+                    </div>
+                    -->
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="sort_num" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-2 control-label">状态</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="state" value="1" checked="checked"> 有效
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="state" value="0"> 无效
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+{% endblock right %}

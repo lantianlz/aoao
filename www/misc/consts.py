@@ -26,4 +26,19 @@ PERMISSIONS = [
     {'code': 'query_user', 'name': u'查询用户', 'parent': 'user_manage'},
     {'code': 'modify_user', 'name': u'修改用户', 'parent': 'user_manage'},
     {'code': 'remove_user', 'name': u'删除用户', 'parent': 'user_manage'},
+
+    {'code': 'city_manage', 'name': u'城市管理', 'parent': None},
+    #{'code': 'add_city', 'name': u'添加城市', 'parent': 'city_manage'},
+    {'code': 'query_city', 'name': u'查询城市', 'parent': 'city_manage'},
+    {'code': 'modify_city', 'name': u'修改城市', 'parent': 'city_manage'},
+
+    {'code': 'district_manage', 'name': u'区管理', 'parent': None},
+    #{'code': 'add_district', 'name': u'添加区', 'parent': 'district_manage'},
+    {'code': 'query_district', 'name': u'查询区', 'parent': 'district_manage'},
+    {'code': 'modify_district', 'name': u'修改区', 'parent': 'district_manage'},
+
+    {'code': 'car_wash_manage', 'name': u'洗车行管理', 'parent': None},
+    {'code': 'add_car_wash', 'name': u'添加洗车行', 'parent': 'car_wash_manage'},
+    {'code': 'query_car_wash', 'name': u'查询洗车行', 'parent': 'car_wash_manage'},
+    {'code': 'modify_car_wash', 'name': u'修改洗车行', 'parent': 'car_wash_manage'},
 ]

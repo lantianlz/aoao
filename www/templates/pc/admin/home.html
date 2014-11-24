@@ -78,6 +78,29 @@ a.list-group-item.active{
             );
         }, 1000);
 
+        // 二级导航
+        $('.admin-nav>li.list-group-item')
+        .bind('mouseenter', function(){
+            var nav = $(this),
+                width = nav.width() + 30;
+            
+            nav.find('.sub-admin-nav')
+            .css({
+                'left': width, 
+                'top': '0', 
+                'width': width, 
+                'z-index': 99
+            })
+            .stop(true, true)
+            .show('fast')
+        })
+        .bind('mouseleave', function(){
+            var nav = $(this);
+            
+            nav.find('.sub-admin-nav')
+            .stop(true, true)
+            .hide('fast');
+        });
     });
 </script>
 	{% block javascript %}{% endblock %}
@@ -89,6 +112,25 @@ a.list-group-item.active{
         
         <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/user' in request.path %}active{% endif %}" href="/admin/user">用户管理</a>
         
+        <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/car_wash' in request.path %}active{% endif %}" href="/admin/car_wash">洗车行管理</a>
+
+        <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/permission' in request.path %}active{% endif %}" href="/admin/permission">优惠券管理</a>
+
+        <!-- 开户子站管理 -->
+        <li class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/city' in request.path %}active{% endif %}">
+            <span class="co11">城市区域管理</span><span class="fa fa-chevron-right pull-right f12 mt-3 co11"></span>
+            
+            <ul class="sub-admin-nav list-group pa none box-shadow-224">
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/city/city' in request.path %}active{% endif %}" href="/admin/city/city">城市管理</a>
+
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/city/district' in request.path %}active{% endif %}" href="/admin/city/district">区管理</a>
+            </ul>
+        </li>
+
+        <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/permission' in request.path %}active{% endif %}" href="/admin/permission">统计管理</a>
+
+        <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/permission' in request.path %}active{% endif %}" href="/admin/permission">常用工具</a>
+
         <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/permission' in request.path %}active{% endif %}" href="/admin/permission">权限管理</a>
         
     </ul>
