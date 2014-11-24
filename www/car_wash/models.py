@@ -35,7 +35,7 @@ class CarWash(models.Model):
     note = models.TextField(null=True)   # 温馨提示，使用提醒
     lowest_sale_price = models.FloatField(db_index=True)  # 最低售价
     lowest_origin_price = models.FloatField()  # 最低原价
-    imgs = models.TextField()  # 多张轮播图融为一个字段
+    imgs = models.TextField(null=True)  # 多张轮播图融为一个字段
     rating = models.IntegerField(default=0, db_index=True)  # 评分
     order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
 
@@ -203,7 +203,7 @@ class Order(models.Model):
 
     service_price = models.ForeignKey("ServicePrice")
     car_wash = models.ForeignKey("CarWash")  # 冗余字段
-    count = models.IntegerField(default=1)
+    count = models.IntegerField()
     total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 总的结算金额
     coupon = models.ForeignKey('Coupon', null=True, blank=True)
     discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵 咕咚码的优惠价格
@@ -221,8 +221,15 @@ class Order(models.Model):
     class Meta:
         ordering = ['-id', ]
 
+    def get_url(self):
+        return "/order/%s" % self.trade_id
+
 
 class OrderCode(models.Model):
+
+    """
+    @note: 洗车码
+    """
     code_type_choices = ((0, u'洗车码'), (1, u'养车码'), )
     state_choices = ((0, u'未使用'), (1, u'已使用'), (2, u'已退款'))
 

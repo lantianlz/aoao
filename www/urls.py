@@ -3,9 +3,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+
 
 urlpatterns = patterns('',
                        url(r'^login$', 'www.account.views.login'),
@@ -32,7 +30,6 @@ urlpatterns = patterns('',
                        url(r'^s/(?P<template_name>.*)$', 'www.misc.views.static_view'),
                        url(r'^500$', 'www.misc.views.test500'),
                        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': False}),
-                       # url(r'^admin/', include(admin.site.urls)),
 
                        url(r'^crossdomain.xml$', direct_to_template, {'template': 'crossdomain.xml'}),
                        )
