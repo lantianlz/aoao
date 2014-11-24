@@ -28,11 +28,20 @@ urlpatterns += patterns('www.admin.views_permission',
 
 # 洗车行
 urlpatterns += patterns('www.admin.views_car_wash',
-                        url(r'^car_wash/add_car_wash$', 'add_car_wash'),
-                        url(r'^car_wash/modify_car_wash$', 'modify_car_wash'),
-                        url(r'^car_wash/get_car_wash_by_id$', 'get_car_wash_by_id'),
-                        url(r'^car_wash/search$', 'search'),
-                        url(r'^car_wash$', 'car_wash'),
+                        url(r'^car_wash/car_wash/add_car_wash$', 'add_car_wash'),
+                        url(r'^car_wash/car_wash/modify_car_wash$', 'modify_car_wash'),
+                        url(r'^car_wash/car_wash/get_car_wash_by_id$', 'get_car_wash_by_id'),
+                        url(r'^car_wash/car_wash/search$', 'search'),
+                        url(r'^car_wash/car_wash$', 'car_wash'),
+                        )
+
+# 洗车行服务类型
+urlpatterns += patterns('www.admin.views_service_type',
+                        url(r'^car_wash/service_type/add_service_type$', 'add_service_type'),
+                        url(r'^car_wash/service_type/modify_service_type$', 'modify_service_type'),
+                        url(r'^car_wash/service_type/get_service_type_by_id$', 'get_service_type_by_id'),
+                        url(r'^car_wash/service_type/search$', 'search'),
+                        url(r'^car_wash/service_type$', 'service_type'),
                         )
 
 # 城市
@@ -54,4 +63,14 @@ urlpatterns += patterns('www.admin.views_district',
                         url(r'^city/district/get_district_by_id$', 'get_district_by_id'),
                         url(r'^city/district/search$', 'search'),
                         url(r'^city/district$', 'district'),
+                        )
+
+# 常用工具
+urlpatterns += patterns('www.admin.views_caches',
+
+                        # 缓存管理
+                        url(r'^tools/caches/get_cache$', 'get_cache'),
+                        url(r'^tools/caches/remove_cache$', 'remove_cache'),
+                        url(r'^tools/caches/modify_cache$', 'modify_cache'),
+                        url(r'^tools/caches$', 'caches'),
                         )

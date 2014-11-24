@@ -64,8 +64,8 @@ class CarWashBase(object):
         except CarWash.DoesNotExist:
             return ""
 
-    def validate_car_wash_info(city_id, district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price):
-        assert all((city_id, district_id, name, business_hours, tel, addr))
+    def validate_car_wash_info(city_id, district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs):
+        assert all((city_id, district_id, name, business_hours, tel, addr, imgs))
         lowest_sale_price = float(lowest_sale_price)
         lowest_origin_price = float(lowest_origin_price)
         assert lowest_sale_price >= 0 and lowest_origin_price >= 0
@@ -74,7 +74,7 @@ class CarWashBase(object):
     def add_car_wash(self, city_id, district_id, name, business_hours, tel, addr,
                      lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
         try:
-            self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price)
+            self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs)
         except:
             return 99801, dict_err.get(99801)
         if CarWash.objects.filter(name=name):
@@ -83,7 +83,11 @@ class CarWashBase(object):
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
                   wash_type=wash_type, note=note, sort_num=sort_num)
-        car_wash = CarWash.objects.create(**ps)
+        
+        try:
+            car_wash = CarWash.objects.create(**ps)
+        except:
+            return 99900, dict_err.get(99900)
         return 0, car_wash
 
     def get_car_washs_by_city_id(self, city_id, order_by_value="0"):
@@ -92,8 +96,8 @@ class CarWashBase(object):
         return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by_field)
 
 
-    def search_car_washs_for_admin(self, name=""):
-        return CarWash.objects.filter(name__contains=name)
+    def search_car_washs_for_admin(self, name="", state=True):
+        return CarWash.objects.filter(name__contains=name, state=state)
 
 
     def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
@@ -121,7 +125,11 @@ class CarWashBase(object):
         for k, v in ps.items():
             setattr(obj, k, v)
 
-        obj.save()
+        try:
+            obj.save()
+        except:
+            return 99900, dict_err.get(99900)
+            
         return 0, dict_err.get(0)
 
 

@@ -94,7 +94,7 @@ class CarWashBank(models.Model):
     balance_date = models.DateField(null=True)  # 结算日期
 
 
-group_choices = ((0, u'洗车专用'), (1, u''))
+group_choices = ((0, u'洗车专用'),)
 
 
 class ServiceType(models.Model):

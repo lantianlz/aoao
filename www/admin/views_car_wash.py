@@ -65,9 +65,11 @@ def format_car_wash(objs, num):
 @verify_permission('query_car_wash')
 def search(request):
     name = request.REQUEST.get('name')
+    state = request.REQUEST.get('state')
+    state = True if state == "1" else False
     page_index = int(request.REQUEST.get('page_index', 1))
 
-    objs = CarWashBase().search_car_washs_for_admin(name)
+    objs = CarWashBase().search_car_washs_for_admin(name, state)
 
     page_objs = page.Cpt(objs, count=10, page=page_index).info
 

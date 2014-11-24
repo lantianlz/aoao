@@ -51,17 +51,18 @@ $(document).ready(function(){
             'createTime': 'create_time'
         },
 
-        search: function(name, pageIndex){
+        search: function(name, state, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/search", 
-                {'name': name||'', 'page_index': pageIndex||1}, 
+                "/admin/car_wash/car_wash/search", 
+                {'name': name||'', 'state': state||1, 'page_index': pageIndex||1}, 
                 function(data){
                     
                     me.pageIndex = pageIndex;
                     me.pageCount = data.page_count;
                     me.name = name||'';
+                    me.state = state||1;
 
                     me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
                 }
@@ -72,7 +73,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/get_car_wash_by_id", 
+                "/admin/car_wash/car_wash/get_car_wash_by_id", 
                 {'car_wash_id': carWashId},
                 function(data){
                     if(callback){
@@ -87,7 +88,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/modify_car_wash", 
+                "/admin/car_wash/car_wash/modify_car_wash", 
                 data,
                 function(response){
                     if(callback){
@@ -99,7 +100,7 @@ $(document).ready(function(){
 
         addCarWash: function(data, callback){
             ajaxSend(
-                "/admin/car_wash/add_car_wash", 
+                "/admin/car_wash/car_wash/add_car_wash", 
                 data,
                 function(response){
                     if(callback){
@@ -145,9 +146,10 @@ $(document).ready(function(){
         },
 
         searchCarWash: function(){
-            var name = this.$('.key-word').val();
+            var name = this.$('.key-word').val(),
+                state = this.$('.key-word-state:checked').val();
 
-            router.navigate(String.format('/search/{0}/1', name), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/1', name, state), {trigger: true});
         },
 
         modifyCarWash: function(sender){
@@ -248,6 +250,10 @@ $(document).ready(function(){
             var carWashId = this.$('form input[type=hidden]').val(),
                 me = this;
 
+            if(!me.$('form').valid()){
+                return;
+            }
+
             me.collection.modifyCarWash($.QXUtils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
                     $.QXNotice.SuccessTopNotice('操作成功');
@@ -336,6 +342,10 @@ $(document).ready(function(){
 
         addCarWash: function(){
             var me = this;
+            
+            if(!$('#add_car_wash_modal form').valid()){
+                return;
+            }
 
             carWashs.addCarWash($.QXUtils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
@@ -354,14 +364,14 @@ $(document).ready(function(){
     var Router = Backbone.Router.extend({
         routes: {
             "":                          "search",
-            "search/(:name)/:pageIndex": "search",
+            "search/(:name)/(:state)/:pageIndex": "search",
             "modify/:carWashId":         "modify",
             "add":                       "add"
         },
 
         // 获取推荐用户
-        search: function(name, pageIndex){
-            carWashs.search(name||'', pageIndex||1);
+        search: function(name, state, pageIndex){
+            carWashs.search(name||'', state||1, pageIndex||1);
         },
 
         modify: function(carWashId){
@@ -402,14 +412,24 @@ $(document).ready(function(){
 <div class="tab-content">
     <!-- 用户列表 -->
     <div class="tab-pane fade pt-15 in active" id="car_wash_list">
-        <div class="pl-0 pb-10 col-md-3">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行呢称..." />
-                <span class="input-group-btn">
-                    <button class="btn btn-default search" type="button">查询</button>
-                </span>
+        <form action="." onsubmit="javascript: return false;">
+            <div class="col-md-2">
+                <label class="radio-inline">
+                    <input type="radio" name="state" class="key-word-state" value="0"> 无效
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="state" class="key-word-state" value="1" checked="checked"> 有效
+                </label>
             </div>
-        </div>
+            <div class="pl-0 pb-10 col-md-3">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行呢称..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default search" type="submit">查询</button>
+                    </span>
+                </div>
+            </div>
+        </form>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -468,25 +488,25 @@ $(document).ready(function(){
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">名称</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="name" value='<%= name %>'>
+            <input type="text" class="form-control" name="name" required maxlength="50" value='<%= name %>'>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">营业时间</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="business_hours" value='<%= businessHours %>'>
+            <input type="text" class="form-control" name="business_hours" required maxlength="50" value='<%= businessHours %>'>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">所属城市</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" name="city_id" id="city_modify" value=''>
+            <input type="text" class="form-control" name="city_id" id="city_modify" value='' required>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">所属区</label>
         <div class="col-sm-3">
-            <select class="form-control input-sm district" name="district_id">
+            <select class="form-control input-sm district" name="district_id" required>
                 
             </select>
         </div>
@@ -494,20 +514,20 @@ $(document).ready(function(){
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">联系电话</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" name="tel" value='<%= tel %>'>
+            <input type="text" class="form-control" name="tel" value='<%= tel %>' required minlength="7" maxlength="11">
         </div>
     </div>
     
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">最低售价</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" name="lowest_sale_price" value='<%= lowestSalePrice %>'>
+            <input type="text" class="form-control" name="lowest_sale_price" required value='<%= lowestSalePrice %>'>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">最低原价</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" name="lowest_origin_price" value='<%= lowestOriginPrice %>'>
+            <input type="text" class="form-control" name="lowest_origin_price" required value='<%= lowestOriginPrice %>'>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -535,13 +555,14 @@ $(document).ready(function(){
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">地址</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="addr" value='<%= addr %>'>
+            <input type="text" class="form-control" name="addr" required value='<%= addr %>'>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">轮播图</label>
         <div class="col-sm-10">
             <textarea style="height: 200px;" class="form-control" id="img_modify" name="imgs"><%= imgs %></textarea>
+            <p class="help-block">建议尺寸为：640 X 280</p>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -612,25 +633,25 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">名称</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="name" value=''>
+                            <input type="text" class="form-control" required name="name" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">营业时间</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="business_hours" value=''>
+                            <input type="text" class="form-control" required name="business_hours" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">所属城市</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="city_id" id="city_add" value=''>
+                            <input type="text" class="form-control" required name="city_id" id="city_add" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">所属区</label>
                         <div class="col-sm-3">
-                            <select class="form-control input-sm district" name="district_id">
+                            <select class="form-control input-sm district" required name="district_id">
                                 
                             </select>
                         </div>
@@ -638,20 +659,20 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">联系电话</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="tel" value=''>
+                            <input type="text" class="form-control" required maxlength="11" minlength="7" name="tel" value=''>
                         </div>
                     </div>
                     
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">最低售价</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="lowest_sale_price" value='0'>
+                            <input type="text" class="form-control" required name="lowest_sale_price" value='0'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">最低原价</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="lowest_origin_price" value='0'>
+                            <input type="text" class="form-control" required name="lowest_origin_price" value='0'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -679,13 +700,14 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">地址</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="addr" value=''>
+                            <input type="text" class="form-control" required name="addr" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">轮播图</label>
                         <div class="col-sm-10">
                             <textarea style="height: 200px;" class="form-control" id="img_add" name="imgs"></textarea>
+                            <p class="help-block">建议尺寸为：640 X 280</p>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
