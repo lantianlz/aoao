@@ -1,10 +1,8 @@
 
 1.替换favicon
-2.百度统计
-3.地图展示
-4.sql检测
-5.缓存使用
-6.七牛域名修改
-7.js和css无用的去掉引用
-8.member_required判读
-9.404and500
+2.sql检测
+3.缓存使用
+4.七牛域名修改
+5.js和css无用的去掉引用
+6.member_required判断
+7.404and500

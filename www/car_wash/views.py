@@ -79,17 +79,6 @@ def setting(request, template_name='mobile/car_wash/setting.html'):
 
 
 def get_car_washs(request):
-    data = [{
-        'id': '1',
-        'url': '/car_wash/1',
-        'name': u'嗷嗷洗车行',
-        'cover': '/static/img/default_car_wash_100.png',
-        'district': u'武侯',
-        'wash_type': u'机器',
-        'lowest_sale_price': '20.0',
-        'lowest_origin_price': '30.0',
-        'price_minus': '10.0'
-    }]
 
     city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
     order_by_value = request.REQUEST.get("order_by_value", "0")

@@ -95,13 +95,11 @@ class CarWashBase(object):
         order_by_field = dict_order_by.get(order_by_value)
         return CarWash.objects.filter(city_id=city_id, state=True).order_by(order_by_field)
 
-
     def search_car_washs_for_admin(self, name="", state=True):
         return CarWash.objects.filter(name__contains=name, state=state)
 
-
     def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
-                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
+                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
         if not car_wash_id:
             return 99800, dict_err.get(99800)
 
