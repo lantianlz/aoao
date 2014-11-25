@@ -27,6 +27,8 @@ def index(request, template_name='mobile/car_wash/index.html'):
     page_objs = page.Cpt(car_washs, count=10, page=page_num).info
     car_washs = page_objs[0]
 
+    is_show_more_flag = True if page_objs[1] < page_objs[4] else False  # 是否展示更多按钮
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
