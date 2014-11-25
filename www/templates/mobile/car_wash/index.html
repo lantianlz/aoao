@@ -5,13 +5,13 @@
 {% block css %}
 <style type="text/css">
 .list-group-item:first-child{
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 .list-group-item:last-child{
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 </style>
 {% endblock %}
@@ -19,122 +19,124 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	// 排序
-	$('.sort').bind('change', function(){
-		window.location.href = "/?order_by_value="+$(this).val();
-	});
+    // 排序
+    $('.sort').bind('change', function(){
+        window.location.href = "/?order_by_value="+$(this).val();
+    });
 
-	// 查看更多
-	$('.get-more').bind('click', function(){
-		var me = $(this),
-			pageIndex = parseInt(me.data('page_index')),
-			strHtml = [
-				'<ul class="list-group col-xs-12 mb-10 pl-15 pr-15">',
-					'<a class="list-group-item row pl-0 pr-0" href="{0}">',
-						'<div class="col-xs-2 pl-5 pr-0">',
-							'<img src="{1}" class="w h50">',
-						'</div>',
-						'<div class="col-xs-6 pl-5 pr-0">',
-							'<div class="fb f15">{2}</div>',
-							'<div class="f13 pt-10"><span class="pr-20 co3">{3}</span><span class="co2">{4}</span></div>',
-						'</div>',
-						'<div class="col-xs-4 pr-5 pl-0 text-right">',
-							'<div>',
-								'<i class="fa fa-rmb f13 co2"></i><span class="co2 f18 fb pr-3">{5}</span>',
-								'<i class="fa fa-rmb f14 line-through co1"></i><span class="f14 line-through co1">{6}</span>',
-							'</div>',
-							'<div class="pt-5">',
-								'<span class="f13 pb-3 pt-3 pl-5 pr-5 bgc-EF8A55 co5">立省{7}元</span>',
-							'</div>',
-						'</div>',
-					'</a>',
-				'</ul>'
-			].join('');
+    // 查看更多
+    $('.get-more').bind('click', function(){
+        var me = $(this),
+            pageIndex = parseInt(me.data('page_index')),
+            strHtml = [
+                '<ul class="list-group col-xs-12 mb-10 pl-15 pr-15">',
+                    '<a class="list-group-item row pl-0 pr-0" href="{0}">',
+                        '<div class="col-xs-2 pl-5 pr-0">',
+                            '<img src="{1}" class="w h50">',
+                        '</div>',
+                        '<div class="col-xs-6 pl-5 pr-0">',
+                            '<div class="fb f15">{2}</div>',
+                            '<div class="f13 pt-10"><span class="pr-20 co3">{3}</span><span class="co2">{4}</span></div>',
+                        '</div>',
+                        '<div class="col-xs-4 pr-5 pl-0 text-right">',
+                            '<div>',
+                                '<i class="fa fa-rmb f13 co2"></i><span class="co2 f18 fb pr-3">{5}</span>',
+                                '<i class="fa fa-rmb f14 line-through co1"></i><span class="f14 line-through co1">{6}</span>',
+                            '</div>',
+                            '<div class="pt-5">',
+                                '<span class="f13 pb-3 pt-3 pl-5 pr-5 bgc-EF8A55 co5">立省{7}元</span>',
+                            '</div>',
+                        '</div>',
+                    '</a>',
+                '</ul>'
+            ].join('');
 
-	    g_ajax_processing_obj_id = $('.get-more').setUUID().attr('id');
+        g_ajax_processing_obj_id = $('.get-more').setUUID().attr('id');
         ajaxSend(
-        	"/car_wash/get_car_washs", 
-        	{'page': pageIndex + 1, "order_by_value":$(".sort").val()}, 
-        	function(data){
-        		if(data.length > 0){
-        			var str = "";
+            "/car_wash/get_car_washs", 
+            {'page': pageIndex + 1, "order_by_value":$(".sort").val()}, 
+            function(data){
+                if(data.length > 0){
+                    var str = "";
 
-        			$.map(data, function(d){
-        				str += String.format(
-        					strHtml, 
-        					d.url, 
-        					d.cover, 
-        					d.name,
-        					d.district,
-        					d.wash_type,
-        					d.lowest_sale_price,
-        					d.lowest_origin_price,
-        					d.price_minus
-        				);
-        			});
+                    $.map(data, function(d){
+                        str += String.format(
+                            strHtml, 
+                            d.url, 
+                            d.cover, 
+                            d.name,
+                            d.district,
+                            d.wash_type,
+                            d.lowest_sale_price,
+                            d.lowest_origin_price,
+                            d.price_minus
+                        );
+                    });
 
-        			$(str).insertBefore(me.parent());
-        			me.data("page_index", pageIndex + 1)
-        		} else {
-        			me.parent().remove();
-        		}
-        	}
+                    $(str).insertBefore(me.parent());
+                    me.data("page_index", pageIndex + 1)
+                } else {
+                    me.parent().remove();
+                }
+            }
         );
 
-	});
+    });
 });
 </script>
 {% endblock %}
 
 {% block topbar %}
 <div class="row pf text-center border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40">
-	<div class="col-xs-4 line-height-32 text-left pl-15 pr-0">
-		<select class="input-sm sort">
-			<option value="0" {% if order_by_value == "0" %}selected="selected"{% endif %}>默认排序</option>
-			<option value="1" {% if order_by_value == "1" %}selected="selected"{% endif %}>价格最低</option>
-			<option value="2" {% if order_by_value == "2" %}selected="selected"{% endif %}>单量最多</option>
-		</select>
-	</div>
-	<div class="col-xs-4 line-height-32 f14 pr-0 pl-0 text-center">洗车行列表</div>
-	<div class="col-xs-4 line-height-32 text-right">
-		<a href="/city/open_citys_list" class="co8">
-			<i class="fa fa-map-marker pr-3"></i>{{city.get_short_name}}
-		</a>
-	</div>
+    <div class="col-xs-4 line-height-32 text-left pl-15 pr-0">
+        <select class="input-sm sort">
+            <option value="0" {% if order_by_value == "0" %}selected="selected"{% endif %}>默认排序</option>
+            <option value="1" {% if order_by_value == "1" %}selected="selected"{% endif %}>价格最低</option>
+            <option value="2" {% if order_by_value == "2" %}selected="selected"{% endif %}>单量最多</option>
+        </select>
+    </div>
+    <div class="col-xs-4 line-height-32 f14 pr-0 pl-0 text-center">洗车行列表</div>
+    <div class="col-xs-4 line-height-32 text-right">
+        <a href="/city/open_citys_list" class="co8">
+            <i class="fa fa-map-marker pr-3"></i>{{city.get_short_name}}
+        </a>
+    </div>
 </div>
 {% endblock %}
 
 {% block container %}
 <div class="row pt-50 pb-50 car-wash-list">
-	
-		{% for car_wash in car_washs %}
-		<ul class="list-group col-xs-12 mb-10 pl-15 pr-15">
-			<a class="list-group-item row pl-0 pr-0" href="{{car_wash.get_url}}">
-				<div class="col-xs-2 pl-5 pr-0">
-					<img src="{{car_wash.get_cover}}" class="w h50">
-				</div>
-				<div class="col-xs-6 pl-5 pr-0">
-					<div class="fb f15">{{car_wash.name}}</div>
-					<div class="f13 pt-10"><span class="pr-20 co3">{{car_wash.get_district.get_short_name}}</span><span class="co2">{{car_wash.get_wash_type_display}}</span></div>
-				</div>
-				<div class="col-xs-4 pr-5 pl-0 text-right">
-					<div>
-						<i class="fa fa-rmb f13 co2"></i><span class="co2 f18 fb">{{car_wash.lowest_sale_price}}</span>
-						<i class="fa fa-rmb f14 line-through co1"></i><span class="f14 line-through co1">{{car_wash.lowest_origin_price}}</span>
-					</div>
-					<div class="pt-5">
-						<span class="f13 pb-3 pt-3 pl-5 pr-5 bgc-EF8A55 co5">立省{{car_wash.get_price_minus}}元</span>
-					</div>
-				</div>
-			</a>
-		</ul>
-		{% endfor %}
-		<div class="col-xs-12 pb-15">
-			<button class="btn btn-lg btn-default btn-block co3 get-more" data-page_index="1">查看更多...</button>
-		</div>
-	{% if not car_washs %}
-   	<div class="alert alert-info mr-5 ml-5">暂无</div>
-	{% endif %}
+    
+        {% for car_wash in car_washs %}
+        <ul class="list-group col-xs-12 mb-10 pl-15 pr-15">
+            <a class="list-group-item row pl-0 pr-0" href="{{car_wash.get_url}}">
+                <div class="col-xs-2 pl-5 pr-0">
+                    <img src="{{car_wash.get_cover}}" class="w h50">
+                </div>
+                <div class="col-xs-6 pl-5 pr-0">
+                    <div class="fb f15">{{car_wash.name}}</div>
+                    <div class="f13 pt-10"><span class="pr-20 co3">{{car_wash.get_district.get_short_name}}</span><span class="co2">{{car_wash.get_wash_type_display}}</span></div>
+                </div>
+                <div class="col-xs-4 pr-5 pl-0 text-right">
+                    <div>
+                        <i class="fa fa-rmb f13 co2"></i><span class="co2 f18 fb">{{car_wash.lowest_sale_price}}</span>
+                        <i class="fa fa-rmb f14 line-through co1"></i><span class="f14 line-through co1">{{car_wash.lowest_origin_price}}</span>
+                    </div>
+                    <div class="pt-5">
+                        <span class="f13 pb-3 pt-3 pl-5 pr-5 bgc-EF8A55 co5">立省{{car_wash.get_price_minus}}元</span>
+                    </div>
+                </div>
+            </a>
+        </ul>
+        {% endfor %}
+        {% if is_show_more_flag %}
+        <div class="col-xs-12 pb-15">
+            <button class="btn btn-lg btn-default btn-block co3 get-more" data-page_index="1">查看更多...</button>
+        </div>
+        {% endif %}
+    {% if not car_washs %}
+    <div class="alert alert-info mr-5 ml-5">暂无</div>
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -83,7 +83,7 @@ class CarWashBase(object):
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
                   wash_type=wash_type, note=note, sort_num=sort_num)
-        
+
         try:
             car_wash = CarWash.objects.create(**ps)
         except:
@@ -127,7 +127,7 @@ class CarWashBase(object):
             obj.save()
         except:
             return 99900, dict_err.get(99900)
-            
+
         return 0, dict_err.get(0)
 
 
