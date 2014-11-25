@@ -182,11 +182,11 @@ class ServiceTypeBase(object):
         st = ServiceType.objects.create(name=name, sort_num=sort_num)
         return 0, st
 
-    def modify_service_type(self, service_type_id, name, sort_num=0):
+    def modify_service_type(self, service_type_id, name, sort_num=0, state=True):
         if not name:
             return 99800, dict_err.get(99800)
 
-        st = self.get_service_type_by_id(service_type_id)
+        st = self.get_service_type_by_id(service_type_id, state=None)
         if not st:
             return 20101, dict_err.get(20101)
 
@@ -195,8 +195,12 @@ class ServiceTypeBase(object):
 
         st.name = name
         st.sort_num = sort_num
+        st.state = state
         st.save()
         return 0, st
+
+    def search_types_for_admin(self):
+        return ServiceType.objects.all()
 
 
 class CouponBase(object):
