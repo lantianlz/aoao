@@ -41,4 +41,9 @@ PERMISSIONS = [
     {'code': 'add_car_wash', 'name': u'添加洗车行', 'parent': 'car_wash_manage'},
     {'code': 'query_car_wash', 'name': u'查询洗车行', 'parent': 'car_wash_manage'},
     {'code': 'modify_car_wash', 'name': u'修改洗车行', 'parent': 'car_wash_manage'},
+
+    {'code': 'service_type_manage', 'name': u'服务类别管理', 'parent': None},
+    {'code': 'add_service_type', 'name': u'添加服务类别', 'parent': 'service_type_manage'},
+    {'code': 'query_service_type', 'name': u'查询服务类别', 'parent': 'service_type_manage'},
+    {'code': 'modify_service_type', 'name': u'修改服务类别', 'parent': 'service_type_manage'},
 ]

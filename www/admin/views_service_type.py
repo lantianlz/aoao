@@ -10,56 +10,46 @@ from www.misc.decorators import staff_required, common_ajax_response, verify_per
 from www.misc import qiniu_client
 from common import utils, page
 
-
+from www.car_wash.models import group_choices
+from www.car_wash.interface import ServiceTypeBase
 
 @verify_permission('')
 def service_type(request, template_name='pc/admin/service_type.html'):
-    # from www.kaihu.models import FriendlyLink
-    # link_types = [{'value': x[0], 'name': x[1]} for x in FriendlyLink.link_type_choices]
+    choices = [{'value': x[0], 'name': x[1]} for x in group_choices]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def format_city(objs, num):
+def format_type(objs, num):
     data = []
 
     for x in objs:
         num += 1
-        province = CityBase().get_province_by_id(x.province)
 
         data.append({
             'num': num,
-            'city_id': x.id,
-            'city_name': x.city,
-            'province_id': province.id if province else '',
-            'province_name': province.province if province else '',
-            'is_show': x.is_show,
-            'pinyin': x.pinyin,
-            'pinyin_abbr': x.pinyin_abbr,
+            'type_id': x.id,
+            'name': x.name,
+            'group_id': x.group,
             'sort_num': x.sort_num,
-            'note': x.note or ''
+            'state': x.state
         })
 
     return data
 
 
-@verify_permission('query_city')
+@verify_permission('query_service_type')
 def search(request):
     data = []
 
-    name = request.REQUEST.get('name')
-    is_show = request.REQUEST.get('is_show')
-    sort_by_province = request.REQUEST.get('sort_by_province')
-    sort_by_province = True if sort_by_province == "1" else False
-
     page_index = int(request.REQUEST.get('page_index'))
 
-    objs = CityBase().search_citys_for_admin(name, is_show, sort_by_province)
+    objs = ServiceTypeBase().search_types_for_admin()
 
     page_objs = page.Cpt(objs, count=10, page=page_index).info
 
     # 格式化json
     num = 10 * (page_index - 1)
-    data = format_city(page_objs[0], num)
+    data = format_type(page_objs[0], num)
 
     return HttpResponse(
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
@@ -67,81 +57,37 @@ def search(request):
     )
 
 
-@verify_permission('query_city')
-def get_city_by_id(request):
-    city_id = request.REQUEST.get('city_id')
+@verify_permission('query_service_type')
+def get_service_type_by_id(request):
+    type_id = request.REQUEST.get('type_id')
 
-    data = format_city([CityBase().get_city_by_id(city_id)], 1)[0]
+    data = format_type([ServiceTypeBase().get_service_type_by_id(type_id, None)], 1)[0]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
-@verify_permission('modify_city')
+@verify_permission('modify_service_type')
 @common_ajax_response
-def modify_city(request):
-    city_id = request.REQUEST.get('city_id')
-    city = request.REQUEST.get('name')
-    pinyin = request.REQUEST.get('pinyin')
-    pinyin_abbr = request.REQUEST.get('pinyin_abbr')
+def modify_service_type(request):
+    type_id = request.REQUEST.get('type_id')
+    name = request.REQUEST.get('name')
     sort_num = int(request.REQUEST.get('sort'))
-    is_show = int(request.REQUEST.get('is_show'))
-    note = request.REQUEST.get('note')
+    state = request.REQUEST.get('state')
+    state = True if state == "1" else False
 
-    return CityBase().modify_city(
-        city_id, pinyin=pinyin, sort_num=sort_num, pinyin_abbr=pinyin_abbr, 
-        is_show=is_show, city=city, note=note
+    return ServiceTypeBase().modify_service_type(
+        type_id, name, sort_num, state
     )
 
-@verify_permission('modify_city')
+
+@verify_permission('add_service_type')
 @common_ajax_response
-def modify_note(request):
-    city_id = request.REQUEST.get('city_id')
-    note = request.REQUEST.get('note')
+def add_service_type(request):
+    name = request.REQUEST.get('name')
+    sort_num = int(request.REQUEST.get('sort'))
 
-    return CityBase().modify_city(
-        city_id, note=note
+    flag, msg = ServiceTypeBase().add_service_type(
+        name, sort_num
     )
 
-@verify_permission('query_city')
-def get_districts_by_city(request):
-    city_id = request.REQUEST.get('city_id')
-    data = []
-
-    for d in CityBase().get_districts_by_city(city_id):
-        data.append({
-            'district_id': d.id,
-            'district_name': d.district
-        })
-
-    return HttpResponse(json.dumps(data), mimetype='application/json')
-
-
-
-def get_citys_by_name(request):
-    '''
-    根据名字查询城市
-    '''
-    city_name = request.REQUEST.get('city_name')
-
-    result = []
-
-    citys = CityBase().get_citys_by_name(city_name)
-
-    if citys:
-        for x in citys:
-            result.append([x.id, x.city, None, x.city])
-
-    return HttpResponse(json.dumps(result), mimetype='application/json')
-
-
-def get_districts_by_city(request):
-    city_id = request.REQUEST.get('city_id')
-    data = []
-
-    for d in CityBase().get_districts_by_city(city_id, None):
-        data.append({
-            'district_id': d.id,
-            'district_name': d.district
-        })
-
-    return HttpResponse(json.dumps(data), mimetype='application/json')
+    return flag, msg.id if flag == 0 else msg
