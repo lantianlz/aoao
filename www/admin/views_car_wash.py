@@ -150,3 +150,20 @@ def modify_car_wash(request):
     return CarWashBase().modify_car_wash(car_wash_id, city_id, district_id, name, business_hours, tel, 
         addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
         wash_type, des, note, sort_num, state)
+
+
+def get_car_washs_by_name(request):
+    '''
+    根据名字查询洗车行
+    '''
+    car_wash_name = request.REQUEST.get('car_wash_name')
+
+    result = []
+
+    car_washs = CarWashBase().get_car_washs_by_name(car_wash_name)
+
+    if car_washs:
+        for x in car_washs:
+            result.append([x.id, x.name, None, x.name])
+
+    return HttpResponse(json.dumps(result), mimetype='application/json')

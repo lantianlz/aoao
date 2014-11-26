@@ -46,4 +46,14 @@ PERMISSIONS = [
     {'code': 'add_service_type', 'name': u'添加服务类别', 'parent': 'service_type_manage'},
     {'code': 'query_service_type', 'name': u'查询服务类别', 'parent': 'service_type_manage'},
     {'code': 'modify_service_type', 'name': u'修改服务类别', 'parent': 'service_type_manage'},
+
+    {'code': 'service_price_manage', 'name': u'服务价格管理', 'parent': None},
+    {'code': 'add_service_price', 'name': u'添加服务价格', 'parent': 'service_price_manage'},
+    {'code': 'query_service_price', 'name': u'查询服务价格', 'parent': 'service_price_manage'},
+    {'code': 'modify_service_price', 'name': u'修改服务价格', 'parent': 'service_price_manage'},
+
+    {'code': 'tools', 'name': u'常用工具', 'parent': None},
+    {'code': 'get_cache', 'name': u'查询缓存', 'parent': 'tools'},
+    {'code': 'remove_cache', 'name': u'删除缓存', 'parent': 'tools'},
+    {'code': 'modify_cache', 'name': u'修改缓存', 'parent': 'tools'},
 ]

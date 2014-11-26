@@ -28,6 +28,7 @@ urlpatterns += patterns('www.admin.views_permission',
 
 # 洗车行
 urlpatterns += patterns('www.admin.views_car_wash',
+                        url(r'^car_wash/car_wash/get_car_washs_by_name$', 'get_car_washs_by_name'),
                         url(r'^car_wash/car_wash/add_car_wash$', 'add_car_wash'),
                         url(r'^car_wash/car_wash/modify_car_wash$', 'modify_car_wash'),
                         url(r'^car_wash/car_wash/get_car_wash_by_id$', 'get_car_wash_by_id'),
@@ -42,6 +43,15 @@ urlpatterns += patterns('www.admin.views_service_type',
                         url(r'^car_wash/service_type/get_service_type_by_id$', 'get_service_type_by_id'),
                         url(r'^car_wash/service_type/search$', 'search'),
                         url(r'^car_wash/service_type$', 'service_type'),
+                        )
+
+# 洗车行服务价格
+urlpatterns += patterns('www.admin.views_service_price',
+                        url(r'^car_wash/service_price/add_service_price$', 'add_service_price'),
+                        url(r'^car_wash/service_price/modify_service_price$', 'modify_service_price'),
+                        url(r'^car_wash/service_price/get_service_price_by_id$', 'get_service_price_by_id'),
+                        url(r'^car_wash/service_price/search$', 'search'),
+                        url(r'^car_wash/service_price$', 'service_price'),
                         )
 
 # 城市

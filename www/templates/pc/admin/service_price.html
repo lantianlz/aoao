@@ -1,7 +1,7 @@
 {% extends "pc/admin/home.html" %}
 {% load custom_tags %}
 {% load custom_filters %}
-{% block title %}洗车服务类型管理{% endblock %}
+{% block title %}洗车服务价格管理{% endblock %}
 
 {% block css %}
 <style type="text/css">
@@ -13,7 +13,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
     // models
-    var Type = Backbone.Model.extend({
+    var Price = Backbone.Model.extend({
 
         // 默认值
         defaults: {
@@ -23,28 +23,35 @@ $(document).ready(function(){
     });
 
     // collections
-    var Types = Backbone.Collection.extend({
-        model: Type,
+    var Prices = Backbone.Collection.extend({
+        model: Price,
 
         _modelMaps: {
             'num': 'num',
-            'typeId': 'type_id',
-            'name': 'name',
-            'groupId': 'group_id',
+            'priceId': 'price_id',
+            'carWashId': 'car_wash_id',
+            'carWashName': 'car_wash_name',
+            'serviceTypeId': 'service_type_id',
+            'serviceTypeName': 'service_type_name',
+            'salePrice': 'sale_price',
+            'originPrice': 'origin_price',
+            'clearPrice': 'clear_price',
             'sortNum': 'sort_num',
             'state': 'state'
         },
 
         // 查询
-        search: function(pageIndex){
+        search: function(car_wash_name, state, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/service_type/search", 
-                {'page_index': pageIndex||1}, 
+                "/admin/car_wash/service_price/search", 
+                {'car_wash_name': car_wash_name||'', 'state': state||1, 'page_index': pageIndex||1}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
+                    me.carWashName = car_wash_name;
+                    me.state = state;
 
                     me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
                 }
@@ -52,12 +59,12 @@ $(document).ready(function(){
         },
 
         // 获取一个提问的model
-        getOne: function(typeId, callback){
+        getOne: function(priceId, callback){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/service_type/get_service_type_by_id", 
-                {'type_id': typeId},
+                "/admin/car_wash/service_price/get_service_price_by_id", 
+                {'price_id': priceId},
                 function(data){
                     if(callback){
                         callback($.QXUtils.dictMap(data, me._modelMaps));
@@ -67,10 +74,10 @@ $(document).ready(function(){
         },
 
         //
-        modifyType: function(data, callback){
+        modifyPrice: function(data, callback){
 
             ajaxSend(
-                "/admin/car_wash/service_type/modify_service_type", 
+                "/admin/car_wash/service_price/modify_service_price", 
                 data,
                 function(response){
                     if(callback){
@@ -80,10 +87,10 @@ $(document).ready(function(){
             );
         },
 
-        addType: function(data, callback){
+        addPrice: function(data, callback){
 
             ajaxSend(
-                "/admin/car_wash/service_type/add_service_type", 
+                "/admin/car_wash/service_price/add_service_price", 
                 data,
                 function(response){
                     if(callback){
@@ -97,11 +104,11 @@ $(document).ready(function(){
 
     // listView
     var ListView = Backbone.View.extend({
-        el: '#type_list',
+        el: '#price_list',
 
         pagination: new $.QXPagination.PaginationView(),
 
-        template: _.template($('#type_template').html()),
+        template: _.template($('#price_template').html()),
 
         initialize: function(){
             this.listenTo(this.collection, 'reset', this.render);
@@ -109,7 +116,7 @@ $(document).ready(function(){
 
         events: {
             'click .search': 'search',
-            'click .pointer': 'modifyType'
+            'click .pointer': 'modifyPrice'
         },
 
         // 渲染函数
@@ -118,39 +125,41 @@ $(document).ready(function(){
 
             this.showPanel();
 
-            this.$('tbody').html(this.template({'types': data}));
+            this.$('tbody').html(this.template({'prices': data}));
 
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search'
+                'search/' + this.collection.carWashName + '/' + this.collection.state
             );
         },
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#type_list"]').tab('show');
+            $('.qx-nav-pills a[href="#price_list"]').tab('show');
         },
 
         search: function(){
+            var carWashName = this.$('.key-word').val(),
+                state = this.$('.key-word-state:checked').val();
 
-            router.navigate(String.format('/search/1'), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/1', carWashName, state), {trigger: true});
         },
 
-        modifyType: function(sender){
+        modifyPrice: function(sender){
             var target = $(sender.currentTarget),
-                typeId = target.data('type_id');
+                priceId = target.data('price_id');
 
-            router.navigate('/modify/' + typeId, {trigger: true});
+            router.navigate('/modify/' + priceId, {trigger: true});
         }
     });
 
     // modifyView
     var ModifyView = Backbone.View.extend({
         
-        el: '#modify_type',
+        el: '#modify_price',
 
-        template: _.template($('#modify_type_template').html()),
+        template: _.template($('#modify_price_template').html()),
 
         events: {
             'click .save': 'save'
@@ -158,7 +167,7 @@ $(document).ready(function(){
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#modify_type"]').tab('show');
+            $('.qx-nav-pills a[href="#modify_price"]').tab('show');
         },
 
         // 渲染
@@ -167,10 +176,10 @@ $(document).ready(function(){
         },
 
         // 显示提问信息
-        modifyType: function(typeId){
+        modifyPrice: function(priceId){
             var me = this;
 
-            this.collection.getOne(typeId, function(data){
+            this.collection.getOne(priceId, function(data){
                 if(data){
                     me.render(data);
                     me.showPanel();
@@ -183,13 +192,13 @@ $(document).ready(function(){
 
         // 保存
         save: function(){
-            var typeId = this.$('form').data('type_id'),
+            var priceId = this.$('form').data('price_id'),
                 me = this;
 
-            me.collection.modifyType($.QXUtils.formToDict(this.$('form')), function(data){
-                if(data.errcode === "0"){
+            me.collection.modifyPrice($.QXUtils.formToDict(this.$('form')), function(data){
+                if(data.errcode === 0){
                     $.QXNotice.SuccessTopNotice('操作成功!');
-                    router.navigate('modify/' + typeId, {'trigger': true});
+                    router.navigate('modify/' + priceId, {'trigger': true});
                 } else {
                     $.QXNotice.ErrorTopNotice(data.errmsg);
                 }
@@ -203,7 +212,7 @@ $(document).ready(function(){
     var AddView = Backbone.View.extend({
         el: 'body',
 
-        template: _.template($('#add_type_template').html()),
+        template: _.template($('#add_price_template').html()),
 
         showPanel: function(){
             var me = this;
@@ -211,36 +220,51 @@ $(document).ready(function(){
             me.render();
         },
 
+        carWashTextBox: null,
+        initCarWashTextBox: function(name, value){
+            var me = this;
+
+            this.carWashTextBox = $.QXTextboxList.create('#car_wash_add', {
+                max: 1,
+                placeholder: '选择所属洗车行',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                param: 'car_wash_name',
+                loadPlaceholder: '正在加载...'
+            });
+            
+        },
+
         render: function(){
             var me = this;
 
-            $('#add_type_modal').remove();
+            $('#add_price_modal').remove();
             
             $('body').append(this.template());
 
             // 绑定事件
-            $('#add_type_modal .cancel').bind('click', function(){
+            $('#add_price_modal .cancel').bind('click', function(){
                 history.go(-1);
             });
-            $('#add_type_modal .ok').bind('click', function(){
-                me.addType();
+            $('#add_price_modal .ok').bind('click', function(){
+                me.addPrice();
             });
             
-            $('#add_type_modal').modal({'show': true, 'backdrop': 'static'});
+            $('#add_price_modal').modal({'show': true, 'backdrop': 'static'});
 
+            this.initCarWashTextBox();
         },
 
-        addType: function(){
+        addPrice: function(){
             var me = this;
             
-            if(!$('#add_type_modal form').valid()){
+            if(!$('#add_price_modal form').valid()){
                 return;
             }
 
-            types.addType($.QXUtils.formToDict(this.$('form')), function(data){
+            prices.addPrice($.QXUtils.formToDict(this.$('form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
-                    $('#add_type_modal').modal('hide');
+                    $('#add_price_modal').modal('hide');
                     $.QXNotice.SuccessTopNotice("操作成功");
                 } else {
                     $.QXNotice.ErrorTopNotice(data.errmsg);
@@ -256,19 +280,19 @@ $(document).ready(function(){
 
         routes: {
             "":                     "search",
-            "modify/:typeId":       "modify",
-            "search/:pageIndex":    "search",
+            "modify/:priceId":       "modify",
+            "search/(:carWashName)/(:state)/:pageIndex":    "search",
             "add":                   "add"
         },
 
         // 查询
-        search: function(pageIndex){
-            types.search(pageIndex||1);
+        search: function(carWashName, state, pageIndex){
+            prices.search(carWashName||'', state||1, pageIndex||1);
         },
 
         // 显示修改界面
-        modify: function(typeId){
-            modifyView.modifyType(typeId);
+        modify: function(priceId){
+            modifyView.modifyPrice(priceId);
         },
 
         add: function(){
@@ -278,9 +302,9 @@ $(document).ready(function(){
     });
     
     // 初始化
-    var types = new Types(),
-        listView = new ListView({'collection': types}),
-        modifyView = new ModifyView({'collection': types}),
+    var prices = new Prices(),
+        listView = new ListView({'collection': prices}),
+        modifyView = new ModifyView({'collection': prices}),
         addView = new AddView(),
         router = new Router();
  
@@ -294,25 +318,46 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#type_list" class="black-blue" data-toggle="pill">服务类型列表</a>
+        <a href="#price_list" class="black-blue" data-toggle="pill">服务价格列表</a>
     </li>
     <li>
-        <a href="#modify_type" class="black-blue" data-toggle="pill">修改服务类型</a>
+        <a href="#modify_price" class="black-blue" data-toggle="pill">修改服务价格</a>
     </li>
     <li class="pull-right">
-        <a href="#add" class="black-blue">添加服务类型</a>
+        <a href="#add" class="black-blue">添加服务价格</a>
     </li>
 </ul>
 
 <div class="tab-content">
     <!-- 客户经理列表 -->
-    <div class="tab-pane fade pt-15 in active" id="type_list">
+    <div class="tab-pane fade pt-15 in active" id="price_list">
+        <form action="." onsubmit="javascript: return false;">
+            <div class="col-md-2">
+                <label class="radio-inline">
+                    <input type="radio" name="state" class="key-word-state" value="0"> 无效
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="state" class="key-word-state" value="1" checked="checked"> 有效
+                </label>
+            </div>
+            <div class="pl-0 pb-10 col-md-3">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default search" type="submit">查询</button>
+                    </span>
+                </div>
+            </div>
+        </form>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>服务类型名称</th>
-                    <th>服务类型大类</th>
+                    <th>洗车行名称</th>
+                    <th>服务类型</th>
+                    <th>售价</th>
+                    <th>原价</th>
+                    <th>结算价</th>
                     <th>排序</th>
                     <th>状态</th>
                 </tr>
@@ -330,25 +375,24 @@ $(document).ready(function(){
     </div>
 
     <!-- 修改客户经理信息 -->
-    <div class="tab-pane fade" id="modify_type">
+    <div class="tab-pane fade" id="modify_price">
         
     </div>
 </div>
 
 <!-- 客户经理列表 -->
-<script type="text/template" id="type_template">
-    <% _.each(types, function(type){ %>
-        <tr class="pointer" data-type_id="<%= type.typeId %>">
-            <td><%= type.num %></td>
-            <td><%= type.name %></td>
+<script type="text/template" id="price_template">
+    <% _.each(prices, function(price){ %>
+        <tr class="pointer" data-price_id="<%= price.priceId %>">
+            <td><%= price.num %></td>
+            <td><%= price.carWashName %></td>
+            <td><%= price.serviceTypeName %></td>
+            <td><%= price.salePrice %></td>
+            <td><%= price.originPrice %></td>
+            <td><%= price.clearPrice %></td>
+            <td><%= price.sortNum %></td>
             <td>
-                {% for group in choices %}
-                    <% if({{group.value}} == type.groupId ){ %>{{group.name}}<% } %>
-                {% endfor %}
-            </td>
-            <td><%= type.sortNum %></td>
-            <td>
-                <% if(!type.state){ %>
+                <% if(!price.state){ %>
                 <span class="fa fa-times co2" title="正常"></span>
                 <% } else { %>
                 <span class="fa fa-check co6" title="无效"></span>
@@ -359,9 +403,9 @@ $(document).ready(function(){
 </script>
 
 <!-- 修改问题模板 -->
-<script type="text/template" id="modify_type_template">
-    <form class="form-horizontal" data-type_id="<%= typeId %>" role="form" method="post" action="">
-        <input type="hidden" name="type_id" value="<%= typeId %>" />
+<script type="text/template" id="modify_price_template">
+    <form class="form-horizontal" data-price_id="<%= priceId %>" role="form" method="post" action="">
+        <input type="hidden" name="price_id" value="<%= priceId %>" />
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">名称</label>
             <div class="col-sm-6">
@@ -413,8 +457,8 @@ $(document).ready(function(){
 </script>
 
 
-<script type="text/template" id="add_type_template">
-<div class="modal fade" id="add_type_modal" tabindex="-1" role="dialog">
+<script type="text/template" id="add_price_template">
+<div class="modal fade" id="add_price_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header pb-5">
@@ -424,28 +468,46 @@ $(document).ready(function(){
             <div class="modal-body">
                 <form class="form-horizontal" role="form" method="post" action="">
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">名称</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required name="name" value=''>
+                        <label class="col-sm-2 control-label">洗车行</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="car_wash_id" id="car_wash_add" value='' required>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">排序</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control" name="sort" value='0'>
-                        </div>
-                    </div>
-                    <!--
-                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">所属大类</label>
+                        <label class="col-sm-2 control-label">服务类型</label>
                         <div class="col-sm-3">
-                            <select class="form-control input-sm" name="group_id">
-                                {% for group in choices %}
-                                <option value="{{group.value}}">{{group.name}}</option>
+                            <select class="form-control input-sm" required name="service_type_id">
+                                {% for type in service_types %}
+                                <option value="{{type.value}}">{{type.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">售价</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control number" name="sale_price" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">原价</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control number" name="origin_price" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">结算价</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control number" name="clear_price" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control number" name="sort" value='0'>
+                        </div>
+                    </div>
+                    <!--
                     <div class="form-group pt-20 pb-20 mb-0">
                         <label class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-2">

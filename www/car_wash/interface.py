@@ -108,7 +108,7 @@ class CarWashBase(object):
             return 20103, dict_err.get(20103)
 
         try:
-            self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price)
+            self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs)
         except:
             return 99801, dict_err.get(99801)
 
@@ -131,10 +131,27 @@ class CarWashBase(object):
         return 0, dict_err.get(0)
 
 
+    def get_car_washs_by_name(self, name=""):
+        objs = CarWash.objects.filter(state=True)
+
+        if name:
+            objs = objs.filter(name__contains=name)
+
+        return objs[:10]
+
+    def get_car_wash_by_name(self, name=""):
+        objs = CarWash.objects.filter(state=True)
+
+        if name:
+            objs = objs.filter(name=name)
+
+        return objs
+
+
 class ServicePriceBase(object):
 
     @car_wash_required
-    def add_service_price(self, car_wash, service_type_id, sale_price, origin_price, clear_price, sort_num=0):
+    def add_service_price(self, car_wash_obj_or_id, service_type_id, sale_price, origin_price, clear_price, sort_num=0):
         try:
             sale_price = float(sale_price)
             origin_price = float(origin_price)
@@ -142,6 +159,11 @@ class ServicePriceBase(object):
             assert sale_price <= origin_price
         except:
             return 99801, dict_err.get(99801)
+
+        if not isinstance(car_wash_obj_or_id, CarWash):
+            car_wash = self.get_car_wash_by_id(car_wash_obj_or_id)
+        else:
+            car_wash = car_wash_obj_or_id
 
         service_type = ServiceTypeBase().get_service_type_by_id(service_type_id)
         if not service_type:
@@ -161,6 +183,17 @@ class ServicePriceBase(object):
             ps.update(state=state)
         return ServicePrice.objects.select_related("service_type").filter(**ps)
 
+
+    def search_prices_for_admin(self, car_wash_name, state=True):
+        objs = ServicePrice.objects.filter(state=state)
+
+        if car_wash_name:
+            car_wash = CarWashBase().get_car_wash_by_name(car_wash_name)
+
+            #if car_wash:
+            objs = objs.filter(car_wash=car_wash)
+
+        return objs
 
 class ServiceTypeBase(object):
 
@@ -202,6 +235,13 @@ class ServiceTypeBase(object):
     def search_types_for_admin(self):
         return ServiceType.objects.all()
 
+    def get_all_types(self, state=True):
+        objs = ServiceType.objects.all()
+
+        if state:
+            objs.filter(state=state);
+
+        return objs
 
 class CouponBase(object):
 
