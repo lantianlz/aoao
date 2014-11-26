@@ -23,7 +23,6 @@ SERVER_DOMAIN = 'aoaoxc.com' if not LOCAL_FLAG else '192.168.0.199:8002'
 MAIN_DOMAIN = ('http://www.%s' % SERVER_DOMAIN) if not LOCAL_FLAG else ('http://%s' % SERVER_DOMAIN)
 
 IMG0_DOMAIN = 'http://img0.aoaoxc.com'
-IMG0_DOMAIN = 'http://aoaoxc-img0.qiniudn.com'
 
 EMAIL_FROM = u'"嗷嗷洗车" <service@aoaoxc.com>'
 EMAIL_HOST_USER = 'service@aoaoxc.com'

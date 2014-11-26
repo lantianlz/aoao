@@ -87,7 +87,10 @@ def oauth_sina(request):
 def oauth_weixin(request):
     import logging
     from www.misc.oauth2.weixin import Consumer
-    client = Consumer()
+    from www.weixin.interface import dict_weixin_app, WexinBase
+
+    app_key = WexinBase().init_app_key()
+    client = Consumer(app_key)
 
     def _create_nick():
         return "weixin_%s" % str(int(time.time() * 1000))
@@ -111,7 +114,7 @@ def oauth_weixin(request):
         flag, result = UserBase().get_user_by_external_info(source='weixin', access_token=access_token, external_user_id=openid,
                                                             refresh_token=None, nick=user_info['nick'],
                                                             ip=utils.get_clientip(request), expire_time=dict_result['expires_in'],
-                                                            user_url=user_info['url'], gender=user_info['gender'])
+                                                            user_url=user_info['url'], gender=user_info['gender'], app_id=dict_weixin_app[app_key]["app_id"])
         if flag:
             user = result
             user.backend = 'www.middleware.user_backend.AuthBackend'

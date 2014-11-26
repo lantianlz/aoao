@@ -18,9 +18,8 @@ REDIRECT_URI = '%s/account/oauth/weixin' % settings.MAIN_DOMAIN
 
 class Consumer(object):
 
-    def __init__(self, response_type='code'):
+    def __init__(self, app_key, response_type='code'):
         from www.weixin.interface import dict_weixin_app
-        app_key = "aoaoxc_test" if settings.LOCAL_FLAG else "aoaoxc"
 
         self.client_id = dict_weixin_app[app_key]["app_id"]
         self.client_secret = dict_weixin_app[app_key]["app_secret"]

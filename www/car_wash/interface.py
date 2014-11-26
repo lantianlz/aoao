@@ -6,7 +6,7 @@ from common import utils
 from www.misc import consts
 
 from www.account.interface import UserBase
-from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon
+from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon, Order, OrderCode
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -233,3 +233,11 @@ class CouponBase(object):
 
     def get_coupons_by_user_id(self, user_id):
         return Coupon.objects.filter(user_id=user_id)
+
+
+class OrderBase(object):
+    pass
+
+
+class OrderCodeBase(object):
+    pass

@@ -449,9 +449,11 @@ class UserBase(object):
 
     def get_user_by_external_info(self, source, access_token, external_user_id,
                                   refresh_token, nick, ip, expire_time,
-                                  user_url='', gender=0):
+                                  user_url='', gender=0, app_id=None):
         assert all((source, access_token, external_user_id, nick))
-        et = self.get_external_user(source, access_token, external_user_id, refresh_token)
+
+        expire_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()) + int(expire_time)))
+        et = self.get_external_user(source, access_token, external_user_id, refresh_token, expire_time)
         if et:
             return True, self.get_user_by_id(et.user_id)
         else:
@@ -459,13 +461,12 @@ class UserBase(object):
             nick = self.generate_nick_by_external_nick(nick)
             if not nick:
                 return False, u'生成名称异常'
-            expire_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()) + int(expire_time)))
             errcode, result = self.regist_user(email=email, nick=nick, password=email, re_password=email, ip=ip, source=1, gender=gender)
             if errcode == 0:
                 user = result
                 ExternalToken.objects.create(source=source, external_user_id=external_user_id,
                                              access_token=access_token, refresh_token=refresh_token, user_url=user_url,
-                                             nick=nick, user_id=user.id, expire_time=expire_time
+                                             nick=nick, user_id=user.id, expire_time=expire_time, app_id=app_id
                                              )
                 return True, user
             else:
@@ -482,7 +483,7 @@ class UserBase(object):
             for i in xrange(10):
                 return '%s_%s' % (nick,  str(int(time.time() * 1000))[-3:])
 
-    def get_external_user(self, source, access_token, external_user_id, refresh_token):
+    def get_external_user(self, source, access_token, external_user_id, refresh_token, expire_time):
         assert all((source, access_token, external_user_id))
 
         et = None
@@ -492,6 +493,7 @@ class UserBase(object):
             if et.access_token != access_token:
                 et.access_token = access_token
                 et.refresh_token = refresh_token
+                et.expire_time = expire_time
                 et.save()
         else:
             ets = list(ExternalToken.objects.filter(source=source, access_token=access_token))
@@ -500,6 +502,7 @@ class UserBase(object):
                 if et.external_user_id != external_user_id:
                     et.external_user_id = external_user_id
                     et.refresh_token = refresh_token
+                    et.expire_time = expire_time
                     et.save()
         return et
 

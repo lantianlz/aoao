@@ -163,8 +163,9 @@ class ExternalToken(models.Model):
     source = models.CharField(max_length=16, db_index=True, choices=source_choices)
     access_token = models.CharField(max_length=255, db_index=True)
     refresh_token = models.CharField(max_length=255, null=True)
-    external_user_id = models.CharField(max_length=64, db_index=True)
-    union_id = models.CharField(max_length=64, null=True)  # 供微信多个公众号使用
+    external_user_id = models.CharField(max_length=128, db_index=True)
+    union_id = models.CharField(max_length=128, null=True)  # 供微信多个公众号使用
+    app_id = models.CharField(max_length=128, null=True)  # 对应的app_id
     nick = models.CharField(max_length=64, null=True)
     user_url = models.CharField(max_length=128, null=True)
     expire_time = models.DateTimeField()
@@ -174,32 +175,3 @@ class ExternalToken(models.Model):
 
     class Meta:
         unique_together = [("source", "access_token"), ("source", "external_user_id")]
-
-
-"""
-class Invitation(models.Model):
-    user_id = models.CharField(max_length=32, unique=True)
-    code = models.CharField(max_length=32, unique=True)
-
-    def get_url(self):
-        from django.conf import settings
-        return u'%s/regist/%s' % (settings.MAIN_DOMAIN, self.code)
-
-    def get_user(self):
-        from www.account.interface import UserBase
-        user = UserBase().get_user_by_id(self.user_id)
-        return user
-
-
-class InvitationUser(models.Model):
-    user_id = models.CharField(max_length=32, db_index=True)
-    invitation = models.ForeignKey('Invitation')
-    state = models.BooleanField(default=True)
-    create_time = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = [('user_id', 'invitation')]
-        ordering = ["-id"]
-
-
-"""

@@ -127,6 +127,7 @@ class ServicePrice(models.Model):
         unique_together = [("car_wash", "service_type"), ]
 
 
+# ===================================================订单和优惠券部分=================================================================#
 class Coupon(models.Model):
 
     """

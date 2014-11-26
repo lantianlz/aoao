@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-import random
 import requests
 import json
 import logging
@@ -9,7 +8,6 @@ from django.conf import settings
 
 from common import cache, debug
 from www.misc import consts
-# from www.question.interface import QuestionBase
 
 
 dict_err = {
@@ -34,6 +32,9 @@ class WexinBase(object):
 
     def __del__(self):
         del self.cache
+
+    def init_app_key(self, default_value="aoaoxc"):
+        return "aoaoxc_test" if settings.LOCAL_FLAG else default_value
 
     def get_base_text_response(self):
         '''
@@ -96,15 +97,6 @@ class WexinBase(object):
         return self.get_base_content_response(to_user, from_user,
                                               content=content)
 
-    def get_hotest_response(self, to_user, from_user):
-        items = ''
-        for question in QuestionBase().get_all_important_question()[:4]:
-            items += (self.get_base_news_item_response() % dict(title=question.iq_title.replace('%', '%%'), des='', picurl=question.img,
-                                                                hrefurl='%s%s' % (settings.MAIN_DOMAIN, question.get_url())))
-
-        base_xml = self.get_base_base_news_response(items)
-        return base_xml % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()), articles_count=4)
-
     def format_input_xml(self, xml):
         '''
         @note: 标签替换为小写，以便pyquery能识别
@@ -133,7 +125,7 @@ class WexinBase(object):
             elif event in ('click'):
                 event_key = jq('eventkey')[0].text.lower()
                 if event_key == 'hotest':
-                    return self.get_hotest_response(to_user, from_user)
+                    pass
 
         # 文字识别
         msg_types = jq('msgtype')
@@ -170,7 +162,7 @@ class WexinBase(object):
 
     def get_weixin_access_token(self, app_key):
         # 本地调试模式不走缓存
-        if settings.LOCAL_FLAG:
+        if not settings.LOCAL_FLAG:
             key = 'weixin_access_token_for_%s' % app_key
             access_token = self.cache.get(key)
             if access_token is None:
@@ -198,3 +190,6 @@ class WexinBase(object):
             logging.error(debug.get_debug_detail(e))
         assert access_token
         return access_token, expires_in
+
+    def get_user_info(self, openid, app_key):
+        pass

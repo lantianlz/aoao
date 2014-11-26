@@ -6,7 +6,7 @@ import time
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 
-from www.weixin.interface import WexinBase
+from www.weixin.interface import dict_weixin_app, WexinBase
 
 
 def weixin_signature_required(func):
@@ -17,7 +17,7 @@ def weixin_signature_required(func):
         timestamp = request.GET.get('timestamp', '') or '0'
         nonce = request.GET.get('nonce', '')
         signature = request.GET.get('signature', '')
-        token = 'aoaoxc_test'
+        token = dict_weixin_app[WexinBase().init_app_key()]['token']
         lst_sig = [timestamp, nonce, token]
         lst_sig.sort()
         if hashlib.sha1(''.join(lst_sig)).hexdigest() == signature and abs(int(time.time()) - int(timestamp)) < 3600:
