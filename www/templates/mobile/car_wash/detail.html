@@ -59,7 +59,7 @@
     <div class="bgc-ffffff mt-5 pl-0">
         <ul class="list-group">
             {% for sp in service_prices %}
-            <a class="list-group-item pl-5" href="/car_wash/buy">
+            <a class="list-group-item pl-5" href="/car_wash/show_create_order/{{sp.id}}">
                 <div class="row">
                     <div class="col-xs-6 pl-5 text-left f16">{{sp.service_type.name}}</div>
                     <div class="col-xs-6 pr-0 text-right">

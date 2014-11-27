@@ -85,7 +85,7 @@ class CarWashBank(models.Model):
     """
     @note: 洗车行结算信息
     """
-    car_wash = models.ForeignKey("CarWash")
+    car_wash = models.ForeignKey("CarWash", unique=True)
     manager_name = models.CharField(max_length=16)
     mobile = models.CharField(max_length=16)
     tel = models.CharField(max_length=16)
@@ -186,6 +186,13 @@ class Coupon(models.Model):
         car_wash = self.car_wash
         if car_wash:
             note = u', 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
+        return note
+
+    def get_display(self):
+        if self.coupon_type == 0:
+            note = u"立减现金%s元" % utils.smart_show_float(self.discount)
+        elif self.coupon_type == 1:
+            note = u"订单优惠至%s元" % utils.smart_show_float(self.discount)
         return note
 
 

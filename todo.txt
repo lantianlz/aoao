@@ -2,7 +2,6 @@
 1.替换favicon
 2.sql检测
 3.缓存使用
-4.七牛域名修改
 5.js和css无用的去掉引用
 6.member_required判断
 7.404and500
