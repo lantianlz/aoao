@@ -1,5 +1,5 @@
 {% extends "mobile/car_wash/base_car_wash.html" %}
-
+{% load custom_filters %}
 {% block title_all %}嗷嗷洗车{% endblock %}
 
 {% block css %}
@@ -20,7 +20,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	var calculatePrice = function(){
-		 price = 0,
+		 var price = 0,
 			// 单价
 			unitPrice = parseFloat($('.unit-price').html()), 
 			// 购买数量	
@@ -68,29 +68,29 @@ $(document).ready(function(){
 	<ul class="col-xs-12 list-group mt-20 pr-0 mb-10">
 		<li class="list-group-item bdc-d0d0d0 row">
 			<div class="col-xs-8 pl-0">
-				<div class="f16">华胜洗车(高新店)</div>
-				<div class="co3 pt-5">5座轿车，特惠价</div>
+				<div class="f16">{{service_price.car_wash.name}}</div>
+				<div class="co3 pt-5">{{service_price.service_type.name}}</div>
 			</div>
 			<div class="col-xs-4 pt-10 text-right pr-0">
-				<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 fb unit-price">15</span>
+				<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 fb unit-price">{{service_price.sale_price|smart_show_float}}</span>
 			</div>
 		</li>
 		<li class="list-group-item bdc-d0d0d0 row">
 			<div class="col-xs-6 f16 pt-5 pl-0">购买数量</div>
 			<div class="col-xs-6 text-right pr-0">
 				<select class="input-sm pay-count">
-					<option value="1">1张</option>
-					<option value="2">2张</option>
-					<option value="3">3张</option>
-					<option value="4">4张</option>
-					<option value="5">5张</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
 				</select>
 			</div>
 		</li>
 		<li class="list-group-item bdc-d0d0d0 row">
 			<div class="col-xs-6 f16 pt-5 pl-0">需支付</div>
 			<div class="col-xs-6 text-right pr-0">
-				<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb total-price">15</span>
+				<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb total-price">{{service_price.sale_price|smart_show_float}}</span>
 			</div>
 		</li>
 	</ul>
@@ -111,7 +111,7 @@ $(document).ready(function(){
 			<div class="col-xs-6 text-right pr-0 pl-0">
 				<label>
 		          	<input type="checkbox" value="0" class="use-balance">
-		          	<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb balance">10.00</span>
+		          	<span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb balance">{{user_cash.balance|smart_show_float}}</span>
 		        </label>
 			</div>
 		</li>

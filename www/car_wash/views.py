@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse, Http404  # , HttpResponseRedirect
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import page
-from www.misc.decorators import member_required, common_ajax_response
+# from www.misc.decorators import member_required, common_ajax_response
 from www.city.interface import CityBase
 from www.car_wash import interface
 
@@ -41,13 +41,19 @@ def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/de
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-# @member_required
 def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
     coupons = cb.get_coupons_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def buy(request, template_name='mobile/car_wash/buy.html'):
+def show_create_order(request, service_price_id, template_name='mobile/car_wash/create_order.html'):
+    from www.cash.interface import UserCashBase
+
+    service_price = spb.get_service_price_by_id(service_price_id)
+    if not service_price:
+        raise Http404
+
+    user_cash = UserCashBase().get_user_cash_by_user_id(request.user.id)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -56,7 +62,6 @@ def order(request, province_id=None, template_name='mobile/car_wash/order.html')
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-# @member_required
 def order_detail(request, order_detail_id=None, template_name="mobile/car_wash/order_detail.html"):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -67,6 +72,9 @@ def location(request, template_name='mobile/car_wash/location.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+# ===================================================ajax部分=================================================================#
+
+
 def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -75,9 +83,6 @@ def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
 def setting(request, template_name='mobile/car_wash/setting.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
-# ===================================================ajax部分=================================================================#
 
 
 def get_car_washs(request):

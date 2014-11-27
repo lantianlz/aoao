@@ -132,7 +132,6 @@ class CarWashBase(object):
 
         return 0, dict_err.get(0)
 
-
     def get_car_washs_by_name(self, name=""):
         objs = CarWash.objects.filter(state=True)
 
@@ -179,12 +178,11 @@ class ServicePriceBase(object):
 
         return 0, sp
 
-    def get_service_prices_by_car_wash(self, car_wash, state=None):
+    def get_service_prices_by_car_wash(self, car_wash, state=True):
         ps = dict(car_wash=car_wash)
         if state is not None:
             ps.update(state=state)
         return ServicePrice.objects.select_related("service_type").filter(**ps)
-
 
     def search_prices_for_admin(self, car_wash_name, state=True):
         objs = ServicePrice.objects.filter(state=state)
@@ -197,12 +195,11 @@ class ServicePriceBase(object):
         return objs
 
     def get_service_price_by_id(self, price_id, state=True):
-        objs = ServicePrice.objects.filter(pk=price_id)
+        objs = ServicePrice.objects.select_related("car_wash", "service_type").filter(pk=price_id)
         if state != None:
             objs = objs.filter(state=state)
 
         return objs[0] if objs else None
-
 
     def modify_service_price(self, price_id, car_wash_id, service_type_id, sale_price, origin_price, clear_price, sort_num=0, state=True):
         try:
@@ -232,7 +229,7 @@ class ServicePriceBase(object):
 
         ps = dict(car_wash=car_wash, service_type=service_type, sale_price=sale_price,
                   origin_price=origin_price, clear_price=clear_price, sort_num=sort_num, state=state)
-        
+
         for k, v in ps.items():
             setattr(obj, k, v)
 
@@ -242,6 +239,7 @@ class ServicePriceBase(object):
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
+
 
 class ServiceTypeBase(object):
 
@@ -287,9 +285,10 @@ class ServiceTypeBase(object):
         objs = ServiceType.objects.all()
 
         if state:
-            objs.filter(state=state);
+            objs.filter(state=state)
 
         return objs
+
 
 class CouponBase(object):
 
