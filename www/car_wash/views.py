@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import page
-# from www.misc.decorators import member_required, common_ajax_response
+from www.misc.decorators import member_required
 from www.city.interface import CityBase
 from www.car_wash import interface
 
@@ -47,6 +47,9 @@ def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
 
 
 def show_create_order(request, service_price_id, template_name='mobile/car_wash/show_create_order.html'):
+    """
+    @note: 显示创建订单页面
+    """
     from www.cash.interface import UserCashBase
 
     service_price = spb.get_service_price_by_id(service_price_id)
@@ -54,8 +57,22 @@ def show_create_order(request, service_price_id, template_name='mobile/car_wash/
         raise Http404
 
     user_cash = UserCashBase().get_user_cash_by_user_id(request.user.id)
+    coupons = cb.get_valid_coupon_by_user_id(request.user.id)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+@member_required
+def create_order(request, service_price_id, template_name='mobile/car_wash/show_create_order.html'):
+    """
+    @note: 创建订单
+    """
+    service_price = spb.get_service_price_by_id(service_price_id)
+    if not service_price:
+        raise Http404
+
+    return HttpResponse("ok")
+    # return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
 def order(request, province_id=None, template_name='mobile/car_wash/order.html'):

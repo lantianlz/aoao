@@ -325,6 +325,14 @@ class CouponBase(object):
     def get_coupons_by_user_id(self, user_id):
         return Coupon.objects.filter(user_id=user_id)
 
+    def get_valid_coupon_by_user_id(self, user_id):
+        coupons = Coupon.objects.filter(user_id=user_id, state=1)
+        datas = []
+        for coupon in coupons:
+            if coupon.check_is_expiry():
+                datas.append(coupon)
+        return coupons
+
 
 class OrderBase(object):
     pass
