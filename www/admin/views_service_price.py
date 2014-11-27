@@ -19,7 +19,7 @@ def service_price(request, template_name='pc/admin/service_price.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def format_type(objs, num):
+def format_price(objs, num):
     data = []
 
     for x in objs:
@@ -57,7 +57,7 @@ def search(request):
 
     # 格式化json
     num = 10 * (page_index - 1)
-    data = format_type(page_objs[0], num)
+    data = format_price(page_objs[0], num)
 
     return HttpResponse(
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
@@ -67,9 +67,9 @@ def search(request):
 
 @verify_permission('query_service_price')
 def get_service_price_by_id(request):
-    type_id = request.REQUEST.get('type_id')
+    price_id = request.REQUEST.get('price_id')
 
-    data = format_type([ServicePriceBase().get_service_price_by_id(type_id, None)], 1)[0]
+    data = format_price([ServicePriceBase().get_service_price_by_id(price_id, None)], 1)[0]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
@@ -77,14 +77,19 @@ def get_service_price_by_id(request):
 @verify_permission('modify_service_price')
 @common_ajax_response
 def modify_service_price(request):
-    type_id = request.REQUEST.get('type_id')
-    name = request.REQUEST.get('name')
+    price_id = request.REQUEST.get('price_id')
+    car_wash_id = request.REQUEST.get('car_wash_id')
+    service_type_id = request.REQUEST.get('service_type_id')
+    sale_price = request.REQUEST.get('sale_price')
+    origin_price = request.REQUEST.get('origin_price')
+    clear_price = request.REQUEST.get('clear_price')
     sort_num = int(request.REQUEST.get('sort'))
     state = request.REQUEST.get('state')
     state = True if state == "1" else False
 
     return ServicePriceBase().modify_service_price(
-        type_id, name, sort_num, state
+        price_id, car_wash_id, service_type_id, sale_price, 
+        origin_price, clear_price, sort_num, state
     )
 
 

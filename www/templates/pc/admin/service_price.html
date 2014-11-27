@@ -170,9 +170,28 @@ $(document).ready(function(){
             $('.qx-nav-pills a[href="#modify_price"]').tab('show');
         },
 
+        carWashTextBox: null,
+        initCarWashTextBox: function(name, value){
+            var me = this;
+
+            this.carWashTextBox = $.QXTextboxList.create('#car_wash_modify', {
+                max: 1,
+                placeholder: '选择所属洗车行',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                param: 'car_wash_name',
+                loadPlaceholder: '正在加载...'
+            });
+            
+            if(value){
+                this.carWashTextBox.add(name, value);
+            }
+        },
+
         // 渲染
         render: function(data){
             this.$el.html(this.template(data));
+
+            this.initCarWashTextBox(data.carWashName, data.carWashId);
         },
 
         // 显示提问信息
@@ -194,6 +213,10 @@ $(document).ready(function(){
         save: function(){
             var priceId = this.$('form').data('price_id'),
                 me = this;
+
+            if(!me.$('form').valid()){
+                return;
+            }
 
             me.collection.modifyPrice($.QXUtils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
@@ -407,47 +430,62 @@ $(document).ready(function(){
     <form class="form-horizontal" data-price_id="<%= priceId %>" role="form" method="post" action="">
         <input type="hidden" name="price_id" value="<%= priceId %>" />
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">名称</label>
+            <label class="col-sm-2 control-label">洗车行</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="name" value='<%= name %>'>
+                <input type="text" class="form-control" name="car_wash_id" id="car_wash_modify" value='' required>
             </div>
         </div>
-        <!--
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">所属大类</label>
+            <label class="col-sm-2 control-label">服务类型</label>
             <div class="col-sm-3">
-                <select class="form-control input-sm" name="group_id">
-                    {% for group in choices %}
-                    <option value="{{group.value}}">{{group.name}}</option>
+                <select class="form-control input-sm" required name="service_type_id">
+                    {% for type in service_types %}
+                    <option value="{{type.value}}" <% if(serviceTypeId == {{type.value}}){ %>selected="selected"<% } %> >{{type.name}}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
-        -->
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">排序</label>
+            <label class="col-sm-2 control-label">售价</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" name="sort" value='<%= sortNum %>'>
+                <input type="text" class="form-control number" required name="sale_price" value='<%= salePrice %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">原价</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control number" required name="origin_price" value='<%= originPrice %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">结算价</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control number" required name="clear_price" value='<%= clearPrice %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control number" required name="sort" value='<%= sortNum %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0">
             <label class="col-sm-2 control-label">状态</label>
             <div class="col-sm-2">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="state" value="1" <% if(state=="1"){ %>checked="checked"<% } %> >
+                        <input type="radio" name="state" value="1" <% if(state == "1"){ %>checked="checked"<% } %> >
                         有效
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="state" value="0" <% if(state=="0"){ %>checked="checked"<% } %> >
+                        <input type="radio" name="state" value="0" <% if(state == "0"){ %>checked="checked"<% } %> >
                         无效
                     </label>
                 </div>
             </div>
         </div>
-        
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <div class="col-sm-12">
                 <button type="button" class="btn btn-primary save">提交你的修改</button>
@@ -486,25 +524,25 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">售价</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control number" name="sale_price" value='0'>
+                            <input type="text" class="form-control number" required name="sale_price" value='0'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">原价</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control number" name="origin_price" value='0'>
+                            <input type="text" class="form-control number" required name="origin_price" value='0'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">结算价</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control number" name="clear_price" value='0'>
+                            <input type="text" class="form-control number" required name="clear_price" value='0'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0">
                         <label class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control number" name="sort" value='0'>
+                            <input type="text" class="form-control number" required name="sort" value='0'>
                         </div>
                     </div>
                     <!--

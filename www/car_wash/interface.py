@@ -14,6 +14,8 @@ dict_err = {
     20102: u'洗车行名称重复',
     20103: u'洗车行不存在或者已删除',
     20104: u'该洗车行已添加此服务类型',
+    20105: u'该服务价格不存在或者已删除',
+    20106: u'该洗车行已添加此服务价格',
 
     20205: u'小概率事件发生，优惠券编码重复，请重新添加',
 }
@@ -190,10 +192,56 @@ class ServicePriceBase(object):
         if car_wash_name:
             car_wash = CarWashBase().get_car_wash_by_name(car_wash_name)
 
-            #if car_wash:
             objs = objs.filter(car_wash=car_wash)
 
         return objs
+
+    def get_service_price_by_id(self, price_id, state=True):
+        objs = ServicePrice.objects.filter(pk=price_id)
+        if state != None:
+            objs = objs.filter(state=state)
+
+        return objs[0] if objs else None
+
+
+    def modify_service_price(self, price_id, car_wash_id, service_type_id, sale_price, origin_price, clear_price, sort_num=0, state=True):
+        try:
+            sale_price = float(sale_price)
+            origin_price = float(origin_price)
+            clear_price = float(clear_price)
+            assert sale_price <= origin_price
+        except:
+            return 99801, dict_err.get(99801)
+
+        obj = self.get_service_price_by_id(price_id, None)
+        if not obj:
+            return 20105, dict_err.get(20105)
+
+        car_wash = CarWashBase().get_car_wash_by_id(car_wash_id)
+        if not car_wash:
+            return 20103, dict_err.get(20103)
+
+        service_type = ServiceTypeBase().get_service_type_by_id(service_type_id)
+        if not service_type:
+            return 20101, dict_err.get(20101)
+
+        temp = ServicePrice.objects.filter(car_wash=car_wash, service_type=service_type)
+
+        if temp and temp[0] != obj:
+            return 20106, dict_err.get(20106)
+
+        ps = dict(car_wash=car_wash, service_type=service_type, sale_price=sale_price,
+                  origin_price=origin_price, clear_price=clear_price, sort_num=sort_num, state=state)
+        
+        for k, v in ps.items():
+            setattr(obj, k, v)
+
+        try:
+            obj.save()
+        except:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
 
 class ServiceTypeBase(object):
 
