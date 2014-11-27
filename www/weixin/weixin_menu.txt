@@ -1,40 +1,45 @@
+一、测试菜单
 {
     "button": [
         {
             "type": "view", 
             "name": "立即洗车", 
-            "url": "http://192.168.0.199:8002/account/oauth/weixin"
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=home#wechat_redirect"
+        }, 
+        {
+            "type": "view", 
+            "name": "我的洗车码", 
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=order_code#wechat_redirect"
         }, 
         {
             "name": "更多", 
             "sub_button": [
                 {
                     "type": "view", 
-                    "name": "李政本地", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
+                    "name": "充值", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=recharge#wechat_redirect"
                 },
                 {
                     "type": "view", 
-                    "name": "小雷本地", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.104%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=aoaoxc_state#wechat_redirect"
+                    "name": "我的优惠券", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=coupon#wechat_redirect"
                 },
                 {
                     "type": "view", 
-                    "name": "正式环境首页", 
-                    "url": "http://www.aoaoxc.com"
-                }
+                    "name": "新手指导", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=help#wechat_redirect"
+                },
+                {
+                    "type": "view", 
+                    "name": "联系我们", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=about#wechat_redirect"
+                },
             ]
         }
     ]
 }
 
 
+二、正式菜单
 
-<xml>
-<ToUserName><![CDATA[gh_4fae99286289]]></ToUserName>
-<FromUserName><![CDATA[o07dat0ujliP84s4GPsLFXOrAcbk]]></FromUserName>
-<CreateTime>1403067969</CreateTime>
-<MsgType><![CDATA[event]]></MsgType>
-<Event><![CDATA[CLICK]]></Event>
-<EventKey><![CDATA[hotest]]></EventKey>
-</xml>
+
