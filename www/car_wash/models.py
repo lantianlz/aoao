@@ -205,9 +205,10 @@ class Order(models.Model):
     service_price = models.ForeignKey("ServicePrice")
     car_wash = models.ForeignKey("CarWash")  # 冗余字段
     count = models.IntegerField()
-    total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 总的结算金额
     coupon = models.ForeignKey('Coupon', null=True, blank=True)
-    discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵 咕咚码的优惠价格
+    total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 总的结算金额
+    user_cash_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 使用账户余额
+    discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵的优惠价格
     pay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 应付金额   最终需要用户支付金额
     payed_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # 支付接口回调反馈的实际付款金额
     pay_time = models.DateTimeField(null=True, blank=True)  # 支付接口回调的时间
