@@ -52,6 +52,11 @@ PERMISSIONS = [
     {'code': 'query_service_price', 'name': u'查询服务价格', 'parent': 'service_price_manage'},
     {'code': 'modify_service_price', 'name': u'修改服务价格', 'parent': 'service_price_manage'},
 
+    {'code': 'car_wash_bank_manage', 'name': u'洗车行银行信息管理', 'parent': None},
+    {'code': 'add_car_wash_bank', 'name': u'添加洗车行银行信息', 'parent': 'car_wash_bank_manage'},
+    {'code': 'query_car_wash_bank', 'name': u'查询洗车行银行信息', 'parent': 'car_wash_bank_manage'},
+    {'code': 'modify_car_wash_bank', 'name': u'修改洗车行银行信息', 'parent': 'car_wash_bank_manage'},
+
     {'code': 'tools', 'name': u'常用工具', 'parent': None},
     {'code': 'get_cache', 'name': u'查询缓存', 'parent': 'tools'},
     {'code': 'remove_cache', 'name': u'删除缓存', 'parent': 'tools'},

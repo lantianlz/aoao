@@ -54,6 +54,15 @@ urlpatterns += patterns('www.admin.views_service_price',
                         url(r'^car_wash/service_price$', 'service_price'),
                         )
 
+# 洗车行银行信息
+urlpatterns += patterns('www.admin.views_bank',
+                        url(r'^car_wash/bank/add_bank$', 'add_bank'),
+                        url(r'^car_wash/bank/modify_bank$', 'modify_bank'),
+                        url(r'^car_wash/bank/get_bank_by_id$', 'get_bank_by_id'),
+                        url(r'^car_wash/bank/search$', 'search'),
+                        url(r'^car_wash/bank$', 'bank'),
+                        )
+
 # 城市
 urlpatterns += patterns('www.admin.views_city',
 

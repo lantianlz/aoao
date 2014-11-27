@@ -6,7 +6,7 @@ from common import utils
 from www.misc import consts
 
 from www.account.interface import UserBase
-from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon, Order, OrderCode
+from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon, Order, OrderCode, CarWashBank
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -16,6 +16,7 @@ dict_err = {
     20104: u'该洗车行已添加此服务类型',
     20105: u'该服务价格不存在或者已删除',
     20106: u'该洗车行已添加此服务价格',
+    20107: u'该洗车行银行信息已存在',
 
     20205: u'小概率事件发生，优惠券编码重复，请重新添加',
 }
@@ -333,3 +334,40 @@ class OrderBase(object):
 
 class OrderCodeBase(object):
     pass
+
+class CarWashBankBase(object):
+
+    def get_bank_by_car_wash(self, car_wash_id):
+        return CarWashBank.objects.filter(car_wash__id=car_wash_id)
+
+    def add_bank(self, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
+        if not (car_wash_id and manager_name and mobile \
+            and tel and bank_name and bank_card and balance_date):
+            return 99800, dict_err.get(99800)
+
+        if self.get_bank_by_car_wash(car_wash_id):
+            return 20107, dict_err.get(20107)
+
+        try:
+            obj = CarWashBank.objects.create(
+                car_wash_id = car_wash_id, 
+                manager_name = manager_name,
+                mobile = mobile,
+                tel = tel,
+                bank_name = bank_name,
+                bank_card = bank_card,
+                balance_date = balance_date
+            )
+            return 0, obj
+        except Exception, e:
+            print e
+            return 99900, dict_err.get(99900)
+
+
+    def search_banks_for_admin(self, car_wash_name):
+        objs = CarWashBank.objects.select_related('car_wash').all();
+
+        if car_wash_name:
+            objs = objs.filter(car_wash__name__contains=car_wash_name)
+            
+        return objs
