@@ -46,7 +46,7 @@ def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def show_create_order(request, service_price_id, template_name='mobile/car_wash/create_order.html'):
+def show_create_order(request, service_price_id, template_name='mobile/car_wash/show_create_order.html'):
     from www.cash.interface import UserCashBase
 
     service_price = spb.get_service_price_by_id(service_price_id)
