@@ -411,9 +411,11 @@ class UserBase(object):
             la = la[0]
             format_user.last_active = la.last_active_time
             format_user.last_active_ip = la.ip
+            format_user.last_active_source = la.last_active_source
         else:
             format_user.last_active = format_user.create_time
             format_user.last_active_ip = format_user.ip
+            format_user.last_active_source = ''
 
         # 注册来源
         if format_user.source > 0:

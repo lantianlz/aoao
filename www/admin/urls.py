@@ -84,6 +84,13 @@ urlpatterns += patterns('www.admin.views_district',
                         url(r'^city/district$', 'district'),
                         )
 
+# 统计
+urlpatterns += patterns('www.admin.views_statistics',
+
+                        url(r'^statistics/get_active_user$', 'get_active_user'),
+                        url(r'^statistics/active_user$', 'active_user'),
+                        )
+
 # 常用工具
 urlpatterns += patterns('www.admin.views_caches',
 
