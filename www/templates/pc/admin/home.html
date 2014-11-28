@@ -63,6 +63,10 @@ a.list-group-item.active{
 .container{
     position: relative;
 }
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{
+    z-index: auto;
+}
 </style>
 	{% block css %}{% endblock %}
 {% endblock %}
@@ -92,7 +96,7 @@ a.list-group-item.active{
                 'z-index': 99
             })
             .stop(true, true)
-            .show('fast')
+            .show('fast');
         })
         .bind('mouseleave', function(){
             var nav = $(this);

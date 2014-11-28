@@ -170,6 +170,33 @@ $(document).ready(function(){
         // 渲染
         render: function(data){
             this.$el.html(this.template(data));
+
+            this.initCarWashTextBox(data.carWashName, data.carWashId);
+
+            $('#balance_date_modify').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                minView: 2,
+                autoclose: true
+            });
+        },
+
+        carWashTextBox: null,
+        initCarWashTextBox: function(name, value){
+            var me = this;
+
+            this.carWashTextBox = $.QXTextboxList.create('#car_wash_modify', {
+                max: 1,
+                placeholder: '选择所属洗车行',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                param: 'car_wash_name',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.carWashTextBox.add(name, value);
+            }
+            
         },
 
         // 显示提问信息
@@ -193,13 +220,13 @@ $(document).ready(function(){
                 me = this;
 
             me.collection.modifyBank($.QXUtils.formToDict(this.$('form')), function(data){
-                if(data.errcode === "0"){
+                if(data.errcode == "0"){
                     $.QXNotice.SuccessTopNotice('操作成功!');
                     router.navigate('modify/' + bankId, {'trigger': true});
                 } else {
                     $.QXNotice.ErrorTopNotice(data.errmsg);
                 }
-            })
+            });
         }
 
 
@@ -249,6 +276,12 @@ $(document).ready(function(){
             $('#add_bank_modal').modal({'show': true, 'backdrop': 'static'});
 
             me.initCarWashTextBox();
+            $('#balance_date_add').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                minView: 2,
+                autoclose: true
+            });
         },
 
         addBank: function(){
@@ -384,46 +417,47 @@ $(document).ready(function(){
 <!-- 修改问题模板 -->
 <script type="text/template" id="modify_bank_template">
     <form class="form-horizontal" data-bank_id="<%= bankId %>" role="form" method="post" action="">
-        <input type="hidden" name="type_id" value="<%= typeId %>" />
+        <input type="hidden" name="bank_id" value="<%= bankId %>" />
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">名称</label>
+            <label class="col-sm-2 control-label">洗车行</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="name" value='<%= name %>'>
+                <input type="text" class="form-control" id="car_wash_modify" required name="car_wash_id" value=''>
             </div>
         </div>
-        <!--
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">所属大类</label>
+            <label class="col-sm-2 control-label">经理名称</label>
             <div class="col-sm-3">
-                <select class="form-control input-sm" name="group_id">
-                    {% for group in choices %}
-                    <option value="{{group.value}}">{{group.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        -->
-        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">排序</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control" name="sort" value='<%= sortNum %>'>
+                <input type="text" class="form-control" required name="manager_name" value='<%= managerName %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">状态</label>
-            <div class="col-sm-2">
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="state" value="1" <% if(state=="1"){ %>checked="checked"<% } %> >
-                        有效
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="state" value="0" <% if(state=="0"){ %>checked="checked"<% } %> >
-                        无效
-                    </label>
-                </div>
+            <label class="col-sm-2 control-label">手机</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" required name="mobile" value='<%= mobile %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">座机</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" required name="tel" value='<%= tel %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">银行名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" required name="bank_name" value='<%= bankName %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">银行卡号</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" required name="bank_card" value='<%= bankCard %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0">
+            <label class="col-sm-2 control-label">结算日期</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" required name="balance_date" id="balance_date_modify" value='<%= balanceDate %>'>
             </div>
         </div>
         
@@ -485,7 +519,7 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0">
                         <label class="col-sm-2 control-label">结算日期</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" required name="balance_date" value=''>
+                            <input type="text" class="form-control" id="balance_date_add" required name="balance_date" value=''>
                         </div>
                     </div>
                 </form>
