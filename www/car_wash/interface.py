@@ -297,6 +297,84 @@ class ServiceTypeBase(object):
         return objs
 
 
+class CarWashBankBase(object):
+
+    def get_bank_by_car_wash(self, car_wash_id):
+        return CarWashBank.objects.filter(car_wash__id=car_wash_id)
+
+    def add_bank(self, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
+        if not (car_wash_id and manager_name and mobile
+                and tel and bank_name and bank_card and balance_date):
+            return 99800, dict_err.get(99800)
+
+        if self.get_bank_by_car_wash(car_wash_id):
+            return 20107, dict_err.get(20107)
+
+        ps = dict(
+            car_wash_id=car_wash_id,
+            manager_name=manager_name,
+            mobile=mobile,
+            tel=tel,
+            bank_name=bank_name,
+            bank_card=bank_card,
+            balance_date=balance_date
+        )
+
+        try:
+            obj = CarWashBank.objects.create(**ps)
+            return 0, obj
+        except Exception, e:
+            print e
+            return 99900, dict_err.get(99900)
+
+    def search_banks_for_admin(self, car_wash_name):
+        objs = CarWashBank.objects.select_related('car_wash').all()
+
+        if car_wash_name:
+            objs = objs.filter(car_wash__name__contains=car_wash_name)
+
+        return objs
+
+    def get_bank_by_id(self, bank_id, state=True):
+        objs = CarWashBank.objects.filter(pk=bank_id)
+        if state:
+            objs.filter(state=state)
+        return objs[0] if objs else None
+
+    def modify_bank(self, bank_id, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
+        if not (bank_id, car_wash_id and manager_name and mobile
+                and tel and bank_name and bank_card and balance_date):
+            return 99800, dict_err.get(99800)
+
+        obj = self.get_bank_by_id(bank_id, None)
+        if not obj:
+            return 20108, dict_err.get(20108)
+
+        temp = self.get_bank_by_car_wash(car_wash_id)
+        if temp and temp[0] != obj:
+            return 20107, dict_err.get(20107)
+
+        ps = dict(
+            car_wash_id=car_wash_id,
+            manager_name=manager_name,
+            mobile=mobile,
+            tel=tel,
+            bank_name=bank_name,
+            bank_card=bank_card,
+            balance_date=balance_date
+        )
+
+        for k, v in ps.items():
+            setattr(obj, k, v)
+
+        try:
+            obj.save()
+        except:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
+
+
 # ===================================================订单和优惠券部分=================================================================#
 class CouponBase(object):
 
@@ -396,81 +474,3 @@ class OrderBase(object):
 
 class OrderCodeBase(object):
     pass
-
-
-class CarWashBankBase(object):
-
-    def get_bank_by_car_wash(self, car_wash_id):
-        return CarWashBank.objects.filter(car_wash__id=car_wash_id)
-
-    def add_bank(self, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
-        if not (car_wash_id and manager_name and mobile
-                and tel and bank_name and bank_card and balance_date):
-            return 99800, dict_err.get(99800)
-
-        if self.get_bank_by_car_wash(car_wash_id):
-            return 20107, dict_err.get(20107)
-
-        ps = dict(
-            car_wash_id=car_wash_id,
-            manager_name=manager_name,
-            mobile=mobile,
-            tel=tel,
-            bank_name=bank_name,
-            bank_card=bank_card,
-            balance_date=balance_date
-        )
-
-        try:
-            obj = CarWashBank.objects.create(**ps)
-            return 0, obj
-        except Exception, e:
-            print e
-            return 99900, dict_err.get(99900)
-
-    def search_banks_for_admin(self, car_wash_name):
-        objs = CarWashBank.objects.select_related('car_wash').all()
-
-        if car_wash_name:
-            objs = objs.filter(car_wash__name__contains=car_wash_name)
-
-        return objs
-
-    def get_bank_by_id(self, bank_id, state=True):
-        objs = CarWashBank.objects.filter(pk=bank_id)
-        if state:
-            objs.filter(state=state)
-        return objs[0] if objs else None
-
-    def modify_bank(self, bank_id, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
-        if not (bank_id, car_wash_id and manager_name and mobile
-                and tel and bank_name and bank_card and balance_date):
-            return 99800, dict_err.get(99800)
-
-        obj = self.get_bank_by_id(bank_id, None)
-        if not obj:
-            return 20108, dict_err.get(20108)
-
-        temp = self.get_bank_by_car_wash(car_wash_id)
-        if temp and temp[0] != obj:
-            return 20107, dict_err.get(20107)
-
-        ps = dict(
-            car_wash_id=car_wash_id,
-            manager_name=manager_name,
-            mobile=mobile,
-            tel=tel,
-            bank_name=bank_name,
-            bank_card=bank_card,
-            balance_date=balance_date
-        )
-
-        for k, v in ps.items():
-            setattr(obj, k, v)
-
-        try:
-            obj.save()
-        except:
-            return 99900, dict_err.get(99900)
-
-        return 0, dict_err.get(0)
