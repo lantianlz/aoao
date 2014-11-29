@@ -440,9 +440,9 @@ class OrderBase(object):
         assert 1 <= count <= 5
         assert pay_type in (0, 1, 2)
 
-    def valide_coupon(self, coupon, pay_fee):
+    def check_coupon_can_use(self, coupon, user_id, pay_fee):
         """
-        @note: 检测优惠码是否可用
+        @note: 检测优惠券是否可用
         """
         pass
 
