@@ -418,10 +418,11 @@ class UserBase(object):
             format_user.last_active_source = ''
 
         # 注册来源
+        format_user.source_display = u"直接注册"
         if format_user.source > 0:
-            format_user.source_display = ExternalToken.objects.filter(user_id=user_id)[0].get_source_display()
-        else:
-            format_user.source_display = u"直接注册"
+            ets = list(ExternalToken.objects.filter(user_id=user_id))
+            if ets:
+                format_user.source_display = ets[0].get_source_display()
 
         return format_user
 

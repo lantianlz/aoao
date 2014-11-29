@@ -10,7 +10,7 @@
         <meta name="renderer" content="webkit" />
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
         <meta name="keywords" content="{% block keywords %}嗷嗷洗车 嗷嗷 洗车 在线洗车{% endblock keywords %}" />
-        <meta name="description" content="{% block description %}嗷嗷洗车，中国最好的在线洗车服务平台{% endblock description %}" />
+        <meta name="description" content="{% block description %}嗷嗷洗车，年轻人的在线洗车服务平台{% endblock description %}" />
         <link rel="shortcut icon" href="{{MEDIA_URL}}img/favicon.ico" />
 
         <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/bootstrap/bootstrap.min.css" />
@@ -40,10 +40,10 @@
         {% block header %}
         <div class="header bgc-333333 box-shadow-224">
             <div class="container pt-20 pb-20">
-                <div class="col-md-10">
+                <div class="col-md-9" style="width:80%;">
                     <span class="f30 co5">嗷嗷洗车管理后台</span>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3" style="width:20%;">
                     <img class="pa avatar-35 avatar-circle" src="{{request.user.get_avatar_25}}">
                     <div class="f14 co5 pull-right">{{request.user.nick}}</div><br />
                     <div class="f12 co3 pull-right current-time">2012-12-20 23:59:59</div>

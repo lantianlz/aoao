@@ -119,7 +119,7 @@ class UserChangeLog(models.Model):
 
 
 class LastActive(models.Model):
-    last_active_source_choices = ((0, u'web页面'), (1, u'手机app'), (2, u"微信端"))
+    last_active_source_choices = ((0, u'web页面'), (1, u'手机app'), (2, u"微信"))
 
     user_id = models.CharField(max_length=32, unique=True)
     ip = models.CharField(max_length=32, null=True)
