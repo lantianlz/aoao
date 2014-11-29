@@ -24,6 +24,8 @@ class UserMiddware(object):
             if t >= 10:
                 user_id = request.user.id if request.user.is_authenticated() else "anymouse"
                 logging.error("LONG_PROCESS: %s %s %s" % (request.path, t, user_id))
+
+        # 更新活跃时间
         return response
 
     def process_exception(self, request, exception):
