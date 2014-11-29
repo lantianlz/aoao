@@ -22,10 +22,18 @@ def member_required(func):
     @date: 2013-12-10
     """
     def _decorator(request, *args, **kwargs):
+        from www.misc.oauth2.weixin import Consumer
+        from www.weixin.interface import WexinBase
+
         if not (hasattr(request, 'user') and request.user.is_authenticated()):
             if request.is_ajax():
                 return HttpResponse('need_login')
             else:
+                user_agent = request.META.get("HTTP_USER_AGENT", "").lower()
+
+                if "micromessenger" in user_agent:  # 微信端自动登录
+                    return HttpResponseRedirect(Consumer(WexinBase().init_app_key()).authorize())
+
                 return HttpResponse(u'请先登录')
                 try:
                     url = urllib.quote_plus(request.get_full_path())
