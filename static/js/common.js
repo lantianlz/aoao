@@ -306,45 +306,6 @@ jQ.fn.autosize = function() {
 }
 /*--------------------------end文本框根据内容自动适应高度--------------------------*/
 
-/*--------------------------提示成功信息后隐藏--------------------------*/
-function successMeg(text, divId, timeout) {
-	/**
-	 * @attention:提示成功信息后隐藏
-	 * @param divId:div的id
-	 * @param text:提示的文字信息
-	 * @param timeout:显示时间
-	 * @author: lizheng
-	 * @date: 2010-01-23
-	 */
-	divId = divId || 'divSuccess';
-	var obj = jQ('#' + divId);
-	divCenter(divId);
-	obj.show();
-	text ? obj.html(text) : null;
-	setTimeout(function() {
-		obj.hide();
-	}, timeout || 2000);
-}
-
-/*--------------------------提示失败信息后隐藏--------------------------*/
-function errorMeg(text, divId, timeout) {
-	/**
-	 * @attention:提示成功信息后隐藏
-	 * @param divId:div的id
-	 * @param text:提示的文字信息
-	 * @param timeout:显示时间
-	 * @author: lizheng
-	 * @date: 2010-01-23
-	 */
-	divId = divId || 'divError';
-	var obj = jQ('#' + divId);
-	divCenter(divId);
-	obj.show();
-	text ? obj.find('>span').html(text) : null;
-	setTimeout(function() {
-		obj.hide();
-	}, timeout || 5000);
-}
 
 /*--------------------------end提示成功信息后隐藏--------------------------*/
 
