@@ -16,13 +16,13 @@ $(document).ready(function(){
 
         ajaxSend(
             "/admin/tools/caches/get_cache", 
-            $.ZXUtils.formToDict('form'),
+            $.QXUtils.formToDict('form'),
             function(data){
                 if(data.errcode == 0){
                     $('.key-value').val(data.errmsg[0]);
                     $('.key-expire').val(data.errmsg[1]);
                 } else {
-                    $.ZXMsg.alert('提示', data.errmsg);
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
                 }
             }
         );
@@ -32,9 +32,9 @@ $(document).ready(function(){
 
         ajaxSend(
             "/admin/tools/caches/modify_cache" , 
-            $.ZXUtils.formToDict('form'),
+            $.QXUtils.formToDict('form'),
             function(data){
-                $.ZXMsg.alert('提示', data.errmsg);
+                $.QXNotice.InfoTopNotice(data.errmsg);
             }
         );
 
@@ -42,13 +42,13 @@ $(document).ready(function(){
 
     $('.remove').bind('click', function(){
 
-        $.ZXMsg.confirm('提示', '确认要删除此缓存?', function(result){
+        $.QXMsg.confirm('提示', '确认要删除此缓存?', function(result){
             if(result){
                 ajaxSend( 
                     "/admin/tools/caches/remove_cache", 
-                    $.ZXUtils.formToDict('form'),
+                    $.QXUtils.formToDict('form'),
                     function(data){
-                        $.ZXMsg.alert('提示', data.errmsg);
+                        $.QXNotice.InfoTopNotice(data.errmsg);
                     }
                 );
             };

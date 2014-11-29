@@ -136,7 +136,7 @@ $(document).ready(function(){
 
         events: {
             'click .search-user': 'searchUser',
-            'click .pointer': 'modifyUser'
+            'click .modify-user': 'modifyUser'
         },
 
         initialize: function(){
@@ -331,7 +331,7 @@ $(document).ready(function(){
                 <img src="<%= user.userAvatar %>" class="avatar-35 avatar-circle" >
             </a>
         </td>
-        <td class="pointer" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
+        <td class="pointer modify-user" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
         <td>
             <%= user.userEmail %>
         </td>
@@ -341,10 +341,10 @@ $(document).ready(function(){
         <td>
             <% if (user.isAdmin) { %>
                 <a href="/admin/permission#modifyUserPermission/<%= user.userId %>" title="修改管理员权限">
-                    <span class="glyphicon glyphicon-ok co-zx"></span>
+                    <span class="fa fa-check co6 f18"></span>
                 </a>
             <% } else if(!user.isAdmin && user.state) { %>
-                <a href="/admin/permission#addAdmin/<%= user.userId %>" title="设置管理员"><span class="glyphicon glyphicon-ok co10 pointer"></span></a>
+                <a href="/admin/permission#addAdmin/<%= user.userId %>" title="设置管理员"><span class="fa fa-check co3 pointer f18"></span></a>
             <% } %>
         </td>
         <td>
