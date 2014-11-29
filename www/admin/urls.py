@@ -100,3 +100,9 @@ urlpatterns += patterns('www.admin.views_caches',
                         url(r'^tools/caches/modify_cache$', 'modify_cache'),
                         url(r'^tools/caches$', 'caches'),
                         )
+
+# 优惠券
+urlpatterns += patterns('www.admin.views_coupon',
+
+                        url(r'^coupon$', 'coupon'),
+                        )
