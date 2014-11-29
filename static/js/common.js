@@ -225,7 +225,6 @@ function showError(target, errorMsg) {
 	target.focus();
 }
 
-
 /*--------------------------弹出删除确认层相关公用js，可以独立出去-----------------------*/
 function DeleteConfirm(text) {
 	/**
@@ -308,8 +307,6 @@ jQ.fn.autosize = function() {
 
 
 /*--------------------------end提示成功信息后隐藏--------------------------*/
-
-
 function CommonCoverDiv() {
 	/**
 	 * @attention:通用的遮盖层类
@@ -335,7 +332,6 @@ function CommonCoverDiv() {
 }
 
 
-
 function common_callback(data) {
 	if (data['errcode'] == '0') {
 		$.Global.SuccessTopNotice('操作成功!页面即将刷新');
@@ -347,7 +343,6 @@ function common_callback(data) {
 		$.Global.ErrorTopNotice(data['errmsg']);
 	}
 }
-
 
 
 function register_shortcut(obj, click_obj, enter_or_ctrlenter) {
@@ -362,7 +357,6 @@ function register_shortcut(obj, click_obj, enter_or_ctrlenter) {
 		}
 	})
 }
-
 
 
 function getQueryStringRegExp(name) {

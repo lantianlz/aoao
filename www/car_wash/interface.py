@@ -436,7 +436,6 @@ class CouponBase(object):
                 datas.append(coupon)
         return coupons
 
-
     def search_coupons_for_admin(self, car_wash_name, nick, state=None):
 
         objs = Coupon.objects.all()
@@ -455,6 +454,7 @@ class CouponBase(object):
                 objs = []
 
         return objs
+
 
 class OrderBase(object):
 
@@ -508,6 +508,10 @@ class OrderBase(object):
                 if errcode != 0:
                     transaction.rollback(using=DEFAULT_DB)
                     return errcode, errmsg
+
+            # 是否使用账户余额
+
+            # 计算应付金额
 
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)
