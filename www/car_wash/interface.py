@@ -22,7 +22,13 @@ dict_err = {
     20108: u'该洗车行银行信息不存在或者已删除',
 
     20201: u'优惠券不存在',
-    20205: u'小概率事件发生，优惠券编码重复，请重新添加',
+    20202: u'不是你的优惠券不要用',
+    20203: u'优惠券已过期',
+    20204: u'优惠券只针对特定洗车行',
+    20205: u'优惠券金额大于需要支付金额',
+    20206: u'未满足最低使用金额要求',
+    20210: u'小概率事件发生，优惠券编码重复，请重新添加',
+
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -411,7 +417,7 @@ class CouponBase(object):
 
         code = utils.get_radmon_int(length=12)
         if Coupon.objects.filter(code=code):
-            return 20205, dict_err.get(20205)
+            return 20210, dict_err.get(20210)
 
         ps = dict(code=code, coupon_type=coupon_type, discount=discount, expiry_time=expiry_time,
                   user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash)
@@ -433,36 +439,56 @@ class CouponBase(object):
 
 class OrderBase(object):
 
-    def validate_order_info(self, service_type, user_id, count, pay_type):
-        assert service_type and user_id and count and pay_type
-        count = int(count)
+    def validate_order_info(self, service_price, user_id, count, pay_type):
+        assert service_price and user_id and count and pay_type
+
         pay_type = int(pay_type)
         assert 1 <= count <= 5
         assert pay_type in (0, 1, 2)
 
-    def check_coupon_can_use(self, coupon, user_id, pay_fee):
+    def check_coupon_can_use(self, coupon, user_id, total_fee, car_wash):
         """
         @note: 检测优惠券是否可用
         """
-        pass
+        if coupon.user_id != user_id:
+            return 20202, dict_err.get(20202)
+        if coupon.check_is_expiry():
+            return 20203, dict_err.get(20203)
+        if coupon.car_wash and coupon.car_wash != car_wash:
+            return 20204, dict_err.get(20204)
+        if coupon.discount > total_fee:
+            return 20205, dict_err.get(20205)
+        if coupon.minimum_amount > total_fee:
+            return 20206, dict_err.get(20206)
+
+        return 0, dict_err.get(0)
 
     @transaction.commit_manually(using=DEFAULT_DB)
     def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False):
         try:
-            service_type = service_price_id_or_object if isinstance(service_price_id_or_object, ServicePrice) \
+            service_price = service_price_id_or_object if isinstance(service_price_id_or_object, ServicePrice) \
                 else ServicePriceBase().get_service_price_by_id(service_price_id_or_object)
 
+            count = int(count)
             try:
-                self.validate_order_info(service_type, user_id, count, pay_type)
+                self.validate_order_info(service_price, user_id, count, pay_type)   # 检测基本信息
             except:
+                transaction.rollback(using=DEFAULT_DB)
                 return 99801, dict_err.get(99801)
 
+            car_wash = service_price.car_wash
+            total_fee = service_price.sale_price * count
             coupon = None
             if coupon_id:
+                # 检测优惠券信息
                 coupon = CouponBase().get_coupon_by_id(coupon_id, user_id)
                 if not coupon:
                     transaction.rollback(using=DEFAULT_DB)
                     return 20201, dict_err.get(20201)
+                errcode, errmsg = self.check_coupon_can_use(coupon, user_id, total_fee, car_wash)
+                if errcode != 0:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return errcode, errmsg
 
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)

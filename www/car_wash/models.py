@@ -141,7 +141,7 @@ class Coupon(models.Model):
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)
     discount = models.FloatField(db_index=True)  # 优惠幅度(小于1代表折扣率，大于1代表折扣金额)
     expiry_time = models.DateTimeField(db_index=True)  # 失效时间
-    minimum_amount = models.FloatField(default=0)  # 最低消费额
+    minimum_amount = models.FloatField(default=0)  # 最低消费额，为0为无限制
     user_id = models.CharField(max_length=32, db_index=True, null=True)  # 用户
     car_wash = models.ForeignKey("CarWash", null=True)
 
