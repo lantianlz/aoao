@@ -62,25 +62,29 @@ def search(request):
 
 
 @verify_permission('query_car_wash_bank')
-def get_service_type_by_id(request):
-    type_id = request.REQUEST.get('type_id')
+def get_bank_by_id(request):
+    bank_id = request.REQUEST.get('bank_id')
 
-    data = format_type([ServiceTypeBase().get_service_type_by_id(type_id, None)], 1)[0]
+    data = format_bank([CarWashBankBase().get_bank_by_id(bank_id, None)], 1)[0]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
 @verify_permission('modify_car_wash_bank')
 @common_ajax_response
-def modify_service_type(request):
-    type_id = request.REQUEST.get('type_id')
-    name = request.REQUEST.get('name')
-    sort_num = int(request.REQUEST.get('sort'))
-    state = request.REQUEST.get('state')
-    state = True if state == "1" else False
+def modify_bank(request):
+    bank_id = request.REQUEST.get('bank_id')
+    car_wash_id = request.REQUEST.get('car_wash_id')
+    manager_name = request.REQUEST.get('manager_name')
+    mobile = request.REQUEST.get('mobile')
+    tel = request.REQUEST.get('tel')
+    bank_name = request.REQUEST.get('bank_name')
+    bank_card = request.REQUEST.get('bank_card')
+    balance_date = request.REQUEST.get('balance_date')
 
-    return ServiceTypeBase().modify_service_type(
-        type_id, name, sort_num, state
+    return CarWashBankBase().modify_bank(
+        bank_id, car_wash_id, manager_name, mobile, 
+        tel, bank_name, bank_card, balance_date
     )
 
 
