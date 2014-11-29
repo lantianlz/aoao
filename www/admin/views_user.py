@@ -106,3 +106,19 @@ def modify_user(request):
     user = UserBase().get_user_by_id(user_id)
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
+
+
+def get_user_by_nick(request):
+    '''
+    根据名字查询用户
+    '''
+    nick = request.REQUEST.get('nick')
+
+    result = []
+
+    user = UserBase().get_user_by_nick(nick)
+
+    if user:
+        result.append([user.id, user.nick, None, user.nick])
+
+    return HttpResponse(json.dumps(result), mimetype='application/json')
