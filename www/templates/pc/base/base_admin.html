@@ -40,10 +40,10 @@
         {% block header %}
         <div class="header bgc-333333 box-shadow-224">
             <div class="container pt-20 pb-20">
-                <div class="col-md-10">
+                <div class="col-md-9" style="width:80%;">
                     <span class="f30 co5">嗷嗷洗车管理后台</span>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3" style="width:20%;">
                     <img class="pa avatar-35 avatar-circle" src="{{request.user.get_avatar_25}}">
                     <div class="f14 co5 pull-right">{{request.user.nick}}</div><br />
                     <div class="f12 co3 pull-right current-time">2012-12-20 23:59:59</div>
