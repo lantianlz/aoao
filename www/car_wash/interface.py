@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import logging
+from django.db import transaction
 
-from common import utils
+from common import utils, debug
 from www.misc import consts
 
 from www.account.interface import UserBase
@@ -18,9 +20,12 @@ dict_err = {
     20106: u'该洗车行已添加此服务价格',
     20107: u'该洗车行银行信息已存在',
 
+    20201: u'优惠券不存在',
     20205: u'小概率事件发生，优惠券编码重复，请重新添加',
 }
 dict_err.update(consts.G_DICT_ERROR)
+
+DEFAULT_DB = 'default'
 
 
 def car_wash_required(func):
@@ -291,7 +296,19 @@ class ServiceTypeBase(object):
         return objs
 
 
+# ===================================================订单和优惠券部分=================================================================#
 class CouponBase(object):
+
+    def get_coupon_by_id(self, id, user_id=None, state=1):
+        try:
+            ps = dict(id=id)
+            if user_id is not None:
+                ps.update(user_id=user_id)
+            if state is not None:
+                ps.update(state=state)
+            return Coupon.objects.get(**ps)
+        except Coupon.DoesNotExist:
+            return ""
 
     def add_coupon(self, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash_id=None):
         try:
@@ -336,11 +353,49 @@ class CouponBase(object):
 
 
 class OrderBase(object):
-    pass
+
+    def validate_order_info(self, service_type, user_id, count, pay_type):
+        assert service_type and user_id and count and pay_type
+        count = int(count)
+        pay_type = int(pay_type)
+        assert 1 <= count <= 5
+        assert pay_type in (0, 1, 2)
+
+    def valide_coupon(self, coupon, pay_fee):
+        """
+        @note: 检测优惠码是否可用
+        """
+        pass
+
+    @transaction.commit_manually(using=DEFAULT_DB)
+    def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False):
+        try:
+            service_type = service_price_id_or_object if isinstance(service_price_id_or_object, ServicePrice) \
+                else ServicePriceBase().get_service_price_by_id(service_price_id_or_object)
+
+            try:
+                self.validate_order_info(service_type, user_id, count, pay_type)
+            except:
+                return 99801, dict_err.get(99801)
+
+            coupon = None
+            if coupon_id:
+                coupon = CouponBase().get_coupon_by_id(coupon_id, user_id)
+                if not coupon:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return 20201, dict_err.get(20201)
+
+            transaction.commit(using=DEFAULT_DB)
+            return 0, dict_err.get(0)
+        except Exception, e:
+            logging.error(debug.get_debug_detail(e))
+            transaction.rollback(using=DEFAULT_DB)
+            return 99900, dict_err.get(99900)
 
 
 class OrderCodeBase(object):
     pass
+
 
 class CarWashBankBase(object):
 
@@ -348,8 +403,8 @@ class CarWashBankBase(object):
         return CarWashBank.objects.filter(car_wash__id=car_wash_id)
 
     def add_bank(self, car_wash_id, manager_name, mobile, tel, bank_name, bank_card, balance_date):
-        if not (car_wash_id and manager_name and mobile \
-            and tel and bank_name and bank_card and balance_date):
+        if not (car_wash_id and manager_name and mobile
+                and tel and bank_name and bank_card and balance_date):
             return 99800, dict_err.get(99800)
 
         if self.get_bank_by_car_wash(car_wash_id):
@@ -357,24 +412,23 @@ class CarWashBankBase(object):
 
         try:
             obj = CarWashBank.objects.create(
-                car_wash_id = car_wash_id, 
-                manager_name = manager_name,
-                mobile = mobile,
-                tel = tel,
-                bank_name = bank_name,
-                bank_card = bank_card,
-                balance_date = balance_date
+                car_wash_id=car_wash_id,
+                manager_name=manager_name,
+                mobile=mobile,
+                tel=tel,
+                bank_name=bank_name,
+                bank_card=bank_card,
+                balance_date=balance_date
             )
             return 0, obj
         except Exception, e:
             print e
             return 99900, dict_err.get(99900)
 
-
     def search_banks_for_admin(self, car_wash_name):
-        objs = CarWashBank.objects.select_related('car_wash').all();
+        objs = CarWashBank.objects.select_related('car_wash').all()
 
         if car_wash_name:
             objs = objs.filter(car_wash__name__contains=car_wash_name)
-            
+
         return objs

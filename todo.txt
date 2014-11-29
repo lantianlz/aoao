@@ -2,6 +2,7 @@
 1.替换favicon
 2.sql检测
 3.缓存使用
-5.js和css无用的去掉引用
-6.member_required判断
-7.404and500
+4.js和css无用的去掉引用
+5.member_required判断
+6.404and500
+7.通用出错页面

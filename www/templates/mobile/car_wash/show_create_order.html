@@ -79,7 +79,7 @@ $(document).ready(function(){
             <li class="list-group-item bdc-d0d0d0 row">
                 <div class="col-xs-6 f16 pt-5 pl-0">购买数量</div>
                 <div class="col-xs-6 text-right pr-0">
-                    <select class="input-sm pay-count">
+                    <select class="input-sm pay-count" name="count">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -101,7 +101,7 @@ $(document).ready(function(){
                 <div class="col-xs-6 f16 pt-5 pl-0">使用优惠券</div>
                 <div class="col-xs-6 text-right pr-0">
                     {% if coupons %}
-                    <select class="input-sm coupon-price">
+                    <select class="input-sm coupon-price" name="coupon_id">
                         <option value="0">不使用</option>
                         {% for coupon in coupons %}
                         <option value="{{coupon.id}}">{{coupon.get_display}}</option>
@@ -116,7 +116,7 @@ $(document).ready(function(){
                 <div class="col-xs-6 f16 pt-5 pl-0">使用账户余额</div>
                 <div class="col-xs-6 text-right pr-0 pl-0">
                     <label>
-                        <input type="checkbox" value="0" class="use-balance">
+                        <input type="checkbox" value="1" class="use-balance" name="user_cash">
                         <span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb balance">{{user_cash.balance|smart_show_float}}</span>
                     </label>
                 </div>
@@ -137,14 +137,14 @@ $(document).ready(function(){
                 <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/weixin.png"></div>
                 <div class="col-xs-6 line-height-32 f16">微信支付</div>
                 <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-                    <input type="checkbox" class="pay-type" value="1" checked="checked">
+                    <input type="checkbox" class="pay-type" value="1" checked="checked" name="pay_type_weixin">
                 </div>
             </li>
             <li class="list-group-item bdc-d0d0d0 row pay-item">
                 <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/zhifubao.png"></div>
                 <div class="col-xs-6 line-height-32 f16">支付宝支付</div>
                 <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-                    <input type="checkbox" class="pay-type" value="2">
+                    <input type="checkbox" class="pay-type" value="1" name="pay_type_alipay">
                 </div>
             </li>
         </ul>

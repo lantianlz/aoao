@@ -214,7 +214,7 @@ class Order(models.Model):
     count = models.IntegerField()
     coupon = models.ForeignKey('Coupon', null=True, blank=True)
     total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 总的结算金额
-    user_cash_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 使用账户余额
+    user_cash_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 使用账户余额的金额
     discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵的优惠价格
     pay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 应付金额   最终需要用户支付金额
     payed_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # 支付接口回调反馈的实际付款金额

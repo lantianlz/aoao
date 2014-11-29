@@ -71,6 +71,15 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     if not service_price:
         raise Http404
 
+    coupon_id = request.POST.get("coupon_id")
+    coupon_id = None if coupon_id == "0" else coupon_id
+    count = request.POST.get("count")
+    user_cash = True if request.POST.has_key("user_cash") else False
+    pay_type = 2 if request.POST.has_key("pay_type_weixin") else 1
+    pay_type = 1 if request.POST.has_key("pay_type_alipay") else 2
+
+    print coupon_id, count, user_cash, pay_type
+
     return HttpResponse("ok")
     # return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
