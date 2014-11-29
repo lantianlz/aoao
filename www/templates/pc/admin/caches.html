@@ -42,17 +42,15 @@ $(document).ready(function(){
 
     $('.remove').bind('click', function(){
 
-        $.QXMsg.confirm('提示', '确认要删除此缓存?', function(result){
-            if(result){
-                ajaxSend( 
-                    "/admin/tools/caches/remove_cache", 
-                    $.Global.Utils.formToDict('form'),
-                    function(data){
-                        $.Global.Notice.InfoTopNotice(data.errmsg);
-                    }
-                );
-            };
-        });
+        if(confirm('确认要删除此缓存?')){
+            ajaxSend( 
+                "/admin/tools/caches/remove_cache", 
+                $.Global.Utils.formToDict('form'),
+                function(data){
+                    $.Global.Notice.InfoTopNotice(data.errmsg);
+                }
+            );
+        }
 
     });
 });
