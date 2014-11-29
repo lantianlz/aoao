@@ -31,8 +31,9 @@ if (!String.format) {
         });
     }
 
+    $.Global = {}
 
-	$.QXUtils = {
+	$.Global.Utils = {
         version: '1.0.0',
         author: 'stranger',
         description: '工具包'
@@ -42,10 +43,10 @@ if (!String.format) {
         字典映射
 
         用例：
-        $.QXUtils.dictMap({'a': '1', 'b': '2'}, {'a': 'a1', 'b': 'b1'})
+        $.Global.Utils.dictMap({'a': '1', 'b': '2'}, {'a': 'a1', 'b': 'b1'})
         返回 {'a1': '1', 'b1': '2'}
     */
-    $.QXUtils.dictMap = function(originDict, maps){
+    $.Global.Utils.dictMap = function(originDict, maps){
         var newDict = {};
         
         if(!originDict){
@@ -62,13 +63,13 @@ if (!String.format) {
     /*
         批量字典映射解析
 
-        $.QXUtils.dictMapParse([{'a': '1', 'b': '2'}], {'a': 'a1', 'b': 'b1'});
+        $.Global.Utils.dictMapParse([{'a': '1', 'b': '2'}], {'a': 'a1', 'b': 'b1'});
     */
-    $.QXUtils.dictMapParse = function(data, maps){
+    $.Global.Utils.dictMapParse = function(data, maps){
         var temp = [];
 
             _.each(data, function(d){
-                temp.push($.QXUtils.dictMap(d, maps));
+                temp.push($.Global.Utils.dictMap(d, maps));
             });
 
         return temp;
@@ -79,9 +80,9 @@ if (!String.format) {
         始终返回两位字符串，不够自动补零
 
         用例:
-        $.QXUtils.addZero('0');
+        $.Global.Utils.addZero('0');
     */
-    $.QXUtils.addZero = function(data){
+    $.Global.Utils.addZero = function(data){
         var temp = data + '';
         if(temp.length === 0){
             return '00'
@@ -97,18 +98,18 @@ if (!String.format) {
         返回字符串  可带格式 y-m-d、h:m:s、y-m-d h:m:s
 
         用例:
-        $.QXUtils.formatDate(new Date());
-        $.QXUtils.formatDate(new Date(), 'y-m-d');
+        $.Global.Utils.formatDate(new Date());
+        $.Global.Utils.formatDate(new Date(), 'y-m-d');
     */
-    $.QXUtils.formatDate = function(date, format){
+    $.Global.Utils.formatDate = function(date, format){
 
         var str = "",
-            year = $.QXUtils.addZero(date.getFullYear()),
-            month = $.QXUtils.addZero(date.getMonth()+1), 
-            day = $.QXUtils.addZero(date.getDate()),
-            hours = $.QXUtils.addZero(date.getHours()),
-            minutes = $.QXUtils.addZero(date.getMinutes()),
-            seconds = $.QXUtils.addZero(date.getSeconds());
+            year = $.Global.Utils.addZero(date.getFullYear()),
+            month = $.Global.Utils.addZero(date.getMonth()+1), 
+            day = $.Global.Utils.addZero(date.getDate()),
+            hours = $.Global.Utils.addZero(date.getHours()),
+            minutes = $.Global.Utils.addZero(date.getMinutes()),
+            seconds = $.Global.Utils.addZero(date.getSeconds());
 
         switch(format){
             case 'y-m-d': 
@@ -129,9 +130,9 @@ if (!String.format) {
         将表单数据转换成字典，用于ajax
 
         用例:
-        $.ZXUtils.formToDict('myform');
+        $.Global.Utils.formToDict('myform');
     */
-    $.QXUtils.formToDict = function(selector){
+    $.Global.Utils.formToDict = function(selector){
         var postData = {};
 
         // 转换
@@ -148,9 +149,9 @@ if (!String.format) {
         格式化价钱
 
         用例:
-        $.QXUtils.formatPrice(12.5);
+        $.Global.Utils.formatPrice(12.5);
     */
-    $.QXUtils.formatPrice = function(price){
+    $.Global.Utils.formatPrice = function(price){
         var price = Math.round(parseFloat(price) * 100) / 100;
 
         price = price + '';
@@ -170,9 +171,9 @@ if (!String.format) {
         获取url参数
 
         用例:
-        $.QXUtils.getQueryString('name');
+        $.Global.Utils.getQueryString('name');
     */
-    $.QXUtils.getQueryString = function(name){
+    $.Global.Utils.getQueryString = function(name){
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"),
             r = window.location.search.substr(1).match(reg);
         
@@ -186,7 +187,7 @@ if (!String.format) {
     /* 
         网站提示插件
     */
-    $.QXNotice = {
+    $.Global.Notice = {
         version: '1.0.0',
         author: 'stranger',
         description: '网站提示插件'
@@ -197,9 +198,9 @@ if (!String.format) {
         type: 是否重要通知
 
         用例:
-        $.QXNotice.TopNotice('info', '这是通知', 2000);
+        $.Global.Notice.TopNotice('info', '这是通知', 2000);
     */
-    $.QXNotice.TopNotice = function(type, content, closeSeconds){
+    $.Global.Notice.TopNotice = function(type, content, closeSeconds){
         var noticeHtml = [
                 '<div class="alert alert-dismissable pf box-shadow-224 border-radius-2 co5 zx-top-notice qx-{0}-notice">',
                     '<button type="button" class="close" aria-hidden="true">',
@@ -243,30 +244,30 @@ if (!String.format) {
     };
 
     // 成功信息
-    $.QXNotice.SuccessTopNotice = function(content){
-        $.QXNotice.TopNotice('success', content, 3000);
+    $.Global.Notice.SuccessTopNotice = function(content){
+        $.Global.Notice.TopNotice('success', content, 3000);
     };
 
     // 错误信息
-    $.QXNotice.ErrorTopNotice = function(content){
-        $.QXNotice.TopNotice('error', content);
+    $.Global.Notice.ErrorTopNotice = function(content){
+        $.Global.Notice.TopNotice('error', content);
     };
 
     // 普通信息
-    $.QXNotice.InfoTopNotice = function(content){
-        $.QXNotice.TopNotice('info', content, 3000);
+    $.Global.Notice.InfoTopNotice = function(content){
+        $.Global.Notice.TopNotice('info', content, 3000);
     };
 
     // 警告信息
-    $.QXNotice.WarningTopNotice = function(content){
-        $.QXNotice.TopNotice('warning', content);
+    $.Global.Notice.WarningTopNotice = function(content){
+        $.Global.Notice.TopNotice('warning', content);
     };
 
 
     /*
         分页组件
     */
-    $.QXPagination = {
+    $.Global.Pagination = {
         version: '1.0.0',
         author: 'stranger',
         description: '分页组件'
@@ -274,7 +275,7 @@ if (!String.format) {
     /*
         分页组件
     */
-    $.QXPagination.PaginationView = Backbone.View.extend({
+    $.Global.Pagination.PaginationView = Backbone.View.extend({
         el: '.qx-pagination',
 
         step: 4,
@@ -368,13 +369,13 @@ if (!String.format) {
     /*
         文本框组件
     */
-    $.QXTextboxList = {
+    $.Global.TextboxList = {
         version: '1.0.0',
         author: 'stranger',
         description: '文本框组件'
     };
     /**/
-    $.QXTextboxList.create = function(selector, options){
+    $.Global.TextboxList.create = function(selector, options){
         var temp = new $.TextboxList(selector, {
             bitsOptions: {
                 box: {deleteButton: true}
@@ -482,16 +483,16 @@ $(document).ready(function(){
     // 提示信息框
     try {
         if(ERROR_MSG){
-            $.QXNotice.ErrorTopNotice(ERROR_MSG);
+            $.Global.Notice.ErrorTopNotice(ERROR_MSG);
         }
         if(SUCCESS_MSG){
-            $.QXNotice.SuccessTopNotice(SUCCESS_MSG);
+            $.Global.Notice.SuccessTopNotice(SUCCESS_MSG);
         }
         if(INFO_MSG){
-            $.QXNotice.InfoTopNotice(INFO_MSG);
+            $.Global.Notice.InfoTopNotice(INFO_MSG);
         }
         if(WARNING_MSG){
-            $.QXNotice.WarningTopNotice(WARNING_MSG);
+            $.Global.Notice.WarningTopNotice(WARNING_MSG);
         }
     }
     catch(e) {

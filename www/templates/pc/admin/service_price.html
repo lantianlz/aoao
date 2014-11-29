@@ -53,7 +53,7 @@ $(document).ready(function(){
                     me.carWashName = car_wash_name;
                     me.state = state;
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -67,7 +67,7 @@ $(document).ready(function(){
                 {'price_id': priceId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -106,7 +106,7 @@ $(document).ready(function(){
     var ListView = Backbone.View.extend({
         el: '#price_list',
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         template: _.template($('#price_template').html()),
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
         initCarWashTextBox: function(name, value){
             var me = this;
 
-            this.carWashTextBox = $.QXTextboxList.create('#car_wash_modify', {
+            this.carWashTextBox = $.Global.TextboxList.create('#car_wash_modify', {
                 max: 1,
                 placeholder: '选择所属洗车行',
                 url: '/admin/car_wash/car_wash/get_car_washs_by_name',
@@ -204,7 +204,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.QXNotice.ErrorTopNotice("没有找到对应的服务类型!");
+                    $.Global.Notice.ErrorTopNotice("没有找到对应的服务类型!");
                 }
             });
         },
@@ -218,12 +218,12 @@ $(document).ready(function(){
                 return;
             }
 
-            me.collection.modifyPrice($.QXUtils.formToDict(this.$('form')), function(data){
+            me.collection.modifyPrice($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功!');
+                    $.Global.Notice.SuccessTopNotice('操作成功!');
                     router.navigate('modify/' + priceId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
@@ -247,7 +247,7 @@ $(document).ready(function(){
         initCarWashTextBox: function(name, value){
             var me = this;
 
-            this.carWashTextBox = $.QXTextboxList.create('#car_wash_add', {
+            this.carWashTextBox = $.Global.TextboxList.create('#car_wash_add', {
                 max: 1,
                 placeholder: '选择所属洗车行',
                 url: '/admin/car_wash/car_wash/get_car_washs_by_name',
@@ -284,13 +284,13 @@ $(document).ready(function(){
                 return;
             }
 
-            prices.addPrice($.QXUtils.formToDict(this.$('form')), function(data){
+            prices.addPrice($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_price_modal').modal('hide');
-                    $.QXNotice.SuccessTopNotice("操作成功");
+                    $.Global.Notice.SuccessTopNotice("操作成功");
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }

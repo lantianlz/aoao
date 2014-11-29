@@ -91,8 +91,12 @@ class CityBase(object):
         if objs:
             return objs[0]
 
-    def search_citys_for_admin(self, city_name, is_show=0, sort_by_province=True):
-        citys = self.get_all_citys().filter(is_show=is_show)
+    def search_citys_for_admin(self, city_name, is_show=None, sort_by_province=True):
+
+        citys = self.get_all_citys()
+
+        if is_show is not None:
+            citys = citys.filter(is_show=is_show)
 
         if city_name:
             citys = citys.filter(city__contains=city_name)
@@ -150,8 +154,11 @@ class CityBase(object):
 
         return districts
 
-    def search_districts_for_admin(self, district_name, city_name, is_show=0):
-        districts = self.get_all_districts().filter(is_show=is_show)
+    def search_districts_for_admin(self, district_name, city_name, is_show=None):
+        districts = self.get_all_districts()
+        
+        if is_show is not None:
+            districts = districts.filter(is_show=is_show)
 
         if city_name:
             city = self.get_city_by_name(city_name)

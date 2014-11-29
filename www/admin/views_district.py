@@ -54,6 +54,7 @@ def search(request):
     name = request.REQUEST.get('name')
     city_name = request.REQUEST.get('city_name')
     is_show = request.REQUEST.get('is_show')
+    is_show = is_show if is_show != "-1" else None
 
     page_index = int(request.REQUEST.get('page_index'))
 

@@ -16,13 +16,13 @@ $(document).ready(function(){
 
         ajaxSend(
             "/admin/tools/caches/get_cache", 
-            $.QXUtils.formToDict('form'),
+            $.Global.Utils.formToDict('form'),
             function(data){
                 if(data.errcode == 0){
                     $('.key-value').val(data.errmsg[0]);
                     $('.key-expire').val(data.errmsg[1]);
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             }
         );
@@ -32,9 +32,9 @@ $(document).ready(function(){
 
         ajaxSend(
             "/admin/tools/caches/modify_cache" , 
-            $.QXUtils.formToDict('form'),
+            $.Global.Utils.formToDict('form'),
             function(data){
-                $.QXNotice.InfoTopNotice(data.errmsg);
+                $.Global.Notice.InfoTopNotice(data.errmsg);
             }
         );
 
@@ -46,9 +46,9 @@ $(document).ready(function(){
             if(result){
                 ajaxSend( 
                     "/admin/tools/caches/remove_cache", 
-                    $.QXUtils.formToDict('form'),
+                    $.Global.Utils.formToDict('form'),
                     function(data){
-                        $.QXNotice.InfoTopNotice(data.errmsg);
+                        $.Global.Notice.InfoTopNotice(data.errmsg);
                     }
                 );
             };

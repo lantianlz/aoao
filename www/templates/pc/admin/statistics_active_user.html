@@ -44,7 +44,7 @@ $(document).ready(function(){
                     me.pageIndex = pageIndex;
                     me.pageCount = data.page_count;
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps))
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps))
                 }
             );
         }
@@ -56,7 +56,7 @@ $(document).ready(function(){
     var ListView = Backbone.View.extend({
         el: '#active_user_list',
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         template: _.template($('#active_user_template').html()),
 

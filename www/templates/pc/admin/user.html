@@ -53,7 +53,7 @@ $(document).ready(function(){
                     me.userNick = userNick||'';
                     me.email = email||'';
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -66,7 +66,7 @@ $(document).ready(function(){
                 {'user_id': userId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -109,7 +109,7 @@ $(document).ready(function(){
 
         template: _.template($('#user_list_template').html()),
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         events: {
             'click .search-user': 'searchUser',
@@ -197,7 +197,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.QXNotice.ErrorTopNotice('没有找到对应的用户!');
+                    $.Global.Notice.ErrorTopNotice('没有找到对应的用户!');
                 }
             });
         },
@@ -209,10 +209,10 @@ $(document).ready(function(){
 
             me.collection.modifyUser(this.$('form').serialize(), function(data){
                 if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功');
+                    $.Global.Notice.SuccessTopNotice('操作成功');
                     router.navigate('modify/' + userId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }

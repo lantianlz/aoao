@@ -46,7 +46,7 @@ $(document).ready(function(){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -60,7 +60,7 @@ $(document).ready(function(){
                 {'type_id': typeId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -99,7 +99,7 @@ $(document).ready(function(){
     var ListView = Backbone.View.extend({
         el: '#type_list',
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         template: _.template($('#type_template').html()),
 
@@ -176,7 +176,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.QXNotice.ErrorTopNotice("没有找到对应的服务类型!");
+                    $.Global.Notice.ErrorTopNotice("没有找到对应的服务类型!");
                 }
             });
         },
@@ -186,12 +186,12 @@ $(document).ready(function(){
             var typeId = this.$('form').data('type_id'),
                 me = this;
 
-            me.collection.modifyType($.QXUtils.formToDict(this.$('form')), function(data){
-                if(data.errcode === "0"){
-                    $.QXNotice.SuccessTopNotice('操作成功!');
+            me.collection.modifyType($.Global.Utils.formToDict(this.$('form')), function(data){
+                if(data.errcode == "0"){
+                    $.Global.Notice.SuccessTopNotice('操作成功!');
                     router.navigate('modify/' + typeId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
@@ -237,13 +237,13 @@ $(document).ready(function(){
                 return;
             }
 
-            types.addType($.QXUtils.formToDict(this.$('form')), function(data){
+            types.addType($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_type_modal').modal('hide');
-                    $.QXNotice.SuccessTopNotice("操作成功");
+                    $.Global.Notice.SuccessTopNotice("操作成功");
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }

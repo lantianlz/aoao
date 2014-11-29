@@ -78,7 +78,7 @@ a.list-group-item.active{
         // clock
         window.setInterval(function(){
             $('.current-time').html(
-                $.QXUtils.formatDate(new Date(), 'y-m-d h:m:s')
+                $.Global.Utils.formatDate(new Date(), 'y-m-d h:m:s')
             );
         }, 1000);
 

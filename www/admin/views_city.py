@@ -49,6 +49,7 @@ def search(request):
 
     name = request.REQUEST.get('name')
     is_show = request.REQUEST.get('is_show')
+    is_show = is_show if is_show != "-1" else None
     sort_by_province = request.REQUEST.get('sort_by_province')
     sort_by_province = True if sort_by_province == "1" else False
 

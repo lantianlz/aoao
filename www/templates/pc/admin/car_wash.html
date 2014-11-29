@@ -64,7 +64,7 @@ $(document).ready(function(){
                     me.name = name||'';
                     me.state = state||1;
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -77,7 +77,7 @@ $(document).ready(function(){
                 {'car_wash_id': carWashId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -117,7 +117,7 @@ $(document).ready(function(){
 
         template: _.template($('#car_wash_list_template').html()),
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         events: {
             'click .search': 'searchCarWash',
@@ -182,7 +182,7 @@ $(document).ready(function(){
         initCityTextBox: function(name, value){
             var me = this;
 
-            this.cityTextBox = $.QXTextboxList.create('#city_modify', {
+            this.cityTextBox = $.Global.TextboxList.create('#city_modify', {
                 max: 1,
                 placeholder: '选择所属城市',
                 url: '/admin/city/city/get_citys_by_name',
@@ -240,7 +240,7 @@ $(document).ready(function(){
                     me.render(data);
                     me.showPanel();
                 } else {
-                    $.QXNotice.ErrorTopNotice('没有找到对应的洗车行!');
+                    $.Global.Notice.ErrorTopNotice('没有找到对应的洗车行!');
                 }
             });
         },
@@ -254,12 +254,12 @@ $(document).ready(function(){
                 return;
             }
 
-            me.collection.modifyCarWash($.QXUtils.formToDict(this.$('form')), function(data){
+            me.collection.modifyCarWash($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功');
+                    $.Global.Notice.SuccessTopNotice('操作成功');
                     router.navigate('modify/' + carWashId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
@@ -276,7 +276,7 @@ $(document).ready(function(){
         initCityTextBox: function(name, value){
             var me = this;
 
-            this.cityTextBox = $.QXTextboxList.create('#city_add', {
+            this.cityTextBox = $.Global.TextboxList.create('#city_add', {
                 max: 1,
                 placeholder: '选择所属城市',
                 url: '/admin/city/city/get_citys_by_name',
@@ -347,13 +347,13 @@ $(document).ready(function(){
                 return;
             }
 
-            carWashs.addCarWash($.QXUtils.formToDict(this.$('form')), function(data){
+            carWashs.addCarWash($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_car_wash_modal').modal('hide');
-                    $.QXNotice.SuccessTopNotice("操作成功");
+                    $.Global.Notice.SuccessTopNotice("操作成功");
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
