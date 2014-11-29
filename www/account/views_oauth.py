@@ -123,9 +123,9 @@ def oauth_weixin(request):
 
             dict_next = {"home": "/", "order_code": "/car_wash/order", "order_code": "/car_wash/order",
                          "recharge": "/cash/recharge", "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help"}
-            # next_url = request.session.get('next_url') or '/'
+            # next_url = request.session.get('next_url')
             # request.session.update(dict(next_url=''))
-            next_url = dict_next.get(weixin_state) or "/"
+            next_url = dict_next.get(weixin_state, "/")
 
             return HttpResponseRedirect(next_url)
         else:

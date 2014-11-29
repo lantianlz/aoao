@@ -96,7 +96,7 @@ def get_next_url(request):
     # 部分链接不能跳转
     next_url = next_url or "/"
     for key in ("regist", "create"):
-        if next_url.find(key) == -1:
+        if next_url.find(key) != -1:
             next_url = "/"
     return next_url
 

@@ -89,8 +89,6 @@ class WexinBase(object):
                                content=error_info)
 
     def get_subscribe_event_response(self, to_user, from_user):
-        # content = (u'欢迎关注智选，这里有最新鲜的投资资讯、最睿智的投资问答。\n'
-        #            u'点击底部菜单立即开启智选之旅，智选定不负你的关注')
         content = (u'嗷嗷洗车\n'
                    u'年轻人的在线洗车行'
                    )

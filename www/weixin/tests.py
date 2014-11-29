@@ -19,9 +19,7 @@ def main():
     wb = WexinBase()
     app_key = "aoao_test"
     to_user = 'o07dat0ujliP84s4GPsLFXOrAcbk'
-    content = (u'古人云：鸟随鸾凤飞腾远，人伴贤良品质高。\n'
-               u'古人又云：物以类聚，人以群分。\n'
-               u'关注智选，你最智慧的选择')
+    content = (u'古人云：鸟随鸾凤飞腾远，人伴贤良品质高。\n')
 
     # print wb.send_msg_to_weixin(content, to_user, app_key)
     # print wb.get_weixin_access_token(app_key="aoao_test")
