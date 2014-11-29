@@ -521,6 +521,20 @@ class UserBase(object):
         self.get_user_by_id(user.id, must_update_cache=True)
         return 0, user
 
+    def get_user_for_admin(self, user_nick="", email=""):
+        objs = None
+
+        if user_nick:
+            objs = self.get_user_by_nick(user_nick)
+            objs = [objs] if objs else []
+        elif email:
+            objs = self.get_user_by_email(email)
+            objs = [objs] if objs else []
+        else:
+            objs = User.objects.all()
+
+        return objs
+
 
 def user_profile_required(func):
     '''
