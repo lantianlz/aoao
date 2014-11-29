@@ -104,15 +104,15 @@ jQ(document).ajaxComplete(function(event, request, settings) {
 	 * @author:	 	lizheng 2010-12-21
 	 */
 	if (request.responseText == 'need_login' || request.responseText == 'perm_refuse') {
-		$.QXNotice.ErrorTopNotice('请先登录');
+		$.Global.Notice.ErrorTopNotice('请先登录');
 		// window.location = login_url;
 	}
 	if (request.responseText == 'need_staff') {
-		$.QXNotice.ErrorTopNotice('需要管理员权限才能执行');
+		$.Global.Notice.ErrorTopNotice('需要管理员权限才能执行');
 	}
 	
 	if (request.responseText == 'permission_denied') {
-		$.QXNotice.ErrorTopNotice('权限不足！');
+		$.Global.Notice.ErrorTopNotice('权限不足！');
 	}
 	
 	if (window.g_ajax_processing_obj_id) {
@@ -377,13 +377,13 @@ function CommonCoverDiv() {
 
 function common_callback(data) {
 	if (data['errcode'] == '0') {
-		$.ZXMsg.alert('提示', '操作成功!页面即将刷新', 3000);
+		$.Global.SuccessTopNotice('操作成功!页面即将刷新');
 		
 		window.setTimeout(function(){
             window.location.reload();
         }, 2000)
 	} else {
-		$.ZXMsg.alert('提示', data['errmsg']);
+		$.Global.ErrorTopNotice(data['errmsg']);
 	}
 }
 

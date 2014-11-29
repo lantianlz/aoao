@@ -246,21 +246,25 @@ body {
 .qx-info-notice{
   background-color: #56A8C7;
   border-color: #56A8C7;
+  z-index: 1099;
 }
 
 .qx-success-notice{
   background-color: #65B153;
   border-color: #0FA70D;
+  z-index: 1099;
 }
 
 .qx-error-notice{
   background-color: #C94C42;
   border-color: #B43A30;
+  z-index: 1099;
 }
 
 .qx-warning-notice{
   background-color: #EEA31F;
   border-color: #EEA31F;
+  z-index: 1099;
 }
 
 .qx-nav-pills{

@@ -135,7 +135,7 @@ class Coupon(models.Model):
     """
     coupon_type_choices = ((0, u'优惠特定金额'), (1, u'优惠至特定金额'))
     platform_choices = ((0, u'无限制'), (1, u'微信端专用'))
-    state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'), (3, u'已过期'))
+    state_choices = ((0, u'未领取'), (1, u'正常'), (2, u'已使用'), (3, u'已过期'), (4, u'无效'))
 
     code = models.CharField(max_length=64, unique=True)  # 优惠券编码
     coupon_type = models.IntegerField(default=1, choices=coupon_type_choices)

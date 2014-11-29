@@ -44,7 +44,7 @@ $(document).ready(function(){
                 "/admin/permission/get_all_administrators", 
                 {}, 
                 function(data){
-                    me.reset($.QXUtils.dictMapParse(data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data, me._modelMaps));
                 }
             );
         }
@@ -60,7 +60,7 @@ $(document).ready(function(){
                 "/admin/permission/get_user_permissions", 
                 {'user_id': userId}, 
                 function(data){
-                    //me.reset($.QXUtils.dictMapParse(data.permissions, me._modelMaps))
+                    //me.reset($.Global.Utils.dictMapParse(data.permissions, me._modelMaps))
                     if(callback){
                         callback(data);
                     }
@@ -75,7 +75,7 @@ $(document).ready(function(){
                 "/admin/permission/save_user_permission?" + permissions, 
                 {'user_id': userId}, 
                 function(data){
-                    //me.reset($.QXUtils.dictMapParse(data.permissions, me._modelMaps))
+                    //me.reset($.Global.Utils.dictMapParse(data.permissions, me._modelMaps))
                     if(callback){
                         callback(data);
                     }
@@ -90,7 +90,7 @@ $(document).ready(function(){
                 "/admin/permission/cancel_admin", 
                 {'user_id': userId}, 
                 function(data){
-                    //me.reset($.QXUtils.dictMapParse(data.permissions, me._modelMaps))
+                    //me.reset($.Global.Utils.dictMapParse(data.permissions, me._modelMaps))
                     if(callback){
                         callback(data);
                     }
@@ -208,7 +208,7 @@ $(document).ready(function(){
                     me.showPanel();
                     me.render(data.permissions, data.user);
                 } else {
-                    $.QXNotice.ErrorTopNotice('没有此用户!');
+                    $.Global.Notice.ErrorTopNotice('没有此用户!');
                 }
             });
         },
@@ -220,9 +220,9 @@ $(document).ready(function(){
             this.collection.saveUserPermission(userId, this.$('form').serialize(), function(data){
                 if(data.errcode === 0){
                     me.modifyUserPermission(userId);
-                    $.QXNotice.SuccessTopNotice('修改成功!');
+                    $.Global.Notice.SuccessTopNotice('修改成功!');
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
                 
             });
@@ -235,10 +235,10 @@ $(document).ready(function(){
             if(confirm('确认要删除此管理员?')){
                 me.collection.cancelAdmin(userId, function(data){
                     if(data.errcode === 0){
-                        $.QXNotice.SuccessTopNotice('删除此管理员成功!');
+                        $.Global.Notice.SuccessTopNotice('删除此管理员成功!');
                         router.navigate('', {trigger: true});
                     } else {
-                        $.QXNotice.ErrorTopNotice(data.errmsg);
+                        $.Global.Notice.ErrorTopNotice(data.errmsg);
                     }
                 });
             }
@@ -318,7 +318,7 @@ $(document).ready(function(){
                     if(data){
                         me.render(data.user_id, data.user_nick);
                     } else {
-                        $.QXNotice.ErrorTopNotice('没有找到对应的用户');
+                        $.Global.Notice.ErrorTopNotice('没有找到对应的用户');
                     }
                 }
             );
@@ -335,9 +335,9 @@ $(document).ready(function(){
                 if(data.errcode === 0){
                     router.navigate('modifyUserPermission/' + userId, {trigger: true});
                     modal.modal('hide');
-                    $.QXNotice.SuccessTopNotice('添加成功!');
+                    $.Global.Notice.SuccessTopNotice('添加成功!');
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
                 
             });

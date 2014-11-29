@@ -28,7 +28,7 @@ $(document).ready(function(){
 
 	// 选择完文件之后自动提交
 	$('.avatar-file').bind('change', function(){
-		$.QXNotice.WarningTopNotice('图片上传中,请不要关闭页面...');
+		$.Global.Notice.WarningTopNotice('图片上传中,请不要关闭页面...');
 		$('.avatar-file').parents('form').submit();
 	});
 
@@ -87,11 +87,11 @@ $(document).ready(function(){
 					'h': cropInfo.h,
 				}, function(data){
 					if(data['flag'] != '0'){
-						$.QXNotice.WarningTopNotice(data['result']);
+						$.Global.Notice.WarningTopNotice(data['result']);
 					} else {
 						$('#crop_modal').modal('hide');
 
-						$.QXNotice.SuccessTopNotice('操作成功!页面即将刷新');
+						$.Global.Notice.SuccessTopNotice('操作成功!页面即将刷新');
 				        window.setTimeout(function(){
 				            window.location = '/account/user_settings';
 				        }, 3000);

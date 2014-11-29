@@ -10,6 +10,7 @@ urlpatterns = patterns('www.admin.views',
 # 用户
 urlpatterns += patterns('www.admin.views_user',
 
+                        url(r'^user/get_user_by_nick$', 'get_user_by_nick'),
                         url(r'^user/modify_user$', 'modify_user'),
                         url(r'^user/get_user_by_id$', 'get_user_by_id'),
                         url(r'^user/search$', 'search'),
@@ -99,4 +100,12 @@ urlpatterns += patterns('www.admin.views_caches',
                         url(r'^tools/caches/remove_cache$', 'remove_cache'),
                         url(r'^tools/caches/modify_cache$', 'modify_cache'),
                         url(r'^tools/caches$', 'caches'),
+                        )
+
+# 优惠券
+urlpatterns += patterns('www.admin.views_coupon',
+
+                        url(r'^coupon/search$', 'search'),
+                        url(r'^coupon/add_coupon$', 'add_coupon'),
+                        url(r'^coupon$', 'coupon'),
                         )

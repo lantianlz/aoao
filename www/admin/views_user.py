@@ -25,23 +25,11 @@ def user(request, template_name='pc/admin/user.html'):
 def search(request):
     user_nick = request.REQUEST.get('user_nick')
     page_index = int(request.REQUEST.get('page_index', 1))
-    order = request.REQUEST.get('order', 'register_date')
+    email = request.REQUEST.get('email')
 
-    data = []
     users = []
     ub = UserBase()
-
-    # 精确匹配
-    if user_nick:
-        users = ub.get_user_by_nick(user_nick)
-        users = [users] if users else []
-    else:
-        # 默认排序
-        if order == "register_date":
-            users = ub.get_all_users()
-        # 根据各种数量排序
-        else:
-            users = UserCountBase().get_all_users_by_order_count(order)
+    users = ub.get_user_for_admin(user_nick, email)
 
     page_objs = page.Cpt(users, count=10, page=page_index).info
 
@@ -63,6 +51,7 @@ def search(request):
             'user_email': user.email,
             'is_admin': user.is_admin,
             'last_active': str(user.last_active),
+            'register_date': str(user.create_time),
             'state': user.state,
             'source': user.source_display,
             'ip': user.ip
@@ -117,3 +106,19 @@ def modify_user(request):
     user = UserBase().get_user_by_id(user_id)
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
+
+
+def get_user_by_nick(request):
+    '''
+    根据名字查询用户
+    '''
+    nick = request.REQUEST.get('nick')
+
+    result = []
+
+    user = UserBase().get_user_by_nick(nick)
+
+    if user:
+        result.append([user.id, user.nick, None, user.nick])
+
+    return HttpResponse(json.dumps(result), mimetype='application/json')

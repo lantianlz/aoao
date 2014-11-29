@@ -1,7 +1,7 @@
 {% extends "pc/admin/home.html" %}
 {% load custom_tags %}
 {% load custom_filters %}
-{% block title %}洗车服务价格管理{% endblock %}
+{% block title %}优惠券管理{% endblock %}
 
 {% block css %}
 <style type="text/css">
@@ -13,7 +13,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
     // models
-    var Price = Backbone.Model.extend({
+    var Coupon = Backbone.Model.extend({
 
         // 默认值
         defaults: {
@@ -23,34 +23,36 @@ $(document).ready(function(){
     });
 
     // collections
-    var Prices = Backbone.Collection.extend({
-        model: Price,
+    var Coupons = Backbone.Collection.extend({
+        model: Coupon,
 
         _modelMaps: {
             'num': 'num',
-            'priceId': 'price_id',
+            'couponId': 'coupon_id',
+            'code': 'code',
             'carWashId': 'car_wash_id',
             'carWashName': 'car_wash_name',
-            'serviceTypeId': 'service_type_id',
-            'serviceTypeName': 'service_type_name',
-            'salePrice': 'sale_price',
-            'originPrice': 'origin_price',
-            'clearPrice': 'clear_price',
-            'sortNum': 'sort_num',
+            'couponType': 'coupon_type',
+            'discount': 'discount',
+            'expiryTime': 'expiry_time',
+            'minimumAmount': 'minimum_amount',
+            'userId': 'user_id',
+            'userNick': 'user_nick',
             'state': 'state'
         },
 
         // 查询
-        search: function(car_wash_name, state, pageIndex){
+        search: function(car_wash_name, nick, state, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/service_price/search", 
-                {'car_wash_name': car_wash_name||'', 'state': state||1, 'page_index': pageIndex||1}, 
+                "/admin/coupon/search", 
+                {'car_wash_name': car_wash_name||'', 'nick': nick||'', 'state': state||1, 'page_index': pageIndex||1}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
                     me.carWashName = car_wash_name;
+                    me.nick = nick;
                     me.state = state;
 
                     me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
@@ -59,12 +61,12 @@ $(document).ready(function(){
         },
 
         // 获取一个提问的model
-        getOne: function(priceId, callback){
+        getOne: function(couponId, callback){
             var me = this;
 
             ajaxSend(
-                "/admin/car_wash/service_price/get_service_price_by_id", 
-                {'price_id': priceId},
+                "/admin/coupon/get_coupon_by_id", 
+                {'coupon_id': couponId},
                 function(data){
                     if(callback){
                         callback($.Global.Utils.dictMap(data, me._modelMaps));
@@ -74,10 +76,10 @@ $(document).ready(function(){
         },
 
         //
-        modifyPrice: function(data, callback){
+        modifyCoupon: function(data, callback){
 
             ajaxSend(
-                "/admin/car_wash/service_price/modify_service_price", 
+                "/admin/coupon/modify_coupon", 
                 data,
                 function(response){
                     if(callback){
@@ -87,10 +89,10 @@ $(document).ready(function(){
             );
         },
 
-        addPrice: function(data, callback){
+        addCoupon: function(data, callback){
 
             ajaxSend(
-                "/admin/car_wash/service_price/add_service_price", 
+                "/admin/coupon/add_coupon", 
                 data,
                 function(response){
                     if(callback){
@@ -104,11 +106,11 @@ $(document).ready(function(){
 
     // listView
     var ListView = Backbone.View.extend({
-        el: '#price_list',
+        el: '#coupon_list',
 
         pagination: new $.Global.Pagination.PaginationView(),
 
-        template: _.template($('#price_template').html()),
+        template: _.template($('#coupon_template').html()),
 
         initialize: function(){
             this.listenTo(this.collection, 'reset', this.render);
@@ -116,7 +118,7 @@ $(document).ready(function(){
 
         events: {
             'click .search': 'search',
-            'click .pointer': 'modifyPrice'
+            'click .pointer': 'modifyCoupon'
         },
 
         // 渲染函数
@@ -125,7 +127,7 @@ $(document).ready(function(){
 
             this.showPanel();
 
-            this.$('tbody').html(this.template({'prices': data}));
+            this.$('tbody').html(this.template({'coupons': data}));
 
             this.pagination.render(
                 this.collection.pageIndex||1, 
@@ -136,30 +138,31 @@ $(document).ready(function(){
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#price_list"]').tab('show');
+            $('.qx-nav-pills a[href="#coupon_list"]').tab('show');
         },
 
         search: function(){
             var carWashName = this.$('.key-word').val(),
-                state = this.$('.key-word-state:checked').val();
+                nick = this.$('.key-word-nick').val(),
+                state = this.$('.key-word-state').val();
 
-            router.navigate(String.format('/search/{0}/{1}/1', carWashName, state), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/{2}/1', carWashName, nick, state), {trigger: true});
         },
 
-        modifyPrice: function(sender){
+        modifyCoupon: function(sender){
             var target = $(sender.currentTarget),
-                priceId = target.data('price_id');
+                couponId = target.data('coupon_id');
 
-            router.navigate('/modify/' + priceId, {trigger: true});
+            router.navigate('/modify/' + couponId, {trigger: true});
         }
     });
 
     // modifyView
     var ModifyView = Backbone.View.extend({
         
-        el: '#modify_price',
+        el: '#modify_coupon',
 
-        template: _.template($('#modify_price_template').html()),
+        template: _.template($('#modify_coupon_template').html()),
 
         events: {
             'click .save': 'save'
@@ -167,7 +170,7 @@ $(document).ready(function(){
 
         // 显示面板
         showPanel: function(){
-            $('.qx-nav-pills a[href="#modify_price"]').tab('show');
+            $('.qx-nav-pills a[href="#modify_coupon"]').tab('show');
         },
 
         carWashTextBox: null,
@@ -195,10 +198,10 @@ $(document).ready(function(){
         },
 
         // 显示提问信息
-        modifyPrice: function(priceId){
+        modifyCoupon: function(couponId){
             var me = this;
 
-            this.collection.getOne(priceId, function(data){
+            this.collection.getOne(couponId, function(data){
                 if(data){
                     me.render(data);
                     me.showPanel();
@@ -211,17 +214,17 @@ $(document).ready(function(){
 
         // 保存
         save: function(){
-            var priceId = this.$('form').data('price_id'),
+            var couponId = this.$('form').data('coupon_id'),
                 me = this;
 
             if(!me.$('form').valid()){
                 return;
             }
 
-            me.collection.modifyPrice($.Global.Utils.formToDict(this.$('form')), function(data){
+            me.collection.modifyCoupon($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode === 0){
                     $.Global.Notice.SuccessTopNotice('操作成功!');
-                    router.navigate('modify/' + priceId, {'trigger': true});
+                    router.navigate('modify/' + couponId, {'trigger': true});
                 } else {
                     $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
@@ -235,7 +238,7 @@ $(document).ready(function(){
     var AddView = Backbone.View.extend({
         el: 'body',
 
-        template: _.template($('#add_price_template').html()),
+        template: _.template($('#add_coupon_template').html()),
 
         showPanel: function(){
             var me = this;
@@ -257,37 +260,62 @@ $(document).ready(function(){
             
         },
 
+        userTextBox: null,
+        initUserTextBox: function(nick, value){
+            var me = this;
+
+            this.userTextBox = $.Global.TextboxList.create('#user_add', {
+                max: 1,
+                placeholder: '选择用户',
+                url: '/admin/user/get_user_by_nick',
+                param: 'nick',
+                loadPlaceholder: '正在加载...'
+            });
+            
+        },
+
+        initDate: function(){
+            $('#expiry_time_add').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                minView: 2,
+                autoclose: true
+            });
+        },
+
         render: function(){
             var me = this;
 
-            $('#add_price_modal').remove();
+            $('#add_coupon_modal').remove();
             
             $('body').append(this.template());
 
             // 绑定事件
-            $('#add_price_modal .cancel').bind('click', function(){
+            $('#add_coupon_modal .cancel').bind('click', function(){
                 history.go(-1);
             });
-            $('#add_price_modal .ok').bind('click', function(){
-                me.addPrice();
+            $('#add_coupon_modal .ok').bind('click', function(){
+                me.addCoupon();
             });
             
-            $('#add_price_modal').modal({'show': true, 'backdrop': 'static'});
+            $('#add_coupon_modal').modal({'show': true, 'backdrop': 'static'});
 
             this.initCarWashTextBox();
+            this.initUserTextBox();
+            this.initDate();
         },
 
-        addPrice: function(){
+        addCoupon: function(){
             var me = this;
             
-            if(!$('#add_price_modal form').valid()){
+            if(!$('#add_coupon_modal form').valid()){
                 return;
             }
 
-            prices.addPrice($.Global.Utils.formToDict(this.$('form')), function(data){
+            coupons.addCoupon($.Global.Utils.formToDict(this.$('form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
-                    $('#add_price_modal').modal('hide');
+                    $('#add_coupon_modal').modal('hide');
                     $.Global.Notice.SuccessTopNotice("操作成功");
                 } else {
                     $.Global.Notice.ErrorTopNotice(data.errmsg);
@@ -303,19 +331,19 @@ $(document).ready(function(){
 
         routes: {
             "":                     "search",
-            "modify/:priceId":       "modify",
-            "search/(:carWashName)/(:state)/:pageIndex":    "search",
+            "modify/:couponId":       "modify",
+            "search/(:carWashName)/(:nick)/(:state)/:pageIndex":    "search",
             "add":                   "add"
         },
 
         // 查询
-        search: function(carWashName, state, pageIndex){
-            prices.search(carWashName||'', state||1, pageIndex||1);
+        search: function(carWashName, nick, state, pageIndex){
+            coupons.search(carWashName||'', nick||'', state||1, pageIndex||1);
         },
 
         // 显示修改界面
-        modify: function(priceId){
-            modifyView.modifyPrice(priceId);
+        modify: function(couponId){
+            modifyView.modifyCoupon(couponId);
         },
 
         add: function(){
@@ -325,9 +353,9 @@ $(document).ready(function(){
     });
     
     // 初始化
-    var prices = new Prices(),
-        listView = new ListView({'collection': prices}),
-        modifyView = new ModifyView({'collection': prices}),
+    var coupons = new Coupons(),
+        listView = new ListView({'collection': coupons}),
+        modifyView = new ModifyView({'collection': coupons}),
         addView = new AddView(),
         router = new Router();
  
@@ -341,27 +369,30 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#price_list" class="black-blue" data-toggle="pill">服务价格列表</a>
+        <a href="#coupon_list" class="black-blue" data-toggle="pill">服务价格列表</a>
     </li>
     <li>
-        <a href="#modify_price" class="black-blue" data-toggle="pill">修改服务价格</a>
+        <a href="#modify_coupon" class="black-blue" data-toggle="pill">修改服务价格</a>
     </li>
     <li class="pull-right">
-        <a href="#add" class="black-blue">添加服务价格</a>
+        <a href="#add" class="black-blue">添加优惠券</a>
     </li>
 </ul>
 
 <div class="tab-content">
     <!-- 客户经理列表 -->
-    <div class="tab-pane fade pt-15 in active" id="price_list">
+    <div class="tab-pane fade pt-15 in active" id="coupon_list">
         <form action="." onsubmit="javascript: return false;">
-            <div class="col-md-2">
-                <label class="radio-inline">
-                    <input type="radio" name="state" class="key-word-state" value="0"> 无效
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="state" class="key-word-state" value="1" checked="checked"> 有效
-                </label>
+            <div class="col-sm-2">
+                <select class="form-control input-sm key-word-state">
+                    <option value="-1">全部</option>
+                    {% for choice in state_choices %}
+                    <option value="{{choice.value}}">{{choice.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="pl-0 pb-10 col-md-2">
+                <input type="text" class="form-control key-word-nick input-sm" placeholder="输入用户昵称..." />
             </div>
             <div class="pl-0 pb-10 col-md-3">
                 <div class="input-group input-group-sm">
@@ -376,12 +407,12 @@ $(document).ready(function(){
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>洗车行名称</th>
-                    <th>服务类型</th>
-                    <th>售价</th>
-                    <th>原价</th>
-                    <th>结算价</th>
-                    <th>排序</th>
+                    <th>优惠券代码</th>
+                    <th>使用类型</th>
+                    <th>优惠幅度</th>
+                    <th>过期时间</th>
+                    <th>所属洗车行</th>
+                    <th>所属用户</th>
                     <th>状态</th>
                 </tr>
             </thead>
@@ -398,37 +429,43 @@ $(document).ready(function(){
     </div>
 
     <!-- 修改客户经理信息 -->
-    <div class="tab-pane fade" id="modify_price">
+    <div class="tab-pane fade" id="modify_coupon">
         
     </div>
 </div>
 
 <!-- 客户经理列表 -->
-<script type="text/template" id="price_template">
-    <% _.each(prices, function(price){ %>
-        <tr class="pointer" data-price_id="<%= price.priceId %>">
-            <td><%= price.num %></td>
-            <td><%= price.carWashName %></td>
-            <td><%= price.serviceTypeName %></td>
-            <td><%= price.salePrice %></td>
-            <td><%= price.originPrice %></td>
-            <td><%= price.clearPrice %></td>
-            <td><%= price.sortNum %></td>
+<script type="text/template" id="coupon_template">
+    <% _.each(coupons, function(coupon){ %>
+        <tr class="pointer" data-coupon_id="<%= coupon.couponId %>">
+            <td><%= coupon.num %></td>
+            <td><%= coupon.code %></td>
             <td>
-                <% if(!price.state){ %>
-                <span class="fa fa-times co2" title="正常"></span>
-                <% } else { %>
-                <span class="fa fa-check co6" title="无效"></span>
-                <% } %>
+                {% for choice in coupon_type_choices %}
+                    <% if({{choice.value}} == coupon.couponType){ %>
+                        {{choice.name}}
+                    <% } %>
+                {% endfor %}
+            </td>
+            <td><%= coupon.discount %></td>
+            <td><%= coupon.expiryTime %></td>
+            <td><%= coupon.carWashName %></td>
+            <td><%= coupon.userNick %></td>
+            <td>
+                {% for choice in state_choices %}
+                    <% if({{choice.value}} == coupon.state){ %>
+                        {{choice.name}}
+                    <% } %>
+                {% endfor %}
             </td>
         </tr>
     <% }) %>
 </script>
 
 <!-- 修改问题模板 -->
-<script type="text/template" id="modify_price_template">
-    <form class="form-horizontal" data-price_id="<%= priceId %>" role="form" method="post" action="">
-        <input type="hidden" name="price_id" value="<%= priceId %>" />
+<script type="text/template" id="modify_coupon_template">
+    <form class="form-horizontal" data-coupon_id="<%= couponId %>" role="form" method="post" action="">
+        <input type="hidden" name="coupon_id" value="<%= couponId %>" />
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">洗车行</label>
             <div class="col-sm-6">
@@ -495,75 +532,89 @@ $(document).ready(function(){
 </script>
 
 
-<script type="text/template" id="add_price_template">
-<div class="modal fade" id="add_price_modal" tabindex="-1" role="dialog">
+<script type="text/template" id="add_coupon_template">
+<div class="modal fade" id="add_coupon_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header pb-5">
                 <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
-                <h4 class="modal-title">添加洗车行</h4>
+                <h4 class="modal-title">添加优惠券</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form" method="post" action="">
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">洗车行</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="car_wash_id" id="car_wash_add" value='' required>
+                        <label class="col-sm-3 control-label">优惠券类型</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm" required name="coupon_type">
+                                {% for choice in coupon_type_choices %}
+                                <option value="{{choice.value}}">{{choice.name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
+                    <!--
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">服务类型</label>
+                        <label class="col-sm-3 control-label">服务类型</label>
                         <div class="col-sm-3">
-                            <select class="form-control input-sm" required name="service_type_id">
-                                {% for type in service_types %}
-                                <option value="{{type.value}}">{{type.name}}</option>
+                            <select class="form-control input-sm" required name="service_group">
+                                {% for choice in coupon_group_choices %}
+                                <option value="{{choice.value}}">{{choice.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">售价</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control number" required name="sale_price" value='0'>
+                        <label class="col-sm-3 control-label">使用平台</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm" required name="platform">
+                                {% for choice in platform_choices %}
+                                <option value="{{choice.value}}">{{choice.name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">原价</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control number" required name="origin_price" value='0'>
-                        </div>
-                    </div>
-                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                        <label class="col-sm-2 control-label">结算价</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control number" required name="clear_price" value='0'>
-                        </div>
-                    </div>
-                    <div class="form-group pt-20 pb-20 mb-0">
-                        <label class="col-sm-2 control-label">排序</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control number" required name="sort" value='0'>
-                        </div>
-                    </div>
-                    <!--
-                    <div class="form-group pt-20 pb-20 mb-0">
-                        <label class="col-sm-2 control-label">状态</label>
-                        <div class="col-sm-2">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="state" value="1" checked="checked" >
-                                    有效
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="state" value="0" >
-                                    无效
-                                </label>
-                            </div>
+                        <label class="col-sm-3 control-label">状态</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm" required name="state">
+                                {% for choice in state_choices %}
+                                <option value="{{choice.value}}">{{choice.name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     -->
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-3 control-label">优惠幅度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control number" required name="discount" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-3 control-label">最低消费额</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control number" required name="minimum_amount" value='0'>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-3 control-label">失效时间</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="expiry_time_add" required name="expiry_time" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-3 control-label">所属用户</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="user_add" name="user_id" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-3 control-label">所属洗车行</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="car_wash_add" name="car_wash" value=''>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">

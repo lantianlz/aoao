@@ -14,24 +14,7 @@
 $(document).ready(function(){
     var User = Backbone.Model.extend({
         defaults: {
-            'num': 1,
-            'userId': '',
-            'userAvatar': '',
-            'userAvatar300': '',
-            'userNick': '',
-            'userDesc': '',
-            'userEmail': '',
-            'questionCount': 0,
-            'answerCount': 0,
-            'likeCount': 0,
-            'followers': 0,
-            'following': 0,
-            'isRecommend': false,
-            'isAdmin': false,
-            'isCustomerManager': false,
-            'lastActive': '',
-            'state': true,
-            'ip': ''
+
         }
     });
 
@@ -48,15 +31,8 @@ $(document).ready(function(){
             'userEmail': 'user_email',
             'userGender': 'user_gender',
             'birthday': 'birthday',
-            'questionCount': 'question_count',
-            'answerCount': 'answer_count',
-            'likeCount': 'liked_count',
-            'followers': 'follower_count',
-            'following': 'following_count',
-            'isRecommend': 'is_recommend',
             'isAdmin': 'is_admin',
             'isManager': 'is_manager',
-            'isCustomerManager': 'is_customer_manager',
             'lastActive': 'last_active',
             'state': 'state',
             'ip': 'ip',
@@ -64,19 +40,20 @@ $(document).ready(function(){
             'registerDate': 'register_date'
         },
 
-        search: function(userNick, pageIndex){
+        search: function(email, userNick, pageIndex){
             var me = this;
 
             ajaxSend(
                 "/admin/user/search", 
-                {'user_nick': userNick||'', 'page_index': pageIndex||1}, 
+                {'email': email||'', 'user_nick': userNick||'', 'page_index': pageIndex||1}, 
                 function(data){
                     
                     me.pageIndex = pageIndex;
                     me.pageCount = data.page_count;
                     me.userNick = userNick||'';
+                    me.email = email||'';
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -89,7 +66,7 @@ $(document).ready(function(){
                 {'user_id': userId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -132,11 +109,11 @@ $(document).ready(function(){
 
         template: _.template($('#user_list_template').html()),
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         events: {
             'click .search-user': 'searchUser',
-            'click .pointer': 'modifyUser'
+            'click .modify-user': 'modifyUser'
         },
 
         initialize: function(){
@@ -151,7 +128,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.userNick
+                'search/' + this.collection.email + '/' + this.collection.userNick
             );
         },
 
@@ -161,9 +138,10 @@ $(document).ready(function(){
         },
 
         searchUser: function(){
-            var userNick = this.$('.key-word').val();
+            var userNick = this.$('.key-word').val(),
+                email = this.$('.email').val();
 
-            router.navigate(String.format('/search/{0}/1', userNick), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/1', email, userNick), {trigger: true});
         },
 
         modifyUser: function(sender){
@@ -219,7 +197,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.QXNotice.ErrorTopNotice('没有找到对应的用户!');
+                    $.Global.Notice.ErrorTopNotice('没有找到对应的用户!');
                 }
             });
         },
@@ -231,10 +209,10 @@ $(document).ready(function(){
 
             me.collection.modifyUser(this.$('form').serialize(), function(data){
                 if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功');
+                    $.Global.Notice.SuccessTopNotice('操作成功');
                     router.navigate('modify/' + userId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
@@ -245,13 +223,13 @@ $(document).ready(function(){
     var Router = Backbone.Router.extend({
         routes: {
             "":                              "search",
-            "search/(:userNick)/:pageIndex": "search",
+            "search/(:email)/(:userNick)/:pageIndex": "search",
             "modify/:userId":                "modify"
         },
 
         // 获取推荐用户
-        search: function(userNick, pageIndex){
-            users.search(userNick||'', pageIndex||1);
+        search: function(email, userNick, pageIndex){
+            users.search(email||'', userNick||'', pageIndex||1);
         },
 
         modify: function(userId){
@@ -284,14 +262,19 @@ $(document).ready(function(){
 <div class="tab-content">
     <!-- 用户列表 -->
     <div class="tab-pane fade pt-15 in active" id="user_list">
-        <div class="pl-0 pb-10 col-md-3">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入用户呢称..." />
-                <span class="input-group-btn">
-                    <button class="btn btn-default search-user" type="button">查询</button>
-                </span>
+        <form action="." onsubmit="javascript: return false;">
+            <div class="pl-0 pb-10 col-md-2">
+                <input type="text" class="form-control email input-sm" placeholder="输入用户邮箱..." />
             </div>
-        </div>
+            <div class="pl-0 pb-10 col-md-3">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入用户呢称..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default search-user" type="submit">查询</button>
+                    </span>
+                </div>
+            </div>
+        </form>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -301,7 +284,7 @@ $(document).ready(function(){
                     <th>邮箱</th>
                     <th>来源</th>
                     <th>是否管理员</th>
-                    <th>上次活跃时间</th>
+                    <th>注册时间</th>
                 </tr>
             </thead>
             <tbody>
@@ -331,7 +314,7 @@ $(document).ready(function(){
                 <img src="<%= user.userAvatar %>" class="avatar-35 avatar-circle" >
             </a>
         </td>
-        <td class="pointer" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
+        <td class="pointer modify-user" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
         <td>
             <%= user.userEmail %>
         </td>
@@ -341,14 +324,14 @@ $(document).ready(function(){
         <td>
             <% if (user.isAdmin) { %>
                 <a href="/admin/permission#modifyUserPermission/<%= user.userId %>" title="修改管理员权限">
-                    <span class="glyphicon glyphicon-ok co-zx"></span>
+                    <span class="fa fa-check co6 f18"></span>
                 </a>
             <% } else if(!user.isAdmin && user.state) { %>
-                <a href="/admin/permission#addAdmin/<%= user.userId %>" title="设置管理员"><span class="glyphicon glyphicon-ok co10 pointer"></span></a>
+                <a href="/admin/permission#addAdmin/<%= user.userId %>" title="设置管理员"><span class="fa fa-check co3 pointer f18"></span></a>
             <% } %>
         </td>
         <td>
-            <%= user.lastActive %>
+            <%= user.registerDate %>
         </td>
     </tr>
 <% }) %>

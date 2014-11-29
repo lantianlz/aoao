@@ -437,6 +437,25 @@ class CouponBase(object):
         return coupons
 
 
+    def search_coupons_for_admin(self, car_wash_name, nick, state=None):
+
+        objs = Coupon.objects.all()
+
+        if state is not None:
+            objs = objs.filter(state=state)
+
+        if car_wash_name:
+            objs = objs.select_related('car_wash').filter(car_wash__name__contains=car_wash_name)
+        elif nick:
+            from www.account.interface import UserBase
+            user = UserBase().get_user_by_nick(nick)
+            if user:
+                objs = objs.filter(user_id=user.id)
+            else:
+                objs = []
+
+        return objs
+
 class OrderBase(object):
 
     def validate_order_info(self, service_price, user_id, count, pay_type):

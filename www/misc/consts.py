@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 
 '''
 全局常量维护
@@ -64,5 +64,9 @@ PERMISSIONS = [
 
     {'code': 'statistics_manage', 'name': u'统计管理', 'parent': None},
     {'code': 'statistics_active_user', 'name': u'当日活跃用户统计', 'parent': 'statistics_manage'},
-    
+ 
+    {'code': 'coupon_manage', 'name': u'优惠券管理', 'parent': None},
+    {'code': 'add_coupon', 'name': u'添加优惠券', 'parent': 'coupon_manage'},
+    {'code': 'query_coupon', 'name': u'查询优惠券', 'parent': 'coupon_manage'},
+    {'code': 'modify_coupon', 'name': u'修改优惠券', 'parent': 'coupon_manage'},   
 ]

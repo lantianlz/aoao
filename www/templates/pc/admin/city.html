@@ -53,7 +53,7 @@ $(document).ready(function(){
                     me.isShow = isShow||0;
                     me.sortByProvince = sortByProvince||0;
 
-                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps));
+                    me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
             );
         },
@@ -67,7 +67,7 @@ $(document).ready(function(){
                 {'city_id': cityId},
                 function(data){
                     if(callback){
-                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                        callback($.Global.Utils.dictMap(data, me._modelMaps));
                     }
                 }
             );
@@ -97,7 +97,7 @@ $(document).ready(function(){
     var ListView = Backbone.View.extend({
         el: '#city_list',
 
-        pagination: new $.QXPagination.PaginationView(),
+        pagination: new $.Global.Pagination.PaginationView(),
 
         template: _.template($('#city_template').html()),
 
@@ -177,7 +177,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.QXNotice.ErrorTopNotice("没有找到对应的城市!");
+                    $.Global.Notice.ErrorTopNotice("没有找到对应的城市!");
                 }
             });
         },
@@ -189,10 +189,10 @@ $(document).ready(function(){
 
             me.collection.modifyCity(this.$('form').serializeArray(), function(data){
                 if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功!');
+                    $.Global.Notice.SuccessTopNotice('操作成功!');
                     router.navigate('modify/' + cityId, {'trigger': true});
                 } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
         }
@@ -212,7 +212,7 @@ $(document).ready(function(){
 
         // 查询
         search: function(name, isShow, sortByProvince, pageIndex){
-            citys.search(name||'', isShow||1, sortByProvince||0, pageIndex||1);
+            citys.search(name||'', isShow||'-1', sortByProvince||0, pageIndex||1);
         },
 
         // 显示修改界面
@@ -259,8 +259,9 @@ $(document).ready(function(){
             </div>
             <div class="pl-0 pr-5 pb-10 col-md-2">
                 <select class="form-control input-sm is-show">
+                    <option value="-1">全部城市</option>
                     <option value="0">未开放</option>
-                    <option value="1" selected="selected">已经开放</option>
+                    <option value="1">已经开放</option>
                 </select>
             </div>
             <div class="pl-0 pb-10 col-md-3">
