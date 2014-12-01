@@ -190,11 +190,40 @@ $(document).ready(function(){
             }
         },
 
+        userTextBox: null,
+        initUserTextBox: function(name, value){
+            var me = this;
+
+            this.userTextBox = $.Global.TextboxList.create('#user_modify', {
+                max: 1,
+                placeholder: '选择用户',
+                url: '/admin/user/get_user_by_nick',
+                param: 'nick',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.userTextBox.add(name, value);
+            }
+            
+        },
+
+        initDate: function(){
+            $('#expiry_time_modify').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                minView: 2,
+                autoclose: true
+            });
+        },
+
         // 渲染
         render: function(data){
             this.$el.html(this.template(data));
 
             this.initCarWashTextBox(data.carWashName, data.carWashId);
+            this.initUserTextBox(data.userNick, data.userId);
+            this.initDate();
         },
 
         // 显示提问信息
@@ -222,7 +251,7 @@ $(document).ready(function(){
             }
 
             me.collection.modifyCoupon($.Global.Utils.formToDict(this.$('form')), function(data){
-                if(data.errcode === 0){
+                if(data.errcode == "0"){
                     $.Global.Notice.SuccessTopNotice('操作成功!');
                     router.navigate('modify/' + couponId, {'trigger': true});
                 } else {
@@ -261,7 +290,7 @@ $(document).ready(function(){
         },
 
         userTextBox: null,
-        initUserTextBox: function(nick, value){
+        initUserTextBox: function(name, value){
             var me = this;
 
             this.userTextBox = $.Global.TextboxList.create('#user_add', {
@@ -467,60 +496,82 @@ $(document).ready(function(){
     <form class="form-horizontal" data-coupon_id="<%= couponId %>" role="form" method="post" action="">
         <input type="hidden" name="coupon_id" value="<%= couponId %>" />
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">洗车行</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" name="car_wash_id" id="car_wash_modify" value='' required>
+            <label class="col-sm-3 control-label">优惠券代码</label>
+            <div class="col-sm-3">
+                <p class="form-control-static"><%= code %></p>
             </div>
         </div>
+
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">服务类型</label>
+            <label class="col-sm-3 control-label">优惠券类型</label>
             <div class="col-sm-3">
-                <select class="form-control input-sm" required name="service_type_id">
-                    {% for type in service_types %}
-                    <option value="{{type.value}}" <% if(serviceTypeId == {{type.value}}){ %>selected="selected"<% } %> >{{type.name}}</option>
+                <select class="form-control input-sm" required name="coupon_type">
+                    {% for choice in coupon_type_choices %}
+                    <option value="{{choice.value}}" <% if({{choice.value}} == couponType){ %>selected="selected"<% } %> >{{choice.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <!--
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-3 control-label">服务类型</label>
+            <div class="col-sm-3">
+                <select class="form-control input-sm" required name="service_group">
+                    {% for choice in coupon_group_choices %}
+                    <option value="{{choice.value}}">{{choice.name}}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">售价</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control number" required name="sale_price" value='<%= salePrice %>'>
+            <label class="col-sm-3 control-label">使用平台</label>
+            <div class="col-sm-3">
+                <select class="form-control input-sm" required name="platform">
+                    {% for choice in platform_choices %}
+                    <option value="{{choice.value}}">{{choice.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">原价</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control number" required name="origin_price" value='<%= originPrice %>'>
+            <label class="col-sm-3 control-label">状态</label>
+            <div class="col-sm-3">
+                <select class="form-control input-sm" required name="state">
+                    {% for choice in state_choices %}
+                    <option value="{{choice.value}}">{{choice.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        -->
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-3 control-label">优惠幅度</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control number" required name="discount" value='<%= discount %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-2 control-label">结算价</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control number" required name="clear_price" value='<%= clearPrice %>'>
+            <label class="col-sm-3 control-label">最低消费额</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control number" required name="minimum_amount" value='<%= minimumAmount %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-3 control-label">失效时间</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="expiry_time_modify" required name="expiry_time" value='<%= expiryTime %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-3 control-label">所属用户</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="user_modify" name="user_id" value=''>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0">
-            <label class="col-sm-2 control-label">排序</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control number" required name="sort" value='<%= sortNum %>'>
-            </div>
-        </div>
-        <div class="form-group pt-20 pb-20 mb-0">
-            <label class="col-sm-2 control-label">状态</label>
-            <div class="col-sm-2">
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="state" value="1" <% if(state == "1"){ %>checked="checked"<% } %> >
-                        有效
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="state" value="0" <% if(state == "0"){ %>checked="checked"<% } %> >
-                        无效
-                    </label>
-                </div>
+            <label class="col-sm-3 control-label">所属洗车行</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="car_wash_modify" name="car_wash_id" value=''>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -611,7 +662,7 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0">
                         <label class="col-sm-3 control-label">所属洗车行</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="car_wash_add" name="car_wash" value=''>
+                            <input type="text" class="form-control" id="car_wash_add" name="car_wash_id" value=''>
                         </div>
                     </div>
 

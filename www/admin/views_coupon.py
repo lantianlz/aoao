@@ -37,7 +37,7 @@ def format_coupon(objs, num):
             'code': x.code,
             'coupon_type': x.coupon_type,
             'discount': x.discount,
-            'expiry_time': str(x.expiry_time),
+            'expiry_time': str(x.expiry_time)[:10],
             'minimum_amount': x.minimum_amount,
             'user_id': x.user_id if user else '',
             'user_nick': user.nick if user else '',
@@ -78,27 +78,26 @@ def search(request):
 def get_coupon_by_id(request):
     coupon_id = request.REQUEST.get('coupon_id')
 
-    data = format_coupon([ServicePriceBase().get_service_price_by_id(price_id, None)], 1)[0]
+    data = format_coupon([CouponBase().get_coupon_by_id(coupon_id, None, None)], 1)[0]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
 @verify_permission('modify_coupon')
 @common_ajax_response
-def modify_service_price(request):
-    price_id = request.REQUEST.get('price_id')
+def modify_coupon(request):
+    coupon_id = request.REQUEST.get('coupon_id')
+    coupon_type = request.REQUEST.get('coupon_type')
+    discount = request.REQUEST.get('discount')
+    expiry_time = request.REQUEST.get('expiry_time')
+    expiry_time = datetime.datetime.strptime(expiry_time, '%Y-%m-%d')
+    user_id = request.REQUEST.get('user_id')
+    minimum_amount = request.REQUEST.get('minimum_amount')
     car_wash_id = request.REQUEST.get('car_wash_id')
-    service_type_id = request.REQUEST.get('service_type_id')
-    sale_price = request.REQUEST.get('sale_price')
-    origin_price = request.REQUEST.get('origin_price')
-    clear_price = request.REQUEST.get('clear_price')
-    sort_num = int(request.REQUEST.get('sort'))
-    state = request.REQUEST.get('state')
-    state = True if state == "1" else False
 
-    return ServicePriceBase().modify_service_price(
-        price_id, car_wash_id, service_type_id, sale_price, 
-        origin_price, clear_price, sort_num, state
+    return CouponBase().modify_coupon(
+        coupon_id, coupon_type, discount, expiry_time, 
+        user_id, minimum_amount, car_wash_id
     )
 
 

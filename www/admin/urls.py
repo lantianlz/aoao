@@ -105,6 +105,8 @@ urlpatterns += patterns('www.admin.views_caches',
 # 优惠券
 urlpatterns += patterns('www.admin.views_coupon',
 
+                        url(r'^coupon/modify_coupon$', 'modify_coupon'),
+                        url(r'^coupon/get_coupon_by_id$', 'get_coupon_by_id'),
                         url(r'^coupon/search$', 'search'),
                         url(r'^coupon/add_coupon$', 'add_coupon'),
                         url(r'^coupon$', 'coupon'),

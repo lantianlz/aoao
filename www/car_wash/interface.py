@@ -421,7 +421,11 @@ class CouponBase(object):
 
         ps = dict(code=code, coupon_type=coupon_type, discount=discount, expiry_time=expiry_time,
                   user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash)
-        coupon = Coupon.objects.create(**ps)
+
+        try:
+            coupon = Coupon.objects.create(**ps)
+        except:
+            return 99900, dict_err.get(99900)
 
         return 0, coupon
 
@@ -454,6 +458,44 @@ class CouponBase(object):
                 objs = []
 
         return objs
+
+
+    def modify_coupon(self, coupon_id, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash_id=None):
+        try:
+            discount = float(discount)
+            minimum_amount = float(minimum_amount)
+
+            assert discount >= 0 and minimum_amount >= 0 and expiry_time > datetime.datetime.now()
+            if minimum_amount > 0:
+                assert minimum_amount > discount
+        except:
+            return 99801, dict_err.get(99801)
+
+        if user_id and not UserBase().get_user_login_by_id(user_id):
+            return 99600, dict_err.get(99600)
+
+        car_wash = None
+        if car_wash_id:
+            car_wash = CarWashBase().get_car_wash_by_id(car_wash_id)
+            if not car_wash:
+                return 20103, dict_err.get(20103)
+
+        obj = self.get_coupon_by_id(coupon_id, None, None)
+        if not obj:
+            return 20201, dict_err.get(20201)
+
+        ps = dict(coupon_type=coupon_type, discount=discount, expiry_time=expiry_time,
+                  user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash)
+        
+        for k, v in ps.items():
+            setattr(obj, k, v)
+
+        try:
+            obj.save()
+        except:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
 
 
 class OrderBase(object):
