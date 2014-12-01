@@ -8,7 +8,8 @@ from common import utils, debug
 from www.misc import consts
 
 from www.account.interface import UserBase
-from www.car_wash.models import CarWash, ServicePrice, ServiceType, Coupon, Order, OrderCode, CarWashBank
+from www.car_wash.models import CarWash, ServicePrice, ServiceType, CarWashBank
+from www.car_wash.models import Coupon, Order, OrderCode
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -459,7 +460,6 @@ class CouponBase(object):
 
         return objs
 
-
     def modify_coupon(self, coupon_id, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash_id=None):
         try:
             discount = float(discount)
@@ -486,7 +486,7 @@ class CouponBase(object):
 
         ps = dict(coupon_type=coupon_type, discount=discount, expiry_time=expiry_time,
                   user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash)
-        
+
         for k, v in ps.items():
             setattr(obj, k, v)
 
@@ -527,6 +527,8 @@ class OrderBase(object):
     @transaction.commit_manually(using=DEFAULT_DB)
     def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False):
         try:
+            from www.cash.interface import UserCashBase
+
             service_price = service_price_id_or_object if isinstance(service_price_id_or_object, ServicePrice) \
                 else ServicePriceBase().get_service_price_by_id(service_price_id_or_object)
 
@@ -540,6 +542,7 @@ class OrderBase(object):
             car_wash = service_price.car_wash
             total_fee = service_price.sale_price * count
             coupon = None
+            discount_fee = 0
             if coupon_id:
                 # 检测优惠券信息
                 coupon = CouponBase().get_coupon_by_id(coupon_id, user_id)
@@ -550,10 +553,13 @@ class OrderBase(object):
                 if errcode != 0:
                     transaction.rollback(using=DEFAULT_DB)
                     return errcode, errmsg
+                discount_fee = coupon.discount if coupon.coupon_type == 0 else (total_fee - coupon.discount)
 
+            pay_fee = total_fee - discount_fee
             # 是否使用账户余额
-
-            # 计算应付金额
+            user_cash = UserCashBase().get_user_cash_by_user_id(user_id)
+            user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
+            pay_fee = pay_fee - user_cash_fee
 
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)

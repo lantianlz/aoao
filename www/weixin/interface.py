@@ -89,8 +89,8 @@ class WexinBase(object):
                                content=error_info)
 
     def get_subscribe_event_response(self, to_user, from_user):
-        content = (u'嗷嗷洗车\n'
-                   u'年轻人的在线洗车行'
+        content = (u'欢迎关注嗷嗷洗车\n'
+                   u'年轻人的在线洗车行，点击查看新手指南'
                    )
         return self.get_base_content_response(to_user, from_user,
                                               content=content)

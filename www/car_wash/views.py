@@ -82,8 +82,11 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     errcode, errmsg = ob.create_order(service_price, request.user.id, count, pay_type, coupon_id, use_user_cash)
     print errcode, errmsg
 
-    return HttpResponse("ok")
-    # return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+    if errcode == 0:
+        return HttpResponse("ok")
+    else:
+        warning_msg = errmsg
+        return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
 def order(request, province_id=None, template_name='mobile/car_wash/order.html'):
