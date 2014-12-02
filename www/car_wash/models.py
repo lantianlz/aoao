@@ -202,8 +202,8 @@ class Order(models.Model):
     @note: 订单
     """
     source_type_choices = ((0, u'购买'), (1, u''))
-    pay_type_choices = ((0, u'未支付'), (1, u'支付宝支付'), (2, u'微信支付'))
-    order_state_choices = ((0, u'未确认'), (1, u'未付款'), (2, u'已付款'), (10, u'已使用'), (11, u'已退款'), )
+    pay_type_choices = ((0, u'未支付'), (1, u'支付宝'), (2, u'微信'))
+    order_state_choices = ((-1, u'未确认'), (0, u'未付款'), (1, u'已付款'), (10, u'已退款'), )
 
     trade_id = models.CharField(max_length=32, db_index=True, unique=True)  # 非自增id,可以修改
     source_type = models.IntegerField(default=0, choices=source_type_choices, db_index=True)
