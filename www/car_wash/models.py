@@ -217,10 +217,10 @@ class Order(models.Model):
     discount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 优惠劵的优惠价格
     user_cash_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 使用账户余额的金额
     pay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 应付金额   最终需要用户支付金额
+    pay_type = models.IntegerField(default=0, choices=pay_type_choices, db_index=True)  # 支付方式
+
     payed_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # 支付接口回调反馈的实际付款金额
     pay_time = models.DateTimeField(null=True, blank=True)  # 支付接口回调的时间
-
-    pay_type = models.IntegerField(default=0, choices=pay_type_choices, db_index=True)  # 支付方式
     pay_info = models.CharField(max_length=256, null=True, blank=True)  # 用户支付成功后保存支付信息
     order_state = models.IntegerField(default=0, choices=order_state_choices, db_index=True)  # 订单状态,默认为未确认状态
     is_admin_modify_pay_fee = models.BooleanField(default=False)  # 管理员是否修改应付金额

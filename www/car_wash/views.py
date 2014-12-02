@@ -81,7 +81,6 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
 
     errcode, errmsg = ob.create_order(service_price, request.user.id, count,
                                       pay_type, coupon_id, use_user_cash, ip=utils.get_clientip(request))
-    print errcode, errmsg
 
     if errcode == 0:
         return HttpResponse("ok")

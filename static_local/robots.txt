@@ -5,6 +5,7 @@ Disallow: /message/*
 Disallow: /account/*
 Disallow: /n/*
 Disallow: /admin/*
+Disallow: *password*
 Disallow: *set*
 Disallow: *cancel*
 Disallow: *remove*

@@ -566,17 +566,21 @@ class OrderBase(object):
                 discount_fee = coupon.discount if coupon.coupon_type == 0 else (total_fee - coupon.discount)
 
             pay_fee = total_fee - discount_fee
+
             # 是否使用账户余额
             user_cash = UserCashBase().get_user_cash_by_user_id(user_id)
             user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
             pay_fee = pay_fee - user_cash_fee
             trade_id = self.generate_order_trade_id(pr="W")
+            pay_type = 0 if pay_fee == 0 else pay_type
 
-            print trade_id, pay_fee, user_cash_fee, coupon_id
-            print count, pay_type, user_id, ip
+            ps = dict(trade_id=trade_id, user_id=user_id, service_price=service_price, car_wash=service_price.car_wash,
+                      count=count, coupon=coupon, total_fee=total_fee, discount_fee=discount_fee, user_cash_fee=user_cash_fee,
+                      pay_fee=pay_fee, pay_type=pay_type, ip=ip)
+            order = Order.objects.create(**ps)
 
             transaction.commit(using=DEFAULT_DB)
-            return 0, dict_err.get(0)
+            return 0, order
         except Exception, e:
             logging.error(debug.get_debug_detail(e))
             transaction.rollback(using=DEFAULT_DB)
