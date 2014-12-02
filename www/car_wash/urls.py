@@ -12,7 +12,4 @@ urlpatterns = patterns('www.car_wash.views',
                        url(r'^order$', 'order'),
                        url(r'^order/(?P<order_detail_id>\w+)$', 'order_detail'),
                        url(r'^get_car_washs$', 'get_car_washs'),
-
-                       url(r'^bind_mobile$', 'bind_mobile'),
-                       url(r'^setting$', 'setting'),
                        )

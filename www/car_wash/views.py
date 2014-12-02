@@ -106,16 +106,6 @@ def location(request, template_name='mobile/car_wash/location.html'):
 # ===================================================ajax部分=================================================================#
 
 
-def bind_mobile(request, template_name='mobile/car_wash/bind_mobile.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
-def setting(request, template_name='mobile/car_wash/setting.html'):
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
-
-
 def get_car_washs(request):
 
     city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)

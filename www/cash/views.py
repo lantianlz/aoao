@@ -12,7 +12,6 @@ ucrb = interface.UserCashRecordBase()
 
 def cash_index(request, template_name='mobile/cash/cash_index.html'):
     user_cash = ucb.get_user_cash_by_user_id(request.user.id)
-
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
@@ -23,5 +22,12 @@ def user_cash_record(request, template_name='mobile/cash/user_cash_record.html')
 
 @member_required
 def recharge(request, template_name='mobile/cash/recharge.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
+def bind_mobile(request, template_name='mobile/cash/bind_mobile.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def setting(request, template_name='mobile/cash/setting.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
