@@ -132,7 +132,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.carWashName + '/' + this.collection.state
+                'search/' + this.collection.carWashName + '/' + this.collection.nick + '/' + this.collection.state
             );
         },
 
@@ -398,10 +398,10 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#coupon_list" class="black-blue" data-toggle="pill">服务价格列表</a>
+        <a href="#coupon_list" class="black-blue" data-toggle="pill">优惠券列表</a>
     </li>
     <li>
-        <a href="#modify_coupon" class="black-blue" data-toggle="pill">修改服务价格</a>
+        <a href="#modify_coupon" class="black-blue" data-toggle="pill">修改优惠券</a>
     </li>
     <li class="pull-right">
         <a href="#add" class="black-blue">添加优惠券</a>
@@ -412,7 +412,7 @@ $(document).ready(function(){
     <!-- 客户经理列表 -->
     <div class="tab-pane fade pt-15 in active" id="coupon_list">
         <form action="." onsubmit="javascript: return false;">
-            <div class="col-sm-2">
+            <div class="col-sm-2 pl-0">
                 <select class="form-control input-sm key-word-state">
                     <option value="-1">全部</option>
                     {% for choice in state_choices %}
@@ -423,7 +423,7 @@ $(document).ready(function(){
             <div class="pl-0 pb-10 col-md-2">
                 <input type="text" class="form-control key-word-nick input-sm" placeholder="输入用户昵称..." />
             </div>
-            <div class="pl-0 pb-10 col-md-3">
+            <div class="pl-0 pb-10 col-md-5">
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
                     <span class="input-group-btn">

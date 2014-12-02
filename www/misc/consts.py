@@ -69,4 +69,7 @@ PERMISSIONS = [
     {'code': 'add_coupon', 'name': u'添加优惠券', 'parent': 'coupon_manage'},
     {'code': 'query_coupon', 'name': u'查询优惠券', 'parent': 'coupon_manage'},
     {'code': 'modify_coupon', 'name': u'修改优惠券', 'parent': 'coupon_manage'},   
+
+    {'code': 'user_cash_record_manage', 'name': u'用户现金记录管理', 'parent': None},
+    {'code': 'query_user_cash_record', 'name': u'查询用户现金记录', 'parent': 'user_cash_record_manage'},
 ]

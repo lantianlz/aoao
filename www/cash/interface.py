@@ -78,6 +78,18 @@ class UserCashRecordBase(object):
         return UserCashRecord.objects.select_related("user_cash").filter(user_cash__user_id=user_id)
 
 
+    def search_records_for_admin(self, nick):
+        objs = UserCashRecord.objects.select_related('user_cash').all()
+
+        if nick:
+            user = UserBase().get_user_by_nick(nick)
+            if user:
+                objs = objs.filter(user_cash__user_id=user.id)
+            else:
+                objs = []
+        return objs
+
+
 class CarWashCashBase(object):
 
     def get_car_wash_cash_by_car_wash_id(self, car_wash_id, auto_create_obj=False):

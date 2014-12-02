@@ -111,3 +111,10 @@ urlpatterns += patterns('www.admin.views_coupon',
                         url(r'^coupon/add_coupon$', 'add_coupon'),
                         url(r'^coupon$', 'coupon'),
                         )
+
+# 常用工具
+urlpatterns += patterns('www.admin.views_user_cash_record',
+
+                        url(r'^user_cash_record/search$', 'search'),
+                        url(r'^user_cash_record$', 'user_cash_record'),
+                        )
