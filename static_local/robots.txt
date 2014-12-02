@@ -1,13 +1,14 @@
 User-agent: *
-Allow: /
 Disallow: /p/*
 Disallow: /message/*
 Disallow: /account/*
 Disallow: /n/*
 Disallow: /admin/*
-Disallow: *set_top*
-Disallow: *cancel_top*
+Disallow: *set*
+Disallow: *cancel*
 Disallow: *remove*
+Disallow: *create*
 Disallow: /500
 Disallow: /search
 Disallow: /logout
+Allow: /

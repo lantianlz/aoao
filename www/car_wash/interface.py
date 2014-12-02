@@ -2,6 +2,7 @@
 
 import datetime
 import logging
+import random
 from django.db import transaction
 
 from common import utils, debug
@@ -524,8 +525,17 @@ class OrderBase(object):
 
         return 0, dict_err.get(0)
 
+    def generate_order_trade_id(self, pr):
+        """
+        @note: 生成订单的id，传入不同前缀来区分订单类型
+        """
+        postfix = '%s' % datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')[:-3]  # 纯数字
+        if pr:
+            postfix = '%s%s%02d' % (pr, postfix, random.randint(0, 99))
+        return postfix
+
     @transaction.commit_manually(using=DEFAULT_DB)
-    def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False):
+    def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False, ip=None):
         try:
             from www.cash.interface import UserCashBase
 
@@ -560,6 +570,10 @@ class OrderBase(object):
             user_cash = UserCashBase().get_user_cash_by_user_id(user_id)
             user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
             pay_fee = pay_fee - user_cash_fee
+            trade_id = self.generate_order_trade_id(pr="W")
+
+            print trade_id, pay_fee, user_cash_fee, coupon_id
+            print count, pay_type, user_id, ip
 
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)
