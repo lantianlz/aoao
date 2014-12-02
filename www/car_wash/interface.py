@@ -31,6 +31,9 @@ dict_err = {
     20206: u'未满足最低使用金额要求',
     20210: u'小概率事件发生，优惠券编码重复，请重新添加',
 
+    20301: u'订单不存在',
+    20302: u'付款金额和订单金额不符，支付失败，请联系嗷嗷洗车客服人员！',
+    20303: u'该支付对应的订单状态无效',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -501,6 +504,24 @@ class CouponBase(object):
 
 class OrderBase(object):
 
+    def get_order_by_trade_id(self, trade_id, state=None):
+        try:
+            ps = dict(trade_id=trade_id)
+            if state is not None:
+                ps.update(state=state)
+            return Order.objects.select_related("car_wash").get(**ps)
+        except Order.DoesNotExist:
+            pass
+
+    def get_order_by_id(self, id, state=None):
+        try:
+            ps = dict(id=id)
+            if state is not None:
+                ps.update(state=state)
+            return Order.objects.select_related("car_wash").get(**ps)
+        except Order.DoesNotExist:
+            pass
+
     def validate_order_info(self, service_price, user_id, count, pay_type):
         assert service_price and user_id and count and pay_type
 
@@ -581,6 +602,59 @@ class OrderBase(object):
 
             transaction.commit(using=DEFAULT_DB)
             return 0, order
+        except Exception, e:
+            logging.error(debug.get_debug_detail(e))
+            transaction.rollback(using=DEFAULT_DB)
+            return 99900, dict_err.get(99900)
+
+    @transaction.commit_manually(using=DEFAULT_DB)
+    def order_pay_callback(self, trade_id, payed_fee, pay_info=''):
+        '''
+        @note: 购物回调函数
+        '''
+        try:
+            from www.tasks import async_send_email
+            from www.account.interface import UserBase
+
+            errcode, errmsg = 0, dict_err.get(0)
+            payed_fee = float(payed_fee)
+            order = None
+
+            if trade_id.startswith('W'):
+                order = self.get_order_by_trade_id(trade_id)
+            if not order:
+                transaction.rollback(using=DEFAULT_DB)
+                return 20301, dict_err.get(20301)
+
+            if order.order_state in (0, ):
+                # 付款金额和订单应付金额是否相符
+                if payed_fee != float(order.pay_type):
+                    errcode, errmsg = 20302, dict_err.get(20302)
+                else:
+                    order.order_state = 1
+                order.payed_fee = str(payed_fee)  # 转成string后以便转成decimal
+                order.pay_info = pay_info
+                order.pay_time = datetime.datetime.now()
+                order.save()
+
+                # 更新洗车行订单数
+
+                # 修改优惠券状态
+
+                # 扣除用户现金账户余额
+
+                # 生成洗车码
+
+                # 发送邮件
+                user = UserBase().get_user_by_id(order.user_id)
+                title = u'诸位，钱来了'
+                content = u'收到「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
+                async_send_email("vip@aoaoxc.com", title, content)
+            elif order.order_state < 0:
+                errcode, errmsg = 20303, dict_err.get(20303)
+
+            transaction.commit(using=DEFAULT_DB)
+            return 0, errmsg
         except Exception, e:
             logging.error(debug.get_debug_detail(e))
             transaction.rollback(using=DEFAULT_DB)

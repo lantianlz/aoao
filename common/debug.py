@@ -63,4 +63,4 @@ def get_debug_detail_and_send_email(e):
         debug_detail = str(debug_detail)
     logging.error(debug_detail)
     async_send_email(settings.NOTIFICATION_EMAIL, u"%s%sworker error" % (settings.SERVER_NAME, str(datetime.datetime.now())),
-                     debug_detail, content_type="text")
+                     debug_detail, type="text")
