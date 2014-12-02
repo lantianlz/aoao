@@ -1,5 +1,7 @@
 User-agent: *
+
 Disallow: /p/*
+
 Disallow: /message/*
 Disallow: /account/*
 Disallow: /n/*

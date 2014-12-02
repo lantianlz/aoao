@@ -19,10 +19,10 @@ def txt_view(request, txt_file_name):
     '''
     @note: txt文件展示，主要是提供给搜索引擎
     '''
-    file_name = os.path.abspath(os.path.join(settings.SITE_ROOT, '../static/txt/%s.txt' % txt_file_name))
+    file_name = os.path.abspath(os.path.join(settings.SITE_ROOT, '../static_local/%s.txt' % txt_file_name))
     if not os.path.exists(file_name):
         raise Http404
-    return HttpResponse(open(file_name))
+    return HttpResponse(open(file_name), mimetype='text/plain')
 
 
 def test500(request):
@@ -72,7 +72,7 @@ def save_img(request):
     else:
         result = dict(error=1, message='系统错误，请确认上传的文件格式为图片')
 
-    return HttpResponse(json.dumps(result))
+    return HttpResponse(json.dumps(result), mimetype='application/json')
 
 
 @member_required
