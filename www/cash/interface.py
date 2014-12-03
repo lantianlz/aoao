@@ -70,13 +70,12 @@ class UserCashRecordBase(object):
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)
         except Exception, e:
-            logging.error(debug.get_debug_detail(e))
+            debug.get_debug_detail(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
     def get_record_by_user_id(self, user_id):
         return UserCashRecord.objects.select_related("user_cash").filter(user_cash__user_id=user_id)
-
 
     def search_records_for_admin(self, nick):
         objs = UserCashRecord.objects.select_related('user_cash').all()
@@ -142,6 +141,6 @@ class CarWashCashRecordBase(object):
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)
         except Exception, e:
-            logging.error(debug.get_debug_detail(e))
+            debug.get_debug_detail(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)

@@ -185,7 +185,7 @@ class WexinBase(object):
             expires_in = content['expires_in']
         except Exception, e:
             logging.error(u'get_weixin_access_token rep is %s' % content)
-            logging.error(debug.get_debug_detail(e))
+            debug.get_debug_detail(e)
         assert access_token
         return access_token, expires_in
 

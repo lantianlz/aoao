@@ -62,7 +62,7 @@ class CarWash(models.Model):
         return self.lowest_origin_price - self.lowest_sale_price
 
     def get_cover(self):
-
+        self.imgs = self.imgs or ""
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
         imgs = tag_img.findall(self.imgs)
         if imgs:
@@ -70,6 +70,7 @@ class CarWash(models.Model):
         return '%simg/default_car_wash_100.png' % settings.MEDIA_URL
 
     def get_imgs(self):
+        self.imgs = self.imgs or ""
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
         imgs = tag_img.findall(self.imgs)
         if not imgs:

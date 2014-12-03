@@ -85,7 +85,7 @@ class CarWashBase(object):
             return ""
 
     def validate_car_wash_info(city_id, district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs):
-        assert all((city_id, district_id, name, business_hours, tel, addr, imgs))
+        assert all((city_id, district_id, name, business_hours, tel, addr))
         lowest_sale_price = float(lowest_sale_price)
         lowest_origin_price = float(lowest_origin_price)
         assert lowest_sale_price >= 0 and lowest_origin_price >= 0
@@ -106,7 +106,8 @@ class CarWashBase(object):
 
         try:
             car_wash = CarWash.objects.create(**ps)
-        except:
+        except Exception, e:
+            debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
         return 0, car_wash
 
@@ -145,7 +146,8 @@ class CarWashBase(object):
 
         try:
             obj.save()
-        except:
+        except Exception, e:
+            debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
@@ -603,7 +605,7 @@ class OrderBase(object):
             transaction.commit(using=DEFAULT_DB)
             return 0, order
         except Exception, e:
-            logging.error(debug.get_debug_detail(e))
+            debug.get_debug_detail(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
@@ -656,7 +658,7 @@ class OrderBase(object):
             transaction.commit(using=DEFAULT_DB)
             return 0, errmsg
         except Exception, e:
-            logging.error(debug.get_debug_detail(e))
+            debug.get_debug_detail(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
