@@ -19,6 +19,7 @@ stb = interface.ServiceTypeBase()
 cwb = interface.CarWashBase()
 spb = interface.ServicePriceBase()
 cb = interface.CouponBase()
+ocb = interface.OrderCodeBase()
 
 city_id = 1974
 district_id = 3247
@@ -62,11 +63,12 @@ def add_cou():
 
 
 def main():
-    # print stb.add_service_type(name=u"标准洗车(5座)")
+    print ocb.generate_code(100)
 
     # add_cw()
     # add_sp()
-    add_cou()
+    # add_cou()
+
 
 if __name__ == '__main__':
     main()
