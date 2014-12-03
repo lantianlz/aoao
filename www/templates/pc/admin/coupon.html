@@ -47,7 +47,7 @@ $(document).ready(function(){
 
             ajaxSend(
                 "/admin/coupon/search", 
-                {'car_wash_name': car_wash_name||'', 'nick': nick||'', 'state': state||1, 'page_index': pageIndex||1}, 
+                {'car_wash_name': car_wash_name||'', 'nick': nick||'', 'state': state||-1, 'page_index': pageIndex||1}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
@@ -367,7 +367,7 @@ $(document).ready(function(){
 
         // 查询
         search: function(carWashName, nick, state, pageIndex){
-            coupons.search(carWashName||'', nick||'', state||1, pageIndex||1);
+            coupons.search(carWashName||'', nick||'', state||-1, pageIndex||1);
         },
 
         // 显示修改界面
