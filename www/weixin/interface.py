@@ -20,7 +20,7 @@ weixin_api_url = 'https://api.weixin.qq.com'
 dict_weixin_app = {
     'aoaoxc_test': {'app_id': 'wx0d227d4f9b19658a', 'app_secret': '513bdaf5b6022df4913f4cb5543fa688', 'app_type': 'gh_65671b9fff9d',
                     'token': 'aoaoxc_test', 'url': ''},
-    'aoaoxc': {'app_id': 'wx1e8f4fb6965ed5c0', 'app_secret': '7919c1db140bf6a299b3acd1668791c2', 'app_type': 'gh_23edefcd5e6d',
+    'aoaoxc': {'app_id': 'wx23cca542b396c669', 'app_secret': 'dd8cc9591fa32514eed8876e652e6260', 'app_type': 'gh_de7e674b94d4',
                'token': 'aoaoxc', 'url': ''},
 }
 
