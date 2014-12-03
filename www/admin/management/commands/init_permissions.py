@@ -21,7 +21,7 @@ class Command(BaseCommand):
                     action='store',
                     dest='user',
                     default='',
-                    help=u'添加管理员, 输入用户名'),
+                    help=u'添加管理员, 输入邮箱'),
     )
 
     def handle(self, *args, **options):
