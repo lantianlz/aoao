@@ -35,3 +35,11 @@ urlpatterns = patterns('',
 
                        url(r'^crossdomain.xml$', direct_to_template, {'template': 'crossdomain.xml'}),
                        )
+
+urlpatterns += patterns('misc.views_paycallback',
+                        (r'^alipaycallback_m$', 'alipaycallback_m'),
+                        (r'^alipaynotify_m$', 'alipaynotify_m'),
+                        (r'^weixinpaycallback$', 'weixinpaycallback'),
+
+                        (r'^test_paycallback$', 'test_paycallback'),
+                        )

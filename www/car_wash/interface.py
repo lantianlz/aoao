@@ -389,6 +389,17 @@ class CarWashBankBase(object):
 
 
 # ===================================================订单和优惠券部分=================================================================#
+def order_required(func):
+    def _decorator(self, order, *args, **kwargs):
+        order = order
+        if not isinstance(order, Order):
+            order = OrderBase().get_order_by_id(order) or OrderBase().get_order_by_trade_id(order)
+            if not order:
+                return 20301, dict_err.get(20301)
+        return func(self, order, *args, **kwargs)
+    return _decorator
+
+
 class CouponBase(object):
 
     def get_coupon_by_id(self, id, user_id=None, state=1):
@@ -565,8 +576,8 @@ class OrderBase(object):
             service_price = service_price_id_or_object if isinstance(service_price_id_or_object, ServicePrice) \
                 else ServicePriceBase().get_service_price_by_id(service_price_id_or_object)
 
-            count = int(count)
             try:
+                count = int(count)
                 self.validate_order_info(service_price, user_id, count, pay_type)   # 检测基本信息
             except:
                 transaction.rollback(using=DEFAULT_DB)
@@ -586,7 +597,7 @@ class OrderBase(object):
                 if errcode != 0:
                     transaction.rollback(using=DEFAULT_DB)
                     return errcode, errmsg
-                discount_fee = coupon.discount if coupon.coupon_type == 0 else (total_fee - coupon.discount)
+                discount_fee = coupon.discount if coupon.coupon_type == 0 else service_price.sale_price
 
             pay_fee = total_fee - discount_fee
 
@@ -617,6 +628,7 @@ class OrderBase(object):
         try:
             from www.tasks import async_send_email
             from www.account.interface import UserBase
+            from www.cash.interface import UserCashRecordBase
 
             errcode, errmsg = 0, dict_err.get(0)
             payed_fee = float(payed_fee)
@@ -630,28 +642,44 @@ class OrderBase(object):
 
             if order.order_state in (0, ):
                 # 付款金额和订单应付金额是否相符
-                if payed_fee != float(order.pay_type):
+                if payed_fee != float(order.pay_fee):
                     errcode, errmsg = 20302, dict_err.get(20302)
-                else:
-                    order.order_state = 1
                 order.payed_fee = str(payed_fee)  # 转成string后以便转成decimal
                 order.pay_info = pay_info
                 order.pay_time = datetime.datetime.now()
-                order.save()
 
                 # 更新洗车行订单数
+                car_wash = order.car_wash
+                car_wash.order_count += 1
+                car_wash.save()
 
                 # 修改优惠券状态
+                coupon = order.coupon
+                if coupon:
+                    coupon.state = 1
+                    coupon.save()
 
                 # 扣除用户现金账户余额
+                if order.user_cash_fee > 0:
+                    ec, em = UserCashRecordBase().add_record(order.user_id, order.user_cash_fee, 1, notes=u"购买洗车码")
+                    if ec != 0:
+                        errcode, errmsg = ec, em
 
-                # 生成洗车码
+                if errcode == 0:
+                    order.order_state = 1
+                    # 生成洗车码
+                    ec, em = OrderCodeBase().create_order_code(order)
+                    if ec != 0:
+                        errcode, errmsg = ec, em
+
+                # 保存订单信息
+                order.save()
 
                 # 发送邮件
                 user = UserBase().get_user_by_id(order.user_id)
                 title = u'诸位，钱来了'
-                content = u'收到「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
-                async_send_email("vip@aoaoxc.com", title, content)
+                content = u'收到用户「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
+                async_send_email("lz@aoaoxc.com", title, content)
             elif order.order_state < 0:
                 errcode, errmsg = 20303, dict_err.get(20303)
 
@@ -664,4 +692,31 @@ class OrderBase(object):
 
 
 class OrderCodeBase(object):
-    pass
+
+    def generate_code(self, car_wash_id):
+        """
+        @note: 生成洗车码
+        """
+        code = utils.get_radmon_int(length=8)
+        return "%02d%s" % (car_wash_id % 100, code)
+
+    @order_required
+    def create_order_code(self, order):
+        try:
+            try:
+                assert order
+            except:
+                return 99801, dict_err.get(99801)
+
+            count = int(order.count)
+            for i in range(count):
+                for j in range(3):  # 三次机会，防止重复
+                    code = self.generate_code(order.car_wash_id)
+                    if not OrderCode.objects.filter(code=code):
+                        break
+                OrderCode.objects.create(user_id=order.user_id, order=order, car_wash=order.car_wash, code=code)
+
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
