@@ -42,7 +42,7 @@ class Consumer(object):
         access_token_url = ('%(api_url)s/sns/oauth2/access_token?grant_type=%(grant_type)s&'
                             'appid=%(appid)s&secret=%(client_secret)s&code=%(code)s') % self.dict_format
 
-        rep = requests.get(access_token_url, timeout=30)
+        rep = requests.get(access_token_url, timeout=30, verify=False)
         content = rep.text
         dict_result = json.loads(content)
         return dict_result
@@ -55,9 +55,9 @@ class Consumer(object):
         data.update(oauth_consumer_key=self.client_id)
         if method == 'GET':
             request_url = '%s?%s' % (request_url, urllib.urlencode(data))
-            rep = requests.get(request_url, timeout=30)
+            rep = requests.get(request_url, timeout=30, verify=False)
         else:
-            rep = requests.post(request_url, data=data, timeout=30)
+            rep = requests.post(request_url, data=data, timeout=30, verify=False)
         content = rep.content
         try:
             return json.loads(content)

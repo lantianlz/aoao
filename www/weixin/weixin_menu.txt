@@ -47,12 +47,12 @@
         {
             "type": "view", 
             "name": "立即洗车", 
-            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=home#wechat_redirect"
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=home#wechat_redirect"
         }, 
         {
             "type": "view", 
             "name": "我的洗车码", 
-            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=order_code#wechat_redirect"
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=order_code#wechat_redirect"
         }, 
         {
             "name": "更多", 
@@ -60,22 +60,22 @@
                 {
                     "type": "view", 
                     "name": "充值", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=recharge#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=recharge#wechat_redirect"
                 },
                 {
                     "type": "view", 
                     "name": "我的优惠券", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=coupon#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=coupon#wechat_redirect"
                 },
                 {
                     "type": "view", 
                     "name": "新手指导", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=help#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=help#wechat_redirect"
                 },
                 {
                     "type": "view", 
                     "name": "联系我们", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=about#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=about#wechat_redirect"
                 },
             ]
         }
