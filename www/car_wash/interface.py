@@ -27,7 +27,7 @@ dict_err = {
     20202: u'不是你的优惠券不要用',
     20203: u'优惠券已过期',
     20204: u'优惠券只针对特定洗车行',
-    20205: u'优惠券金额大于需要支付金额',
+    20205: u'优惠券金额大于单次购买金额',
     20206: u'未满足最低使用金额要求',
     20210: u'小概率事件发生，优惠券编码重复，请重新添加',
 
@@ -337,7 +337,7 @@ class CarWashBankBase(object):
             obj = CarWashBank.objects.create(**ps)
             return 0, obj
         except Exception, e:
-            print e
+            debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
     def search_banks_for_admin(self, car_wash_name):
@@ -542,7 +542,7 @@ class OrderBase(object):
         assert 1 <= count <= 5
         assert pay_type in (0, 1, 2)
 
-    def check_coupon_can_use(self, coupon, user_id, total_fee, car_wash):
+    def check_coupon_can_use(self, coupon, user_id, sale_price, car_wash):
         """
         @note: 检测优惠券是否可用
         """
@@ -552,9 +552,9 @@ class OrderBase(object):
             return 20203, dict_err.get(20203)
         if coupon.car_wash and coupon.car_wash != car_wash:
             return 20204, dict_err.get(20204)
-        if coupon.discount > total_fee:
+        if coupon.discount > sale_price:
             return 20205, dict_err.get(20205)
-        if coupon.minimum_amount > total_fee:
+        if coupon.minimum_amount > sale_price:
             return 20206, dict_err.get(20206)
 
         return 0, dict_err.get(0)
@@ -593,14 +593,13 @@ class OrderBase(object):
                 if not coupon:
                     transaction.rollback(using=DEFAULT_DB)
                     return 20201, dict_err.get(20201)
-                errcode, errmsg = self.check_coupon_can_use(coupon, user_id, total_fee, car_wash)
+                errcode, errmsg = self.check_coupon_can_use(coupon, user_id, service_price.sale_price, car_wash)
                 if errcode != 0:
                     transaction.rollback(using=DEFAULT_DB)
                     return errcode, errmsg
-                discount_fee = coupon.discount if coupon.coupon_type == 0 else service_price.sale_price
+                discount_fee = coupon.discount if coupon.coupon_type == 0 else (service_price.sale_price - coupon.discount)
 
             pay_fee = total_fee - discount_fee
-
             # 是否使用账户余额
             user_cash = UserCashBase().get_user_cash_by_user_id(user_id)
             user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
@@ -613,15 +612,22 @@ class OrderBase(object):
                       pay_fee=pay_fee, pay_type=pay_type, ip=ip)
             order = Order.objects.create(**ps)
 
+            # 不用付费订单直接生成洗车码
+            if pay_fee == 0:
+                errcode, errmsg = self.order_pay_callback(trade_id, pay_fee, pay_info=u"账户余额付款", order=order)
+                if errcode != 0:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return errcode, errmsg
+
             transaction.commit(using=DEFAULT_DB)
             return 0, order
         except Exception, e:
-            debug.get_debug_detail(e)
+            debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
     @transaction.commit_manually(using=DEFAULT_DB)
-    def order_pay_callback(self, trade_id, payed_fee, pay_info=''):
+    def order_pay_callback(self, trade_id, payed_fee, pay_info='', order=None):
         '''
         @note: 购物回调函数
         '''
@@ -632,9 +638,9 @@ class OrderBase(object):
 
             errcode, errmsg = 0, dict_err.get(0)
             payed_fee = float(payed_fee)
-            order = None
+            order = order
 
-            if trade_id.startswith('W'):
+            if (not order) and trade_id.startswith('W'):
                 order = self.get_order_by_trade_id(trade_id)
             if not order:
                 transaction.rollback(using=DEFAULT_DB)
@@ -656,37 +662,40 @@ class OrderBase(object):
                 # 修改优惠券状态
                 coupon = order.coupon
                 if coupon:
-                    coupon.state = 1
+                    coupon.state = 2
                     coupon.save()
 
                 # 扣除用户现金账户余额
-                if order.user_cash_fee > 0:
-                    ec, em = UserCashRecordBase().add_record(order.user_id, order.user_cash_fee, 1, notes=u"购买洗车码")
-                    if ec != 0:
-                        errcode, errmsg = ec, em
+                if errcode == 0 and order.user_cash_fee > 0:
+                    errcode, errmsg = UserCashRecordBase().add_record(order.user_id, order.user_cash_fee, 1, notes=u"购买洗车码")
 
                 if errcode == 0:
-                    order.order_state = 1
                     # 生成洗车码
-                    ec, em = OrderCodeBase().create_order_code(order)
-                    if ec != 0:
-                        errcode, errmsg = ec, em
-
-                # 保存订单信息
-                order.save()
+                    errcode, errmsg = OrderCodeBase().create_order_code(order)
 
                 # 发送邮件
-                user = UserBase().get_user_by_id(order.user_id)
-                title = u'诸位，钱来了'
-                content = u'收到用户「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
-                async_send_email("lz@aoaoxc.com", title, content)
+                if payed_fee > 0:
+                    user = UserBase().get_user_by_id(order.user_id)
+                    title = u'诸位，钱来了'
+                    if errcode != 0:
+                        title += u"(状态异常，订单号:%s, errcode:%s, errmsg:%s)" % (trade_id, errcode, errmsg)
+                    content = u'收到用户「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
+                    async_send_email("lz@aoaoxc.com", title, content)
+
+                if errcode == 0:
+                    # 保存订单信息
+                    order.order_state = 1
+                    order.save()
+                else:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return errcode, errmsg
             elif order.order_state < 0:
                 errcode, errmsg = 20303, dict_err.get(20303)
 
             transaction.commit(using=DEFAULT_DB)
-            return 0, errmsg
+            return errcode, errmsg
         except Exception, e:
-            debug.get_debug_detail(e)
+            debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
@@ -697,7 +706,7 @@ class OrderCodeBase(object):
         """
         @note: 生成洗车码
         """
-        code = utils.get_radmon_int(length=8)
+        code = utils.get_radmon_int(length=10)
         return "%02d%s" % (car_wash_id % 100, code)
 
     @order_required
@@ -718,5 +727,5 @@ class OrderCodeBase(object):
 
             return 0, dict_err.get(0)
         except Exception, e:
-            debug.get_debug_detail(e)
+            debug.get_debug_detail_and_send_email(e)
             return 99900, dict_err.get(99900)

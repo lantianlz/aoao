@@ -121,8 +121,8 @@ def oauth_weixin(request):
             auth.login(request, user)
             UserBase().update_user_last_login_time(user.id, ip=utils.get_clientip(request), last_active_source=2)
 
-            dict_next = {"home": "/", "order_code": "/car_wash/order", "order_code": "/car_wash/order",
-                         "recharge": "/cash/recharge", "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help"}
+            dict_next = {"home": "/", "order_code": "/car_wash/order_code",  "recharge": "/cash/recharge",
+                         "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help"}
             # next_url = request.session.get('next_url')
             # request.session.update(dict(next_url=''))
             next_url = dict_next.get(weixin_state, "/")

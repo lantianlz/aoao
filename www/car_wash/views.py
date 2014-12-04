@@ -89,7 +89,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
         return show_create_order(request, service_price_id, warning_msg)
 
 
-def order(request, province_id=None, template_name='mobile/car_wash/order.html'):
+def order_code(request, province_id=None, template_name='mobile/car_wash/order_code_list.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
