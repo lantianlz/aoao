@@ -15,7 +15,11 @@ user_id = 'f762a6f5d2b711e39a09685b35d0bf16'
 
 
 def main():
+    from django.conf import settings
+    from common import utils
     from www.weixin.interface import WexinBase
+    from www.tasks import async_send_email
+
     wb = WexinBase()
     app_key = "aoao_test"
     to_user = 'o07dat0ujliP84s4GPsLFXOrAcbk'
@@ -24,14 +28,9 @@ def main():
     # print wb.send_msg_to_weixin(content, to_user, app_key)
     # print wb.get_weixin_access_token(app_key="aoao_test")
 
-    from www.tasks import async_send_email_worker
-    async_send_email_worker.delay('lantian-lz@163.com', title="来自嗷嗷洗车", content="邮件发送")
+    context = {'reset_url': '%s/reset_password?code=%s' % (settings.MAIN_DOMAIN, "123"), }
+    async_send_email("web@aoaoxc.com", u'来自嗷嗷洗车', utils.render_email_template('email/reset_password.html', context), 'html')
 
-    from common.utils import replace_href_to_open_blank
-    body = """
-    <p>目前市场上用的最多的炒股软件有三款：大智慧，通达信，同花顺。大部分证券公司也提供这三款软件的定制版，都是可以免费使用的。</p><p><br></p>
-    """
-    # print replace_href_to_open_blank(body)
 
 if __name__ == '__main__':
     main()

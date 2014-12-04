@@ -1,5 +1,5 @@
 {% extends "mobile/car_wash/base_car_wash.html" %}
-
+{% load custom_filters %}
 {% block title_all %}订单详情{% endblock %}
 
 {% block css %}
@@ -8,69 +8,62 @@
 </style>
 {% endblock %}
 
-{% block bar_title %}华胜洗车行(高新店){% endblock %}
+{% block bar_title %}{{order.car_wash.name}}{% endblock %}
 
 {% block container %}
 <div class="row pt-30 pb-50">
-	<a href="/car_wash/1">
-		<div class="row bgc-ffffff mt-20 pt-15 pl-15 pr-15 pb-10 pr">
-			<div class="col-xs-3 pl-0 pr-0">
-				<img src="{{MEDIA_URL}}img/xch3.jpg" class="w h70">
-			</div>
-			<div class="col-xs-9">
-				<div class="fb f16 co7">华胜洗车行(高新店)</div>
-				<div class="co1 f14 pt-5">洗车券1张, 可用于SUV-7座</div>
-				<div class="f14 co1">
-					<i class="fa fa-rmb co2"></i><span class="co2 f20 fb pr-3">15</span>元
-					<i class="fa fa-rmb f14 line-through co1 pl-5"></i><span class="line-through">30元</span>
-				</div>
-			</div>
-			<span class="fa fa-angle-right pa f30 co3" style="right: 10px; top: 37px;"></span>
-		</div>
-	</a>
+    <a href="{{order.car_wash.get_url}}">
+        <div class="row bgc-ffffff mt-20 pt-15 pl-15 pr-15 pb-10 pr">
+            <div class="col-xs-3 pl-0 pr-0">
+                <img src="{{order.car_wash.get_cover}}" class="w h70">
+            </div>
+            <div class="col-xs-9">
+                <div class="fb f16 co7">{{order.car_wash.name}}</div>
+                <div class="co1 f14 pt-5">洗车码{{order.count}}张，{{order.service_price.service_type.name}}</div>
+                <div class="f14 co1">
+                    <i class="fa fa-rmb co2"></i><span class="co2 f20 fb pr-3">{{order.service_price.sale_price}}</span>元
+                    <i class="fa fa-rmb f14 line-through co1 pl-5"></i><span class="line-through">{{order.service_price.origin_price}}元</span>
+                </div>
+            </div>
+            <span class="fa fa-angle-right pa f30 co3" style="right: 10px; top: 37px;"></span>
+        </div>
+    </a>
 
-	<div class="row bgc-ffffff border-top bdc-e6e6e6 pt-10 pb-10 pl-15 pr-15 f14">
-		<i class="f15 fa fa-check-circle pr-3 co8"></i>随时退款
-		<i class="f15 fa fa-check-circle pr-3 co8 pl-10"></i>永不过期
-	</div>
+    <div class="row bgc-ffffff border-top bdc-e6e6e6 pt-10 pb-10 pl-15 pr-15 f14">
+        <i class="f15 fa fa-check-circle pr-3 co8"></i>随时退款
+        <i class="f15 fa fa-check-circle pr-3 co8 pl-10"></i>永不过期
+    </div>
 
-	<div class="row bgc-ffffff border-top bdc-e6e6e6 f14 mt-15">
-		<div class="co1 pl-15 pr-15 pb-10 pt-10">嗷嗷洗车券</div>
-		<ul class="list-group mb-0">
-			<li class="list-group-item pl-0 pr-0">
-				<div class="pl-15 pr-15">券号: 
-					<span class="co8 f16">0986 5320 1254</span>
-					<span class="pull-right co6">未消费</span>
-				</div>
-			</li>
-			<li class="list-group-item pl-0 pr-0">
-				<div class="pl-15 pr-15 co3">券号: 
-					<span class="co3 f16">0986 5320 1255</span>
-					<span class="pull-right co3">已消费</span>
-				</div>
-			</li>
-		</ul>
-		
-	</div>
+    <div class="row bgc-ffffff border-top bdc-e6e6e6 f14 mt-15">
+        <div class="co1 pl-15 pr-15 pb-10 pt-10">嗷嗷洗车码</div>
+        <ul class="list-group mb-0">
+            {% for code in codes %}
+            <li class="list-group-item pl-0 pr-0">
+                <div class="pl-15 pr-15">号码：
+                    <span class="{% if code.state == 0%}co8{% else %}co3{% endif %} f16">{{code.get_code_display}}</span>
+                    <span class="pull-right {% if code.state == 0%}co6{% else %}co3{% endif %}">{{code.get_state_display}}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        
+    </div>
 
-	<div class="row bgc-ffffff border-top bdc-e6e6e6 pt-5 pb-5 f14 mt-15">
-		<div class="co1 pl-15 pb-10 pt-10">订单详细信息</div>
-		<div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
-			<div class="col-xs-4 pr-0 ">订单号:</div><div class="col-xs-8 pl-0">723521452</div>
-		</div>
-		<div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
-			<div class="col-xs-4 pr-0">购买手机号:</div><div class="col-xs-8 pl-0">13488985003</div>
-		</div>
-		<div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
-			<div class="col-xs-4 pr-0">付款时间:</div><div class="col-xs-8 pl-0">2014-10-22 15:12</div>
-		</div>
-		<div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
-			<div class="col-xs-4 pr-0">总价:</div><div class="col-xs-8 pl-0">15 元</div>
-		</div>
-	</div>
+    <div class="row bgc-ffffff border-top bdc-e6e6e6 pt-5 pb-5 f14 mt-15">
+        <div class="co1 pl-15 pb-10 pt-10">订单详细信息</div>
+        <div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
+            <div class="col-xs-4 pr-0 ">订单号:</div><div class="col-xs-8 pl-0">{{order.trade_id}}</div>
+        </div>
+        <div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
+            <div class="col-xs-4 pr-0">付款时间:</div><div class="col-xs-8 pl-0">{{order.pay_time|date:"Y-m-d H:i"}}</div>
+        </div>
+        <div class="border-top bdc-e6e6e6 pb-10 pt-10 row">
+            <div class="col-xs-4 pr-0">总价:</div><div class="col-xs-8 pl-0"><i class="fa fa-rmb"></i> {{order.pay_fee|smart_show_float}} 元</div>
+        </div>
+    </div>
 
-	<div class="row mt-20 pl-15 pr-15 pb-20">
-		<button class="btn btn-block btn-danger btn-lg">申请退款</button>
-	</div>
+    <div class="row mt-20 pl-15 pr-15 pb-20">
+        <button class="btn btn-block btn-danger btn-lg">申请退款</button>
+    </div>
 </div>
 {% endblock %}
