@@ -148,12 +148,6 @@ def change_http_data(content):
     return content
 
 
-# 格式化时间输出
-from common.utils import time_format, smart_show_float
-register.filter('time_format', time_format)
-register.filter('smart_show_float', smart_show_float)
-
-
 @register.filter
 def answers_list(answers_list_params, request):
     """
@@ -167,3 +161,8 @@ def answers_list(answers_list_params, request):
     answers_count = answers.count()
 
     return mark_safe(render_to_response('answer/_answers_list_0.html', locals()).content)
+
+# 格式化时间输出
+from common.utils import time_format, smart_show_float
+register.filter('time_format', time_format)
+register.filter('smart_show_float', smart_show_float)

@@ -232,7 +232,7 @@ class Order(models.Model):
         ordering = ['-id', ]
 
     def get_url(self):
-        return "/order/%s" % self.trade_id
+        return "/car_wash/order/%s" % self.trade_id
 
 
 class OrderCode(models.Model):
@@ -252,3 +252,9 @@ class OrderCode(models.Model):
 
     use_time = models.DateTimeField(null=True, db_index=True)  # 使用时间
     operate_user_id = models.CharField(max_length=32, null=True, db_index=True)  # 兑换操作人
+
+    class Meta:
+        ordering = ['state', '-id']
+
+    def get_code_display(self):
+        return "%s %s %s" % (self.code[:4], self.code[4:8], self.code[8:])

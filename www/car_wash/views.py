@@ -14,6 +14,7 @@ cwb = interface.CarWashBase()
 spb = interface.ServicePriceBase()
 cb = interface.CouponBase()
 ob = interface.OrderBase()
+ocb = interface.OrderCodeBase()
 
 
 def index(request, template_name='mobile/car_wash/index.html'):
@@ -90,11 +91,26 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
 
 
 def order_code(request, province_id=None, template_name='mobile/car_wash/order_code_list.html'):
+    is_valid = request.REQUEST.get("is_valid") or "1"
+    if is_valid == "1":
+        codes = ocb.get_valid_order_codes_by_user_id(request.user.id)
+    else:
+        codes = ocb.get_complete_order_codes_by_user_id(request.user.id)
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def order_detail(request, order_detail_id=None, template_name="mobile/car_wash/order_detail.html"):
+@member_required
+def order_detail(request, trade_id, template_name="mobile/car_wash/order_detail.html"):
+    order = ob.get_order_by_trade_id(trade_id)
+    if not order:
+        raise Http404
 
+    if order.user_id != request.user.id:  # 自己才能看自己的订单
+        err_msg = u'what are you doing? 别人的订单不要看哦'
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+    codes = ocb.get_order_codes_by_order(order)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

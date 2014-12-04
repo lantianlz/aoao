@@ -522,7 +522,7 @@ class OrderBase(object):
             ps = dict(trade_id=trade_id)
             if state is not None:
                 ps.update(state=state)
-            return Order.objects.select_related("car_wash").get(**ps)
+            return Order.objects.select_related("car_wash", "service_price").get(**ps)
         except Order.DoesNotExist:
             pass
 
@@ -531,7 +531,7 @@ class OrderBase(object):
             ps = dict(id=id)
             if state is not None:
                 ps.update(state=state)
-            return Order.objects.select_related("car_wash").get(**ps)
+            return Order.objects.select_related("car_wash", "service_price").get(**ps)
         except Order.DoesNotExist:
             pass
 
@@ -729,3 +729,12 @@ class OrderCodeBase(object):
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
             return 99900, dict_err.get(99900)
+
+    def get_valid_order_codes_by_user_id(self, user_id):
+        return OrderCode.objects.select_related("car_wash", "order").filter(user_id=user_id, state=0)
+
+    def get_complete_order_codes_by_user_id(self, user_id):
+        return OrderCode.objects.select_related("car_wash", "order").filter(user_id=user_id, state__gt=0)
+
+    def get_order_codes_by_order(self, order):
+        return OrderCode.objects.filter(order=order)
