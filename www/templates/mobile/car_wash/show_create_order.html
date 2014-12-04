@@ -140,18 +140,17 @@ $(document).ready(function(){
         </ul>
 
         <ul class="col-xs-12 list-group pr-0 mb-10">
-            <li class="list-group-item bdc-d0d0d0 row pay-item">
+            <li class="list-group-item bdc-d0d0d0 row pay-item none">
                 <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/weixin.png"></div>
                 <div class="col-xs-6 line-height-32 f16">微信支付</div>
                 <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-                    <input type="checkbox" class="pay-type" value="1" checked="checked" name="pay_type_weixin">
-                </div>
+                    <input type="checkbox" class="pay-type" value="1"  name="pay_type_weixin">
             </li>
             <li class="list-group-item bdc-d0d0d0 row pay-item">
                 <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/zhifubao.png"></div>
                 <div class="col-xs-6 line-height-32 f16">支付宝支付</div>
                 <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-                    <input type="checkbox" class="pay-type" value="1" name="pay_type_alipay">
+                    <input type="checkbox" class="pay-type" value="1" checked="checked" name="pay_type_alipay">
                 </div>
             </li>
         </ul>
