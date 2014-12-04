@@ -41,5 +41,5 @@ class UserMiddware(object):
 
         title = u'%s error in %s' % (settings.SERVER_NAME, request.get_full_path())
         content = debug.get_debug_detail(exception)
-        if settings.SERVER_NAME != 'DEVELOPER':
+        if not settings.LOCAL_FLAG:
             utils.send_email(settings.NOTIFICATION_EMAIL, title, content)

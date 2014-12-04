@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
@@ -34,7 +34,7 @@ def index(request, template_name='mobile/car_wash/index.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/detail.html'):
+def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/car_wash_detail.html'):
     car_wash = cwb.get_car_wash_by_id(car_wash_id)
     if not car_wash:
         raise Http404
@@ -84,6 +84,9 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
                                       pay_type, coupon_id, use_user_cash, ip=utils.get_clientip(request))
 
     if errcode == 0:
+        order = errmsg
+        if order.pay_fee == 0:
+            return HttpResponseRedirect("/car_wash/order_code")
         return HttpResponse("ok")
     else:
         warning_msg = errmsg
