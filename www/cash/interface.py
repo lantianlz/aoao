@@ -33,7 +33,7 @@ class UserCashBase(object):
 class UserCashRecordBase(object):
 
     def validate_record_info(self, user_id, value, operation, notes):
-        value = int(value)
+        value = float(value)
         operation = int(operation)
         user = UserBase().get_user_by_id(user_id)
         assert operation in (0, 1)
@@ -59,6 +59,7 @@ class UserCashRecordBase(object):
         """
         try:
             try:
+                value = Decimal(value)
                 operation = int(operation)
                 self.validate_record_info(user_id, value, operation, notes)
             except Exception, e:
@@ -80,7 +81,7 @@ class UserCashRecordBase(object):
 
             return 0, dict_err.get(0)
         except Exception, e:
-            debug.get_debug_detail(e)
+            debug.get_debug_detail_and_send_email(e)
             return 99900, dict_err.get(99900)
 
     def get_record_by_user_id(self, user_id):

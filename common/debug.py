@@ -61,6 +61,6 @@ def get_debug_detail_and_send_email(e):
     debug_detail = get_debug_detail(e)
     if isinstance(debug_detail, (list, tuple)):
         debug_detail = str(debug_detail)
-    logging.error(debug_detail)
-    async_send_email(settings.NOTIFICATION_EMAIL, u"%s%sworker error" % (settings.SERVER_NAME, str(datetime.datetime.now())),
+    debug_detail = u"%s\n%s" % (str(datetime.datetime.now()), debug_detail)
+    async_send_email(settings.NOTIFICATION_EMAIL, u"%s direct error" % (settings.SERVER_NAME, ),
                      debug_detail, type="text")
