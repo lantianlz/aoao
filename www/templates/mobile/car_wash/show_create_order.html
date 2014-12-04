@@ -28,7 +28,7 @@ $(document).ready(function(){
             // 总价   
             totalPrice = unitPrice * payCount, 
             // 优惠券价格
-            couponPrice = parseFloat($('.coupon-price').val()),
+            couponPrice = ($('.coupon-price').length > 0) ? parseFloat($('.coupon-price').val()) : 0,
             // 余额
             balance = parseFloat($('.use-balance').attr('checked') ? $('.balance').html() : 0), 
             // 需支付价格
@@ -67,6 +67,13 @@ $(document).ready(function(){
 <div class="row pt-30 pb-50 pl-15 pr-15">
     <form method="post" action="/car_wash/create_order/{{service_price.id}}">
         <ul class="col-xs-12 list-group mt-20 pr-0 mb-10">
+            <li class="list-group-item bdc-d0d0d0 row">
+                <div class="col-md-12 pr-0 pl-0">
+                    购买洗车码之后，凭此洗车码即可到各大嗷嗷洗车行享受优惠洗车服务！
+                </div>
+            </li>
+        </ul>
+        <ul class="col-xs-12 list-group mt-0 pr-0 mb-10">
             <li class="list-group-item bdc-d0d0d0 row">
                 <div class="col-xs-8 pl-0">
                     <div class="f16">{{service_price.car_wash.name}}</div>
