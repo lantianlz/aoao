@@ -50,7 +50,7 @@ class WexinBase(object):
         </xml>
         '''
 
-    def get_base_base_news_response(self, items=None):
+    def get_base_news_response(self, items=None):
         '''
         @note: 图文信息模板
         '''
@@ -80,20 +80,27 @@ class WexinBase(object):
 
     def get_base_content_response(self, to_user, from_user, content):
         base_xml = self.get_base_text_response()
-        return base_xml % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()),
-                               content=content)
+        return base_xml % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()), content=content)
 
     def get_error_response(self, to_user, from_user, error_info):
         base_xml = self.get_base_text_response()
-        return base_xml % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()),
-                               content=error_info)
+        return base_xml % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()), content=error_info)
 
     def get_subscribe_event_response(self, to_user, from_user):
         content = (u'我们已经恭候您多时了！洗车的时候能想到嗷嗷，人家真是幸福呢...\n'
                    u'嗷嗷洗车是专属于年轻人的洗车平台，这里有更优惠的价格，更贴心的服务，更丰富的活动——洗车用嗷嗷，就对了！'
                    )
-        return self.get_base_content_response(to_user, from_user,
-                                              content=content)
+        return self.get_base_content_response(to_user, from_user, content=content)
+
+    def get_customer_service_response(self, to_user, from_user):
+        return u'''
+        <xml>
+        <ToUserName><![CDATA[%(to_user)s]]></ToUserName>
+        <FromUserName><![CDATA[%(from_user)s]]></FromUserName>
+        <CreateTime>%(timestamp)s</CreateTime>
+        <MsgType><![CDATA[transfer_customer_service]]></MsgType>
+        </xml>
+        ''' % dict(to_user=from_user, from_user=to_user, timestamp=int(time.time()))
 
     def format_input_xml(self, xml):
         '''
@@ -132,6 +139,7 @@ class WexinBase(object):
             if msg_type == 'text':
                 content = jq('content')[0].text.strip()
                 logging.error(u'收到用户发送的文本数据，内容如下：%s' % content)
+                return self.get_customer_service_response(to_user, from_user)   # 多客服接管
 
     def get_app_key_by_app_type(self, app_type):
         for key in dict_weixin_app:
