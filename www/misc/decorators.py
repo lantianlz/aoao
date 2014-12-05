@@ -11,6 +11,8 @@ import urllib
 import json
 from functools import wraps
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 from common import cache
 
@@ -35,7 +37,8 @@ def member_required(func):
                     return HttpResponseRedirect(Consumer(WexinBase().init_app_key()).authorize())
 
                 if "android" in user_agent or "iphone" in user_agent:   # 手机浏览器端需要处理
-                    return HttpResponse(u'请在微信中搜索公众号「嗷嗷洗车」，关注后通过菜单访问')
+                    err_msg = u'需要登陆后进行操作<br /><br />请在微信中搜索公众号「嗷嗷洗车」，关注后通过菜单访问'
+                    return render_to_response('error.html', locals(), context_instance=RequestContext(request))
 
                 # 电脑端跳转到登陆页面
                 try:

@@ -4,6 +4,7 @@ import time
 import datetime
 
 # from pprint import pprint
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.template import RequestContext
@@ -88,6 +89,7 @@ def oauth_weixin(request):
     import logging
     from www.misc.oauth2.weixin import Consumer
     from www.weixin.interface import dict_weixin_app, WexinBase
+    from www.tasks import async_change_profile_from_weixin
 
     app_key = WexinBase().init_app_key()
     client = Consumer(app_key)
@@ -120,6 +122,12 @@ def oauth_weixin(request):
             user.backend = 'www.middleware.user_backend.AuthBackend'
             auth.login(request, user)
             UserBase().update_user_last_login_time(user.id, ip=utils.get_clientip(request), last_active_source=2)
+
+            # 更新用户资料
+            if settings.LOCAL_FLAG:
+                async_change_profile_from_weixin(user, app_key, openid)
+            else:
+                async_change_profile_from_weixin.delay(user, app_key, openid)
 
             dict_next = {"home": "/", "order_code": "/car_wash/order_code",  "recharge": "/cash/recharge",
                          "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help"}

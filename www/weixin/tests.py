@@ -19,17 +19,20 @@ def main():
     from common import utils
     from www.weixin.interface import WexinBase
     from www.tasks import async_send_email
+    from pprint import pprint
 
     wb = WexinBase()
-    app_key = "aoao_test"
-    to_user = 'o07dat0ujliP84s4GPsLFXOrAcbk'
+    app_key = "aoaoxc_test"
+    to_user = 'oZy3hskE524Y2QbLgY2h3VnI3Im8'
     content = (u'古人云：鸟随鸾凤飞腾远，人伴贤良品质高。\n')
 
     # print wb.send_msg_to_weixin(content, to_user, app_key)
     # print wb.get_weixin_access_token(app_key="aoao_test")
 
     context = {'reset_url': '%s/reset_password?code=%s' % (settings.MAIN_DOMAIN, "123"), }
-    async_send_email("web@aoaoxc.com", u'来自嗷嗷洗车', utils.render_email_template('email/reset_password.html', context), 'html')
+    # async_send_email("web@aoaoxc.com", u'来自嗷嗷洗车', utils.render_email_template('email/reset_password.html', context), 'html')
+
+    pprint(wb.get_user_info(app_key, to_user))
 
 
 if __name__ == '__main__':

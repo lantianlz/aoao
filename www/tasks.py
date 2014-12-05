@@ -25,3 +25,8 @@ def async_clear_count_info_by_code(user_id, code):
     from www.message import interface
     return interface.UnreadCountBase().clear_count_info_by_code(user_id, code)
 
+
+@task(queue='www_worker', name='www_worker.async_change_profile_from_weixin')
+def async_change_profile_from_weixin(user, app_key, openid):
+    from www.account.interface import UserBase
+    UserBase().change_profile_from_weixin(user, app_key, openid)

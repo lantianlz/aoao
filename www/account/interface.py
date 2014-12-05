@@ -535,6 +535,43 @@ class UserBase(object):
 
         return objs
 
+    def change_profile_from_weixin(self, user, app_key, openid):
+        '''
+        @note: 通过微信资料修改
+        '''
+        try:
+            from www.weixin.interface import dict_weixin_app, WexinBase
+
+            if user.nick.startswith("weixin_"):
+                user_id = user.id
+                app_id = dict_weixin_app[app_key]["app_id"]
+
+                weixin_user_info = WexinBase().get_user_info(app_key, openid)
+                if weixin_user_info:
+                    nick = weixin_user_info["nickname"]
+                    gender = weixin_user_info["sex"]
+                    errcode, errmsg = self.check_gender(gender)
+                    if errcode != 0:
+                        return errcode, errmsg
+
+                    ets = list(ExternalToken.objects.filter(app_id=app_id, external_user_id=openid, source="weixin"))
+                    if ets:
+                        et = ets[0]
+                        et.nick = nick
+                        et.save()
+
+                    nick = self.generate_nick_by_external_nick(nick)
+                    user = self.get_user_by_id(user_id)
+                    user.nick = nick
+                    user.gender = int(gender)
+                    user.save()
+
+                    # 更新缓存
+                    self.get_user_by_id(user.id, must_update_cache=True)
+            return 0, user
+        except Exception, e:
+            debug.get_debug_detail(e)
+
 
 def user_profile_required(func):
     '''

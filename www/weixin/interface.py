@@ -189,5 +189,21 @@ class WexinBase(object):
         assert access_token
         return access_token, expires_in
 
-    def get_user_info(self, openid, app_key):
-        pass
+    def get_user_info(self, app_key, openid):
+        """
+        @note: 获取一关注公众号的用户信息
+        """
+        access_token = self.get_weixin_access_token(app_key)
+        url = '%s/cgi-bin/user/info?access_token=%s&openid=%s' % (weixin_api_url, access_token, openid)
+        data = {}
+        try:
+            r = requests.get(url, timeout=20)
+            text = r.text
+            r.raise_for_status()
+            data = json.loads(text)
+            if data.get("errmsg") or data.get("subscribe") == 0:
+                logging.error("error user info data is:%s" % data)
+                data = {}
+        except Exception, e:
+            debug.get_debug_detail(e)
+        return data
