@@ -1,0 +1,37 @@
+{% extends "pc/base/base.html" %}
+
+{% block title %}登录{% endblock %}
+
+{% block base_css %}
+<style type="text/css">
+body{
+    background-color: #41464A;
+}
+</style>
+{% endblock %}
+
+{% block base_js %}{% endblock %}
+
+{% block header %}{% endblock header %}
+
+{% block base_container %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 text-center">
+            <div class="pt-30">
+                <img class="w100" src="{{MEDIA_URL}}img/logo_white.png">
+            </div>
+            <div class="pt-20">
+                <img style="box-shadow: 0px 3px 6px #252424;" src="{{MEDIA_URL}}img/qr_code.jpg">
+            </div>
+            <div class="pt-20">
+                <div class="co12 f13">请使用微信扫面二维码登录</div>
+            </div>
+            <div class="pt-55">
+                <div class="co13 f13">Copyright &copy; {% if YEAR == "2014" %}{{YEAR}}{% else %}2014 - {{YEAR}}{% endif %} aoaoxc.com. All Rights Reserved.</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

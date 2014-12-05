@@ -7,6 +7,7 @@ from django.views.generic.simple import direct_to_template
 
 urlpatterns = patterns('',
                        url(r'^login$', 'www.account.views.login'),
+                       url(r'^login_weixin$', 'www.account.views.login_weixin'),
                        url(r'^logout$', 'www.account.views.logout'),
                        url(r'^regist$', 'www.account.views.regist'),
                        url(r'^forget_password$', 'www.account.views.forget_password'),
