@@ -34,6 +34,7 @@ dict_err = {
     20301: u'订单不存在',
     20302: u'付款金额和订单金额不符，支付失败，请联系嗷嗷洗车客服人员！',
     20303: u'该支付对应的订单状态无效',
+    20304: u'前后端总金额不一致，请重新下单',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -451,6 +452,9 @@ class CouponBase(object):
         return Coupon.objects.filter(user_id=user_id)
 
     def get_valid_coupon_by_user_id(self, user_id):
+        """
+        @note: 获取有效的coupon用于前端使用
+        """
         coupons = Coupon.objects.filter(user_id=user_id, state=1)
         datas = []
         for coupon in coupons:
@@ -569,7 +573,7 @@ class OrderBase(object):
         return postfix
 
     @transaction.commit_manually(using=DEFAULT_DB)
-    def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False, ip=None):
+    def create_order(self, service_price_id_or_object, user_id, count, pay_type, coupon_id=None, use_user_cash=False, ip=None, page_show_pay_fee=None):
         try:
             from www.cash.interface import UserCashBase
 
@@ -600,12 +604,17 @@ class OrderBase(object):
                 discount_fee = coupon.discount if coupon.coupon_type == 0 else (service_price.sale_price - coupon.discount)
 
             pay_fee = total_fee - discount_fee
-            # 是否使用账户余额
-            user_cash = UserCashBase().get_user_cash_by_user_id(user_id)
+            user_cash = UserCashBase().get_user_cash_by_user_id(user_id)    # 是否使用账户余额
             user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
             pay_fee = pay_fee - user_cash_fee
             trade_id = self.generate_order_trade_id(pr="W")
             pay_type = 0 if pay_fee == 0 else pay_type
+
+            if page_show_pay_fee:
+                page_show_pay_fee = float(page_show_pay_fee)
+                if page_show_pay_fee != float(pay_fee):
+                    transaction.rollback(using=DEFAULT_DB)
+                    return 20304, dict_err.get(20304)
 
             ps = dict(trade_id=trade_id, user_id=user_id, service_price=service_price, car_wash=service_price.car_wash,
                       count=count, coupon=coupon, total_fee=total_fee, discount_fee=discount_fee, user_cash_fee=user_cash_fee,

@@ -79,9 +79,10 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     use_user_cash = True if request.POST.has_key("use_user_cash") else False
     pay_type = 2 if request.POST.has_key("pay_type_weixin") else 1
     pay_type = 1 if request.POST.has_key("pay_type_alipay") else 2
+    page_show_pay_fee = request.POST.get("page_show_pay_fee")
 
     errcode, errmsg = ob.create_order(service_price, request.user.id, count,
-                                      pay_type, coupon_id, use_user_cash, ip=utils.get_clientip(request))
+                                      pay_type, coupon_id, use_user_cash, ip=utils.get_clientip(request), page_show_pay_fee=page_show_pay_fee)
 
     if errcode == 0:
         order = errmsg

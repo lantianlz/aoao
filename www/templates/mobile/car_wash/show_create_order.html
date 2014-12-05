@@ -63,6 +63,7 @@ $(document).ready(function(){
         } else {
             $('.pay-item').show();
         }
+        $("#page_show_pay_fee_id").val(needPrice);
     };
 
     // 绑定触发支付事件
@@ -180,6 +181,7 @@ $(document).ready(function(){
         </ul>
 
         <div class="col-xs-12 pl-0 pr-0 pt-0 pb-20">
+            <input type="hidden" name="page_show_pay_fee" value="" id="page_show_pay_fee_id" />
             <button class="btn btn-block btn-orange btn-lg" type="submit">确认支付</button>
         </div>
     </form>
