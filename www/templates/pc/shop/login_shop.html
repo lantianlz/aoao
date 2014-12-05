@@ -1,0 +1,79 @@
+{% extends "pc/base/base.html" %}
+
+{% block title %}商户平台登录{% endblock %}
+
+{% block base_css %}
+<style type="text/css">
+body{
+    background-color: #2a2f35;
+}
+
+.user-name{
+    background-color: #3b4148;
+    border-color: #3b4148;
+    border-radius: 2px;
+    color: #999;
+}
+
+.pwd{
+    background-color: #3b4148;
+    border-color: #3b4148;
+    border-radius: 2px;
+    color: #999;
+}
+
+.login{
+    border-radius: 2px;
+    background-color: #D76427;
+    color: #eee;
+    transition: all 0.3s;
+}
+.login:hover{
+    background-color: #E87B42;
+    color: #eee;
+}
+</style>
+{% endblock %}
+
+{% block base_js %}{% endblock %}
+
+{% block header %}{% endblock header %}
+
+{% block base_container %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 text-center pt-40">
+            <div class="pt-40 pr row">
+                <div class="col-md-6 col-xs-6 text-right pr-0">
+                    <img class="" style="width: 40px;" src="{{MEDIA_URL}}img/logo_white_1.png">
+                    <img class="" style="width: 80px;" src="{{MEDIA_URL}}img/logo_white_2.png">
+                </div>
+                <div class="col-md-6 col-xs-6 text-left pl-15 pt-3">
+                    <span class="co12 f20">商户平台</span>
+                </div>
+            </div>
+            <form class="form-horizontal" role="form" action="." onsubmit="javascript: return false;">
+                <div class="pt-30 form-group">
+                    <div class="col-md-offset-2 col-md-8 pl-0">
+                        <input type="text" class="form-control input-lg user-name" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-8 pl-0">
+                        <input type="password" class="form-control input-lg pwd" placeholder="密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-8 pl-0">
+                        <button class="btn btn-lg btn-block login" type="submit">商 户 登 录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="text-center w pf" style="bottom: 30px; ">
+    <div class="co1 f13">Copyright &copy; {% if YEAR == "2014" %}{{YEAR}}{% else %}2014 - {{YEAR}}{% endif %} aoaoxc.com. All Rights Reserved.</div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}
