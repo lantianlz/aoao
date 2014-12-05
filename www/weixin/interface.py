@@ -161,7 +161,7 @@ class WexinBase(object):
 
         access_token = self.get_weixin_access_token(app_key)
         url = '%s/cgi-bin/message/custom/send?access_token=%s' % (weixin_api_url, access_token)
-        r = requests.post(url, data=data, timeout=30)
+        r = requests.post(url, data=data, timeout=30, verify=False)
         r.raise_for_status()
         content = json.loads(r.content)
         logging.error('send msg to weixin resp is %s' % (content,))
@@ -185,7 +185,7 @@ class WexinBase(object):
         url = '%s/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s' % (weixin_api_url, dict_weixin_app[app_key]['app_id'],
                                                                                     dict_weixin_app[app_key]['app_secret'])
         try:
-            r = requests.get(url, timeout=20)
+            r = requests.get(url, timeout=20, verify=False)
             content = r.content
             r.raise_for_status()
             content = json.loads(content)
@@ -205,7 +205,7 @@ class WexinBase(object):
         url = '%s/cgi-bin/user/info?access_token=%s&openid=%s' % (weixin_api_url, access_token, openid)
         data = {}
         try:
-            r = requests.get(url, timeout=20)
+            r = requests.get(url, timeout=20, verify=False)
             text = r.text
             r.raise_for_status()
             data = json.loads(text)
