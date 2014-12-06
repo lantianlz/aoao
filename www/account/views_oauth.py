@@ -94,9 +94,6 @@ def oauth_weixin(request):
     app_key = WexinBase().init_app_key()
     client = Consumer(app_key)
 
-    def _create_nick():
-        return "weixin_%s" % str(int(time.time() * 1000))
-
     code = request.REQUEST.get('code')
     if not code:
         return HttpResponseRedirect(client.authorize())
@@ -108,9 +105,9 @@ def oauth_weixin(request):
         access_token = dict_result.get('access_token')
         # logging.error(dict_result)
 
-        # 获取用户信息
+        # 自动检测用户登陆
         openid = dict_result.get("openid")
-        user_info = dict(nick=_create_nick(), url="", gender=0)
+        user_info = dict(nick=u"weixin_%s" % int(time.time() * 1000), url="", gender=0)
 
         flag, result = UserBase().get_user_by_external_info(source='weixin', access_token=access_token, external_user_id=openid,
                                                             refresh_token=None, nick=user_info['nick'],

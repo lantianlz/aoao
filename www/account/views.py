@@ -297,3 +297,31 @@ def get_user_info_by_nick(request):
             infos = dict(user_id=user.id, nick=user.nick, avatar=user.get_avatar_65(), des=user.des or '', gender=user.gender)
 
     return HttpResponse(json.dumps(infos), mimetype='application/json')
+
+
+def get_weixin_login_state(request):
+    '''
+    @note: 微信扫码登陆
+    '''
+    from common import cache
+
+    ticket = request.REQUEST.get('ticket', '').strip()
+    cache_obj = cache.Cache()
+    key = u'weixin_login_state_%s' % ticket
+    datas = cache_obj.get(key)
+    if datas:
+        errcode, errmsg, user_id = datas
+    else:
+        errcode, errmsg, user_id = -2, u"等待登陆中", ""
+    next_url = ""
+
+    if errcode == 0:
+        user = ub.get_user_by_id(user_id)
+        user.backend = 'www.middleware.user_backend.AuthBackend'
+        auth.login(request, user)
+
+        next_url = request.session.get('next_url') or '/'
+        request.session.update(dict(next_url=''))
+        cache_obj.delete(key)
+
+    return HttpResponse(json.dumps(dict(errcode=errcode, errmsg=errmsg, next_url=next_url)), mimetype='application/json')

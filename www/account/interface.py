@@ -572,6 +572,40 @@ class UserBase(object):
         except Exception, e:
             debug.get_debug_detail(e)
 
+    def login_by_weixin_qr_code(self, ticket, openid, app_key):
+        """
+        @note: 通过微信二维码扫码登陆
+        """
+        assert ticket and openid and app_key
+        from www.weixin.interface import dict_weixin_app
+        from www.tasks import async_change_profile_from_weixin
+
+        user_info = dict(nick=u"weixin_%s" % int(time.time() * 1000), url="", gender=0)
+        flag, result = self.get_user_by_external_info(source='weixin', access_token="access_token_%s" % openid, external_user_id=openid,
+                                                      refresh_token=None, nick=user_info['nick'], ip=None, expire_time=0,
+                                                      user_url=user_info['url'], gender=user_info['gender'], app_id=dict_weixin_app[app_key]["app_id"])
+        if flag:
+            user = result
+            UserBase().update_user_last_login_time(user.id, last_active_source=2)
+
+            # 更新用户资料
+            if settings.LOCAL_FLAG:
+                async_change_profile_from_weixin(user, app_key, openid)
+            else:
+                async_change_profile_from_weixin.delay(user, app_key, openid)
+
+            errcode, errmsg = 0, u"登陆网站成功"
+        else:
+            errcode, errmsg = -1, result
+
+        # 设置缓存
+        cache_obj = cache.Cache()
+        key = u'weixin_login_state_%s' % ticket
+        user_id = user.id if errcode == 0 else ""
+        cache_obj.set(key, [errcode, errmsg, user_id], time_out=300)
+
+        return errcode, errmsg
+
 
 def user_profile_required(func):
     '''

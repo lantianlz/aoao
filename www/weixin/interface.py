@@ -5,6 +5,7 @@ import requests
 import json
 import logging
 from django.conf import settings
+from pyquery import PyQuery as pq
 
 from common import cache, debug
 from www.misc import consts
@@ -113,7 +114,8 @@ class WexinBase(object):
         return xml
 
     def get_response(self, xml):
-        from pyquery import PyQuery as pq
+        from www.account.interface import UserBase
+
         xml = self.format_input_xml(xml)
         jq = pq(xml)
         to_user = jq('tousername')[0].text
@@ -127,10 +129,14 @@ class WexinBase(object):
             event = events[0].text.lower()
             if event in ('subscribe',):
                 return self.get_subscribe_event_response(to_user, from_user)
-            elif event in ('click'):
+            elif event in ('click', ):
                 event_key = jq('eventkey')[0].text.lower()
                 if event_key == 'hotest':
                     pass
+            elif event in ('scan', ):
+                ticket = jq('ticket')[0].text.lower()
+                errcode, errmsg = UserBase().login_by_weixin_qr_code(ticket, from_user, app_key)
+                return self.get_base_content_response(to_user, from_user, errmsg)
 
         # 文字识别
         msg_types = jq('msgtype')
@@ -222,7 +228,7 @@ class WexinBase(object):
         """
         access_token = self.get_weixin_access_token(app_key)
         url = '%s/cgi-bin/qrcode/create?access_token=%s' % (weixin_api_url, access_token)
-        data = u'{"expire_seconds":%s, "action_name":"QR_SCENE", "action_info": {"scene": {"scene_id": %s}}' % (expire, int(float(time.time()) * 1000))
+        data = u'{"expire_seconds":%s, "action_name":"QR_SCENE", "action_info": {"scene": {"scene_id": %s}}' % (expire, int(time.time() * 1000))
         data = data.encode('utf8')
 
         result = {}
