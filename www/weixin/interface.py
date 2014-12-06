@@ -89,7 +89,8 @@ class WexinBase(object):
 
     def get_subscribe_event_response(self, to_user, from_user):
         content = (u'我们已经恭候您多时了！洗车的时候能想到嗷嗷，人家真是幸福呢...\n'
-                   u'嗷嗷洗车是专属于年轻人的洗车平台，这里有更优惠的价格，更贴心的服务，更丰富的活动——洗车用嗷嗷，就对了！'
+                   u'嗷嗷洗车是专属于年轻人的洗车平台，这里有更优惠的价格，更贴心的服务，更丰富的活动\n'
+                   u'洗车用嗷嗷，就对了！'
                    )
         return self.get_base_content_response(to_user, from_user, content=content)
 

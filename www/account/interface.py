@@ -594,7 +594,7 @@ class UserBase(object):
             else:
                 async_change_profile_from_weixin.delay(user, app_key, openid)
 
-            errcode, errmsg = 0, u"登陆网站成功"
+            errcode, errmsg = 0, u"扫码登陆网站成功"
         else:
             errcode, errmsg = -1, result
 
