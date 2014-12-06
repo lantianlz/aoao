@@ -57,6 +57,7 @@ body {
 .co11{color: #555555;}
 .co12{color: #DFDFDF;}
 .co13{color: #242627;}
+.co14{color: #D76427;} /*橙色*/
 
 .mr-0{margin-right: 0px;}
 .mr-5{margin-right: 5px;}
@@ -106,6 +107,7 @@ body {
 .pl-60{padding-left: 60px;}
 .pl-70{padding-left: 70px;}
 .pl-75{padding-left: 75px;}
+.pl-80{padding-left: 80px;}
 .pr-0{padding-right: 0;}
 .pr-3{padding-right: 3px;}
 .pr-5{padding-right: 5px;}
@@ -139,6 +141,9 @@ body {
 .bgc-272829{background-color: #272829;} /*底部*/
 .bgc-333333{background-color: #333333;}
 .bgc-e9e9e9{background-color: #e9e9e9;}
+.bgc-e57e31{background-color: #e57e31;} /*商户结算黄色*/
+.bgc-293541{background-color: #293541;} /*商户结算棕色*/
+.bgc-f2f3f8{background-color: #f2f3f8;} /*商户结算灰色*/
 
 .border-1{border: solid 1px;}
 .border-5{border: solid 5px;}
@@ -154,6 +159,7 @@ body {
 
 .bdc-e6e6e6{border-color: #e6e6e6;}
 .bdc-d0d0d0{border-color: #d0d0d0;}
+.bdc-333{border-color: #333;}
 .bdc-ddd{border-color: #ddd;}
 .bdc-fff{border-color: #fff;}
 .bdc-eee{border-color: #eee;}
@@ -188,10 +194,13 @@ body {
 .h40{height: 40px;}
 .h50{height: 50px;}
 .h70{height: 70px;}
+.h100{height: 100px;}
 .h155{height: 155px;}
 .h200{height: 200px;}
 .h225{height: 225px;}
 .h250{height: 250px;}
+.min-h400{min-height: 400px;}
+.min-h600{min-height: 600px;}
 
 .w{width: 100%;}
 .w60{width: 60px;}
