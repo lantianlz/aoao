@@ -50,8 +50,19 @@ def login(request, template_name='pc/account/login.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
 def login_weixin(request, template_name='pc/account/login_weixin.html'):
+    from www.weixin.interface import WexinBase
+
+    wb = WexinBase()
+    ticket_info = WexinBase().get_qr_code_ticket(wb.init_app_key())
+    if not ticket_info:
+        raise Exception, u"获取微信登陆二维码异常"
+    ticket = ticket_info["ticket"]
+    expire = ticket_info["expire_seconds"]
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 
 def regist(request, invitation_code=None, template_name='account/regist.html'):
     email = request.POST.get('email', '').strip()

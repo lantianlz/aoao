@@ -215,3 +215,25 @@ class WexinBase(object):
         except Exception, e:
             debug.get_debug_detail(e)
         return data
+
+    def get_qr_code_ticket(self, app_key, expire=300):
+        """
+        @note: 获取二维码对应的ticket
+        """
+        access_token = self.get_weixin_access_token(app_key)
+        url = '%s/cgi-bin/qrcode/create?access_token=%s' % (weixin_api_url, access_token)
+        data = u'{"expire_seconds":%s, "action_name":"QR_SCENE", "action_info": {"scene": {"scene_id": %s}}' % (expire, int(float(time.time()) * 1000))
+        data = data.encode('utf8')
+
+        result = {}
+        try:
+            r = requests.post(url, data=data, timeout=20, verify=False)
+            text = r.text
+            r.raise_for_status()
+            result = json.loads(text)
+            if result.get("errmsg") or result.get("subscribe") == 0:
+                logging.error("error create_qr_code result is:%s" % result)
+                result = {}
+        except Exception, e:
+            debug.get_debug_detail(e)
+        return result

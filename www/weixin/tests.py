@@ -15,6 +15,7 @@ user_id = 'f762a6f5d2b711e39a09685b35d0bf16'
 
 
 def main():
+    import time
     from django.conf import settings
     from common import utils
     from www.weixin.interface import WexinBase
@@ -32,7 +33,8 @@ def main():
     context = {'reset_url': '%s/reset_password?code=%s' % (settings.MAIN_DOMAIN, "123"), }
     # async_send_email("web@aoaoxc.com", u'来自嗷嗷洗车', utils.render_email_template('email/reset_password.html', context), 'html')
 
-    pprint(wb.get_user_info(app_key, to_user))
+    # pprint(wb.get_user_info(app_key, to_user))
+    pprint(wb.get_qr_code_ticket(app_key))
 
 
 if __name__ == '__main__':

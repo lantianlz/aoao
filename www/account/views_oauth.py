@@ -99,7 +99,6 @@ def oauth_weixin(request):
 
     code = request.REQUEST.get('code')
     if not code:
-        # logging.error(client.authorize())
         return HttpResponseRedirect(client.authorize())
     else:
         weixin_state = request.GET.get("state")
@@ -131,8 +130,6 @@ def oauth_weixin(request):
 
             dict_next = {"home": "/", "order_code": "/car_wash/order_code",  "recharge": "/cash/recharge",
                          "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help"}
-            # next_url = request.session.get('next_url')
-            # request.session.update(dict(next_url=''))
             next_url = dict_next.get(weixin_state, "/")
 
             return HttpResponseRedirect(next_url)
