@@ -698,6 +698,8 @@ class OrderBase(object):
                 else:
                     transaction.rollback(using=DEFAULT_DB)
                     return errcode, errmsg
+
+                # 异步发送微信模板消息
             elif order.order_state < 0:
                 errcode, errmsg = 20303, dict_err.get(20303)
 

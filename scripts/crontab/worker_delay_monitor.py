@@ -21,6 +21,10 @@ from django.conf import settings
 
 WORKER_CONFIG = [
     {
+        'name': 'www_worker',
+        'limit': 100,
+    },
+    {
         'name': 'email_worker',
         'limit': 200,
     },
