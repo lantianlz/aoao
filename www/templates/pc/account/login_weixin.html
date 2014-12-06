@@ -14,9 +14,9 @@ body{
 {% block base_js %}
 <script type="text/javascript">
 $(document).ready(function(){
-    var expire = "{{expire}}",
+    var expire = parseInt("{{expire}}") * 1000,
         loginInterval;
-    expire = 4000;
+    // expire = 4000;
 
     // 是否过期
     window.setTimeout(function(){
@@ -30,14 +30,13 @@ $(document).ready(function(){
             "/get_weixin_login_state", 
             {ticket: "{{ticket}}" }, 
             function(result){
-
                 switch(result.errcode){
-                    case "0":
-                        window.location.href = request.errmsg;
+                    case 0:
                         window.clearInterval(loginInterval);
+                        window.location.href = result.next_url;
                         break;
-                    case "-1":
-                        $('.notice').html('<i class="fa fa-exclamation-circle pr-3 f15"></i>扫面二维码登录失败，请刷新页面后重试');
+                    case -1:
+                        $('.notice').html('<i class="fa fa-exclamation-circle pr-3 f15"></i>' + result.errmsg);
                         $('.notice').fadeIn();
                         window.clearInterval(loginInterval);
                         break;

@@ -54,6 +54,11 @@ def login(request, template_name='pc/account/login.html'):
 def login_weixin(request, template_name='pc/account/login_weixin.html'):
     from www.weixin.interface import WexinBase
 
+    # 从REUQEST中或者HTTP_REFERER中获取
+    next_url = utils.get_next_url(request)
+    if next_url:
+        request.session['next_url'] = urllib.unquote_plus(next_url)
+
     wb = WexinBase()
     ticket_info = WexinBase().get_qr_code_ticket(wb.init_app_key())
     if not ticket_info:
@@ -309,6 +314,7 @@ def get_weixin_login_state(request):
     cache_obj = cache.Cache()
     key = u'weixin_login_state_%s' % ticket
     datas = cache_obj.get(key)
+
     if datas:
         errcode, errmsg, user_id = datas
     else:
@@ -322,6 +328,6 @@ def get_weixin_login_state(request):
 
         next_url = request.session.get('next_url') or '/'
         request.session.update(dict(next_url=''))
-        cache_obj.delete(key)
+        # cache_obj.delete(key)
 
     return HttpResponse(json.dumps(dict(errcode=errcode, errmsg=errmsg, next_url=next_url)), mimetype='application/json')

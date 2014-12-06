@@ -134,7 +134,7 @@ class WexinBase(object):
                 if event_key == 'hotest':
                     pass
             elif event in ('scan', ):
-                ticket = jq('ticket')[0].text.lower()
+                ticket = jq('ticket')[0].text
                 errcode, errmsg = UserBase().login_by_weixin_qr_code(ticket, from_user, app_key)
                 return self.get_base_content_response(to_user, from_user, errmsg)
 
