@@ -124,19 +124,21 @@ class WexinBase(object):
         app_key = self.get_app_key_by_app_type(to_user)
         logging.error(u'收到一个来自app：%s 的请求' % app_key)
 
-        # click事件
+        # 事件
         if events:
             event = events[0].text.lower()
+            if event in ('scan', 'subscribe'):  # 扫码登陆事件
+                tickets = jq('ticket')
+                if tickets:
+                    ticket = tickets[0].text
+                    errcode, errmsg = UserBase().login_by_weixin_qr_code(ticket, from_user, app_key)
+                    return self.get_base_content_response(to_user, from_user, errmsg)
             if event in ('subscribe',):
                 return self.get_subscribe_event_response(to_user, from_user)
             elif event in ('click', ):
                 event_key = jq('eventkey')[0].text.lower()
                 if event_key == 'hotest':
                     pass
-            elif event in ('scan', ):
-                ticket = jq('ticket')[0].text
-                errcode, errmsg = UserBase().login_by_weixin_qr_code(ticket, from_user, app_key)
-                return self.get_base_content_response(to_user, from_user, errmsg)
 
         # 文字识别
         msg_types = jq('msgtype')
