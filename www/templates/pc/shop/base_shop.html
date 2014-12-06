@@ -1,0 +1,38 @@
+{% extends "pc/base/base.html" %}
+
+{% block base_js %}
+    {% block javascript %}{% endblock %}
+{% endblock %}
+
+{% block base_css %}
+    {% block css %}{% endblock %}
+{% endblock %}
+
+{% block header %}{% endblock header %}
+
+{% block base_container %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左侧 -->
+        <div class="col-md-3 pl-0 pr-0">
+            <div class="h100 bgc-e57e31 pr pl-80 pt-30">
+                <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
+                <span class="f20 co5">嗷嗷洗车 商户平台</span>
+            </div>
+            <div class="min-h600 bgc-293541">
+            </div>
+        </div>
+
+        <!-- 右侧 -->
+        <div class="col-md-9 pl-0 pr-0">
+            <div class="h100 bgc-ffffff row mr-0 ml-0">
+                <div class="col-md-3">{% block page_title %}{% endblock %}</div>
+            </div>
+            <div class="min-h600 bgc-f2f3f8">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
