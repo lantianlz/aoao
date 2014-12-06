@@ -12,7 +12,7 @@ from www.misc import consts
 
 
 dict_err = {
-    70100: u'暂无绑定的设备，请取消关注公众号后重新扫描二维码',
+    70100: u'发送模板消息异常',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -246,3 +246,43 @@ class WexinBase(object):
         except Exception, e:
             debug.get_debug_detail(e)
         return result
+
+    def send_template_msg(self, app_key, openid, template_id="xZssRUhtE-xGOINN1eVaVpoprKtmQq9VOqcPFkujCL0"):
+        """
+        @note: 发送模板消息
+        """
+        access_token = self.get_weixin_access_token(app_key)
+        url = '%s/cgi-bin/message/template/send?access_token=%s' % (weixin_api_url, access_token)
+        jump_url = ('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri='
+                    'http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=order_code#wechat_redirect'
+                    )
+        data = u'''
+        {
+           "touser":"%(openid)s",
+           "template_id":"%(template_id)s",
+           "url":"%(jump_url)s",
+           "data":{
+                   "name": {
+                       "value":"嗷嗷洗车行洗车码",
+                       "color":"#EF8A55"
+                   },
+                   "remark":{
+                       "value":"洗车码1: 0159 5951 3181                                    洗车码2: 0193 0809 4551",
+                       "color":"#999999"
+                   }
+           }
+       }
+       ''' % dict(openid=openid, template_id=template_id, jump_url=jump_url)
+        data = data.encode('utf8')
+
+        errcode, errmsg = 0, dict_err.get(0)
+        try:
+            r = requests.post(url, data=data, timeout=20, verify=False)
+            text = r.text
+            r.raise_for_status()
+            result = json.loads(text)
+            errcode, errmsg = result["errcode"], result["errmsg"]
+        except Exception, e:
+            debug.get_debug_detail(e)
+            errcode, errmsg = 70100, dict_err.get(70100)
+        return errcode, errmsg

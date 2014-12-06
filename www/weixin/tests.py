@@ -25,6 +25,9 @@ def main():
     wb = WexinBase()
     app_key = "aoaoxc_test"
     to_user = 'oZy3hskE524Y2QbLgY2h3VnI3Im8'
+
+    app_key = "aoaoxc"
+    to_user = 'oNYsJj1eg4fnU4tKLvH-f2IXlxJ4'
     content = (u'古人云：鸟随鸾凤飞腾远，人伴贤良品质高。\n')
 
     # print wb.send_msg_to_weixin(content, to_user, app_key)
@@ -34,7 +37,8 @@ def main():
     # async_send_email("web@aoaoxc.com", u'来自嗷嗷洗车', utils.render_email_template('email/reset_password.html', context), 'html')
 
     # pprint(wb.get_user_info(app_key, to_user))
-    pprint(wb.get_qr_code_ticket(app_key))
+    # pprint(wb.get_qr_code_ticket(app_key))
+    pprint(wb.send_template_msg(app_key, to_user))
 
 
 if __name__ == '__main__':
