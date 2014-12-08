@@ -63,19 +63,19 @@ body,html{
         <div class="h100 bgc-e57e31 w pa pl-80 pt-20 z99">
             <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
             <div class="f20 co5 fb">嗷嗷洗车 商户平台</div>
-            <div class="f15 co5 pt-2 pr-5">高新区九方洗车行</div>
+            <div class="f15 co5 pt-2 pr-5">{{request.car_wash.name}}</div>
         </div>
         <div class="frame-left bgc-293541 h pt-100">
             <ul class="list-group nav-bar pl-15 pr-15 pt-15 mb-0">
-                <a class="{% if '/shop/verify_code' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/verify_code">
+                <a class="{% if '/verify_code' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/{{request.car_wash.id}}/verify_code">
                     <i class="fa fa-barcode pr-10"></i>验证消费码
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
-                <a class="{% if '/shop/orders' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/orders">
+                <a class="{% if '/orders' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/orders">
                     <i class="fa fa-list-alt pr-10"></i>账户流水
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
-                <a class="{% if '/shop/chart' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/chart">
+                <a class="{% if '/chart' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/chart">
                     <i class="fa fa-area-chart pr-10"></i>对账统计
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
@@ -86,9 +86,9 @@ body,html{
         <div class="h100 bgc-ffffff w mr-0 ml-0 row pa pl-300" style="left: 0;">
             <div class="col-md-3 f22 pt-30 pl-35 co9">{% block page_title %}{% endblock %}</div>
             <div class="col-md-9 text-right pt-30">
-                <img class="img-circle avatar-35" src="http://tp1.sinaimg.cn/1613200184/180/1286542530/1">
-                <span>stranger</span>
-                <a class="co8 pl-5" href="#"><i class="fa fa-sign-out"></i>退出平台</a>
+                <img class="img-circle avatar-35" src="{{request.user.get_avatar_65}}">
+                <span>{{request.user.nick}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="co8 pl-5" href="/logout"><i class="fa fa-sign-out"></i>退出</a>
             </div>
         </div>
         <div class="frame-right pt-100 h bgc-f2f3f8 pt-0">

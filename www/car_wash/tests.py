@@ -20,10 +20,12 @@ cwb = interface.CarWashBase()
 spb = interface.ServicePriceBase()
 cb = interface.CouponBase()
 ocb = interface.OrderCodeBase()
+cwmb = interface.CarWashManagerBase()
 
 city_id = 1974
 district_id = 3247
 business_hours = "09:00-18:00"
+user_id = "d081652b603211e48a41685b35d0bf16"
 
 
 def add_cw():
@@ -62,12 +64,16 @@ def add_cou():
             print errcode, result.encode("utf8")
 
 
+def add_cms():
+    print cwmb.add_car_wash_manager(1, user_id)
+
+
 def main():
-    print ocb.generate_code(100)
 
     # add_cw()
     # add_sp()
     # add_cou()
+    add_cms()
 
 
 if __name__ == '__main__':

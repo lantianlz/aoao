@@ -128,6 +128,15 @@ class ServicePrice(models.Model):
         unique_together = [("car_wash", "service_type"), ]
 
 
+class CarWashManager(models.Model):
+    car_wash = models.ForeignKey("CarWash")
+    user_id = models.CharField(max_length=32, db_index=True)
+    role = models.IntegerField(default=0, db_index=True)    # 角色，扩展字段
+
+    class Meta:
+        unique_together = [("car_wash", "user_id"), ]
+
+
 # ===================================================订单和优惠券部分=================================================================#
 class Coupon(models.Model):
 

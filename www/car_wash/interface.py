@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import logging
 import random
 from django.db import transaction
 from django.conf import settings
@@ -11,7 +10,7 @@ from www.misc import consts
 
 from www.account.interface import UserBase
 from www.car_wash.models import CarWash, ServicePrice, ServiceType, CarWashBank
-from www.car_wash.models import Coupon, Order, OrderCode
+from www.car_wash.models import Coupon, Order, OrderCode, CarWashManager
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -36,6 +35,8 @@ dict_err = {
     20302: u'付款金额和订单金额不符，支付失败，请联系嗷嗷洗车客服人员！',
     20303: u'该支付对应的订单状态无效',
     20304: u'前后端总金额不一致，请重新下单',
+
+    20401: u'该管理员已存在，请勿重复添加',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -765,3 +766,30 @@ class OrderCodeBase(object):
 
     def get_order_codes_by_order(self, order):
         return OrderCode.objects.filter(order=order)
+
+
+class CarWashManagerBase(object):
+
+    def get_cwm_by_user_id(self, user_id):
+        """
+        @note: 获取用户管理的第一个洗车行
+        """
+        cwms = list(CarWashManager.objects.select_related("car_wash").filter(user_id=user_id))
+        if cwms:
+            return cwms[0]
+
+    def get_cwm_by_car_wash_and_user_id(self, car_wash_id, user_id):
+        cwms = list(CarWashManager.objects.select_related("car_wash").filter(car_wash=car_wash_id, user_id=user_id))
+        if cwms:
+            return cwms[0]
+
+    @car_wash_required
+    def add_car_wash_manager(self, car_wash, user_id):
+        if user_id and not UserBase().get_user_login_by_id(user_id):
+            return 99600, dict_err.get(99600)
+
+        if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
+            return 20401, dict_err.get(20401)
+
+        cwm = CarWashManager.objects.create(user_id=user_id, car_wash=car_wash)
+        return 0, cwm
