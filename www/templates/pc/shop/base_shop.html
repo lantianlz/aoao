@@ -6,6 +6,11 @@
 
 {% block base_css %}
 <style type="text/css">
+body,html{
+    margin:0px;
+    height:100%;
+}
+
 .nav-bar .list-group-item{
     background-color: #293541;
     border: 0;
@@ -53,14 +58,14 @@
 {% block header %}{% endblock header %}
 
 {% block base_container %}
-<div class="container-fluid pr pl-0 pr-0">
-    <div class="pa w300 bgc-e57e31">
-        <div class="h100 bgc-e57e31 pr pl-80 pt-20">
+<div class="container-fluid pr pl-0 pr-0 h">
+    <div class="pa w300 bgc-e57e31 h">
+        <div class="h100 bgc-e57e31 w pa pl-80 pt-20 z99">
             <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
             <div class="f20 co5 fb">嗷嗷洗车 商户平台</div>
             <div class="f15 co5 pt-2 pr-5">高新区九方洗车行</div>
         </div>
-        <div class="frame-left min-h600 bgc-293541">
+        <div class="frame-left bgc-293541 h pt-100">
             <ul class="list-group nav-bar pl-15 pr-15 pt-15 mb-0">
                 <a class="{% if '/shop/verify_code' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/verify_code">
                     <i class="fa fa-barcode pr-10"></i>验证消费码
@@ -77,8 +82,8 @@
             </ul>
         </div>
     </div>
-    <div class="pl-300 w">
-        <div class="h100 bgc-ffffff row mr-0 ml-0">
+    <div class="pl-300 w h">
+        <div class="h100 bgc-ffffff w mr-0 ml-0 row pa pl-300" style="left: 0;">
             <div class="col-md-3 f22 pt-30 pl-35 co9">{% block page_title %}{% endblock %}</div>
             <div class="col-md-9 text-right pt-30">
                 <img class="img-circle avatar-35" src="http://tp1.sinaimg.cn/1613200184/180/1286542530/1">
@@ -86,7 +91,7 @@
                 <a class="co8 pl-5" href="#"><i class="fa fa-sign-out"></i>退出平台</a>
             </div>
         </div>
-        <div class="frame-right min-h600 bgc-f2f3f8">
+        <div class="frame-right pt-100 h bgc-f2f3f8 pt-0">
             {% block right %}{% endblock %}
         </div>
     </div>

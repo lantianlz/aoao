@@ -92,6 +92,7 @@ body {
 .pt-45{padding-top: 45px;}
 .pt-50{padding-top: 50px;}
 .pt-55{padding-top: 55px;}
+.pt-100{padding-top: 100px;}
 .pl-0{padding-left: 0;}
 .pl-3{padding-left: 3px;}
 .pl-5{padding-left: 5px;}
@@ -158,6 +159,7 @@ body {
 .border-top-2{border-top: solid 2px;}
 .border-bottom-0{border-bottom: 0;}
 .border-bottom{border-bottom: solid 1px;}
+.border-bottom-2{border-bottom: solid 2px;}
 
 .bdc-e6e6e6{border-color: #e6e6e6;}
 .bdc-d0d0d0{border-color: #d0d0d0;}
