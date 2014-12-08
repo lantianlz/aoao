@@ -17,3 +17,11 @@ def login_shop(request, template_name='pc/shop/login_shop.html'):
 
 def verify_code(request, template_name='pc/shop/verify_code.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def orders(request, template_name='pc/shop/orders.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def chart(request, template_name='pc/shop/chart.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))

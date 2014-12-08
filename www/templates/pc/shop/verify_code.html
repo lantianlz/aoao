@@ -1,13 +1,21 @@
 {% extends "pc/shop/base_shop.html" %}
 {% block title %}验证洗车码{% endblock %}
 
-{% block page_title %}验证洗车码{% endblock %}
+{% block page_title %}验证消费码{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.code').focus();
+});
+</script>
+{% endblock %}
 
 {% block right %}
 <div class="row mr-0 ml-0">
 	<div class="col-md-12 pt-30">
 		<div class="col-md-3">
-			<input type="text" class="form-control" placeholder="输入消费码">
+			<input type="text" class="form-control code" placeholder="输入消费码">
 		</div>
 		<div class="col-md-2">
 			<button class="btn btn-default">查 询</button>
