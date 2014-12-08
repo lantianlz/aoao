@@ -96,14 +96,28 @@ var echarts,
 
 
 $(document).ready(function(){
-	
+	$('.start-date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
+    $('.end-date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
 });
 </script>
 {% endblock %}
 
 {% block right %}
 <div class="row mr-0 ml-0">
-	<div class="col-md-8 pt-20 pb-20">
+	<div class="col-md-8 pb-10">
+	</div>
+	<div class="col-md-8 pt-10 pb-20">
 		<form class="form-inline" role="form">
 			<div class="input-group">
 				<div class="input-group-addon">开始日期</div>

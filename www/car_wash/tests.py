@@ -25,7 +25,7 @@ cwmb = interface.CarWashManagerBase()
 city_id = 1974
 district_id = 3247
 business_hours = "09:00-18:00"
-user_id = "d081652b603211e48a41685b35d0bf16"
+user_id = "10017d666f2911e4be49000c297089d3"
 
 
 def add_cw():
