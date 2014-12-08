@@ -33,7 +33,12 @@ $(document).ready(function(){
                 switch(result.errcode){
                     case 0:
                         window.clearInterval(loginInterval);
-                        window.location.href = result.next_url;
+                        $('.success').fadeIn();
+
+                        window.setTimeout(function(){
+                            window.location.href = result.next_url;
+                        }, 3000);
+                        
                         break;
                     case -1:
                         $('.notice').html('<i class="fa fa-exclamation-circle pr-3 f15"></i>' + result.errmsg);
@@ -78,15 +83,20 @@ $(document).ready(function(){
             <div class="pt-20">
                 <img style="box-shadow: 0px 3px 6px #252424; width: 300px;" src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={{ticket}}">
             </div>
-            <div class="pt-20">
+            <div class="pt-20 pb-20">
                 <div class="co12 f13">请使用微信扫描二维码登录</div>
             </div>
-            <div class="pt-20 pl-30 pr-30">
+            <div class="pt-0 pl-30 pr-30">
+                <div class="co10 f13 success none bdr-4 border-1 bdc-333 bgc-333333 pt-5 pb-5 pl-10 pr-10">
+                    <i class="fa fa-check pr-3 f15"></i>扫码登录成功!
+                </div>
+            </div>
+            <div class="pt-0 pl-30 pr-30">
                 <div class="co8 f13 tips none bdr-4 border-1 bdc-333 bgc-333333 pt-5 pb-5 pl-10 pr-10">
                     <i class="fa fa-exclamation-circle pr-3 f15"></i>当前二维码已过期，请刷新页面后重试
                 </div>
             </div>
-            <div class="pt-20 pl-30 pr-30">
+            <div class="pt-0 pl-30 pr-30">
                 <div class="co8 f13 notice none bdr-4 border-1 bdc-333 bgc-333333 pt-5 pb-5 pl-10 pr-10">
                 </div>
             </div>

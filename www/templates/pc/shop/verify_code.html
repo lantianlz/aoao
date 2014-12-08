@@ -2,3 +2,56 @@
 {% block title %}验证洗车码{% endblock %}
 
 {% block page_title %}验证洗车码{% endblock %}
+
+{% block right %}
+<div class="row mr-0 ml-0">
+	<div class="col-md-12 pt-30">
+		<div class="col-md-3">
+			<input type="text" class="form-control" placeholder="输入消费码">
+		</div>
+		<div class="col-md-2">
+			<button class="btn btn-default">查 询</button>
+		</div>
+	</div>
+	<div class="col-md-7 pt-30 pl-30 pr-30">
+		<div class="border-bottom bdc-bbb pl-5 pb-5">订单详情</div>
+	</div>
+	<div class="col-md-7 pt-0 pl-50 pr-50">
+		<form class="form-horizontal" role="form" method="post" action="/admin/question/important_question/modify_important">
+	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+	            <label class="col-md-2 control-label">消费码</label>
+	            <div class="col-md-6">
+	                <p class="form-control-static">4235 2254 2512</p>
+	            </div>
+	        </div>
+	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+	            <label class="col-md-2 control-label">服务类型</label>
+	            <div class="col-md-6">
+	                <p class="form-control-static">洗车专用</p>
+	            </div>
+	        </div>
+	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+	            <label class="col-md-2 control-label">服务价格</label>
+	            <div class="col-md-6">
+	                <p class="form-control-static">15</p>
+	            </div>
+	        </div>
+	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+	            <label class="col-md-2 control-label">下单时间</label>
+	            <div class="col-md-6">
+	                <p class="form-control-static">2014-12-12 15:23</p>
+	            </div>
+	        </div>
+	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+	            <label class="col-md-2 control-label">购买人</label>
+	            <div class="col-md-6">
+	                <p class="form-control-static">stranger</p>
+	            </div>
+	        </div>
+	        <div class="form-group pt-15 pb-10 mb-0">
+	            <button class="btn btn-orange">确认消费</button>
+	        </div>
+	    </form>
+	</div>
+</div>
+{% endblock %}
