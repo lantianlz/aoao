@@ -16,6 +16,7 @@ user_id = 'f762a6f5d2b711e39a09685b35d0bf16'
 
 def main():
     import time
+    import datetime
     from django.conf import settings
     from common import utils
     from www.weixin.interface import WexinBase
@@ -38,7 +39,7 @@ def main():
 
     # pprint(wb.get_user_info(app_key, to_user))
     # pprint(wb.get_qr_code_ticket(app_key))
-    pprint(wb.send_template_msg(app_key, to_user))
+    # pprint(wb.send_buy_success_template_msg(to_user, name=u"嗷嗷洗车行洗车码", remark=u"洗车码1: 0098 6543 1221   洗车码2: 7788 9954 1432", app_key=app_key))
 
 
 if __name__ == '__main__':

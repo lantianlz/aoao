@@ -687,3 +687,12 @@ class UserCountBase(object):
         '''
         '''
         return UserCount.objects.all().order_by("-" + sort)
+
+
+class ExternalTokenBase(object):
+
+    def get_ets_by_user_id(self, user_id, source=None):
+        ps = dict(user_id=user_id)
+        if source is not None:
+            ps.update(dict(source=source))
+        return ExternalToken.objects.filter(**ps)

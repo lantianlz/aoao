@@ -4,6 +4,7 @@ import datetime
 import logging
 import random
 from django.db import transaction
+from django.conf import settings
 
 from common import utils, debug
 from www.misc import consts
@@ -641,7 +642,7 @@ class OrderBase(object):
         @note: 购物回调函数
         '''
         try:
-            from www.tasks import async_send_email
+            from www.tasks import async_send_email, async_send_buy_success_template_msg_by_user_id
             from www.account.interface import UserBase
             from www.cash.interface import UserCashRecordBase
 
@@ -678,9 +679,12 @@ class OrderBase(object):
                 if errcode == 0 and order.user_cash_fee > 0:
                     errcode, errmsg = UserCashRecordBase().add_record(order.user_id, order.user_cash_fee, 1, notes=u"购买洗车码")
 
+                codes = []
                 if errcode == 0:
                     # 生成洗车码
                     errcode, errmsg = OrderCodeBase().create_order_code(order)
+                    if errcode == 0:
+                        codes = errmsg
 
                 # 发送邮件
                 if payed_fee > 0:
@@ -700,6 +704,16 @@ class OrderBase(object):
                     return errcode, errmsg
 
                 # 异步发送微信模板消息
+                if errcode == 0:
+                    name = u"%s洗车码" % car_wash.name
+                    remark = u""
+                    for i, code in enumerate(codes):
+                        remark += u"洗车码%s: %s    " % ((i + 1), code)
+                    remark += u"洗车的时候出示此洗车码即可使用"
+
+                    if not settings.LOCAL_FLAG:
+                        async_send_buy_success_template_msg_by_user_id.delay(order.user_id, name, remark)
+
             elif order.order_state < 0:
                 errcode, errmsg = 20303, dict_err.get(20303)
 
@@ -729,14 +743,16 @@ class OrderCodeBase(object):
                 return 99801, dict_err.get(99801)
 
             count = int(order.count)
+            codes = []
             for i in range(count):
                 for j in range(3):  # 三次机会，防止重复
                     code = self.generate_code(order.car_wash_id)
                     if not OrderCode.objects.filter(code=code):
                         break
                 OrderCode.objects.create(user_id=order.user_id, order=order, car_wash=order.car_wash, code=code)
+                codes.append(code)
 
-            return 0, dict_err.get(0)
+            return 0, codes
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
             return 99900, dict_err.get(99900)

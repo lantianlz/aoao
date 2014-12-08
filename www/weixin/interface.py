@@ -72,7 +72,7 @@ class WexinBase(object):
     def get_base_news_item_response(self):
         return u'''
         <item>
-        <Title><![CDATA[%(title)s]]></Title> 
+        <Title><![CDATA[%(title)s]]></Title>
         <Description><![CDATA[%(des)s]]></Description>
         <PicUrl><![CDATA[%(picurl)s]]></PicUrl>
         <Url><![CDATA[%(hrefurl)s]]></Url>
@@ -247,7 +247,7 @@ class WexinBase(object):
             debug.get_debug_detail(e)
         return result
 
-    def send_template_msg(self, app_key, openid, template_id="xZssRUhtE-xGOINN1eVaVpoprKtmQq9VOqcPFkujCL0"):
+    def send_template_msg(self, app_key, openid, content, template_id):
         """
         @note: 发送模板消息
         """
@@ -261,18 +261,9 @@ class WexinBase(object):
            "touser":"%(openid)s",
            "template_id":"%(template_id)s",
            "url":"%(jump_url)s",
-           "data":{
-                   "name": {
-                       "value":"嗷嗷洗车行洗车码",
-                       "color":"#EF8A55"
-                   },
-                   "remark":{
-                       "value":"洗车码1: 0159 5951 3181                                    洗车码2: 0193 0809 4551",
-                       "color":"#999999"
-                   }
-           }
+           "data":%(content)s
        }
-       ''' % dict(openid=openid, template_id=template_id, jump_url=jump_url)
+       ''' % dict(openid=openid, template_id=template_id, jump_url=jump_url, content=content)
         data = data.encode('utf8')
 
         errcode, errmsg = 0, dict_err.get(0)
@@ -286,3 +277,21 @@ class WexinBase(object):
             debug.get_debug_detail(e)
             errcode, errmsg = 70100, dict_err.get(70100)
         return errcode, errmsg
+
+    def send_buy_success_template_msg(self, openid, name, remark, app_key=None):
+        template_id = "xZssRUhtE-xGOINN1eVaVpoprKtmQq9VOqcPFkujCL0"
+        app_key = app_key or self.init_app_key()
+        content = u'''
+         {
+            "name": {
+                "value":"%(name)s",
+                "color":"#EF8A55"
+            },
+            "remark":{
+                "value":"%(remark)s",
+                "color":"#999999"
+            }
+         }
+        ''' % dict(name=name, remark=remark)
+
+        return self.send_template_msg(app_key, openid, content, template_id)
