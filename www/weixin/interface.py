@@ -298,3 +298,29 @@ class WexinBase(object):
         ''' % dict(name=name, remark=remark)
 
         return self.send_template_msg(app_key, openid, content, template_id)
+
+    def send_use_order_code_template_msg(self, openid, product_type, name, time, remark, app_key=None):
+        template_id = "gdkyj2dncX-KXtPFYIArByLiSs00bq2wfNBru8fxeXg"
+        app_key = app_key or self.init_app_key()
+        content = u'''
+         {
+            "productType": {
+                "value":"%(product_type)s",
+                "color":"#000000"
+            },
+            "name": {
+                "value":"%(name)s",
+                "color":"#000000"
+            },
+            "time":{
+                "value":"%(time)s",
+                "color":"#000000"
+            },
+            "remark":{
+                "value":"%(remark)s",
+                "color":"#EF8A55"
+            }
+         }
+        ''' % dict(product_type=product_type, name=name, time=time, remark=remark)
+
+        return self.send_template_msg(app_key, openid, content, template_id)

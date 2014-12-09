@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import utils, user_agent_parser, page
-from www.misc.decorators import member_required
+from www.misc.decorators import member_required, common_ajax_response
 from www.shop.interface import car_wash_manager_required_for_request
 
 from www.car_wash import interface
@@ -56,7 +56,6 @@ def get_order_code(request, car_wash_id):
 
     data = {}
     if order_code:
-
         service_price = order_code.order.service_price
         user = order_code.get_user()
         data = dict(code=order_code.get_code_display(), car_wash_name=order_code.car_wash.name,
@@ -66,3 +65,11 @@ def get_order_code(request, car_wash_id):
                     user_nick=user.nick, service_type_name=service_price.service_type.name,
                     use_time=order_code.use_time.strftime('%Y-%m-%d %H:%M') if order_code.use_time else '')
     return HttpResponse(json.dumps(data))
+
+
+@member_required
+@car_wash_manager_required_for_request
+@common_ajax_response
+def use_order_code(request, car_wash_id):
+    code = request.REQUEST.get("code", "").strip().replace(" ", "")
+    return ocb.use_order_code(request.car_wash, request.user, code, ip=utils.get_clientip(request))

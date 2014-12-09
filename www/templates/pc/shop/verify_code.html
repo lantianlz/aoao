@@ -78,8 +78,11 @@ $(document).ready(function(){
 				function(response){
 					if(response.errcode == "0"){
 						$.Global.Notice.InfoTopNotice("消费洗车码成功!");
-						$('.code').val(code);
-						$('.search').click();
+						// $('.code').val(code);
+						// $('.search').click();
+						window.setTimeout(function(){
+                			window.location.href = "/shop/" + CAR_WASH_ID + "/shop_cash";
+            			}, 2000)
 					} else {
 						$.Global.Notice.WarningTopNotice(response.errmsg);
 					}

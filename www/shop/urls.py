@@ -11,4 +11,5 @@ urlpatterns = patterns('www.shop.views',
                        url(r'^(?P<car_wash_id>\d+)/chart$', 'chart'),
 
                        url(r'^(?P<car_wash_id>\d+)/get_order_code$', 'get_order_code'),
+                       url(r'^(?P<car_wash_id>\d+)/use_order_code$', 'use_order_code'),
                        )

@@ -40,6 +40,8 @@ def main():
     # pprint(wb.get_user_info(app_key, to_user))
     # pprint(wb.get_qr_code_ticket(app_key))
     # pprint(wb.send_buy_success_template_msg(to_user, name=u"嗷嗷洗车行洗车码", remark=u"洗车码1: 0098 6543 1221   洗车码2: 7788 9954 1432", app_key=app_key))
+    # pprint(wb.send_use_order_code_template_msg(to_user, product_type=u"消费项目", name=u"嗷嗷洗车行", time=u"2013年8月20日 20:38",
+    #                                            remark=u"洗车码「0280 1041 3114」已成功使用，欢迎再次购买", app_key=app_key))
 
 
 if __name__ == '__main__':

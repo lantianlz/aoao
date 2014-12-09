@@ -7,7 +7,7 @@ from django.conf import settings
 
 from common import utils, debug
 from www.misc import consts
-
+from www.tasks import async_send_email
 from www.account.interface import UserBase
 from www.car_wash.models import CarWash, ServicePrice, ServiceType, CarWashBank
 from www.car_wash.models import Coupon, Order, OrderCode, CarWashManager
@@ -35,8 +35,10 @@ dict_err = {
     20302: u'付款金额和订单金额不符，支付失败，请联系嗷嗷洗车客服人员！',
     20303: u'该支付对应的订单状态无效',
     20304: u'前后端总金额不一致，请重新下单',
+    20305: u'洗车码不存在',
 
     20401: u'该管理员已存在，请勿重复添加',
+    20402: u'I get you，没权限的你怎么进来的',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -642,7 +644,7 @@ class OrderBase(object):
         @note: 购物回调函数
         '''
         try:
-            from www.tasks import async_send_email, async_send_buy_success_template_msg_by_user_id
+            from www.tasks import async_send_buy_success_template_msg_by_user_id
             from www.cash.interface import UserCashRecordBase
 
             errcode, errmsg = 0, dict_err.get(0)
@@ -724,6 +726,18 @@ class OrderBase(object):
             return 99900, dict_err.get(99900)
 
 
+def car_wash_manager_required(func):
+    """
+    @note: 洗车行管理权限装饰器
+    """
+
+    def _decorator(self, car_wash, user, *args, **kwargs):
+        if not CarWashManagerBase().check_user_is_cwm(car_wash, user):
+            return 20402, dict_err.get(20402)
+        return func(self, car_wash, user, *args, **kwargs)
+    return _decorator
+
+
 class OrderCodeBase(object):
 
     def generate_code(self, car_wash_id):
@@ -770,6 +784,60 @@ class OrderCodeBase(object):
             return OrderCode.objects.select_related("car_wash", "order").get(car_wash=car_wash, code=code)
         except OrderCode.DoesNotExist:
             pass
+
+    def get_order_code_by_code(self, code):
+        try:
+            return OrderCode.objects.select_related("car_wash", "order").get(code=code)
+        except OrderCode.DoesNotExist:
+            pass
+
+    @car_wash_manager_required
+    @transaction.commit_manually(using=DEFAULT_DB)
+    def use_order_code(self, car_wash, user, code, ip=None):
+        """
+        @note: 使用洗车码
+        """
+        try:
+            from www.cash.interface import CarWashCashRecordBase
+            from www.tasks import async_send_use_order_code_template_msg_by_user_id
+
+            order_code = OrderCodeBase().get_order_code_by_code(code)
+            if not order_code:
+                transaction.rollback(using=DEFAULT_DB)
+                return 20305, dict_err.get(20305)
+
+            car_wash = order_code.car_wash
+            # 修改状态
+            order_code.state = 1
+            order_code.use_time = datetime.datetime.now()
+            order_code.operate_user_id = user.id
+            order_code.save()
+
+            # 洗车行账户操作
+            errcode, errmsg = CarWashCashRecordBase().add_record(car_wash=car_wash, value=order_code.order.service_price.clear_price,
+                                                                 operation=0, notes=u"洗车码消费", ip=ip)
+            if errcode != 0:
+                transaction.rollback(using=DEFAULT_DB)
+                return errcode, errmsg
+
+            # 异步发送模板消息
+            if not settings.LOCAL_FLAG:
+                async_send_use_order_code_template_msg_by_user_id.delay(order_code.user_id, product_type=u"洗车行", name=car_wash.name,
+                                                                        time=unicode(datetime.datetime.now().strftime('%Y年%m月%d日 %H:%M'), "utf8"),
+                                                                        remark=u"洗车码「%s」已成功使用，欢迎再次购买" % order_code.get_code_display())
+
+            # 异步发送通知邮件
+            user = UserBase().get_user_by_id(order_code.user_id)
+            title = u'诸位，又有小伙伴去消费了'
+            content = u'小伙伴「%s」在洗车行「%s」消费成功，洗车码: %s' % (user.nick, car_wash.name, order_code.get_code_display())
+            async_send_email("lz@aoaoxc.com", title, content)
+
+            transaction.commit(using=DEFAULT_DB)
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail_and_send_email(e)
+            transaction.rollback(using=DEFAULT_DB)
+            return 99900, dict_err.get(99900)
 
 
 class CarWashManagerBase(object):
