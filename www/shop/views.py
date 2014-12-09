@@ -34,7 +34,7 @@ def verify_code(request, car_wash_id, template_name='pc/shop/verify_code.html'):
 
 @member_required
 @car_wash_manager_required_for_request
-def orders(request, car_wash_id, template_name='pc/shop/orders.html'):
+def shop_cash(request, car_wash_id, template_name='pc/shop/shop_cash.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

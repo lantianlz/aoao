@@ -71,7 +71,7 @@ body,html{
                     <i class="fa fa-barcode pr-10"></i>验证消费码
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
-                <a class="{% if '/orders' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/{{request.car_wash.id}}/orders">
+                <a class="{% if '/shop_cash' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/{{request.car_wash.id}}/shop_cash">
                     <i class="fa fa-list-alt pr-10"></i>账户流水
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
