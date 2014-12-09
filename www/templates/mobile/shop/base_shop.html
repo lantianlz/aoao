@@ -1,0 +1,37 @@
+{% extends "mobile/base.html" %}
+
+{% block base_css %}
+<style type="text/css">
+body,html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+	background-color: #f2f3f8;
+}
+
+.container{
+	padding-left: 0;
+	padding-right: 0;
+	height: 100%;
+}
+
+</style>
+{% block css %}{% endblock %}
+{% endblock %}
+
+{% block base_js %}
+<script type="text/javascript">
+var CAR_WASH_ID = {{request.car_wash.id}};
+</script>
+{% block javascript %}{% endblock %}
+{% endblock %}
+
+{% block base_container %}
+	<div class="h100 bgc-e57e31 w pl-100 pt-20 pa">
+		<img style="left: 35px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
+		<div class="f20 co5 fb">嗷嗷洗车 商户平台</div>
+        <div class="f15 co5 pt-2 pr-5">{{request.car_wash.name}}</div>
+	</div>
+	{% block container %}{% endblock %}
+
+{% endblock %}

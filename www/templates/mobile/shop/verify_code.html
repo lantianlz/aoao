@@ -1,0 +1,76 @@
+{% extends "mobile/shop/base_shop.html" %}
+
+{% block container %}
+<div class="row h pt-100 mr-0 ml-0">
+	<div class="col-xs-12 pt-15">
+		<form onsubmit="javscript:return false;">
+			<div class="col-xs-9">
+				<input type="text" class="form-control code input-lg" placeholder="输入洗车码">
+			</div>
+			<div class="col-xs-3 pl-0">
+				<button type="submit" class="btn btn-default btn-lg search">查 询</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="order-detail col-xs-12">
+		<div class="border-bottom-2 bdc-bbb pt-30 pb-5">订单详情</div>
+		
+		<div class="pl-15 pr-15">
+			<form class="form-horizontal" onsubmit="javascript:return false;">
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pl-0 pt-7">所属洗车行</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static car_wash_name">成都高新区紫荆洗车站</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">状态</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static fb state">未消费</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">服务类型</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static service_type_name">洗车专用</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">洗车码</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static code">0168 5426 6215</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">销售价格</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static sale_price"><i class="fa fa-rmb pr-3"></i>20.00 元</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">结算价格</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static clear_price"><i class="fa fa-rmb pr-3"></i>10.00 元</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">购买人</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static user_nick">stranger</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
+		            <label class="col-xs-4 control-label pt-7">购买时间</label>
+		            <div class="col-xs-8">
+		                <p class="form-control-static pay_time">2014-12-04 21:03</p>
+		            </div>
+		        </div>
+		        <div class="form-group pt-15 pb-10 mb-20">
+		            <button class="btn btn-orange btn-block btn-lg use">确认消费</button>
+		        </div>
+		    </form>
+	    </div>
+	</div>
+</div>
+{% endblock %}

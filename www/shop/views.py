@@ -31,6 +31,12 @@ def shop_index(request):
 @member_required
 @car_wash_manager_required_for_request
 def verify_code(request, car_wash_id, template_name='pc/shop/verify_code.html'):
+
+    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
+    # 手机客户端换模板
+    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
+        template_name = 'mobile/shop/verify_code.html'
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
