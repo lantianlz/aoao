@@ -69,8 +69,22 @@ $(document).ready(function(){
 	// 使用洗车码
 	$('.use').bind('click', function(){
 		if(confirm("确认使用此洗车码？")){
-			g_ajax_processing_obj_id = $('.use').setUUID().attr('id');
+			var code = $('.order-detail .code').html();
 
+			g_ajax_processing_obj_id = $('.use').setUUID().attr('id');
+			ajaxSend(
+				'/shop/' + CAR_WASH_ID + '/use_order_code', 
+				{code: code},
+				function(response){
+					if(response.errcode == "0"){
+						$.Global.Notice.InfoTopNotice("消费洗车码成功!");
+						$('.code').val(code);
+						$('.search').click();
+					} else {
+						$.Global.Notice.WarningTopNotice(response.errmsg);
+					}
+				}
+			);
 		}
 	});
 	
@@ -96,7 +110,7 @@ $(document).ready(function(){
 		<form class="form-horizontal" onsubmit="javascript:return false;">
 	        <div class="form-group pt-10 pb-10 mb-0 border-bottom bdc-ddd">
 	            <label class="col-md-2 control-label pl-0">所属洗车行</label>
-	            <div class="col-md-6">
+	            <div class="col-md-10">
 	                <p class="form-control-static car_wash_name">成都高新区紫荆洗车站</p>
 	            </div>
 	        </div>
