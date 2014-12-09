@@ -54,11 +54,15 @@ def get_order_code(request, car_wash_id):
     code = request.REQUEST.get("code", "").strip().replace(" ", "")
     order_code = ocb.get_order_code_by_car_wash_and_code(request.car_wash, code)
 
-    service_price = order_code.order.service_price
-    user = order_code.get_user()
-    data = dict(code=order_code.get_code_display(), car_wash_name=order_code.car_wash.name,
-                sale_price=service_price.sale_price, clear_price=service_price.clear_price,
-                state=order_code.state, state_display=order_code.get_state_display(),
-                pay_time=order_code.order.pay_time.strftime('%Y-%m-%d %H:%M'),
-                user_nick=user.nick, service_type_name=service_price.service_type.name)
+    data = {}
+    if order_code:
+
+        service_price = order_code.order.service_price
+        user = order_code.get_user()
+        data = dict(code=order_code.get_code_display(), car_wash_name=order_code.car_wash.name,
+                    sale_price=service_price.sale_price, clear_price=service_price.clear_price,
+                    state=order_code.state, state_display=order_code.get_state_display(),
+                    pay_time=order_code.order.pay_time.strftime('%Y-%m-%d %H:%M'),
+                    user_nick=user.nick, service_type_name=service_price.service_type.name,
+                    use_time=order_code.use_time.strftime('%Y-%m-%d %H:%M') if order_code.use_time else '')
     return HttpResponse(json.dumps(data))

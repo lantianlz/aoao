@@ -1,6 +1,9 @@
 {% extends "pc/base/base.html" %}
 
 {% block base_js %}
+<script type="text/javascript">
+var CAR_WASH_ID = {{request.car_wash.id}};
+</script>
     {% block javascript %}{% endblock %}
 {% endblock %}
 
@@ -9,6 +12,7 @@
 body,html{
     margin:0px;
     height:100%;
+    background-color: #f2f3f8;
 }
 
 .nav-bar .list-group-item{
@@ -58,7 +62,7 @@ body,html{
 {% block header %}{% endblock header %}
 
 {% block base_container %}
-<div class="container-fluid pr pl-0 pr-0 h">
+<div class="container-fluid pr pl-0 pr-0 min-h">
     <div class="pa w300 bgc-e57e31 h">
         <div class="h100 bgc-e57e31 w pa pl-80 pt-20 z99">
             <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
@@ -81,17 +85,20 @@ body,html{
                 </a>
             </ul>
         </div>
+        <div class="pf text-center w300 co1 pl-15 pr-15" style="left:0; bottom:10px;">
+            如果在使用中遇到任何疑问, 可以联系客服寻求帮助, 客服电话: 15208411129
+        </div>
     </div>
     <div class="pl-300 w h">
         <div class="h100 bgc-ffffff w mr-0 ml-0 row pa pl-300" style="left: 0;">
             <div class="col-md-3 f22 pt-30 pl-35 co9">{% block page_title %}{% endblock %}</div>
             <div class="col-md-9 text-right pt-30">
                 <img class="img-circle avatar-35" src="{{request.user.get_avatar_65}}">
-                <span>{{request.user.nick}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="co8 pl-5" href="/logout"><i class="fa fa-sign-out"></i>退出</a>
+                <span>{{request.user.nick}}</span>
+                <a class="co8 pl-10" href="/logout"><i class="fa fa-sign-out"></i>退出</a>
             </div>
         </div>
-        <div class="frame-right pt-100 h bgc-f2f3f8 pt-0">
+        <div class="frame-right pt-100 bgc-f2f3f8 pt-0">
             {% block right %}{% endblock %}
         </div>
     </div>
