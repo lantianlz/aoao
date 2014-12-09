@@ -1,14 +1,14 @@
 {% extends "pc/shop/base_shop.html" %}
 {% block title %}验证洗车码{% endblock %}
 
-{% block page_title %}验证消费码{% endblock %}
+{% block page_title %}验证洗车码{% endblock %}
 
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.code').focus();
 
-	// 查询消费码
+	// 查询洗车码
 	$('.search').bind('click', function(){
 		$('.order-detail').hide();
 
@@ -23,7 +23,7 @@ $(document).ready(function(){
 			{code: code},
 			function(response){
 				if($.isEmptyObject(response)){
-					$.Global.Notice.InfoTopNotice("消费码不存在，请重新输入");
+					$.Global.Notice.InfoTopNotice("洗车码不存在，请重新输入");
 					$('.code').select();
 					return;
 				}
@@ -43,7 +43,7 @@ $(document).ready(function(){
 						break;
 
 					case 1:
-						$('.order-detail .state').html('<span class="co2">此消费码已于时间 '+response.use_time+' 消费</span>');
+						$('.order-detail .state').html('<span class="co2">此洗车码已于时间 '+response.use_time+' 消费</span>');
 						break;
 
 					default:
@@ -54,9 +54,9 @@ $(document).ready(function(){
 		);
 	});
 
-	// 使用消费码
+	// 使用洗车码
 	$('.use').bind('click', function(){
-		if(confirm("确认使用此消费码？")){
+		if(confirm("确认使用此洗车码？")){
 			g_ajax_processing_obj_id = $('.use').setUUID().attr('id');
 
 		}
@@ -71,7 +71,7 @@ $(document).ready(function(){
 	<div class="col-md-12 pt-30 pl-20">
 		<form onsubmit="javscript:return false;">
 			<div class="col-md-3">
-				<input type="text" class="form-control code" placeholder="输入消费码">
+				<input type="text" class="form-control code" placeholder="输入洗车码">
 			</div>
 			<div class="col-md-2 pl-0">
 				<button type="submit" class="btn btn-default search">查 询</button>
@@ -99,7 +99,7 @@ $(document).ready(function(){
 	            <div class="col-md-4">
 	                <p class="form-control-static service_type_name">洗车专用</p>
 	            </div>
-	            <label class="col-md-2 control-label">消费码</label>
+	            <label class="col-md-2 control-label">洗车码</label>
 	            <div class="col-md-4">
 	                <p class="form-control-static code">4235 2254 2512</p>
 	            </div>
