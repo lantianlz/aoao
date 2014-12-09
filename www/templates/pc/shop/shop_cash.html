@@ -1,20 +1,20 @@
 {% extends "pc/shop/base_shop.html" %}
 {% block title %}账户流水{% endblock %}
-
+{% load custom_filters %}
 {% block page_title %}账户流水{% endblock %}
 
 {% block css %}
 <style type="text/css">
 .pagination>li>a, .pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus{
-	color: #EF8A55;
+    color: #EF8A55;
 }
 .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
-	background-color: #EF8A55;
-	border-color: #EF8A55;
+    background-color: #EF8A55;
+    border-color: #EF8A55;
 }
 
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th{
-	background-color: #e1e1e1; 
+    background-color: #e1e1e1; 
 }
 </style>
 {% endblock %}
@@ -22,7 +22,7 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.start-date').datetimepicker({
+    $('.start-date').datetimepicker({
         format: 'yyyy-mm-dd',
         language: 'zh-CN',
         minView: 2,
@@ -41,77 +41,54 @@ $(document).ready(function(){
 
 {% block right %}
 <div class="row mr-0 ml-0">
-	<div class="col-md-8 pt-20 pb-10">
-		<span class="pr-15 f20">洗车行当前账户余额: <span class="co8 fb">3684.00</span></span>
-	</div>
-	<div class="col-md-8 pt-20 pb-20">
-		<form class="form-inline" role="form">
-			<div class="input-group">
-				<div class="input-group-addon">开始日期</div>
-				<input type="text" class="input form-control start-date" value="2014-12-01">
-		    </div>
-		    <div class="input-group">
-				<div class="input-group-addon">结束日期</div>
-				<input type="text" class="input form-control end-date" value="2014-12-08">
-		    </div>
-		    <div class="input-group">
-		    	<button class="btn btn-default">查 询</button>
-		    </div>
-		</form>
-	</div>
-	<div class="col-md-8">
-		<table class="table table-hover mb-0 mt-10">
-			<thead>
-	            <tr>
-	                <th>#</th>
-	                <th>消费时间</th>
-	                <th>消费人</th>
-	                <th>消费金额</th>
-	                <th>消费类型</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	        	<tr>
-	        		<td>1</td>
-	                <td>2014-12-12 15:22:26</td>
-	                <td>stranger</td>
-	                <td>15</td>
-	                <td>洗车专用</td>
-	        	</tr>
-	        	<tr>
-	        		<td>2</td>
-	                <td>2014-12-12 15:22:26</td>
-	                <td>stranger</td>
-	                <td>15</td>
-	                <td>洗车专用</td>
-	        	</tr>
-	        	<tr>
-	        		<td>3</td>
-	                <td>2014-12-12 15:22:26</td>
-	                <td>stranger</td>
-	                <td>15</td>
-	                <td>洗车专用</td>
-	        	</tr>
-	        </tbody>
-		</table>
-		
-		<div class="text-center">
-			<ul class="pagination pagination-sm">
-				<li><a href="#">&laquo;</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">&raquo;</a></li>
-		    </ul>
-	    </div>
+    <div class="col-md-8 pt-20 pb-10">
+        <span class="pr-15 f20">当前账户余额: <span class="co8 fb">{{car_wash_cash.balance}} 元</span></span>
+    </div>
+    <div class="col-md-8 pt-20 pb-20">
+        <form class="form-inline" role="form">
+            <div class="input-group">
+                <div class="input-group-addon">开始日期</div>
+                <input type="text" class="input form-control start-date" value="2014-12-01">
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">结束日期</div>
+                <input type="text" class="input form-control end-date" value="2014-12-08">
+            </div>
+            <div class="input-group">
+                <button class="btn btn-default">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-hover mb-0 mt-10">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>消费时间</th>
+                    <th>消费内容</th>
+                    <th>消费金额</th>
+                    <th>账户余额</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{record.id}}</td>
+                    <td>{{record.create_time}}</td>
+                    <td>{{record.notes}}</td>
+                    <td class="{% if record.operation == 0 %}co10{% else %}co8{% endif %}">{% if record.operation == 0 %}+{% else %}-{% endif %}{{record.value}}</td>
+                    <td>{{record.current_balance}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {{page_params|paging:request}}
 
-	    <div class="border-top-2 bdc-ddd text-right pr-0 pt-10 f15">
-			<span class="pr-15">总消费人数: <span class="co8 fb">84</span></span>
-			<span class="pr-15">总消费次数: <span class="co8 fb">148</span></span>
-			<span class="pr-15">总消费金额: <span class="co8 fb">1985.00</span></span>
-		</div>
-	</div>
+        <div class="border-top-2 bdc-ddd text-right pr-0 pt-10 f15">
+            <span class="pr-15">总兑换次数: <span class="co8 fb">{{count}}</span></span>
+            <span class="pr-15">总收入: <span class="co8 fb">1985.00 元</span></span>
+        </div>
+    </div>
 </div>
 {% endblock %}

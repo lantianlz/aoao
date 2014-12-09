@@ -23,5 +23,5 @@ def car_wash_manager_required_for_request(func):
             raise Http404
 
         request.car_wash = car_wash
-        return func(request, car_wash, *args, **kwargs)
+        return func(request, car_wash_id, *args, **kwargs)
     return _decorator

@@ -120,7 +120,7 @@ def paging(value, request, get_page_onclick=None, page_onclick_params={}):
     pre_url = get_page_url(url, page - 1)
     next_url = get_page_url(url, page + 1)
     page_items_with_url = [(p, get_page_url(url, p) if p != '...' else '') for p in page_items]
-    return mark_safe(render_to_response('include/_paging.html', locals()).content)
+    return mark_safe(render_to_response('pc/include/_paging.html', locals()).content)
 
 
 @register.filter

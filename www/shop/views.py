@@ -7,6 +7,8 @@ from django.shortcuts import render_to_response
 
 from common import utils, user_agent_parser, page
 from www.misc.decorators import member_required, common_ajax_response
+
+from www.cash.interface import CarWashCashBase, CarWashCashRecordBase
 from www.shop.interface import car_wash_manager_required_for_request
 
 from www.car_wash import interface
@@ -37,6 +39,16 @@ def verify_code(request, car_wash_id, template_name='pc/shop/verify_code.html'):
 @member_required
 @car_wash_manager_required_for_request
 def shop_cash(request, car_wash_id, template_name='pc/shop/shop_cash.html'):
+    car_wash_cash = CarWashCashBase().get_car_wash_cash_by_car_wash_id(car_wash_id)
+
+    records = CarWashCashRecordBase().get_records_by_car_wash_id(car_wash_id)
+    count = records.count()
+    # 分页
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(records, count=20, page=page_num).info
+    page_params = (page_objs[1], page_objs[4])
+    records = page_objs[0]
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

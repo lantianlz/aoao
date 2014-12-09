@@ -54,3 +54,6 @@ class CarWashCashRecord(models.Model):
     notes = models.CharField(max_length=256)    # 流水介绍
     ip = models.CharField(max_length=32, null=True)
     create_time = models.DateTimeField(auto_now_add=True, db_index=True)  # 创建时间
+
+    class Meta:
+        ordering = ['-id']
