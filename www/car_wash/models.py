@@ -267,3 +267,7 @@ class OrderCode(models.Model):
 
     def get_code_display(self):
         return "%s %s %s" % (self.code[:4], self.code[4:8], self.code[8:])
+
+    def get_user(self):
+        from www.account.interface import UserBase
+        return UserBase().get_user_by_id(self.user_id)

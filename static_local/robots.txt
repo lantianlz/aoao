@@ -10,6 +10,7 @@ Disallow: *set*
 Disallow: *cancel*
 Disallow: *remove*
 Disallow: *create*
+Disallow: *login*
 Disallow: /500
 Disallow: /search
 Disallow: /logout

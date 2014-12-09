@@ -474,7 +474,6 @@ class CouponBase(object):
         if car_wash_name:
             objs = objs.select_related('car_wash').filter(car_wash__name__contains=car_wash_name)
         elif nick:
-            from www.account.interface import UserBase
             user = UserBase().get_user_by_nick(nick)
             if user:
                 objs = objs.filter(user_id=user.id)
@@ -644,7 +643,6 @@ class OrderBase(object):
         '''
         try:
             from www.tasks import async_send_email, async_send_buy_success_template_msg_by_user_id
-            from www.account.interface import UserBase
             from www.cash.interface import UserCashRecordBase
 
             errcode, errmsg = 0, dict_err.get(0)
@@ -767,21 +765,39 @@ class OrderCodeBase(object):
     def get_order_codes_by_order(self, order):
         return OrderCode.objects.filter(order=order)
 
+    def get_order_code_by_car_wash_and_code(self, car_wash, code):
+        try:
+            return OrderCode.objects.select_related("car_wash", "order").get(car_wash=car_wash, code=code)
+        except OrderCode.DoesNotExist:
+            pass
+
 
 class CarWashManagerBase(object):
 
     def get_cwm_by_user_id(self, user_id):
         """
-        @note: 获取用户管理的第一个洗车行
+        @note: 获取用户管理的第一个洗车行，用于自动跳转到管理的洗车行
         """
         cwms = list(CarWashManager.objects.select_related("car_wash").filter(user_id=user_id))
         if cwms:
             return cwms[0]
 
     def get_cwm_by_car_wash_and_user_id(self, car_wash_id, user_id):
+        """
+        @note: 获取用户管理的单个洗车行
+        """
         cwms = list(CarWashManager.objects.select_related("car_wash").filter(car_wash=car_wash_id, user_id=user_id))
         if cwms:
             return cwms[0]
+
+    def check_user_is_cwm(self, car_wash_id, user):
+        """
+        @note: 判断用户是否是某个洗车行管理员
+        """
+        if isinstance(user, (str, unicode)):
+            user = UserBase().get_user_by_id(user)
+        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash_id, user.id)
+        return True if (cwm or user.is_staff()) else False
 
     @car_wash_required
     def add_car_wash_manager(self, car_wash, user_id):
