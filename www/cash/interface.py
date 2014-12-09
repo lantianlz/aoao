@@ -84,7 +84,7 @@ class UserCashRecordBase(object):
             debug.get_debug_detail_and_send_email(e)
             return 99900, dict_err.get(99900)
 
-    def get_record_by_user_id(self, user_id):
+    def get_records_by_user_id(self, user_id):
         return UserCashRecord.objects.select_related("user_cash").filter(user_cash__user_id=user_id)
 
     def search_records_for_admin(self, nick):
@@ -164,3 +164,9 @@ class CarWashCashRecordBase(object):
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
+
+    def get_records_by_car_wash_id(self, car_wash_id):
+        return CarWashCashRecord.objects.select_related("car_wash_cash").filter(car_wash_cash__car_wash_id=car_wash_id)
+
+    def get_records_by_range_date(self, car_wash_id, start_date, end_date):
+        pass

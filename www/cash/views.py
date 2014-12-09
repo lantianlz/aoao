@@ -16,7 +16,7 @@ def cash_index(request, template_name='mobile/cash/cash_index.html'):
 
 
 def user_cash_record(request, template_name='mobile/cash/user_cash_record.html'):
-    records = ucrb.get_record_by_user_id(request.user.id)
+    records = ucrb.get_records_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
