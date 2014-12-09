@@ -125,6 +125,9 @@ class WexinBase(object):
         app_key = self.get_app_key_by_app_type(to_user)
         logging.error(u'收到一个来自app：%s 的请求' % app_key)
 
+        if "test" in app_key:   # 剔除测试公众号发送信息
+            return
+
         # 事件
         if events:
             event = events[0].text.lower()
