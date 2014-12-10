@@ -1,5 +1,94 @@
 {% extends "mobile/shop/base_shop.html" %}
 
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.code').focus();
+
+	// 查询洗车码
+	$('.search').bind('click', function(){
+		$('.order-detail').hide();
+
+		var code = $('.code').val();
+		if(code == ""){
+			return;
+		}
+
+		g_ajax_processing_obj_id = $('.search').setUUID().attr('id');
+		ajaxSend(
+			'/shop/' + CAR_WASH_ID + '/get_order_code', 
+			{code: code},
+			function(response){
+				if($.isEmptyObject(response)){
+					$.Global.Notice.InfoTopNotice("洗车码不存在，请重新输入");
+					$('.code').select();
+					return;
+				}
+
+				$('.use').hide();
+				$('.order-detail').show();
+
+				// form 赋值
+				for(var key in response){
+					$('.order-detail' + ' .' + key).html(response[key]);
+				}
+				$('.sale_price').html(
+					String.format(
+						'<span class="co8"><i class="fa fa-rmb pr-3"></i>{0} 元</span>', 
+						$.Global.Utils.formatPrice(response.sale_price)
+					)
+				);
+				$('.clear_price').html(
+					String.format(
+						'<span class="co8"><i class="fa fa-rmb pr-3"></i>{0} 元</span>', 
+						$.Global.Utils.formatPrice(response.clear_price)
+					)
+				);
+				// 状态信息
+				switch(response.state){
+					case 0:
+						$('.order-detail .state').html('<span class="co10">未消费</span>');
+						$('.use').show();
+						break;
+
+					case 1:
+						$('.order-detail .state').html('<span class="co2">此洗车码已于时间 '+response.use_time+' 消费</span>');
+						break;
+
+					default:
+						$('.order-detail .state').html(response.state_display);
+						break;
+				}
+			} 
+		);
+	});
+
+	// 使用洗车码
+	$('.use').bind('click', function(){
+		if(confirm("确认使用此洗车码？")){
+			var code = $('.order-detail .code').html();
+
+			g_ajax_processing_obj_id = $('.use').setUUID().attr('id');
+			ajaxSend(
+				'/shop/' + CAR_WASH_ID + '/use_order_code', 
+				{code: code},
+				function(response){
+					if(response.errcode == "0"){
+						$.Global.Notice.InfoTopNotice("消费洗车码成功!");
+						// $('.code').val(code);
+						// $('.search').click();
+					} else {
+						$.Global.Notice.WarningTopNotice(response.errmsg);
+					}
+				}
+			);
+		}
+	});
+	
+});
+</script>
+{% endblock %}
+
 {% block container %}
 <div class="row h pt-100 mr-0 ml-0">
 	<div class="col-xs-12 pt-15">
@@ -13,7 +102,7 @@
 		</form>
 	</div>
 
-	<div class="order-detail col-xs-12">
+	<div class="order-detail col-xs-12 none">
 		<div class="border-bottom-2 bdc-bbb pt-30 pb-5">订单详情</div>
 		
 		<div class="pl-15 pr-15">
