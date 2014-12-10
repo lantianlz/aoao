@@ -48,7 +48,8 @@ var echarts,
                       width: 1,
                       type: 'solid'
                     }
-                }
+                },
+                formatter: '{b}<br />{a}: {c} 元'
             },
             legend: {
                 data:['收入']
@@ -60,13 +61,7 @@ var echarts,
             xAxis : [{
                 type : 'category',
                 boundaryGap : false,
-                data: (function(){
-                    var data = [];
-                    for(var i=1; i<=20; i++){
-                        data.push('2014-12-' + i);
-                    }
-                    return data;
-                })()
+                data: {{days|safe}}
             }],
             yAxis : [{
                 type : 'value'
@@ -83,13 +78,7 @@ var echarts,
                         }
                     }
                 },
-                data: (function(){
-                    var data = [];
-                    for(var i=1; i<=20; i++){
-                        data.push(Math.round(Math.random()*1000));
-                    }
-                    return data;
-                })(),
+                data: {{values|safe}}
             }]
         });
     };
@@ -118,14 +107,14 @@ $(document).ready(function(){
     <div class="col-md-8 pb-10">
     </div>
     <div class="col-md-8 pt-10 pb-20">
-        <form class="form-inline" role="form">
+        <form class="form-inline" role="form" method="post">
             <div class="input-group">
                 <div class="input-group-addon">开始日期</div>
-                <input type="text" class="input form-control start-date" value="2014-12-01">
+                <input type="text" class="input form-control start-date" value="{{start_date}}" name="start_date">
             </div>
             <div class="input-group">
                 <div class="input-group-addon">结束日期</div>
-                <input type="text" class="input form-control end-date" value="2014-12-08">
+                <input type="text" class="input form-control end-date" value="{{end_date}}" name="end_date">
             </div>
             <div class="input-group">
                 <button class="btn btn-default">查 询</button>
@@ -136,8 +125,9 @@ $(document).ready(function(){
 
     <div class="blank20"></div>
     <div class="col-md-12 text-center pr-0 pt-10 f15">
-        <span class="pr-15">总兑换次数: <span class="co8 fb">148</span></span>
-        <span class="pr-15">总收入: <span class="co8 fb">1985.00 元</span></span>
+        <span class="pr-15 co1">{{start_date}} 到 {{end_date}}</span>
+        <span class="pr-15">总兑换次数: <span class="co8 fb">{{in_reords_count}}</span></span>
+        <span class="pr-15">总收入: <span class="co8 fb">{{total_fee}} 元</span></span>
     </div>
 </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import datetime
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -46,14 +47,26 @@ def verify_code(request, car_wash_id, template_name='pc/shop/verify_code.html'):
 @car_wash_manager_required_for_request
 def shop_cash(request, car_wash_id, template_name='pc/shop/shop_cash.html'):
     car_wash_cash = CarWashCashBase().get_car_wash_cash_by_car_wash_id(car_wash_id)
+    end_date = datetime.datetime.now().date() + datetime.timedelta(days=1)
+    start_date = datetime.datetime.strptime('%s-%s-01' % (end_date.year, end_date.month), '%Y-%m-%d').date()
 
-    records = CarWashCashRecordBase().get_records_by_car_wash_id(car_wash_id)
-    count = records.count()
+    if request.POST.get("start_date"):
+        end_date = datetime.datetime.strptime(request.POST.get("end_date"), '%Y-%m-%d').date()
+        start_date = datetime.datetime.strptime(request.POST.get("start_date"), '%Y-%m-%d').date()
+
+    records = CarWashCashRecordBase().get_records_by_range_date(car_wash_id, start_date, end_date)
+    in_reords = CarWashCashRecordBase().get_records_by_range_date(car_wash_id, start_date, end_date, operation=0)
+    in_reords_count = in_reords.count()
+    total_fee = sum([r.value for r in in_reords])
+
     # 分页
+    page_count = 20
     page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(records, count=20, page=page_num).info
+    page_objs = page.Cpt(records, count=page_count, page=page_num).info
     page_params = (page_objs[1], page_objs[4])
     records = page_objs[0]
+
+    _format_objs_set_index(records, page_num, page_count)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -61,7 +74,39 @@ def shop_cash(request, car_wash_id, template_name='pc/shop/shop_cash.html'):
 @member_required
 @car_wash_manager_required_for_request
 def chart(request, car_wash_id, template_name='pc/shop/chart.html'):
+    car_wash_cash = CarWashCashBase().get_car_wash_cash_by_car_wash_id(car_wash_id)
+    end_date = datetime.datetime.now().date() + datetime.timedelta(days=1)
+    start_date = datetime.datetime.strptime('%s-%s-01' % (end_date.year, end_date.month), '%Y-%m-%d').date()
+
+    if request.POST.get("start_date"):
+        end_date = datetime.datetime.strptime(request.POST.get("end_date"), '%Y-%m-%d').date()
+        start_date = datetime.datetime.strptime(request.POST.get("start_date"), '%Y-%m-%d').date()
+
+    in_reords = CarWashCashRecordBase().get_records_by_range_date(car_wash_id, start_date, end_date, operation=0)
+    in_reords_count = in_reords.count()
+    total_fee = sum([r.value for r in in_reords])
+
+    dict_records = CarWashCashRecordBase().format_records_with_day(in_reords)
+    days = []
+    values = []
+    _start_date = start_date
+    while _start_date <= end_date:
+        days.append(str(_start_date))
+        values.append(dict_records.get(str(_start_date), "0.00"))
+        _start_date += datetime.timedelta(days=1)
+
+    days = json.dumps(days)
+    values = json.dumps(values)
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def _format_objs_set_index(objs, page_num, page_count):
+    """
+    @note: 格式化对象，设置index值
+    """
+    for i, obj in enumerate(objs):
+        obj.index = (page_num - 1) * page_count + i + 1
 
 
 # ===================================================ajax部分=================================================================#
