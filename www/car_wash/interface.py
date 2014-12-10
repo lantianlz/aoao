@@ -36,6 +36,7 @@ dict_err = {
     20303: u'该支付对应的订单状态无效',
     20304: u'前后端总金额不一致，请重新下单',
     20305: u'洗车码不存在',
+    20306: u'洗车码已使用或退款，无法验证',
 
     20401: u'该管理员已存在，请勿重复添加',
     20402: u'I get you，没权限的你怎么进来的',
@@ -805,6 +806,10 @@ class OrderCodeBase(object):
             if not order_code:
                 transaction.rollback(using=DEFAULT_DB)
                 return 20305, dict_err.get(20305)
+
+            if order_code.state != 0:   # 判断状态
+                transaction.rollback(using=DEFAULT_DB)
+                return 20306, dict_err.get(20306)
 
             car_wash = order_code.car_wash
             # 修改状态
