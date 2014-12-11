@@ -118,3 +118,20 @@ urlpatterns += patterns('www.admin.views_user_cash_record',
                         url(r'^user_cash_record/search$', 'search'),
                         url(r'^user_cash_record$', 'user_cash_record'),
                         )
+
+# 订单管理
+urlpatterns += patterns('www.admin.views_order',
+
+                        url(r'^order/get_order_by_id$', 'get_order_by_id'),
+                        url(r'^order/search$', 'search'),
+                        url(r'^order$', 'order'),
+                        )
+
+
+# 洗车码管理
+urlpatterns += patterns('www.admin.views_order_code',
+
+                        url(r'^order_code/get_code_by_id$', 'get_code_by_id'),
+                        url(r'^order_code/search$', 'search'),
+                        url(r'^order_code$', 'order_code'),
+                        )

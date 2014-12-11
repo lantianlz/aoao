@@ -72,4 +72,10 @@ PERMISSIONS = [
 
     {'code': 'user_cash_record_manage', 'name': u'用户现金记录管理', 'parent': None},
     {'code': 'query_user_cash_record', 'name': u'查询用户现金记录', 'parent': 'user_cash_record_manage'},
+
+    {'code': 'order_manage', 'name': u'订单管理', 'parent': None},
+    {'code': 'query_order', 'name': u'查询订单', 'parent': 'order_manage'},
+
+    {'code': 'order_code_manage', 'name': u'洗车码管理', 'parent': None},
+    {'code': 'query_order_code', 'name': u'查询洗车码', 'parent': 'coupon_manage'},
 ]

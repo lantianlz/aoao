@@ -727,6 +727,22 @@ class OrderBase(object):
             return 99900, dict_err.get(99900)
 
 
+    def search_orders_for_admin(self, car_wash_name, trade_id, state):
+        objs = Order.objects.select_related("car_wash", "service_price").all()
+
+        if trade_id:
+            objs = objs.filter(trade_id=trade_id)
+            return objs if objs else []
+
+        if car_wash_name:
+            objs = objs.filter(car_wash__name__contains=car_wash_name)
+
+        if state is not None:
+            objs = objs.filter(order_state=state)
+
+        return objs
+
+
 def car_wash_manager_required(func):
     """
     @note: 洗车行管理权限装饰器
@@ -792,6 +808,12 @@ class OrderCodeBase(object):
         except OrderCode.DoesNotExist:
             pass
 
+    def get_order_code_by_id(self, code_id):
+        try:
+            return OrderCode.objects.select_related("car_wash", "order").get(id=code_id)
+        except OrderCode.DoesNotExist:
+            pass
+
     @car_wash_manager_required
     @transaction.commit_manually(using=DEFAULT_DB)
     def use_order_code(self, car_wash, user, code, ip=None):
@@ -843,6 +865,22 @@ class OrderCodeBase(object):
             debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
+
+
+    def search_codes_for_admin(self, car_wash_name, code, state):
+        objs = OrderCode.objects.select_related("car_wash", "order").all()
+
+        if code:
+            objs = objs.filter(code=code)
+            return objs if objs else []
+
+        if car_wash_name:
+            objs = objs.filter(car_wash__name__contains=car_wash_name)
+
+        if state is not None:
+            objs = objs.filter(state=state)
+
+        return objs
 
 
 class CarWashManagerBase(object):
