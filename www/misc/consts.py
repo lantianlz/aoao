@@ -77,5 +77,5 @@ PERMISSIONS = [
     {'code': 'query_order', 'name': u'查询订单', 'parent': 'order_manage'},
 
     {'code': 'order_code_manage', 'name': u'洗车码管理', 'parent': None},
-    {'code': 'query_order_code', 'name': u'查询洗车码', 'parent': 'coupon_manage'},
+    {'code': 'query_order_code', 'name': u'查询洗车码', 'parent': 'order_code_manage'},
 ]
