@@ -560,7 +560,7 @@ class OrderBase(object):
             return 20203, dict_err.get(20203)
         if coupon.car_wash and coupon.car_wash != car_wash:
             return 20204, dict_err.get(20204)
-        if coupon.discount > sale_price:
+        if coupon.discount >= sale_price:
             return 20205, dict_err.get(20205)
         if coupon.minimum_amount > sale_price:
             return 20206, dict_err.get(20206)

@@ -1,5 +1,6 @@
 *.py[cod]
 settings.py*
+config_real.py
 
 # C extensions
 *.so

@@ -69,6 +69,8 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     """
     @note: 创建订单
     """
+    from common.alipay import alipay_mobile
+
     service_price = spb.get_service_price_by_id(service_price_id)
     if not service_price:
         raise Http404
@@ -88,7 +90,18 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
         order = errmsg
         if order.pay_fee == 0:
             return HttpResponseRedirect("/car_wash/order_code")
-        return HttpResponse("ok")
+
+        if order.pay_type == 1:  # 支付宝支付
+            alipay = alipay_mobile.Alipay()
+            flag, token = alipay.get_token(subject=u"%s洗车服务" % order.car_wash.name, out_trade_no=order.trade_id,
+                                           total_fee=order.pay_fee, out_user=order.user_id)
+            if flag:
+                return HttpResponseRedirect(alipay.get_pay_url())
+        if order.pay_type == 2:     # 微信支付
+            pass
+
+        err_msg = u'支付跳转异常，请联系嗷嗷客服人员'
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
     else:
         warning_msg = errmsg
         return show_create_order(request, service_price_id, warning_msg)
