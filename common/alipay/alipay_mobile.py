@@ -75,7 +75,6 @@ class Alipay(object):
                     "</direct_trade_create_req>") % dict(subject=subject, out_trade_no=out_trade_no, total_fee=total_fee,
                                                          seller_account_name=self.seller_account_name, out_user=out_user, pay_expire=self.pay_expire,
                                                          merchant_url=self.merchant_url, call_back_url=call_back_url, notify_url=notify_url)
-
         params = {}
         params['req_data'] = req_data
         params['service'] = "alipay.wap.trade.create.direct"
@@ -87,7 +86,6 @@ class Alipay(object):
         params, prestr = self.format_params(params)
         sign = self.build_mysign(prestr)
         params['sign'] = sign
-
         return params
 
     def get_token(self, subject, out_trade_no, total_fee, out_user, call_back_url=None, notify_url=None):
@@ -127,6 +125,23 @@ class Alipay(object):
 
         self.pay_url = '%s?%s&sign=%s' % (ALIPAY_URL, prestr, sign)
         return self.pay_url
+
+    def validate_html_redirect_params(self, request):
+        '''
+        @note: 校验支付回调后页面跳转回来的参数是否正常
+        '''
+        sign_in = request.REQUEST.get("sign", "")
+
+        params = {}
+        params['result'] = request.REQUEST.get("result", "")
+        params['out_trade_no'] = request.REQUEST.get("out_trade_no", "")
+        params['trade_no'] = request.REQUEST.get("trade_no", "")
+        params['request_token'] = request.REQUEST.get("request_token", "")
+
+        params, prestr = self.format_params(params)
+        sign = self.build_mysign(prestr)
+
+        return sign == sign_in
 
 
 if __name__ == '__main__':
