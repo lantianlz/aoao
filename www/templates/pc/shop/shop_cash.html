@@ -45,14 +45,14 @@ $(document).ready(function(){
         <span class="pr-15 f20">当前账户余额: <span class="co8 fb">{{car_wash_cash.balance}} 元</span></span>
     </div>
     <div class="col-md-8 pt-20 pb-20">
-        <form class="form-inline" role="form">
+        <form class="form-inline" role="form" method="post">
             <div class="input-group">
                 <div class="input-group-addon">开始日期</div>
-                <input type="text" class="input form-control start-date" value="2014-12-01">
+                <input type="text" class="input form-control start-date" value="{{start_date}}" name="start_date">
             </div>
             <div class="input-group">
                 <div class="input-group-addon">结束日期</div>
-                <input type="text" class="input form-control end-date" value="2014-12-08">
+                <input type="text" class="input form-control end-date" value="{{end_date}}" name="end_date">
             </div>
             <div class="input-group">
                 <button class="btn btn-default">查 询</button>
@@ -73,7 +73,7 @@ $(document).ready(function(){
             <tbody>
                 {% for record in records %}
                 <tr>
-                    <td>{{record.id}}</td>
+                    <td>{{record.index}}</td>
                     <td>{{record.create_time}}</td>
                     <td>{{record.notes}}</td>
                     <td class="{% if record.operation == 0 %}co10{% else %}co8{% endif %}">{% if record.operation == 0 %}+{% else %}-{% endif %}{{record.value}}</td>
@@ -86,8 +86,9 @@ $(document).ready(function(){
         {{page_params|paging:request}}
 
         <div class="border-top-2 bdc-ddd text-right pr-0 pt-10 f15">
-            <span class="pr-15">总兑换次数: <span class="co8 fb">{{count}}</span></span>
-            <span class="pr-15">总收入: <span class="co8 fb">1985.00 元</span></span>
+            <span class="pr-15 co1">{{start_date}} 到 {{end_date}}</span>
+            <span class="pr-15">总兑换次数: <span class="co8 fb">{{in_reords_count}}</span></span>
+            <span class="pr-15">总收入: <span class="co8 fb">{{total_fee}} 元</span></span>
         </div>
     </div>
 </div>

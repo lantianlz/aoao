@@ -168,5 +168,22 @@ class CarWashCashRecordBase(object):
     def get_records_by_car_wash_id(self, car_wash_id):
         return CarWashCashRecord.objects.select_related("car_wash_cash").filter(car_wash_cash__car_wash_id=car_wash_id)
 
-    def get_records_by_range_date(self, car_wash_id, start_date, end_date):
-        pass
+    def get_records_by_range_date(self, car_wash_id, start_date, end_date, operation=None):
+        ps = dict(car_wash_cash__car_wash_id=car_wash_id, create_time__gt=start_date, create_time__lt=end_date)
+        if operation is not None:
+            ps.update(dict(operation=operation))
+        return CarWashCashRecord.objects.select_related("car_wash_cash").filter(**ps)
+
+    def format_records_with_day(self, records):
+        """
+        @note: 将流水按天汇总
+        """
+        dict_results = {}
+        for record in records:
+            day = str(record.create_time.date())
+            value = float(record.value)
+            if day not in dict_results:
+                dict_results[day] = value
+            else:
+                dict_results[day] += value
+        return dict_results

@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 
 class Cpt(object):
+
     """
     @attention: 分页处理类
     @author：lizheng
@@ -51,5 +52,5 @@ class Cpt(object):
         self.Contacts = Contacts
         Ct = self.Contacts
         CurrentPage = Ct.number
+        # 当前页、上一页、下一页、总页数、每页数量
         self.info = [list(self.Contacts.object_list), CurrentPage, Ct.previous_page_number(), Ct.next_page_number(), Ct.paginator.num_pages, Ct.paginator.count]
-

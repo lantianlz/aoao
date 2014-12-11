@@ -1,27 +1,46 @@
 # -*- coding: utf-8 -*-
 
+import logging
 
+from django.utils.encoding import smart_str
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from common import debug
+from common.alipay import alipay_mobile
 from www.car_wash.interface import OrderBase
 
 
 def alipaycallback_m(request):
     """
-    @note: 支付宝手机支付回调
+    @note: 支付宝手机支付回调，页面跳转方式
     """
-    pass
+    logging.error(u"alipaycallback_m info is: %s" % smart_str(request.REQUEST))
+
+    alipay = alipay_mobile.Alipay()
+    flag = alipay.validate_html_redirect_params(request)
+    if flag:
+        timeinterval = 3
+
+        next_url = "/"  # 成功跳转url控制
+        if request.REQUEST.get("out_trade_no", "").startswith("W"):
+            next_url = "/car_wash/order_code"
+        if request.REQUEST.get("out_trade_no", "").startswith("R"):
+            next_url = "/cash"
+
+        success_msg = u'支付成功，页面即将跳转'
+        return render_to_response('success.html', locals(), context_instance=RequestContext(request))
+    else:
+        err_msg = u'支付结果校验异常，请联系嗷嗷客服人员'
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
 
 
 def alipaynotify_m(request):
     """
-    @note: 支付宝手机支付通知
+    @note: 支付宝手机支付通知，服务器通知方式
     """
-    pass
+    logging.error(u"alipaynotify_m info is: %s" % smart_str(request.REQUEST))
 
 
 def weixinpaycallback(request):
@@ -60,4 +79,4 @@ def test_paycallback(request):
             return HttpResponse('success')
 
         return HttpResponse(u"status is:%s\nerrmsg is:%s" % (status, errmsg))
-    return HttpResponse("not the one")
+    return HttpResponse("not the one who can test")
