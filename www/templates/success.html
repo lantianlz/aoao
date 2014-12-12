@@ -114,16 +114,20 @@
             </div>
             <div style="height: 100%; padding-top: 100px;">
                 <div class="text-center" style="padding-top: 40px; color: #696969;">{{success_msg|default:"成功"}}</div>
+                {% if timeinterval %}
                 <div class="text-center" style="padding-top: 40px; color: #696969;">{{timeinterval}} 秒后页面即将跳转</div>
+                {% endif %}
                 <div class="text4">
                     <i class="fa fa-check"></i>
                 </div>
             </div>
         </div>
+        {% if timeinterval %}
         <script type="text/javascript">
         window.setInterval(function(){
             window.location.href = "{{next_url}}";
         }, {{timeinterval}} * 1000);
         </script>
+        {% endif %}
     </body>
 </html>
