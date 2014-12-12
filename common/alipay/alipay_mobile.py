@@ -133,12 +133,26 @@ class Alipay(object):
         sign_in = request.REQUEST.get("sign", "")
 
         params = {}
-        params['result'] = request.REQUEST.get("result", "")
-        params['out_trade_no'] = request.REQUEST.get("out_trade_no", "")
-        params['trade_no'] = request.REQUEST.get("trade_no", "")
-        params['request_token'] = request.REQUEST.get("request_token", "")
+        for key in ['result', 'out_trade_no', 'trade_no', 'request_token']:
+            params[key] = request.REQUEST.get(key, "")
 
         params, prestr = self.format_params(params)
+        sign = self.build_mysign(prestr)
+
+        return sign == sign_in
+
+    def validate_notify_params(self, request):
+        '''
+        @note: 校验支付通知接口的参数是否正常
+        '''
+        sign_in = request.REQUEST.get("sign", "")
+
+        # 通知接口参数签名比较特殊，参数顺序是固定的
+        prestr = ''
+        for key in ['service', 'v', 'sec_id', 'notify_data']:
+            value = smart_str(request.REQUEST.get(key, ""), self.input_charset)
+            prestr += '%s=%s&' % (key, value)
+        prestr = prestr[:-1]
         sign = self.build_mysign(prestr)
 
         return sign == sign_in
@@ -146,5 +160,14 @@ class Alipay(object):
 
 if __name__ == '__main__':
     alipay = Alipay()
-    print alipay.get_token(subject=u"心愿洗车行洗车服务", out_trade_no=u"W2014120815441258305", total_fee="20.00", out_user="f762a6f5d2b711e39a09685b35d0bf16")
-    print alipay.get_pay_url()
+    # print alipay.get_token(subject=u"心愿洗车行洗车服务", out_trade_no=u"W2014120815441258305", total_fee="20.00", out_user="f762a6f5d2b711e39a09685b35d0bf16")
+    # print alipay.get_pay_url()
+
+    class DATA(object):
+
+        def __init__(self, data={}):
+            self.REQUEST = data
+            self.POST = data
+            self.GET = data
+
+    print alipay.validate_notify_params(DATA(data=dict(service="alipay.wap.trade.create.direct", v=2.0, sec_id=0001, notify_data="<notify >...</notify>")))

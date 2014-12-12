@@ -11,3 +11,7 @@ todo
 7.微信secret不放入源码管理
 8.发送支付通知邮件、兑换券使用邮件均修改为vip@aoaoxc.com
 9.注释掉无用的入口url
+10.判断user_agent
+device_type:pc phone pad
+device_name:ipad iphone
+os:android ios
