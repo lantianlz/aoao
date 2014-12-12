@@ -715,7 +715,7 @@ class OrderBase(object):
                     remark = u""
                     for i, code in enumerate(codes):
                         remark += u"洗车码%s: %s    " % ((i + 1), code)
-                    remark += u"洗车的时候出示此洗车码即可使用"
+                    remark += u"在相应洗车行洗车后出示此洗车码即可完成消费"
 
                     if not settings.LOCAL_FLAG:
                         async_send_buy_success_template_msg_by_user_id.delay(order.user_id, name, remark)
