@@ -699,7 +699,7 @@ class OrderBase(object):
                     if errcode != 0:
                         title += u"(状态异常，订单号:%s, errcode:%s, errmsg:%s)" % (trade_id, errcode, errmsg)
                     content = u'收到用户「%s」通过「%s」的付款 %.2f 元' % (user.nick, order.get_pay_type_display(), payed_fee)
-                    async_send_email("lz@aoaoxc.com", title, content)
+                    async_send_email("vip@aoaoxc.com", title, content)
 
                 if errcode == 0:
                     # 保存订单信息
@@ -860,7 +860,7 @@ class OrderCodeBase(object):
             user = UserBase().get_user_by_id(order_code.user_id)
             title = u'诸位，又有小伙伴去消费了'
             content = u'小伙伴「%s」在洗车行「%s」消费成功，洗车码: %s' % (user.nick, car_wash.name, order_code.get_code_display())
-            async_send_email("lz@aoaoxc.com", title, content)
+            async_send_email("vip@aoaoxc.com", title, content)
 
             transaction.commit(using=DEFAULT_DB)
             return 0, dict_err.get(0)
