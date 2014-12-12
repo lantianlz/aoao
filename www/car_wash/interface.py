@@ -913,14 +913,9 @@ class CarWashManagerBase(object):
         return True if (cwm or user.is_staff()) else False
 
     @car_wash_required
-    def add_car_wash_manager(self, car_wash_obj_or_id, user_id):
+    def add_car_wash_manager(self, car_wash, user_id):
         if user_id and not UserBase().get_user_login_by_id(user_id):
             return 99600, dict_err.get(99600)
-
-        if not isinstance(car_wash_obj_or_id, CarWash):
-            car_wash = self.get_car_wash_by_id(car_wash_obj_or_id)
-        else:
-            car_wash = car_wash_obj_or_id
 
         if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
             return 20401, dict_err.get(20401)
@@ -941,7 +936,6 @@ class CarWashManagerBase(object):
             return CarWashManager.objects.select_related("car_wash").get(id=manager_id)
         except CarWashManager.DoesNotExist:
             pass
-
 
     @car_wash_required
     def modify_car_wash_manager(self, car_wash_obj_or_id, user_id):

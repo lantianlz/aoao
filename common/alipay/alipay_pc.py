@@ -2,8 +2,9 @@
 
 import types
 from urllib import urlencode, urlopen
-from hashcompat import md5_constructor as md5
-from config import settings
+
+from common.hashcompat import md5_constructor as md5
+from common.alipay.config import settings
 
 
 def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):

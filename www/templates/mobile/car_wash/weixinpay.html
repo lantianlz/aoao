@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
+    <head>
+        <meta charset="utf-8" />
+        <title>嗷嗷洗车</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <!-- 兼容 双核浏览器 -->
+        <meta name="renderer" content="webkit" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+        <link rel="shortcut icon" href="{{MEDIA_URL}}img/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/font-awesome/css/font-awesome.min.css" />
+        <style type="text/css">
+        body{
+            font-family: "Helvetica Neue",Helvetica,"Lucida Grande","Luxi Sans",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei","Wenquanyi Micro Hei","WenQuanYi Micro Hei Mono","WenQuanYi Zen Hei","WenQuanYi Zen Hei Mono",LiGothicMed;
+            background-color: #DFDFDF;
+        }
+        .container{
+            margin: 0 auto;
+            width: 320px;
+            margin-top: 50px;
+            position: relative;
+            color: #6F6F6F;
+        }
+
+        .text1{
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .text2{
+            font-size: 16px;
+            padding-top: 10px;
+        }
+
+        .text3{
+            padding-top: 5px;
+            font-size: 16px;
+            padding-right: 10px;
+        }
+
+        .text4{
+            font-size: 95px;
+            color: #cacaca;
+            text-shadow: 1px 1px 6px;
+            padding-top: 50px;
+        }
+
+        .back{
+            margin-top: 25px;
+        }
+
+        .link{
+            font-size: 16px;
+            color: #EF8A55;
+            text-decoration: none;
+            padding-right: 10px;
+        }
+        .link:hover{
+            text-decoration: underline;
+        }
+
+        .pt-15{
+            padding-top: 15px;
+        }
+        .pr-10{
+            padding-right: 10px;
+        }
+
+        .logo{
+            width: 100px;
+            height: 100px;
+        }
+
+        .text-center{
+            text-align: center;
+        }
+        </style>
+        <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery-1.7.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                try{
+                    function onBridgeReady(){
+                        WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                            "appId":"wx2421b1c4370ec43b",
+                            "timeStamp":"1395712654",
+                            "nonceStr":"e61463f8efa94090b1f366cccfbbb444",
+                            "package":"prepay_id=u802345jgfjsdfgsdg888",
+                            "signType":"MD5",
+                            "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" 
+                            }, function(res){
+                                if(res.err_msg == "get_brand_wcpay_request:ok"){
+                                    alert("支付成功");
+                                }
+                                else{
+                                    alert(res.err_msg);
+                                }
+                            }
+                        );
+                    }
+
+                    if(typeof(WeixinJSBridge) == "undefined"){
+                        if( document.addEventListener ){
+                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                        }else if (document.attachEvent){
+                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        }
+                    }else{
+                        onBridgeReady();
+                    }
+                }
+                catch(e) {
+                    alert(e);
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="text-center">
+                <div class=""><img class="logo" src="{{MEDIA_URL}}img/logo_white.png"></div>
+                <div class="text2">微信支付</div>
+            </div>
+        </div>
+    </body>
+</html>

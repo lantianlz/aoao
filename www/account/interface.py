@@ -696,3 +696,8 @@ class ExternalTokenBase(object):
         if source is not None:
             ps.update(dict(source=source))
         return ExternalToken.objects.filter(**ps)
+
+    def get_weixin_openid_by_user_id(self, user_id):
+        ets = list(self.get_ets_by_user_id(user_id, source="weixin"))
+        if ets:
+            return ets[0].external_user_id

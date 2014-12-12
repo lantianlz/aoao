@@ -42,10 +42,9 @@ def async_send_buy_success_template_msg_by_user_id(user_id, name, remark, app_ke
     from www.weixin.interface import WexinBase
     from www.account.interface import ExternalTokenBase
 
-    ets = list(ExternalTokenBase().get_ets_by_user_id(user_id, source="weixin"))
-    if ets:
-        et = ets[0]
-        errcode, errmsg = WexinBase().send_buy_success_template_msg(openid=et.external_user_id, name=name, remark=remark, app_key=app_key)
+    openid = ExternalTokenBase().get_weixin_openid_by_user_id(user_id)
+    if openid:
+        errcode, errmsg = WexinBase().send_buy_success_template_msg(openid=openid, name=name, remark=remark, app_key=app_key)
         # errcode, errmsg = WexinBase().send_buy_success_template_msg(openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4", name=name, remark=remark, app_key="aoaoxc")
         logging.error(u"%s: errcode is:%s, errmsg is:%s" % (str(datetime.datetime.now()), errcode, errmsg))
 
@@ -58,10 +57,9 @@ def async_send_use_order_code_template_msg_by_user_id(user_id, product_type, nam
     from www.weixin.interface import WexinBase
     from www.account.interface import ExternalTokenBase
 
-    ets = list(ExternalTokenBase().get_ets_by_user_id(user_id, source="weixin"))
-    if ets:
-        et = ets[0]
-        errcode, errmsg = WexinBase().send_use_order_code_template_msg(openid=et.external_user_id, product_type=product_type, name=name,
+    openid = ExternalTokenBase().get_weixin_openid_by_user_id(user_id)
+    if openid:
+        errcode, errmsg = WexinBase().send_use_order_code_template_msg(openid=openid, product_type=product_type, name=name,
                                                                        time=time, remark=remark, app_key=app_key)
         # errcode, errmsg = WexinBase().send_use_order_code_template_msg(openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4", product_type=product_type, name=name,
         #                                                                time=time, remark=remark,  app_key="aoaoxc")

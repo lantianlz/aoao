@@ -70,9 +70,9 @@ def alipaynotify_m(request):
     return HttpResponse(result)
 
 
-def weixinpaycallback(request):
+def weixinnotify(request):
     """
-    @note: 微信支付回调
+    @note: 微信支付回调服务通知接口
     """
     pass
 

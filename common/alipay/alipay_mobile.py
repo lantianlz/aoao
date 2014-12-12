@@ -18,8 +18,8 @@ import urlparse
 # from pprint import pprint
 from pyquery import PyQuery as pq
 from django.utils.encoding import smart_str
-from hashcompat import md5_constructor as md5
 
+from common.hashcompat import md5_constructor as md5
 from common.alipay.config_real import settings
 from common import debug
 

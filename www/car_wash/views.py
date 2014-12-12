@@ -70,6 +70,8 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     @note: 创建订单
     """
     from common.alipay import alipay_mobile
+    from common.weixinpay import weixinpay
+    from www.account.interface import ExternalTokenBase
 
     service_price = spb.get_service_price_by_id(service_price_id)
     if not service_price:
@@ -98,7 +100,12 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
             if flag:
                 return HttpResponseRedirect(alipay.get_pay_url())
         if order.pay_type == 2:     # 微信支付
-            pass
+            weixinpay = weixinpay.Weixinpay()
+            flag, prepay_id = weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no=order.trade_id,
+                                                      total_fee=int(order.pay_fee * 100),
+                                                      openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
+            if flag:
+                return render_to_response('mobile/car_wash/weixinpay.html', locals(), context_instance=RequestContext(request))
 
         err_msg = u'支付跳转异常，请联系嗷嗷客服人员'
         return render_to_response('error.html', locals(), context_instance=RequestContext(request))
