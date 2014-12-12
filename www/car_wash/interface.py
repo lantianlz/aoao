@@ -4,6 +4,7 @@ import datetime
 import random
 from django.db import transaction
 from django.conf import settings
+from decimal import Decimal
 
 from common import utils, debug
 from www.misc import consts
@@ -616,7 +617,9 @@ class OrderBase(object):
 
             if page_show_pay_fee:
                 page_show_pay_fee = float(page_show_pay_fee)
-                if page_show_pay_fee != float(pay_fee):
+                pay_fee = float(pay_fee)
+
+                if abs(page_show_pay_fee - pay_fee) > Decimal(0.001):
                     transaction.rollback(using=DEFAULT_DB)
                     return 20304, dict_err.get(20304)
 
@@ -660,7 +663,8 @@ class OrderBase(object):
 
             if order.order_state in (0, ):
                 # 付款金额和订单应付金额是否相符
-                if payed_fee != float(order.pay_fee):
+                # if payed_fee != float(order.pay_fee):
+                if abs(payed_fee - float(order.pay_fee)) > Decimal(0.001):
                     errcode, errmsg = 20302, dict_err.get(20302)
                 order.payed_fee = str(payed_fee)  # 转成string后以便转成decimal
                 order.pay_info = pay_info
@@ -725,7 +729,6 @@ class OrderBase(object):
             debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
-
 
     def search_orders_for_admin(self, car_wash_name, trade_id, state):
         objs = Order.objects.select_related("car_wash", "service_price").all()
@@ -865,7 +868,6 @@ class OrderCodeBase(object):
             debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
-
 
     def search_codes_for_admin(self, car_wash_name, code, state):
         objs = OrderCode.objects.select_related("car_wash", "order").all()

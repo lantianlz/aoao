@@ -93,7 +93,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
 
         if order.pay_type == 1:  # 支付宝支付
             alipay = alipay_mobile.Alipay()
-            flag, token = alipay.get_token(subject=u"%s洗车服务" % order.car_wash.name, out_trade_no=order.trade_id,
+            flag, token = alipay.get_token(subject=u"嗷嗷洗车", out_trade_no=order.trade_id,
                                            total_fee=order.pay_fee, out_user=order.user_id)
             if flag:
                 return HttpResponseRedirect(alipay.get_pay_url())
