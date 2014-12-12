@@ -13,7 +13,7 @@ from common import utils, page
 from www.car_wash.interface import CarWashBankBase
 
 @verify_permission('')
-def bank(request, template_name='pc/admin/bank.html'):
+def bank(request, template_name='pc/admin/car_wash_bank.html'):
     #choices = [{'value': x[0], 'name': x[1]} for x in group_choices]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

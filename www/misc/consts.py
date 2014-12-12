@@ -78,4 +78,9 @@ PERMISSIONS = [
 
     {'code': 'order_code_manage', 'name': u'洗车码管理', 'parent': None},
     {'code': 'query_order_code', 'name': u'查询洗车码', 'parent': 'order_code_manage'},
+
+    {'code': 'car_wash_manager_manage', 'name': u'洗车行管理员管理', 'parent': None},
+    {'code': 'add_car_wash_manager', 'name': u'添加洗车行管理员', 'parent': 'car_wash_manager_manage'},
+    {'code': 'query_car_wash_manager', 'name': u'查询洗车行管理员', 'parent': 'car_wash_manager_manage'},
+    {'code': 'delete_car_wash_manager', 'name': u'修改洗车行管理员', 'parent': 'car_wash_manager_manage'}, 
 ]

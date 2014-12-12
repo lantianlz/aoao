@@ -56,12 +56,22 @@ urlpatterns += patterns('www.admin.views_service_price',
                         )
 
 # 洗车行银行信息
-urlpatterns += patterns('www.admin.views_bank',
+urlpatterns += patterns('www.admin.views_car_wash_bank',
                         url(r'^car_wash/bank/add_bank$', 'add_bank'),
                         url(r'^car_wash/bank/modify_bank$', 'modify_bank'),
                         url(r'^car_wash/bank/get_bank_by_id$', 'get_bank_by_id'),
                         url(r'^car_wash/bank/search$', 'search'),
                         url(r'^car_wash/bank$', 'bank'),
+                        )
+
+# 洗车行管理员
+urlpatterns += patterns('www.admin.views_car_wash_manager',
+                        url(r'^car_wash/manager/delete_manager$', 'delete_manager'),
+                        url(r'^car_wash/manager/add_manager$', 'add_manager'),
+                        url(r'^car_wash/manager/modify_manager$', 'modify_manager'),
+                        url(r'^car_wash/manager/get_manager_by_id$', 'get_manager_by_id'),
+                        url(r'^car_wash/manager/search$', 'search'),
+                        url(r'^car_wash/manager$', 'manager'),
                         )
 
 # 城市
