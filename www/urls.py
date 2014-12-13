@@ -42,6 +42,7 @@ urlpatterns += patterns('misc.views_paycallback',
                         (r'^alipaycallback_m$', 'alipaycallback_m'),
                         (r'^alipaynotify_m$', 'alipaynotify_m'),
                         (r'^weixinnotify$', 'weixinnotify'),
+                        (r'^weixinwarning$', 'weixinwarning'),
 
                         (r'^test_paycallback$', 'test_paycallback'),
                         )
