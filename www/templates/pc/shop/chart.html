@@ -98,6 +98,34 @@ $(document).ready(function(){
         minView: 2,
         autoclose: true
     });
+
+    var checkDate = function(){
+        
+        var sDate = new Date($('.start-date').val()),
+            eDate = new Date($('.end-date').val()),
+            timedelta = eDate - sDate;
+
+        // 开始日期 小于 结束日期
+        if(timedelta > 0){
+            // 日期间隔需要3个月之间
+            if(timedelta > 3*30*24*60*60*1000){
+                $.Global.Notice.InfoTopNotice('最多只能查询3个月内的流水');
+                $('.search').attr('disabled', true);
+            } else {
+                $('.search').attr('disabled', false);
+            }
+        } else {
+            $.Global.Notice.InfoTopNotice('结束时期应该大于开始日期');
+            $('.search').attr('disabled', true);
+        }
+    };
+
+    $('.start-date').bind('change', function(){
+        checkDate();
+    });
+    $('.end-date').bind('change', function(){
+        checkDate();
+    });
 });
 </script>
 {% endblock %}
@@ -117,7 +145,7 @@ $(document).ready(function(){
                 <input type="text" class="input form-control end-date" value="{{end_date}}" name="end_date">
             </div>
             <div class="input-group">
-                <button class="btn btn-default">查 询</button>
+                <button class="btn btn-default search" type="submit">查 询</button>
             </div>
         </form>
     </div>
