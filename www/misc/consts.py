@@ -51,6 +51,7 @@ PERMISSIONS = [
     {'code': 'add_service_price', 'name': u'添加服务价格', 'parent': 'service_price_manage'},
     {'code': 'query_service_price', 'name': u'查询服务价格', 'parent': 'service_price_manage'},
     {'code': 'modify_service_price', 'name': u'修改服务价格', 'parent': 'service_price_manage'},
+    {'code': 'remove_service_price', 'name': u'删除服务价格', 'parent': 'service_price_manage'},
 
     {'code': 'car_wash_bank_manage', 'name': u'洗车行银行信息管理', 'parent': None},
     {'code': 'add_car_wash_bank', 'name': u'添加洗车行银行信息', 'parent': 'car_wash_bank_manage'},
@@ -72,6 +73,9 @@ PERMISSIONS = [
 
     {'code': 'user_cash_record_manage', 'name': u'用户现金记录管理', 'parent': None},
     {'code': 'query_user_cash_record', 'name': u'查询用户现金记录', 'parent': 'user_cash_record_manage'},
+
+    {'code': 'car_wash_cash_record_manage', 'name': u'洗车行现金记录管理', 'parent': None},
+    {'code': 'query_car_wash_cash_record', 'name': u'查询洗车行现金记录', 'parent': 'car_wash_cash_record_manage'},
 
     {'code': 'order_manage', 'name': u'订单管理', 'parent': None},
     {'code': 'query_order', 'name': u'查询订单', 'parent': 'order_manage'},

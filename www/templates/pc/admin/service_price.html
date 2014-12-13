@@ -98,6 +98,19 @@ $(document).ready(function(){
                     }
                 }
             );
+        },
+
+        removePrice: function(priceId, callback){
+
+            ajaxSend(
+                "/admin/car_wash/service_price/remove_service_price", 
+                {'price_id': priceId},
+                function(response){
+                    if(callback){
+                        callback(response);
+                    }
+                }
+            );
         }
 
     });
@@ -162,7 +175,8 @@ $(document).ready(function(){
         template: _.template($('#modify_price_template').html()),
 
         events: {
-            'click .save': 'save'
+            'click .save': 'save',
+            'click .remove': 'remove'
         },
 
         // 显示面板
@@ -226,6 +240,23 @@ $(document).ready(function(){
                     $.Global.Notice.ErrorTopNotice(data.errmsg);
                 }
             })
+        },
+
+        remove: function(){
+            var priceId = this.$('form').data('price_id'),
+                me = this;
+
+            if(confirm('确认删除此服务价格?')){
+                me.collection.removePrice(priceId, function(data){
+                    if(data.errcode == "0"){
+                        $.Global.Notice.SuccessTopNotice('操作成功!');
+                        router.navigate('search//1/1', {'trigger': true});
+                    } else {
+                        $.Global.Notice.ErrorTopNotice(data.errmsg);
+                    }
+                });
+            }
+            
         }
 
 
@@ -489,6 +520,7 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <div class="col-sm-12">
                 <button type="button" class="btn btn-primary save">提交你的修改</button>
+                <button type="button" class="btn btn-danger remove ml-25">删除此服务价格</button>
             </div>
         </div>
     </form>

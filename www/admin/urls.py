@@ -48,6 +48,7 @@ urlpatterns += patterns('www.admin.views_service_type',
 
 # 洗车行服务价格
 urlpatterns += patterns('www.admin.views_service_price',
+                        url(r'^car_wash/service_price/remove_service_price$', 'remove_service_price'),
                         url(r'^car_wash/service_price/add_service_price$', 'add_service_price'),
                         url(r'^car_wash/service_price/modify_service_price$', 'modify_service_price'),
                         url(r'^car_wash/service_price/get_service_price_by_id$', 'get_service_price_by_id'),

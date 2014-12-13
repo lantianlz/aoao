@@ -109,3 +109,11 @@ def add_service_price(request):
     )
 
     return flag, msg.id if flag == 0 else msg
+
+
+@verify_permission('remove_service_price')
+@common_ajax_response
+def remove_service_price(request):
+    price_id = request.REQUEST.get('price_id')
+
+    return ServicePriceBase().remove_service_price(price_id)

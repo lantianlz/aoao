@@ -45,7 +45,7 @@ def format_record(objs, num):
     return data
 
 
-@verify_permission('query_user_cash_record')
+@verify_permission('query_car_wash_cash_record')
 def search(request):
     data = []
 

@@ -274,6 +274,18 @@ class ServicePriceBase(object):
         return 0, dict_err.get(0)
 
 
+    def remove_service_price(self, price_id):
+        if not price_id:
+            return 99800, dict_err.get(99800)
+
+        try:
+            ServicePrice.objects.get(id=price_id).delete()
+        except Exception, e:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
+
+
 class ServiceTypeBase(object):
 
     def get_service_type_by_id(self, id, state=True):
