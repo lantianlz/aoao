@@ -10,6 +10,7 @@ from pyquery import PyQuery as pq
 
 from common import debug
 from common.alipay import alipay_mobile
+from common.weixinpay.weixinpay import Weixinpay
 from www.car_wash.interface import OrderBase
 
 
@@ -18,7 +19,7 @@ def alipaycallback_m(request):
     @note: 支付宝手机支付回调，页面跳转方式
     仅做检测，不做后续处理，由服务器通知方式进行后续处理，避免同时并发的方式
     """
-    logging.error(u"alipaycallback_m info is: %s" % smart_str(request.REQUEST))
+    logging.error(u"alipaycallback_m info is: %s" % request.REQUEST)
 
     alipay = alipay_mobile.Alipay()
     flag = alipay.validate_html_redirect_params(request)
@@ -41,7 +42,7 @@ def alipaynotify_m(request):
     """
     @note: 支付宝手机支付通知，服务器通知方式
     """
-    logging.error(u"alipaynotify_m info is: %s" % smart_str(request.REQUEST))
+    logging.error(u"alipaynotify_m info is: %s" % request.REQUEST)
 
     alipay = alipay_mobile.Alipay()
     flag = alipay.validate_notify_params(request)
@@ -70,7 +71,32 @@ def weixinnotify(request):
     """
     @note: 微信支付回调服务通知接口
     """
-    pass
+    xml_data = request.read()
+    logging.error(u"weixinnotify info is: %s" % xml_data)
+
+    weixinpay = Weixinpay()
+    result = 'FAIL'
+    errmsg = "OK"
+
+    params = weixinpay.format_xml_data_to_params(xml_data)
+
+    # 先判断协议返回错误码, 再判断业务返回错误码
+    if params.get("return_code") == "SUCCESS" and params.get("result_code") == "SUCCESS":
+        flag = weixinpay.validate_notify_params(params)
+        if not flag:
+            trade_no = params.get("transaction_id")
+            appid = params.get("appid")
+            buyer_id = params.get("openid")
+            trade_id = params.get("out_trade_no")
+            total_fee = float(params.get('total_fee'))
+            pay_info = 'trade_no:%s, appid:%s, buyer_id:%s' % (trade_no, appid, buyer_id)
+
+            if trade_id.startswith("W"):
+                errcode, errmsg = OrderBase().order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
+                result = u'SUCCESS' if errcode in (0, 20301) else 'FAIL'  # 不存在的订单返回成功防止一直补发
+
+    xml = u"<xml><return_code><![CDATA[%s]]></return_code><return_msg><![CDATA[%s]]></return_msg></xml>" % (result, errmsg)
+    return HttpResponse(xml, mimetype='text/xml')
 
 
 def weixinwarning(request):

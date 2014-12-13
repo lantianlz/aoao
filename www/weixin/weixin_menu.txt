@@ -31,7 +31,7 @@
                 },
                 {
                     "type": "view", 
-                    "name": "联系我们", 
+                    "name": "关于我们", 
                     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=about#wechat_redirect"
                 },
                 {
@@ -79,7 +79,7 @@
                 },
                 {
                     "type": "view", 
-                    "name": "联系我们", 
+                    "name": "关于我们", 
                     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=about#wechat_redirect"
                 },
                 {

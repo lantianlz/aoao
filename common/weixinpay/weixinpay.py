@@ -128,7 +128,26 @@ class Weixinpay(object):
             debug.get_debug_detail_and_send_email(e)
             return False, e
 
+    def validate_notify_params(self, params):
+        '''
+        @note: 校验支付通知接口的参数是否正常
+        '''
+        sign_in = params.get("sign", "")
+
+        params, prestr = self.format_params(params)
+        sign = self.build_mysign(prestr)
+
+        return sign == sign_in
+
+    def format_xml_data_to_params(self, xml_data):
+        params = {}
+        jq = pq(xml_data)
+        for children in jq.children():
+            params[children.tag.strip()] = children.text.strip()
+        # pprint(params)
+        return params
+
 
 if __name__ == '__main__':
     weixinpay = Weixinpay()
-    weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH")
+    # weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH")
