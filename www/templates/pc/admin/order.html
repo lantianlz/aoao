@@ -30,6 +30,7 @@ $(document).ready(function(){
             'num': 'num',
             'orderId': 'order_id',
             'tradeId': 'trade_id',
+            'serviceType': 'service_type',
             'sourceType': 'source_type',
             'userId': 'user_id',
             'userNick': 'user_nick',
@@ -48,6 +49,7 @@ $(document).ready(function(){
             'payFee': 'pay_fee',
             'payType': 'pay_type',
             'payTime': 'pay_time',
+            'payInfo': 'pay_info',
             'ip': 'ip',
             'state': 'state'
         },
@@ -409,6 +411,13 @@ $(document).ready(function(){
         </div>
 
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">服务类型</label>
+            <div class="col-sm-3">
+                <p class="form-control-static"><%= serviceType %></p>
+            </div>
+        </div>
+
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">售价</label>
             <div class="col-sm-3">
                 <p class="form-control-static"><%= salePrice %></p>
@@ -509,6 +518,13 @@ $(document).ready(function(){
             <label class="col-sm-2 control-label">支付时间</label>
             <div class="col-sm-3">
                 <p class="form-control-static"><%= payTime %></p>
+            </div>
+        </div>
+
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-2 control-label">支付信息</label>
+            <div class="col-sm-3">
+                <p class="form-control-static"><%= payInfo %></p>
             </div>
         </div>
 

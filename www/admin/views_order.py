@@ -35,6 +35,7 @@ def format_order(objs, num):
             'num': num,
             'order_id': x.id,
             'trade_id': x.trade_id,
+            'service_type': x.service_price.service_type.name,
             'source_type': x.source_type,
             'user_id': x.user_id if user else '',
             'user_nick': user.nick if user else '',
@@ -53,6 +54,7 @@ def format_order(objs, num):
             'pay_fee': str(x.pay_fee),
             'pay_type': str(x.pay_type),
             'pay_time': str(x.pay_time),
+            'pay_info': x.pay_info,
             'ip': x.ip,
             'state': x.order_state
         })
