@@ -57,12 +57,13 @@ def search(request):
 
     car_wash_name = request.REQUEST.get('car_wash_name')
     code = request.REQUEST.get('code')
+    nick = request.REQUEST.get('nick')
     state = request.REQUEST.get('state')
     state = int(state) if state != "-2" else None
     
     page_index = int(request.REQUEST.get('page_index'))
 
-    objs = OrderCodeBase().search_codes_for_admin(car_wash_name, code, state)
+    objs = OrderCodeBase().search_codes_for_admin(car_wash_name, code, nick, state)
 
     page_objs = page.Cpt(objs, count=10, page=page_index).info
 

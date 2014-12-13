@@ -7,7 +7,7 @@ from django.db import transaction
 from common import utils, debug
 from www.misc import consts
 from www.account.interface import UserBase
-from www.car_wash.interface import car_wash_required
+from www.car_wash.interface import car_wash_required, CarWashBase
 from www.cash.models import UserCash, UserCashRecord, CarWashCash, CarWashCashRecord
 
 dict_err = {
@@ -187,3 +187,14 @@ class CarWashCashRecordBase(object):
             else:
                 dict_results[day] += value
         return dict_results
+
+    def search_records_for_admin(self, car_wash_name):
+        objs = CarWashCashRecord.objects.select_related('car_wash_cash').all()
+
+        if car_wash_name:
+            car_wash = CarWashBase().get_car_washs_by_name(car_wash_name, None)
+            if car_wash:
+                objs = objs.filter(car_wash_cash__car_wash_id=car_wash[0].id)
+            else:
+                objs = []
+        return objs

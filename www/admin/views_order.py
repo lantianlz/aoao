@@ -66,12 +66,13 @@ def search(request):
 
     car_wash_name = request.REQUEST.get('car_wash_name')
     trade_id = request.REQUEST.get('trade_id')
+    nick = request.REQUEST.get('nick')
     state = request.REQUEST.get('state')
     state = int(state) if state != "-2" else None
     
     page_index = int(request.REQUEST.get('page_index'))
 
-    objs = OrderBase().search_orders_for_admin(car_wash_name, trade_id, state)
+    objs = OrderBase().search_orders_for_admin(car_wash_name, trade_id, nick, state)
 
     page_objs = page.Cpt(objs, count=10, page=page_index).info
 

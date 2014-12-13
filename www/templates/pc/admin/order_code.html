@@ -44,18 +44,19 @@ $(document).ready(function(){
         },
 
         // 查询
-        search: function(car_wash_name, code, state, pageIndex){
+        search: function(car_wash_name, code, nick, state, pageIndex){
             var me = this;
 
             ajaxSend(
                 "/admin/order_code/search", 
-                {'car_wash_name': car_wash_name, 'code': code, 'state': state, 'page_index': pageIndex}, 
+                {'car_wash_name': car_wash_name, 'code': code, 'nick': nick, 'state': state, 'page_index': pageIndex}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
                     me.carWashName = car_wash_name;
                     me.code= code;
                     me.state = state;
+                    me.nick = nick;
 
                     me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
@@ -107,7 +108,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.carWashName + '/' + this.collection.code + '/' + this.collection.state
+                'search/' + this.collection.carWashName + '/' + this.collection.code + '/' + this.collection.nick + '/' + this.collection.state
             );
         },
 
@@ -119,9 +120,10 @@ $(document).ready(function(){
         search: function(){
             var carWashName = this.$('.key-word').val(),
                 code = this.$('.key-word-code').val(),
+                nick = this.$('.key-word-nick').val(),
                 state = this.$('.key-word-state').val();
 
-            router.navigate(String.format('/search/{0}/{1}/{2}/1', carWashName, code, state), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/{2}/{3}/1', carWashName, code, nick, state), {trigger: true});
         },
 
         modifyCode: function(sender){
@@ -245,12 +247,12 @@ $(document).ready(function(){
         routes: {
             "":                     "search",
             "modify/:codeId":       "modify",
-            "search/(:carWashName)/(:code)/(:state)/:pageIndex":    "search",
+            "search/(:carWashName)/(:code)/(:nick)/(:state)/:pageIndex":    "search",
         },
 
         // 查询
-        search: function(carWashName, code, state, pageIndex){
-            codes.search(carWashName||'', code||'', state||-2, pageIndex||1);
+        search: function(carWashName, code, nick, state, pageIndex){
+            codes.search(carWashName||'', code||'', nick||'', state||-2, pageIndex||1);
         },
 
         // 显示修改界面
@@ -295,10 +297,13 @@ $(document).ready(function(){
                     {% endfor %}
                 </select>
             </div>
-            <div class="pl-0 pb-10 col-md-3">
+            <div class="pl-0 pb-10 col-md-2">
                 <input type="text" class="input-sm form-control border-radius-0 key-word-code" placeholder="输入洗车码..." />
             </div>
-            <div class="pl-0 pb-10 col-md-4">
+            <div class="pl-0 pb-10 col-md-2">
+                <input type="text" class="input-sm form-control border-radius-0 key-word-nick" placeholder="输入用户呢称..." />
+            </div>
+            <div class="pl-0 pb-10 col-md-3">
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
                     <span class="input-group-btn">

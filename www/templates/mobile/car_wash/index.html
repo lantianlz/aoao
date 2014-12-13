@@ -85,17 +85,17 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block topbar %}
-<div class="row pf text-center border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h40">
-    <div class="col-xs-4 line-height-32 text-left pl-15 pr-0">
+<div class="row pf text-center border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h45">
+    <div class="col-xs-4 line-height-35 text-left pl-15 pr-0 pt-0">
         <select class="input-sm sort">
             <option value="0" {% if order_by_value == "0" %}selected="selected"{% endif %}>默认排序</option>
             <option value="1" {% if order_by_value == "1" %}selected="selected"{% endif %}>价格最低</option>
             <option value="2" {% if order_by_value == "2" %}selected="selected"{% endif %}>单量最多</option>
         </select>
     </div>
-    <div class="col-xs-4 line-height-32 f14 pr-0 pl-0 text-center">洗车行列表</div>
-    <div class="col-xs-4 line-height-32 text-right">
-        <a href="/city/open_citys_list" class="co8">
+    <div class="col-xs-4 line-height-35 f14 pr-0 pl-0 text-center">洗车行列表</div>
+    <div class="col-xs-4 line-height-35 text-right">
+        <a href="/city/open_citys_list" class="co8 pt-10 pb-10 pl-20 pr-0">
             <i class="fa fa-map-marker pr-3"></i>{{city.get_short_name}}
         </a>
     </div>
@@ -103,7 +103,7 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block container %}
-<div class="row pt-50 pb-50 car-wash-list">
+<div class="row pt-55 pb-50 car-wash-list">
     
         {% for car_wash in car_washs %}
         <ul class="list-group col-xs-12 mb-10 pl-15 pr-15">

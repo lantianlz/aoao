@@ -159,16 +159,22 @@ class CarWashBase(object):
 
         return 0, dict_err.get(0)
 
-    def get_car_washs_by_name(self, name=""):
-        objs = CarWash.objects.filter(state=True)
+    def get_car_washs_by_name(self, name="", state=True):
+        objs = CarWash.objects.all()
+
+        if state is not None:
+            objs = objs.filter(state=state)
 
         if name:
             objs = objs.filter(name__contains=name)
 
         return objs[:10]
 
-    def get_car_wash_by_name(self, name=""):
-        objs = CarWash.objects.filter(state=True)
+    def get_car_wash_by_name(self, name="", state=True):
+        objs = CarWash.objects.all()
+
+        if state is not None:
+            objs = objs.filter(state=state)
 
         if name:
             objs = objs.filter(name=name)
@@ -730,7 +736,7 @@ class OrderBase(object):
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
-    def search_orders_for_admin(self, car_wash_name, trade_id, state):
+    def search_orders_for_admin(self, car_wash_name, trade_id, nick, state):
         objs = Order.objects.select_related("car_wash", "service_price").all()
 
         if trade_id:
@@ -742,6 +748,14 @@ class OrderBase(object):
 
         if state is not None:
             objs = objs.filter(order_state=state)
+
+        if nick:
+            user = UserBase().get_user_by_nick(nick)
+            if user:
+                objs = objs.filter(user_id=user.id)
+                return objs if objs else []
+            else:
+                return []
 
         return objs
 
@@ -869,7 +883,7 @@ class OrderCodeBase(object):
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
 
-    def search_codes_for_admin(self, car_wash_name, code, state):
+    def search_codes_for_admin(self, car_wash_name, code, nick, state):
         objs = OrderCode.objects.select_related("car_wash", "order").all()
 
         if code:
@@ -882,6 +896,13 @@ class OrderCodeBase(object):
         if state is not None:
             objs = objs.filter(state=state)
 
+        if nick:
+            user = UserBase().get_user_by_nick(nick)
+            if user:
+                objs = objs.filter(user_id=user.id)
+                return objs if objs else []
+            else:
+                return []
         return objs
 
 

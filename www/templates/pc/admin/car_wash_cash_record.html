@@ -1,7 +1,7 @@
 {% extends "pc/admin/home.html" %}
 {% load custom_tags %}
 {% load custom_filters %}
-{% block title %}用户现金管理{% endblock %}
+{% block title %}洗车行现金管理{% endblock %}
 
 {% block css %}
 <style type="text/css">
@@ -29,8 +29,8 @@ $(document).ready(function(){
         _modelMaps: {
             'num': 'num',
             'recordId': 'record_id',
-            'userId': 'user_id',
-            'userNick': 'user_nick',
+            'carWashId': 'car_wash_id',
+            'carWashName': 'car_wash_name',
             'balance': 'balance',
             'value': 'value',
             'currentBalance': 'current_balance',
@@ -41,16 +41,16 @@ $(document).ready(function(){
         },
 
         // 查询
-        search: function(nick, pageIndex){
+        search: function(carWashName, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/cash/user_cash_record/search", 
-                {'nick': nick||'', 'page_index': pageIndex||1}, 
+                "/admin/cash/car_wash_cash_record/search", 
+                {'car_wash_name': carWashName||'', 'page_index': pageIndex||1}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
-                    me.nick = nick;
+                    me.carWashName = carWashName;
 
                     me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
@@ -123,12 +123,12 @@ $(document).ready(function(){
 
         routes: {
             "":                     "search",
-            "search/(:nick)/:pageIndex":    "search",
+            "search/(:carWashName)/:pageIndex":    "search",
         },
 
         // 查询
-        search: function(nick, pageIndex){
-            records.search(nick||'', pageIndex||1);
+        search: function(carWashName, pageIndex){
+            records.search(carWashName||'', pageIndex||1);
         }
 
     });
@@ -148,7 +148,7 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#record_list" class="black-blue" data-toggle="pill">用户现金记录列表</a>
+        <a href="#record_list" class="black-blue" data-toggle="pill">洗车行现金记录列表</a>
     </li>
 </ul>
 
@@ -158,7 +158,7 @@ $(document).ready(function(){
         <form action="." onsubmit="javascript: return false;">
             <div class="pl-0 pb-10 col-md-3">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入用户昵称..." />
+                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
                     <span class="input-group-btn">
                         <button class="btn btn-default search" type="submit">查询</button>
                     </span>
@@ -169,7 +169,7 @@ $(document).ready(function(){
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>用户</th>
+                    <th>洗车行</th>
                     <th>最新余额</th>
                     <th>操作类型</th>
                     <th>操作金额</th>
@@ -196,7 +196,7 @@ $(document).ready(function(){
     <% _.each(records, function(record){ %>
         <tr class="pointer" data-record_id="<%= record.recordId %>">
             <td><%= record.num %></td>
-            <td><%= record.userNick %></td>
+            <td><%= record.carWashName %></td>
             <td><%= record.balance %></td>
             <td>
                 {% for choice in operation_choices %}
