@@ -442,6 +442,12 @@ $(document).ready(function(){
                 <input type="text" class="form-control" required name="tel" value='<%= tel %>'>
             </div>
         </div>
+        <div class="form-group pt-20 pb-20 mb-0">
+            <label class="col-sm-2 control-label">结算日期</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" required name="balance_date" id="balance_date_modify" value='<%= balanceDate %>'>
+            </div>
+        </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">银行名称</label>
             <div class="col-sm-3">
@@ -454,12 +460,7 @@ $(document).ready(function(){
                 <input type="text" class="form-control" required name="bank_card" value='<%= bankCard %>'>
             </div>
         </div>
-        <div class="form-group pt-20 pb-20 mb-0">
-            <label class="col-sm-2 control-label">结算日期</label>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" required name="balance_date" id="balance_date_modify" value='<%= balanceDate %>'>
-            </div>
-        </div>
+        
         
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <div class="col-sm-12">
@@ -504,6 +505,12 @@ $(document).ready(function(){
                             <input type="text" class="form-control" required name="tel" value=''>
                         </div>
                     </div>
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-2 control-label">结算日期</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="balance_date_add" required name="balance_date" value='{{balance_date}}'>
+                        </div>
+                    </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">银行名称</label>
                         <div class="col-sm-3">
@@ -514,12 +521,6 @@ $(document).ready(function(){
                         <label class="col-sm-2 control-label">银行卡号</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" required name="bank_card" value=''>
-                        </div>
-                    </div>
-                    <div class="form-group pt-20 pb-20 mb-0">
-                        <label class="col-sm-2 control-label">结算日期</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="balance_date_add" required name="balance_date" value=''>
                         </div>
                     </div>
                 </form>

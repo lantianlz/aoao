@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json
+import json, datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -15,6 +15,7 @@ from www.car_wash.interface import CarWashBankBase
 @verify_permission('')
 def bank(request, template_name='pc/admin/car_wash_bank.html'):
     #choices = [{'value': x[0], 'name': x[1]} for x in group_choices]
+    balance_date = datetime.datetime.now().strftime('%Y-%m') + '-05'
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
