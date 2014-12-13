@@ -195,7 +195,7 @@ class Coupon(models.Model):
             note += u' (最低消费%s元)' % utils.smart_show_float(self.minimum_amount)
         car_wash = self.car_wash
         if car_wash:
-            note = u', 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
+            note += u' 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
         return note
 
     def get_display(self):

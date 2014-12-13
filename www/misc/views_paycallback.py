@@ -59,10 +59,6 @@ def alipaynotify_m(request):
             total_fee = float(jq('total_fee').html())
             pay_info = 'trade_no:%s, buyer_email:%s, buyer_id:%s' % (trade_no, buyer_email, buyer_id)
 
-            # print pay_info
-            # print trade_id
-            # print total_fee
-
             if trade_id.startswith("W"):
                 errcode, errmsg = OrderBase().order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
                 result = u'success' if errcode in (0, 20301) else 'fail'  # 不存在的订单返回成功防止一直补发
@@ -75,6 +71,20 @@ def weixinnotify(request):
     @note: 微信支付回调服务通知接口
     """
     pass
+
+
+def weixinwarning(request):
+    """
+    @note: 微信支付告警通知接口, 微信监测到商户服务出现问题时，会及时推送相关告警信息到商户后台
+    """
+    from django.conf import settings
+    from www.tasks import async_send_email
+
+    if request.GET or request.POST:
+        title = u'微信支付告警通知'
+        content = u'告警内容如下：\n%s' % request.REQUEST
+        async_send_email(settings.NOTIFICATION_EMAIL, title, content)
+    return HttpResponse("ok")
 
 
 def test_paycallback(request):

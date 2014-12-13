@@ -64,7 +64,7 @@ $(document).ready(function(){
     <div class="row">
         <div class="col-md-offset-4 col-md-4 text-center">
 
-            {% if 'is_shop' in request.GET %}
+            {% if 'is_shop' in request.GET or 'shop' in request.GET.next_url %}
             <div class="pt-40 pr row pb-20 mt-20">
                 <div class="col-md-7 col-xs-6 text-right">
                     <img class="" style="width: 40px;" src="{{MEDIA_URL}}img/logo_white_1.png">
