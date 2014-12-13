@@ -22,7 +22,9 @@ CACHE_INDEX = {
     'CACHE_SESSION': [u'session库', CACHE_SESSION],
     'CACHE_TIMELINE': [u'timeline库', CACHE_TIMELINE],
 }
-CACHE_KEYS_DESC = {'media_version': u'静态文件版本号'}
+CACHE_KEYS_DESC = {'media_version': u'静态文件版本号',
+                   'weixin_access_token_for_aoaoxc': u'微信公众号token',
+                   }
 
 
 def get_connection(config):
