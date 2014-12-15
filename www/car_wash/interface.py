@@ -707,6 +707,7 @@ class OrderBase(object):
                     errcode, errmsg = OrderCodeBase().create_order_code(order)
                     if errcode == 0:
                         codes = errmsg
+                        errmsg = "ok"
 
                 # 发送邮件
                 if payed_fee > 0:
