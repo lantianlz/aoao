@@ -5,6 +5,7 @@ todo
 4.核查静态文件引入必须增加文件版本号
 5.member_required判断
 6.IE兼容性测试
+7.index页智能判断
 
 
 7.微信secret不放入源码管理
