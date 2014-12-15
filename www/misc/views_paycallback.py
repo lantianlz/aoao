@@ -96,6 +96,7 @@ def weixinnotify(request):
                 result = u'SUCCESS' if errcode in (0, 20301) else 'FAIL'  # 不存在的订单返回成功防止一直补发
 
     xml = u"<xml><return_code><![CDATA[%s]]></return_code><return_msg><![CDATA[%s]]></return_msg></xml>" % (result, errmsg)
+    logging.error(u"weixinnotify return is: %s" % xml)
     return HttpResponse(xml, mimetype='text/xml')
 
 

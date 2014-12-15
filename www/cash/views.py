@@ -35,7 +35,6 @@ def recharge(request, template_name='mobile/cash/recharge.html'):
         total_fee = request.POST.get("total_fee")
 
         errcode, errmsg = cob.create_order(request.user.id, pay_type, total_fee, ip=utils.get_clientip(request))
-
         if errcode == 0:
             order = errmsg
 

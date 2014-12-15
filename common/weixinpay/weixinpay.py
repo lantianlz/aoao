@@ -139,4 +139,28 @@ class Weixinpay(object):
 
 if __name__ == '__main__':
     weixinpay = Weixinpay()
-    print weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4")
+    # print weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4")
+
+    xml_data = """
+    <xml><appid><![CDATA[wx23cca542b396c669]]></appid>
+    <bank_type><![CDATA[CMB_DEBIT]]></bank_type>
+    <cash_fee><![CDATA[1]]></cash_fee>
+    <fee_type><![CDATA[CNY]]></fee_type>
+    <is_subscribe><![CDATA[Y]]></is_subscribe>
+    <mch_id><![CDATA[1224504302]]></mch_id>
+    <nonce_str><![CDATA[1ed469c2845311e48cab00163e0237be]]></nonce_str>
+    <openid><![CDATA[oNYsJj1eg4fnU4tKLvH-f2IXlxJ4]]></openid>
+    <out_trade_no><![CDATA[W2014121520084622604]]></out_trade_no>
+    <result_code><![CDATA[SUCCESS]]></result_code>
+    <return_code><![CDATA[SUCCESS]]></return_code>
+    <sign><![CDATA[79BA77410E75E7F0F7ADA8C91D16EFEA]]></sign>
+    <time_end><![CDATA[20141215200914]]></time_end>
+    <total_fee>1</total_fee>
+    <trade_type><![CDATA[JSAPI]]></trade_type>
+    <transaction_id><![CDATA[1008790051201412150007265351]]></transaction_id>
+    </xml>
+    """
+
+    params = weixinpay.format_xml_data_to_params(xml_data)
+    pprint(params)
+    print weixinpay.validate_notify_params(params)
