@@ -88,7 +88,7 @@ def weixinnotify(request):
             appid = params.get("appid")
             buyer_id = params.get("openid")
             trade_id = params.get("out_trade_no")
-            total_fee = float(params.get('total_fee'))
+            total_fee = float(params.get('total_fee')) / 100.0    # 微信金额以分为单位
             pay_info = 'trade_no:%s, appid:%s, buyer_id:%s' % (trade_no, appid, buyer_id)
 
             if trade_id.startswith("W"):
