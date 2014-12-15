@@ -701,3 +701,9 @@ class ExternalTokenBase(object):
         ets = list(self.get_ets_by_user_id(user_id, source="weixin"))
         if ets:
             return ets[0].external_user_id
+
+    def get_external_for_admin(self, s_date, e_date):
+
+        objs = ExternalToken.objects.filter(create_time__range=(s_date, e_date))
+
+        return objs
