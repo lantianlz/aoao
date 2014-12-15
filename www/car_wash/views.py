@@ -108,7 +108,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
         if order.pay_type == 2:     # 微信支付
             weixinpay = weixinpay.Weixinpay()
             flag, prepay_id = weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no=order.trade_id,
-                                                      total_fee=int(order.pay_fee * 100),
+                                                      total_fee=int((order.pay_fee + 0.001) * 100),
                                                       openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
             if flag:
                 params = dict(appId=weixinpay.appid, timeStamp=int(time.time()), nonceStr=utils.uuid_without_dash(),
