@@ -105,6 +105,10 @@ def oauth_weixin(request):
         access_token = dict_result.get('access_token')
         # logging.error(dict_result)
 
+        # dict_result={u'errcode': 40029, u'errmsg': u'invalid code'}
+        if dict_result.get("errcode") == 40029:  # 重新授权
+            return HttpResponseRedirect(client.authorize())
+
         # 自动检测用户登陆
         openid = dict_result.get("openid")
         user_info = dict(nick=u"weixin_%s" % int(time.time() * 1000), url="", gender=0)
