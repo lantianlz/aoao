@@ -7,7 +7,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import page, utils
+from common import page, utils, user_agent_parser
 from www.misc.decorators import member_required
 from www.city.interface import CityBase
 from www.car_wash import interface
@@ -19,7 +19,7 @@ ob = interface.OrderBase()
 ocb = interface.OrderCodeBase()
 
 
-def index(request, template_name='mobile/car_wash/index.html'):
+def index(request, template_name='pc/index.html'):
     city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
     city = CityBase().get_city_by_id(city_id)
 
@@ -32,6 +32,11 @@ def index(request, template_name='mobile/car_wash/index.html'):
     car_washs = page_objs[0]
 
     is_show_more_flag = True if page_objs[1] < page_objs[4] else False  # 是否展示更多按钮
+
+    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
+    # 手机客户端换模板
+    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
+        template_name = 'mobile/car_wash/index.html'
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

@@ -99,6 +99,8 @@ urlpatterns += patterns('www.admin.views_district',
 # 统计
 urlpatterns += patterns('www.admin.views_statistics',
 
+                        url(r'^statistics/external/search$', 'get_external'),
+                        url(r'^statistics/external$', 'external'),
                         url(r'^statistics/get_active_user$', 'get_active_user'),
                         url(r'^statistics/active_user$', 'active_user'),
                         )

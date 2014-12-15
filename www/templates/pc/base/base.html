@@ -36,102 +36,41 @@
 
         <div class="scroll-top"></div>
         {% block header %}
-        <div class="navbar bgc-fff" role="navigation">
-            <div class="container pt-25">
-                <div class="navbar-header pt-5 pr">
-                    <a href="/" class="qx-logo"><img src="{{MEDIA_URL}}img/logo.png" alt="且行"></a>
-                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="fa fa-minus bgc-zx"></span>
-                        <span class="fa fa-minus bgc-zx"></span>
-                        <span class="fa fa-minus bgc-zx"></span>
+        <header class="navbar navbar-fixed-top bgc-ffffff bdc-e6e6e6 border-bottom" role="banner">
+            <div class="container">
+                <div class="navbar-header pr">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
+                    <a href="../" class="navbar-brand co1 pl-70 f22 pt-20 pb-20">嗷嗷洗车</a>
+                    <img class="w40 pa" style="left: 5px; top: 10px;" src="{{MEDIA_URL}}img/logo.png">
                 </div>
-                <div class="collapse navbar-collapse pt-20">
-                    <ul class="nav navbar-nav pr qx-nav">
-                        <li {% if "/" == request.path %}class="active"{% endif %}>
-                            <a class="co1 fb pl-35 pr-35 f16" href="/">首页</a>
-                        </li>
-                        <li {% if "/activity" in request.path %}class="active"{% endif %}>
-                            <a class="co1 fb pl-35 pr-35 f16" href="/activity/">活动</a>
-                        </li>
-                        <li {% if "/journey" in request.path %}class="active"{% endif %}>
-                            <a class="co1 fb pl-35 pr-35 f16" href="/journey/">游记</a>
-                        </li>
-                        <li {% if "/sight" in request.path %}class="active"{% endif %}>
-                            <a class="co1 fb pl-35 pr-35 f16" href="/sight/">景点</a>
-                        </li>
-                    </ul>
-
+                <nav class="collapse navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav navbar-right">
-                        {% if request.user.is_authenticated %}
-                        <li class="user-menu dropdown">
-                            <a href="{{request.user.get_url}}" class="dropdown-toggle user w140" data-toggle="dropdown" title="{{request.user.nick}}" style="padding-top: 12px; padding-bottom: 13px; padding-right: 0;">
-                                <img alt="{{request.user.nick}}" class="avatar-25 img-circle user" src="{{request.user.get_avatar_25}}">
-                                <span class="pl-0">{{request.user.nick|str_display:5}}</span>
-                            </a>
-                            
-                            <ul class="dropdown-menu text-left" role="menu">
-                                <li>
-                                    <a href="{{request.user.get_url}}">
-                                        <span class="fa fa-user mr-10 f16"></span>我的主页
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/account/user_settings">
-                                        <span class="fa fa-gear mr-10 f15"></span>账号设置
-                                    </a>
-                                </li>
-                                <li role="presentation" class="divider"></li>
-                                <li>
-                                    <a href="/logout">
-                                        <span class="fa fa-power-off mr-10 f15"></span>退出
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="message-menu dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 16px; padding-bottom: 19px;">
-                                <span class="fa fa-bell" id="unread_count_total_nav_none"></span>
-                                <span class="ml-5 badge none" id="unread_count_total_nav_show">0</span>
-                            </a>
-                            
-                            <ul class="dropdown-menu text-left" role="menu">
-                                <li>
-                                    <a href="/message/system_message">
-                                        系统消息<span class="ml-5 badge none" id="unread_count_total_nav_system_message">0</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/message/received_like">
-                                        收到的赞<span class="ml-5 badge none" id="unread_count_total_nav_received_like">0</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/message/received_answer">
-                                        收到的回复<span class="ml-5 badge none" id="unread_count_total_nav_received_answer">0</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/message/at_answer">
-                                        @提到我的<span class="ml-5 badge none" id="unread_count_total_nav_at_answer">0</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <script type="text/javascript" src="{{MEDIA_URL}}js/_update_unread_count_total.js"></script>
-                        {% else %}
                         <li>
-                            <div class="un-login-user pt-20">
-                                <a class="co5" href="/regist" rel="nofollow">免费注册</a>
-                                <a class="pl-5" href="/login" rel="nofollow">立即登录</a>
-                            </div>
+                            <a class="co1 f17" href="../javascript/">首页</a>
                         </li>
-                        {% endif %}
+                        <li>
+                            <a class="co1 f17" href="../getting-started/">服务</a>
+                        </li>
+                        <li>
+                            <a class="co1 f17" href="../css/">使用</a>
+                        </li>
+                        <li class="active">
+                            <a class="co1 f17" href="../components/">常见问题</a>
+                        </li>
+                        <li>
+                            <a class="co1 f14" href="../customize/">
+                                <span class="pt-5 pb-5 pr-5 pl-5 bgc-d31623 bdr-6 co5">商户登录</span>
+                            </a>
+                        </li>
                     </ul>
-                </div>
+                </nav>
             </div>
-        </div>
+        </header>
         {% endblock header %}
         
         {% block base_container %}
