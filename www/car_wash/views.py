@@ -107,7 +107,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
                                                       openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
             if flag:
                 params = dict(appId=weixinpay.appid, timeStamp=int(time.time()), nonceStr=utils.uuid_without_dash(),
-                              package="prepay_id=%s" % prepay_id, signType="MD5", )
+                              package="prepay_id=%s" % prepay_id, signType="MD5", trade_id=order.trade_id)
                 params, prestr = weixinpay.format_params(params)
                 sign = weixinpay.build_mysign(prestr)
                 params["paySign"] = sign
