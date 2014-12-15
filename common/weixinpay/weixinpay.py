@@ -13,6 +13,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 
 import requests
+import logging
 
 from pprint import pprint
 from pyquery import PyQuery as pq
@@ -112,6 +113,7 @@ class Weixinpay(object):
 
                 return True, prepay_id
             else:
+                logging.error(u"get_prepay_id fail, info is:%s" % text)
                 return False, text
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
