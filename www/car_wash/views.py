@@ -88,8 +88,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
     coupon_id = None if coupon_id == "0" else coupon_id
     count = request.POST.get("count")
     use_user_cash = True if request.POST.has_key("use_user_cash") else False
-    pay_type = 2 if request.POST.has_key("pay_type_weixin") else 1
-    pay_type = 1 if request.POST.has_key("pay_type_alipay") else 2
+    pay_type = request.POST.get("pay_type")
     page_show_pay_fee = request.POST.get("page_show_pay_fee")
 
     errcode, errmsg = ob.create_order(service_price, request.user.id, count,
@@ -113,7 +112,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
                                                       openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
             if flag:
                 params = dict(appId=weixinpay.appid, timeStamp=int(time.time()), nonceStr=utils.uuid_without_dash(),
-                              package="prepay_id=%s" % prepay_id, signType="MD5", )
+                              package="prepay_id=%s" % prepay_id, signType="MD5", trade_id=order.trade_id)
                 params, prestr = weixinpay.format_params(params)
                 sign = weixinpay.build_mysign(prestr)
                 params["paySign"] = sign

@@ -13,6 +13,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 
 import requests
+import logging
 
 from pprint import pprint
 from pyquery import PyQuery as pq
@@ -89,32 +90,21 @@ class Weixinpay(object):
         """ % params
 
         try:
-            # resp = requests.post(url=url, data=xml, timeout=30)
-            # resp.encoding = "utf-8"
-            # text = resp.text
-            text = """
-            <xml>
-            <return_code><![CDATA[SUCCESS]]></return_code>
-            <return_msg><![CDATA[OK]]></return_msg>
-            <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
-            <mch_id><![CDATA[10000100]]></mch_id>
-            <device_info><![CDATA[1000]]></device_info>
-            <nonce_str><![CDATA[FvYSnPuFFPkAr77M]]></nonce_str>
-            <sign><![CDATA[63238039D6E43634297CF2A6EB5F3B72]]></sign>
-            <result_code><![CDATA[SUCCESS]]></result_code>
-            <openid><![CDATA[oUpF8uN95-Ptaags6E_roPHg7AG0]]></openid>
-            <is_subscribe><![CDATA[Y]]></is_subscribe>
-            <trade_type><![CDATA[JSAPI]]></trade_type>
-            <bank_type><![CDATA[CCB_CREDIT]]></bank_type>
-            <total_fee>1</total_fee>
-            <coupon_fee>0</coupon_fee>
-            <fee_type><![CDATA[CNY]]></fee_type>
-            <transaction_id><![CDATA[1008450740201407220000058756]]></transaction_id>
-            <out_trade_no><![CDATA[1406033828]]></out_trade_no>
-            <prepay_id><![CDATA[123456]]></prepay_id>
-            <time_end><![CDATA[20140722160655]]></time_end>
-            </xml>
-            """
+            resp = requests.post(url=url, data=xml, timeout=30)
+            resp.encoding = "utf-8"
+            text = resp.text
+            # text = """
+            # <xml><return_code><![CDATA[SUCCESS]]></return_code>
+            # <return_msg><![CDATA[OK]]></return_msg>
+            # <appid><![CDATA[wx23cca542b396c669]]></appid>
+            # <mch_id><![CDATA[1224504302]]></mch_id>
+            # <nonce_str><![CDATA[YGJzdXq7hggzwGVx]]></nonce_str>
+            # <sign><![CDATA[08AC09CF26D2820E833F857E61DE4B62]]></sign>
+            # <result_code><![CDATA[SUCCESS]]></result_code>
+            # <prepay_id><![CDATA[wx2014121518153157cbc1f6af0195338906]]></prepay_id>
+            # <trade_type><![CDATA[JSAPI]]></trade_type>
+            # </xml>
+            # """
             text = smart_str(text)
             if "prepay_id" in text:
                 jq = pq(text)
@@ -123,6 +113,7 @@ class Weixinpay(object):
 
                 return True, prepay_id
             else:
+                logging.error(u"get_prepay_id fail, info is:%s" % text)
                 return False, text
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
@@ -150,4 +141,28 @@ class Weixinpay(object):
 
 if __name__ == '__main__':
     weixinpay = Weixinpay()
-    # weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH")
+    # print weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no="W2014120815441258305", total_fee=2000, openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4")
+
+    xml_data = """
+    <xml><appid><![CDATA[wx23cca542b396c669]]></appid>
+    <bank_type><![CDATA[CMB_DEBIT]]></bank_type>
+    <cash_fee><![CDATA[1]]></cash_fee>
+    <fee_type><![CDATA[CNY]]></fee_type>
+    <is_subscribe><![CDATA[Y]]></is_subscribe>
+    <mch_id><![CDATA[1224504302]]></mch_id>
+    <nonce_str><![CDATA[1ed469c2845311e48cab00163e0237be]]></nonce_str>
+    <openid><![CDATA[oNYsJj1eg4fnU4tKLvH-f2IXlxJ4]]></openid>
+    <out_trade_no><![CDATA[W2014121520084622604]]></out_trade_no>
+    <result_code><![CDATA[SUCCESS]]></result_code>
+    <return_code><![CDATA[SUCCESS]]></return_code>
+    <sign><![CDATA[79BA77410E75E7F0F7ADA8C91D16EFEA]]></sign>
+    <time_end><![CDATA[20141215200914]]></time_end>
+    <total_fee>1</total_fee>
+    <trade_type><![CDATA[JSAPI]]></trade_type>
+    <transaction_id><![CDATA[1008790051201412150007265351]]></transaction_id>
+    </xml>
+    """
+
+    params = weixinpay.format_xml_data_to_params(xml_data)
+    pprint(params)
+    print weixinpay.validate_notify_params(params)

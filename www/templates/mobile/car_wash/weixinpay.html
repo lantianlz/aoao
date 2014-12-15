@@ -89,10 +89,11 @@
                             "paySign":"{{paySign}}" 
                             }, function(res){
                                 if(res.err_msg == "get_brand_wcpay_request:ok"){
-                                    alert("支付成功");
+                                    // alert("支付成功");
+                                    window.location.href = "/weixin_success_info?out_trade_no=" + {{trade_id}};
                                 }
                                 else{
-                                    alert(res.err_msg);
+                                    alert("支付失败，请重新操作\n" + res.err_msg);
                                 }
                             }
                         );
@@ -119,7 +120,7 @@
         <div class="container">
             <div class="text-center">
                 <div class=""><img class="logo" src="{{MEDIA_URL}}img/logo_white.png"></div>
-                <div class="text2">微信支付</div>
+                <div class="text2">请稍后，微信支付接口调取中...</div>
             </div>
         </div>
     </body>

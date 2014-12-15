@@ -8,7 +8,7 @@ from common import utils, debug
 from www.misc import consts
 from www.account.interface import UserBase
 from www.car_wash.interface import car_wash_required, CarWashBase
-from www.cash.models import UserCash, UserCashRecord, CarWashCash, CarWashCashRecord
+from www.cash.models import UserCash, UserCashRecord, CarWashCash, CarWashCashRecord, CashOrder
 
 dict_err = {
     30100: u'余额不足',
@@ -198,3 +198,33 @@ class CarWashCashRecordBase(object):
             else:
                 objs = []
         return objs
+
+
+class CashOrderBase(object):
+
+    def validate_order_info(self, user_id, pay_type, total_fee):
+        assert user_id and pay_type
+        assert 1000 > total_fee > 0
+        assert pay_type in (1, 2)
+
+    def create_order(self, user_id, pay_type, total_fee, ip=None):
+        try:
+            from www.car_wash.interface import OrderBase
+
+            try:
+                pay_type = int(pay_type)
+                total_fee = float(total_fee)
+                self.validate_order_info(user_id, pay_type, total_fee)   # 检测基本信息
+            except:
+                return 99801, dict_err.get(99801)
+
+            pay_fee = total_fee
+            trade_id = OrderBase().generate_order_trade_id(pr="R")
+
+            ps = dict(trade_id=trade_id, user_id=user_id, total_fee=total_fee, discount_fee=0, pay_fee=pay_fee, pay_type=pay_type, ip=ip)
+            order = CashOrder.objects.create(**ps)
+
+            return 0, order
+        except Exception, e:
+            debug.get_debug_detail_and_send_email(e)
+            return 99900, dict_err.get(99900)
