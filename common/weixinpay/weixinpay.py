@@ -114,6 +114,7 @@ class Weixinpay(object):
                 return True, prepay_id
             else:
                 logging.error(u"get_prepay_id fail, info is:%s" % text)
+                logging.error(u"get_prepay_id fail, params is:%s" % xml)
                 return False, text
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
