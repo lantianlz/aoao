@@ -49,7 +49,8 @@ $(document).ready(function(){
 	$('#fullpage').fullpage({
 	    scrollingSpeed: 700,
 	    easing: 'easeOutExpo',
-	    navigation: true
+	    navigation: true,
+	    anchors: ['homepage', 'service', 'use', 'q&a']
 	});
 });
 
@@ -58,7 +59,7 @@ $(document).ready(function(){
 
 {% block base_container %}
 <div id="fullpage">
-	<div class="section bgc-f23a1a">
+	<div class="section bgc-f23a1a" data-anchor="homepage" >
 		<div class="container" style="padding-top: 8%">
 			<div class="col-md-6 pl-75">
 				<div class="co5 f45">专属于年轻人的</div>
@@ -77,9 +78,9 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div>
-	<div class="section bgc-ffffff"></div>
-	<div class="section bgc-f8f8f8"></div>
-	<div class="section bgc-ffffff"></div>
+	<div class="section bgc-ffffff" data-anchor="service"></div>
+	<div class="section bgc-f8f8f8" data-anchor="use"></div>
+	<div class="section bgc-ffffff" data-anchor="q&a"></div>
 </div>
 {% endblock %}
 
