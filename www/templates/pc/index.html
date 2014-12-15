@@ -1,0 +1,86 @@
+{% extends "pc/base/base.html" %}
+
+{% block base_css %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/fullpage/jquery.fullPage.css" />
+<style type="text/css">
+.nav>li>a:hover, .nav>li>a:focus{
+	color: #f23a1a;
+	background-color: transparent;
+}
+
+.navbar-nav>li>a{
+	padding-left: 30px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+a:hover, a:focus{
+	color: #f23a1a;
+	background-color: transparent;
+}
+
+.navbar-brand{
+	height: auto;
+}
+
+#fullPage-nav li a, .fullPage-slidesNav li a{
+	color: #bababa;
+}
+
+#fullPage-nav li .active span, .fullPage-slidesNav .active span{
+	background-color: #bababa;
+}
+
+#fullPage-nav span, .fullPage-slidesNav span{
+	border: 1px solid #bababa;
+	width: 10px;
+	height: 10px;
+}
+
+</style>
+{% endblock %}
+
+{% block base_js %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.fullPage.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.easing.1.3.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#fullpage').fullpage({
+	    scrollingSpeed: 700,
+	    easing: 'easeOutExpo',
+	    navigation: true
+	});
+});
+
+</script>
+{% endblock %}
+
+{% block base_container %}
+<div id="fullpage">
+	<div class="section bgc-f23a1a">
+		<div class="container" style="padding-top: 8%">
+			<div class="col-md-6 pl-75">
+				<div class="co5 f45">专属于年轻人的</div>
+				<div class="co5 f80">洗车平台</div>
+				<div class="co5 f15">汇聚你身边的洗车行，为你提供最优惠、最便捷、最时尚的洗车服务</div>
+				<div class="" style="padding-top: 10%">
+					<img src="{{MEDIA_URL}}img/homepage/qrcode.png" />
+				</div>
+				<div class="" style="padding-top: 3%">
+					<img src="{{MEDIA_URL}}img/homepage/slogan.png" />
+				</div>
+			</div>
+			<div class="col-md-6 text-right pr-75 pr">
+				<img class="w250" src="{{MEDIA_URL}}img/homepage/phone.png">
+				<img class="pa" style="bottom: 30px; left: 70px;" src="{{MEDIA_URL}}img/homepage/car.png">
+			</div>
+		</div>
+	</div>
+	<div class="section bgc-ffffff"></div>
+	<div class="section bgc-f8f8f8"></div>
+	<div class="section bgc-ffffff"></div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
