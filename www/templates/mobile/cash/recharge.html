@@ -5,21 +5,21 @@
 {% block css %}
 <style type="text/css">
 .list-group-item:first-child{
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 .list-group-item:last-child{
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
 .bg-price{
-	transition: all 0.75s;
+    transition: all 0.75s;
 }
 
 .btn-price{
-	transition: all 0.75s;
+    transition: all 0.75s;
 }
 </style>
 {% endblock %}
@@ -27,57 +27,62 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	PARENT_URL = "/cash/";
-	// 点击金额切换颜色
-	$('.btn-price').bind('click', function(){
-		var price = $(this).data('price'),
-			color = $(this).data('color');
+    PARENT_URL = "/cash/";
+    // 点击金额切换颜色
+    $('.btn-price').bind('click', function(){
+        var price = $(this).data('price'),
+            color = $(this).data('color');
 
-		$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
-		$(this).css({'backgroundColor': color, 'borderColor': color, 'color': '#ffffff'});
-		$('.bg-price').css('backgroundColor', color);
-		$('.price').html($.Global.Utils.formatPrice(price));
+        $('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
+        $(this).css({'backgroundColor': color, 'borderColor': color, 'color': '#ffffff'});
+        $('.bg-price').css('backgroundColor', color);
+        $('.price').html(price);
+        $('#total_fee_id').val(price);
 
-		$('.other-price-check').attr('checked', false);
-		$('.other-price').val('');
-	});
+        $('.other-price-check').attr('checked', false);
+        $('.other-price').val('');
+    });
 
-	// 点击整行选择支付方式
-	$('.pay-item').bind('click', function(){
-		$('.pay-type').attr('checked', false);
-		$(this).find('.pay-type').attr('checked', true);
-	});
+    // 点击整行选择支付方式
+    $('.pay-item').bind('click', function(){
+        $('.pay-type').attr('checked', false);
+        $(this).find('.pay-type').attr('checked', true);
+    });
 
-	// 手动输入价格
-	$('.other-price').bind('input', function(){
-		var price = $(this).val();
-		if(/^(\d{1,3}\.\d{1,2}|\d{1,3})$/.test(price)){
-			price = parseFloat(price);
-		} else {
-			price = 0;
-		}
+    // 手动输入价格
+    $('.other-price').bind('input', function(){
+        var price = $(this).val();
+        if(/^(\d{1,3}\.\d{1,2}|\d{1,3})$/.test(price)){
+            price = parseFloat(price);
+            $('.price').html(price);
+            $('#total_fee_id').val(price);
 
-		$('.price').html($.Global.Utils.formatPrice(price));
+            $('.other-price-check').attr('checked', true);
+            $('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
+            $('.bg-price').css('backgroundColor', "#BEBEBE");
+        } else {
+            // price = 0;
+            alert("请输入正确的金额");
+        }
 
-		$('.other-price-check').attr('checked', true);
-		$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
-		$('.bg-price').css('backgroundColor', "#BEBEBE");
-	});
+    });
 
-	// 手动点击其他价格的checkbox
-	$('.other-price-check').bind('click', function(){
-		if($(this).attr('checked')){
-			$('.other-price').val(0);
-			$('.price').html("0.00");
-			$('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
-			$('.bg-price').css('backgroundColor', "#BEBEBE");
-		} else {
-			$('.other-price').val('');
-			$('.price').html("0.00");
-		}
-	});
+    // 手动点击其他价格的checkbox
+    $('.other-price-check').bind('click', function(){
+        if($(this).attr('checked')){
+            $('.other-price').val(0);
+            $('.price').html("0");
+            $('#total_fee_id').val(0);
+            $('.btn-price').css({'backgroundColor': '#eeeeee', 'borderColor': '#dddddd', 'color': '#777777'});
+            $('.bg-price').css('backgroundColor', "#BEBEBE");
+        } else {
+            $('.other-price').val('');
+            $('.price').html("0");
+            $('#total_fee_id').val(0);
+        }
+    });
 
-	$('.btn-price').eq(2).click();
+    $('.btn-price').eq(2).click();
 });
 </script>
 {% endblock %}
@@ -86,59 +91,62 @@ $(document).ready(function(){
 
 {% block container %}
 <div class="pb-50 pt-50 row pl-15 pr-15">
-	<div class="bgc-F5CCC5 mb-15 col-xs-12 row bg-price bdr-4">
-		<div class="col-xs-8 pl-0 pr-0 h155 line-height-155 text-center">
-			<span class="f35 co5 price">100.00</span>
-			<span class="f25 co5 pl-5">元</span>
-		</div>
-		<div class="col-xs-4 pt-30 pl-0 pr-0 text-center">
-			<div><img src="{{MEDIA_URL}}img/logo_white.png" class="w100" /></div>
-			<!-- <div class="co5 f16 pt-5">嗷嗷洗车</div> -->
-		</div>
-	</div>
+    <div class="bgc-F5CCC5 mb-15 col-xs-12 row bg-price bdr-4">
+        <div class="col-xs-8 pl-0 pr-0 h155 line-height-155 text-center">
+            <span class="f35 co5 price">0</span>
+            <span class="f25 co5 pl-5">元</span>
+        </div>
+        <div class="col-xs-4 pt-30 pl-0 pr-0 text-center">
+            <div><img src="{{MEDIA_URL}}img/logo_white.png" class="w100" /></div>
+            <!-- <div class="co5 f16 pt-5">嗷嗷洗车</div> -->
+        </div>
+    </div>
 
-	<div class="col-xs-4 pl-0 pr-5 text-left">
-		<button class="btn btn-block btn-lg co9 btn-price" data-price="500.00" data-color="#5A9BC3">500.00</button>
-	</div>
-	<div class="col-xs-4 pl-3 pr-3">
-		<button class="btn btn-block btn-lg co9 btn-price" data-price="200.00" data-color="#5DC35A">200.00</button>
-	</div>
-	<div class="col-xs-4 pl-5 pr-0 text-right">
-		<button class="btn btn-block btn-lg co9 btn-price" data-price="100.00" data-color="#EF8A55">100.00</button>
-	</div>
+    <div class="col-xs-4 pl-0 pr-5 text-left">
+        <button class="btn btn-block btn-lg co9 btn-price" data-price="500" data-color="#5A9BC3">500</button>
+    </div>
+    <div class="col-xs-4 pl-3 pr-3">
+        <button class="btn btn-block btn-lg co9 btn-price" data-price="200" data-color="#5DC35A">200</button>
+    </div>
+    <div class="col-xs-4 pl-5 pr-0 text-right">
+        <button class="btn btn-block btn-lg co9 btn-price" data-price="100" data-color="#EF8A55">100</button>
+    </div>
 
-	<div class="col-xs-12 pl-0 pr-0 pt-10 other-price-item">
-		<div class="input-group">
-	      	<span class="input-group-addon">
-	        	<input class="other-price-check" type="checkbox">
-	      	</span>
-	      	<input type="text" class="form-control input-lg other-price" placeholder="其他金额(0-999)">
-	    </div>
-	</div>
+    <div class="col-xs-12 pl-0 pr-0 pt-10 other-price-item">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <input class="other-price-check" type="checkbox">
+            </span>
+            <input type="text" class="form-control input-lg other-price" placeholder="其他金额(0-999)">
+        </div>
+    </div>
 
-	<ul class="list-group col-xs-12 mt-15 mb-10 pr-0">
-		<li class="list-group-item bdc-d0d0d0 pr">
-			<div class="row pay-item">
-				<div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/weixin.png"></div>
-				<div class="col-xs-6 line-height-32 f16">微信支付</div>
-				<div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-					<input type="checkbox" class="pay-type" value="1" checked="checked">
-				</div>
-			</div>
-		</li>
-		<li class="list-group-item bdc-d0d0d0 pr">
-			<div class="row pay-item">
-				<div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/zhifubao.png"></div>
-				<div class="col-xs-6 line-height-32 f16">支付宝支付</div>
-				<div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
-					<input type="checkbox" class="pay-type" value="2">
-				</div>
-			</div>
-		</li>
-	</ul>
+    <form method="post" action="/cash/recharge">
+        <ul class="list-group col-xs-12 mt-15 mb-10 pr-0">
+            <li class="list-group-item bdc-d0d0d0 pr">
+                <div class="row pay-item">
+                    <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/weixin.png"></div>
+                    <div class="col-xs-6 line-height-32 f16">微信支付</div>
+                    <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
+                        <input type="checkbox" class="pay-type" value="2" name="pay_type" >
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item bdc-d0d0d0 pr">
+                <div class="row pay-item">
+                    <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/zhifubao.png"></div>
+                    <div class="col-xs-6 line-height-32 f16">支付宝支付</div>
+                    <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
+                        <input type="checkbox" class="pay-type" name="pay_type" value="1" checked="checked">
+                    </div>
+                </div>
+            </li>
+        </ul>
 
-	<div class="col-xs-12 pl-0 pr-0 pt-5 pb-20">
-		<button class="btn btn-orange btn-block btn-lg">确认付款</button>
-	</div>
+        <div class="col-xs-12 pl-0 pr-0 pt-5 pb-20">
+            <input type="hidden" value="" name="total_fee" id="total_fee_id" />
+            <button class="btn btn-orange btn-block btn-lg" type="submit">确认付款</button>
+        </div>
+    </from>
 </div>
 {% endblock %}

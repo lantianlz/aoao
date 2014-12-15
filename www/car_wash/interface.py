@@ -273,7 +273,6 @@ class ServicePriceBase(object):
 
         return 0, dict_err.get(0)
 
-
     def remove_service_price(self, price_id):
         if not price_id:
             return 99800, dict_err.get(99800)
@@ -564,8 +563,6 @@ class OrderBase(object):
 
     def validate_order_info(self, service_price, user_id, count, pay_type):
         assert service_price and user_id and count and pay_type
-
-        pay_type = int(pay_type)
         assert 1 <= count <= 5
         assert pay_type in (0, 1, 2)
 
@@ -605,6 +602,7 @@ class OrderBase(object):
 
             try:
                 count = int(count)
+                pay_type = int(pay_type)
                 self.validate_order_info(service_price, user_id, count, pay_type)   # 检测基本信息
             except:
                 transaction.rollback(using=DEFAULT_DB)
