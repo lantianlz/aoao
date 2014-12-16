@@ -15,3 +15,4 @@ device_type:pc phone pad
 device_name:ipad iphone
 os:android ios
 10.自动清理30天前的无效订单
+11.微信请求prepayid失效的时候发送邮件
