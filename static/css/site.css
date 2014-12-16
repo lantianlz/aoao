@@ -16,6 +16,8 @@ body {
 .inline-block{display:inline-block;}
 .pointer{cursor: pointer;}
 
+a:focus {outline: none;-moz-outline: none;}
+
 .fb{font-weight: bold;}
 
 .f11{font-size: 11px;}
@@ -32,6 +34,7 @@ body {
 .f25{font-size: 25px;}
 .f30{font-size: 30px;}
 .f35{font-size: 35px;}
+.f37{font-size: 37px;}
 .f40{font-size: 40px;}
 .f45{font-size: 45px;}
 .f50{font-size: 50px;}
@@ -48,7 +51,7 @@ body {
 .line-height-155{line-height: 155px;}
 
 .co1{color: #919191;}
-.co2{color: #ef5555;}
+.co2{color: #ef5555;} /*暗红*/
 .co3{color: #aaaaaa;}
 .co4{color: #FDD147;}
 .co5{color: #ffffff;}
@@ -61,6 +64,7 @@ body {
 .co12{color: #DFDFDF;}
 .co13{color: #242627;}
 .co14{color: #D76427;} /*橙色*/
+.co15{color: #f23a1a;} /*红色*/
 
 .mr-0{margin-right: 0px;}
 .mr-5{margin-right: 5px;}
@@ -113,11 +117,13 @@ body {
 .pl-40{padding-left: 40px;}
 .pl-45{padding-left: 45px;}
 .pl-50{padding-left: 50px;}
+.pl-55{padding-left: 55px;}
 .pl-60{padding-left: 60px;}
 .pl-70{padding-left: 70px;}
 .pl-75{padding-left: 75px;}
 .pl-80{padding-left: 80px;}
 .pl-100{padding-left: 100px;}
+.pl-130{padding-left: 130px;}
 .pl-300{padding-left: 300px;}
 .pr-0{padding-right: 0;}
 .pr-3{padding-right: 3px;}
@@ -216,6 +222,7 @@ body {
 .h70{height: 70px;}
 .h100{height: 100px;}
 .h155{height: 155px;}
+.h185{height: 185px;}
 .h200{height: 200px;}
 .h225{height: 225px;}
 .h250{height: 250px;}
@@ -225,6 +232,7 @@ body {
 
 .w{width: 100%;}
 .w40{width: 40px;}
+.w50{width: 50px;}
 .w60{width: 60px;}
 .w100{width: 100px;}
 .w140{width: 140px;}
@@ -341,4 +349,12 @@ body {
 
 .placeholder{
   color: #555;
+}
+
+.white-white{
+  color: white;
+}
+
+.white-white:hover, .white-white:focus {
+  color: white;
 }
