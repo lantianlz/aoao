@@ -127,10 +127,12 @@ def weixinpay(request, template_name='mobile/car_wash/weixinpay.html'):
     trade_id = request.REQUEST.get("trade_id")
     weixinpay = weixinpay.Weixinpay()
     params = dict(appId=weixinpay.appid, timeStamp=int(time.time()), nonceStr=utils.uuid_without_dash(),
-                  package="prepay_id=%s" % prepay_id, signType="MD5", trade_id=trade_id)
+                  package="prepay_id=%s" % prepay_id, signType="MD5")   # 支付签名的参数不可改动
     params, prestr = weixinpay.format_params(params)
     sign = weixinpay.build_mysign(prestr)
+
     params["paySign"] = sign
+    params["trade_id"] = trade_id
 
     return render_to_response(template_name, params, context_instance=RequestContext(request))
 
