@@ -10,7 +10,7 @@ from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from common import debug
+from common import debug, user_agent_parser
 from www.misc import qiniu_client
 from www.misc.decorators import member_required
 
@@ -138,3 +138,16 @@ def static_view(request, template_name):
         raise Http404
 
     return render_to_response('static_templates/%s.html' % template_name, locals(), context_instance=RequestContext(request))
+
+
+def show_index(request):
+    """
+    @note: 自动显示首页
+    """
+    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
+    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
+        from www.car_wash.views import index
+        return index(request)
+    else:
+        from www.account.views import home_welcome
+        return home_welcome(request)

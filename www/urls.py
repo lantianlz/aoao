@@ -21,7 +21,7 @@ urlpatterns = patterns('',
                        # url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),
 
 
-                       url(r'^$', 'www.car_wash.views.index'),
+                       url(r'^$', 'www.misc.views.show_index'),
                        url(r'^admin/', include('www.admin.urls')),
                        url(r'^car_wash/', include('www.car_wash.urls')),
                        url(r'^account/', include('www.account.urls')),

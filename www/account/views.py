@@ -15,13 +15,8 @@ from www.account import interface
 ub = interface.UserBase()
 
 
-def show_index(request):
-    if request.user.is_authenticated():
-        from www.timeline.views import show_user_timeline
-        return show_user_timeline(request)
-    else:
-        from www.question.views import question_home
-        return question_home(request)
+def home_welcome(request, template_name='pc/index.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
 def login(request, template_name='pc/account/login.html'):

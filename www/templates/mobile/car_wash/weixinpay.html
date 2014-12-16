@@ -90,7 +90,7 @@
                             }, function(res){
                                 if(res.err_msg == "get_brand_wcpay_request:ok"){
                                     // alert("支付成功");
-                                    window.location.href = "/weixin_success_info?out_trade_no=" + {{trade_id}};
+                                    window.location.href = "/weixin_success_info?out_trade_no=" + "{{trade_id}}";
                                 }
                                 else{
                                     alert("支付失败，请重新操作\n" + res.err_msg);
