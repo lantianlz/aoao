@@ -49,13 +49,9 @@ def recharge(request, template_name='mobile/cash/recharge.html'):
                 flag, prepay_id = weixinpay.get_prepay_id(body=u"嗷嗷洗车充值", out_trade_no=order.trade_id,
                                                           total_fee=int(order.pay_fee * 100),
                                                           openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
+                # openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4")
                 if flag:
-                    params = dict(appId=weixinpay.appid, timeStamp=int(time.time()), nonceStr=utils.uuid_without_dash(),
-                                  package="prepay_id=%s" % prepay_id, signType="MD5", )
-                    params, prestr = weixinpay.format_params(params)
-                    sign = weixinpay.build_mysign(prestr)
-                    params["paySign"] = sign
-                    return render_to_response('mobile/car_wash/weixinpay.html', params, context_instance=RequestContext(request))
+                    return HttpResponseRedirect("/car_wash/weixinpay?showwxpaytitle=1&prepay_id=%s&trade_id=%s" % (prepay_id, order.trade_id))
 
             err_msg = u'支付跳转异常，请联系嗷嗷客服人员'
             return render_to_response('error.html', locals(), context_instance=RequestContext(request))

@@ -113,8 +113,17 @@ class Weixinpay(object):
 
                 return True, prepay_id
             else:
+                from www.tasks import async_send_email
+                from django.conf import settings
+                from django.utils.encoding import smart_unicode
+
                 logging.error(u"get_prepay_id fail, info is:%s" % text)
-                logging.error("get_prepay_id fail, params is:%s" % xml)
+                logging.error(u"get_prepay_id fail, params is:%s" % smart_unicode(xml))
+
+                title = u'%s 生成微信支付链接错误' % settings.SERVER_NAME
+                content = u'params:%s\n\nreturn info:%s' % (smart_unicode(xml), text)
+                async_send_email(settings.NOTIFICATION_EMAIL, title, content)
+
                 return False, text
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)

@@ -12,6 +12,7 @@ from common import debug
 from common.alipay import alipay_mobile
 from common.weixinpay.weixinpay import Weixinpay
 from www.car_wash.interface import OrderBase
+from www.cash.interface import CashOrderBase
 
 
 def alipaycallback_m(request):
@@ -62,7 +63,9 @@ def alipaynotify_m(request):
 
             if trade_id.startswith("W"):
                 errcode, errmsg = OrderBase().order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
-                result = u'success' if errcode in (0, 20301) else 'fail'  # 不存在的订单返回成功防止一直补发
+            elif trade_id.startswith("R"):
+                errcode, errmsg = CashOrderBase().cash_order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
+            result = u'success' if errcode in (0, 20301) else 'fail'  # 不存在的订单返回成功防止一直补发
 
     return HttpResponse(result)
 
@@ -93,7 +96,9 @@ def weixinnotify(request):
 
             if trade_id.startswith("W"):
                 errcode, errmsg = OrderBase().order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
-                result = u'SUCCESS' if errcode in (0, 20301) else 'FAIL'  # 不存在的订单返回成功防止一直补发
+            elif trade_id.startswith("R"):
+                errcode, errmsg = CashOrderBase().cash_order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
+            result = u'SUCCESS' if errcode in (0, 20301) else 'FAIL'  # 不存在的订单返回成功防止一直补发
 
     xml = u"<xml><return_code><![CDATA[%s]]></return_code><return_msg><![CDATA[%s]]></return_msg></xml>" % (result, errmsg)
     logging.error(u"weixinnotify return is: %s" % xml)
@@ -146,7 +151,11 @@ def test_paycallback(request):
         try:
             ob = OrderBase()
             pay_info = 'trade_no:%s, buyer_email:%s, buyer_id:%s' % (trade_no, buyer_email, buyer_id)
-            errcode, errmsg = ob.order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
+
+            if trade_id.startswith("W"):
+                errcode, errmsg = ob.order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
+            elif trade_id.startswith("R"):
+                errcode, errmsg = CashOrderBase().cash_order_pay_callback(trade_id=trade_id, payed_fee=total_fee, pay_info=pay_info)
 
             status = u'success' if errcode == 0 else 'fail'
         except Exception, e:

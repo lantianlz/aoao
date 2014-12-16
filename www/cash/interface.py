@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import datetime
 from decimal import Decimal
 from django.db import transaction
 
@@ -227,4 +228,80 @@ class CashOrderBase(object):
             return 0, order
         except Exception, e:
             debug.get_debug_detail_and_send_email(e)
+            return 99900, dict_err.get(99900)
+
+    def get_order_by_id(self, id, state=None):
+        try:
+            ps = dict(id=id)
+            if state is not None:
+                ps.update(state=state)
+            return CashOrder.objects.get(**ps)
+        except CashOrder.DoesNotExist:
+            pass
+
+    def get_order_by_trade_id(self, trade_id, state=None):
+        try:
+            ps = dict(trade_id=trade_id)
+            if state is not None:
+                ps.update(state=state)
+            return CashOrder.objects.get(**ps)
+        except CashOrder.DoesNotExist:
+            pass
+
+    @transaction.commit_manually(using=DEFAULT_DB)
+    def cash_order_pay_callback(self, trade_id, payed_fee, pay_info='', order=None):
+        '''
+        @note: 充值回调函数
+        '''
+        try:
+            from www.tasks import async_send_email
+            from www.car_wash.interface import dict_err as dict_err_car_wash
+
+            errcode, errmsg = 0, dict_err.get(0)
+            payed_fee = float(payed_fee)
+            order = order
+
+            if (not order) and trade_id.startswith('R'):
+                order = self.get_order_by_trade_id(trade_id)
+            if not order:
+                transaction.rollback(using=DEFAULT_DB)
+                return 20301, dict_err_car_wash.get(20301)
+
+            if order.order_state in (0, ):
+                # 付款金额和订单应付金额是否相符
+                if abs(payed_fee - float(order.pay_fee)) > Decimal(0.001):
+                    errcode, errmsg = 20302, dict_err_car_wash.get(20302)
+                order.payed_fee = str(payed_fee)  # 转成string后以便转成decimal
+                order.pay_info = pay_info
+                order.pay_time = datetime.datetime.now()
+
+                # 增加用户现金账户余额
+                if errcode == 0:
+                    errcode, errmsg = UserCashRecordBase().add_record(order.user_id, payed_fee, 0, notes=u"%s充值" % order.get_pay_type_display())
+
+                # 发送邮件
+                if payed_fee > 0:
+                    user = UserBase().get_user_by_id(order.user_id)
+                    title = u'诸位，钱来了'
+                    if errcode != 0:
+                        title += u"(状态异常，订单号:%s, errcode:%s, errmsg:%s)" % (trade_id, errcode, errmsg)
+                    content = u'收到用户「%s」通过「%s」的付款 %.2f 元，用于充值' % (user.nick, order.get_pay_type_display(), payed_fee)
+                    async_send_email("lz@aoaoxc.com", title, content)
+
+                if errcode == 0:
+                    # 保存订单信息
+                    order.order_state = 1
+                    order.save()
+                else:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return errcode, errmsg
+
+            elif order.order_state < 0:
+                errcode, errmsg = 20303, dict_err_car_wash.get(20303)
+
+            transaction.commit(using=DEFAULT_DB)
+            return errcode, errmsg
+        except Exception, e:
+            debug.get_debug_detail_and_send_email(e)
+            transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
