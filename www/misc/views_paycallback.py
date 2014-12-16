@@ -104,8 +104,6 @@ def weixin_success_info(request):
     """
     @note: 微信支付成功后页面页面提示
     """
-    logging.error(u"alipaycallback_m info is: %s" % request.REQUEST)
-
     timeinterval = 3
     next_url = "/"  # 成功跳转url控制
     if request.REQUEST.get("out_trade_no", "").startswith("W"):
