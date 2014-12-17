@@ -7,7 +7,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import page, utils, user_agent_parser
+from common import page, utils
 from www.misc.decorators import member_required
 from www.city.interface import CityBase
 from www.car_wash import interface

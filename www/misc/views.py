@@ -10,7 +10,7 @@ from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from common import debug, user_agent_parser
+from common import debug, utils
 from www.misc import qiniu_client
 from www.misc.decorators import member_required
 
@@ -144,8 +144,8 @@ def show_index(request):
     """
     @note: 自动显示首页
     """
-    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
-    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
+    dict_user_agent = utils.format_user_agent(request.META.get('HTTP_USER_AGENT'))
+    if dict_user_agent['device_type'] in ('phone', ):
         from www.car_wash.views import index
         return index(request)
     else:

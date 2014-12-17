@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import utils, user_agent_parser, page
+from common import utils, page
 from www.misc import qiniu_client
 from www.misc.decorators import member_required
 from www.account import interface
@@ -37,11 +37,6 @@ def login(request, template_name='pc/account/login.html'):
         next_url = utils.get_next_url(request)
         if next_url:
             request.session['next_url'] = urllib.unquote_plus(next_url)
-
-    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
-    # 手机客户端换模板
-    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
-        template_name = 'pc/account/login.html'
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

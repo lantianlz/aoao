@@ -279,7 +279,7 @@ class ServicePriceBase(object):
 
         try:
             ServicePrice.objects.get(id=price_id).delete()
-        except Exception, e:
+        except Exception:
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
@@ -412,7 +412,88 @@ class CarWashBankBase(object):
         return 0, dict_err.get(0)
 
 
+class CarWashManagerBase(object):
+
+    def get_cwm_by_user_id(self, user_id):
+        """
+        @note: 获取用户管理的第一个洗车行，用于自动跳转到管理的洗车行
+        """
+        cwms = list(CarWashManager.objects.select_related("car_wash").filter(user_id=user_id))
+        if cwms:
+            return cwms[0]
+
+    def get_cwm_by_car_wash_and_user_id(self, car_wash_id, user_id):
+        """
+        @note: 获取用户管理的单个洗车行
+        """
+        cwms = list(CarWashManager.objects.select_related("car_wash").filter(car_wash=car_wash_id, user_id=user_id))
+        if cwms:
+            return cwms[0]
+
+    def check_user_is_cwm(self, car_wash_id, user):
+        """
+        @note: 判断用户是否是某个洗车行管理员
+        """
+        if isinstance(user, (str, unicode)):
+            user = UserBase().get_user_by_id(user)
+        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash_id, user.id)
+        return True if (cwm or user.is_staff()) else False
+
+    @car_wash_required
+    def add_car_wash_manager(self, car_wash, user_id):
+        if user_id and not UserBase().get_user_login_by_id(user_id):
+            return 99600, dict_err.get(99600)
+
+        if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
+            return 20401, dict_err.get(20401)
+
+        cwm = CarWashManager.objects.create(user_id=user_id, car_wash=car_wash)
+        return 0, cwm
+
+    def search_managers_for_admin(self, car_wash_name):
+        objs = CarWashManager.objects.select_related("car_wash").all()
+
+        if car_wash_name:
+            objs = objs.filter(car_wash__name__contains=car_wash_name)
+
+        return objs
+
+    def get_manager_by_id(self, manager_id):
+        try:
+            return CarWashManager.objects.select_related("car_wash").get(id=manager_id)
+        except CarWashManager.DoesNotExist:
+            pass
+
+    @car_wash_required
+    def modify_car_wash_manager(self, car_wash_obj_or_id, user_id):
+        if user_id and not UserBase().get_user_login_by_id(user_id):
+            return 99600, dict_err.get(99600)
+
+        if not isinstance(car_wash_obj_or_id, CarWash):
+            car_wash = self.get_car_wash_by_id(car_wash_obj_or_id)
+        else:
+            car_wash = car_wash_obj_or_id
+
+        if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
+            return 20401, dict_err.get(20401)
+
+        cwm = CarWashManager.objects.create(user_id=user_id, car_wash=car_wash)
+        return 0, cwm
+
+    def delete_car_wash_manager(self, manager_id):
+        if not manager_id:
+            return 99800, dict_err.get(99800)
+
+        try:
+            CarWashManager.objects.get(id=manager_id).delete()
+        except Exception:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
+
 # ===================================================订单和优惠券部分=================================================================#
+
+
 def order_required(func):
     def _decorator(self, order, *args, **kwargs):
         order = order
@@ -915,83 +996,3 @@ class OrderCodeBase(object):
             else:
                 return []
         return objs
-
-
-class CarWashManagerBase(object):
-
-    def get_cwm_by_user_id(self, user_id):
-        """
-        @note: 获取用户管理的第一个洗车行，用于自动跳转到管理的洗车行
-        """
-        cwms = list(CarWashManager.objects.select_related("car_wash").filter(user_id=user_id))
-        if cwms:
-            return cwms[0]
-
-    def get_cwm_by_car_wash_and_user_id(self, car_wash_id, user_id):
-        """
-        @note: 获取用户管理的单个洗车行
-        """
-        cwms = list(CarWashManager.objects.select_related("car_wash").filter(car_wash=car_wash_id, user_id=user_id))
-        if cwms:
-            return cwms[0]
-
-    def check_user_is_cwm(self, car_wash_id, user):
-        """
-        @note: 判断用户是否是某个洗车行管理员
-        """
-        if isinstance(user, (str, unicode)):
-            user = UserBase().get_user_by_id(user)
-        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash_id, user.id)
-        return True if (cwm or user.is_staff()) else False
-
-    @car_wash_required
-    def add_car_wash_manager(self, car_wash, user_id):
-        if user_id and not UserBase().get_user_login_by_id(user_id):
-            return 99600, dict_err.get(99600)
-
-        if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
-            return 20401, dict_err.get(20401)
-
-        cwm = CarWashManager.objects.create(user_id=user_id, car_wash=car_wash)
-        return 0, cwm
-
-    def search_managers_for_admin(self, car_wash_name):
-        objs = CarWashManager.objects.select_related("car_wash").all()
-
-        if car_wash_name:
-            objs = objs.filter(car_wash__name__contains=car_wash_name)
-
-        return objs
-
-    def get_manager_by_id(self, manager_id):
-        try:
-            return CarWashManager.objects.select_related("car_wash").get(id=manager_id)
-        except CarWashManager.DoesNotExist:
-            pass
-
-    @car_wash_required
-    def modify_car_wash_manager(self, car_wash_obj_or_id, user_id):
-        if user_id and not UserBase().get_user_login_by_id(user_id):
-            return 99600, dict_err.get(99600)
-
-        if not isinstance(car_wash_obj_or_id, CarWash):
-            car_wash = self.get_car_wash_by_id(car_wash_obj_or_id)
-        else:
-            car_wash = car_wash_obj_or_id
-
-        if CarWashManager.objects.filter(user_id=user_id, car_wash=car_wash):
-            return 20401, dict_err.get(20401)
-
-        cwm = CarWashManager.objects.create(user_id=user_id, car_wash=car_wash)
-        return 0, cwm
-
-    def delete_car_wash_manager(self, manager_id):
-        if not manager_id:
-            return 99800, dict_err.get(99800)
-
-        try:
-            CarWashManager.objects.get(id=manager_id).delete()
-        except Exception, e:
-            return 99900, dict_err.get(99900)
-
-        return 0, dict_err.get(0)
