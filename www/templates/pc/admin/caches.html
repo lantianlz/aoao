@@ -67,7 +67,7 @@ $(document).ready(function(){
                 {% for index in indexes %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="index" value="{{index.value}}" {% if index.value == "CACHE_TMP" %}checked{% endif %} />
+                        <input type="radio" name="index" value="{{index.value}}" {% if index.value == "CACHE_STATIC" %}checked{% endif %} />
                         {{index.name}}
                     </label>
                 </div>
