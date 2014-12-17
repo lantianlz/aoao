@@ -6,21 +6,23 @@
 <style type="text/css">
 
 .next-page{
-	opacity: 0;
-	-webkit-animation: next-page 1.5s ease infinite;
+	
 }
 @-webkit-keyframes next-page{
     from {
     	opacity: 0;
-    	-webkit-transform: translateY(-20px);
+    	/*bottom: 40px;*/
+    	color: #f23a1a;
     }
     75%  {
     	opacity: 0.99;
-    	-webkit-transform: translateY(0px);
+    	/*bottom: 20px;*/
+    	color: #ffffff;
     }
     100% {
     	opacity: 0;
-    	-webkit-transform: translateY(5px);
+    	color: #f23a1a;
+    	/*bottom: 15px;*/
     }
 }
 
@@ -35,7 +37,10 @@ $(document).ready(function(){
 	$('#fullpage').fullpage({
 	    scrollingSpeed: 700,
 	    easing: 'easeOutExpo',
-	    navigation: false
+	    navigation: false,
+	    onLeave: function(index, nextIndex, direction){
+	    	
+	    }
 	});
 
 
@@ -57,10 +62,11 @@ $(document).ready(function(){
 		</div>
 		<div class="f22 pt-5">嗷嗷洗车</div>
 
-		<i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom: 2%; left: 48%;"></i>
+		<i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom:  2%; left: 48%;"></i>
 	</div>
 
 	<div class="section bgc-ffffff co1 pr" style="padding-top: 15%;">
+
 		<div class="container w300 pr" style="padding-left: 85px; padding-bottom: 15%">
 			<img class="pa w70" style="left: 0px;" src="{{MEDIA_URL}}img/homepage/drop.png">
 			<span class="f20 pa f22 co5 fb" style="left: 13px; top: 19px;">省钱</span>
