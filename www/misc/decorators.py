@@ -14,7 +14,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import cache
+from common import cache, utils
 
 
 def member_required(func):
@@ -161,3 +161,28 @@ def verify_permission(permission):
                 return func(request, *args, **kwargs)
         return wrapper
     return permission_decorator
+
+
+def auto_select_template(func):
+    """
+    @note: 过滤器, 自动判断模板选择
+    """
+    def _decorator(request, *args, **kwargs):
+        template_name = kwargs.get("template_name")
+        if template_name:
+            dict_user_agent = utils.format_user_agent(request.META.get('HTTP_USER_AGENT'))
+            if dict_user_agent['device_type'] in ('pc', 'pad'):
+                ps = template_name.split("/")
+                if ps.__len__() > 1:
+                    ps[0] = "pc"
+                template_name = "/".join(ps)
+
+            if dict_user_agent['device_type'] in ('phone',):
+                ps = template_name.split("/")
+                if ps.__len__() > 1:
+                    ps[0] = "mobile"
+                template_name = "/".join(ps)
+
+            kwargs.update(dict(template_name=template_name))
+        return func(request, *args, **kwargs)
+    return _decorator

@@ -286,7 +286,7 @@ class CashOrderBase(object):
                     if errcode != 0:
                         title += u"(状态异常，订单号:%s, errcode:%s, errmsg:%s)" % (trade_id, errcode, errmsg)
                     content = u'收到用户「%s」通过「%s」的付款 %.2f 元，用于充值' % (user.nick, order.get_pay_type_display(), payed_fee)
-                    async_send_email("lz@aoaoxc.com", title, content)
+                    async_send_email("vip@aoaoxc.com", title, content)
 
                 if errcode == 0:
                     # 保存订单信息

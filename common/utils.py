@@ -353,3 +353,56 @@ def smart_show_float(value, point_len=2):
 
         if point_len == 2:
             return "%.2f" % value
+
+
+def format_user_agent(user_agent):
+    """
+    @note: 分析user_agent得到设备信息
+    device_type:pc phone pad
+    device_name:ipad iphone
+    os:android ios
+    """
+    try:
+        user_agent = (user_agent or "").strip().lower()
+
+        # 设备类型
+        device_type = "pc"
+        for key in ("phone", "android"):
+            if key in user_agent:
+                device_type = "phone"
+        for key in ("pad", "tab", "sch-i800"):
+            if key in user_agent:
+                device_type = "pad"
+
+        # 设备名称
+        device_name = user_agent.split(" ", 1)[1].split(";")[0].replace("(", "")
+
+        # 系统名称
+        os_name = "other"
+        for key in ("ios", "android"):
+            if key in user_agent:
+                os_name = key
+        for key in ("windows phone", "mac os"):
+            if key in user_agent:
+                os_name = key
+                break
+
+        os_version = "1.0"
+        dict_result = dict(device_type=device_type, device_name=device_name, os_name=os_name, os_version=os_version)
+
+        return dict_result
+    except:
+        return dict(device_type=device_type, device_name="other", os_name="other", os_version="1.0")
+
+
+if __name__ == '__main__':
+    us = [
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X; en-us) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53',
+        'Mozilla/5.0 (BB10; Touch) AppleWebKit/537.10+ (KHTML, like Gecko) Version/10.0.9.2372 Mobile Safari/537.10+',
+        'Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19',
+        'Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 820)',
+        'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+    ]
+    for user_agent in us:
+        format_user_agent(user_agent)

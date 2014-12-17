@@ -6,8 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import utils, user_agent_parser, page
-from www.misc.decorators import member_required, common_ajax_response
+from common import utils, page
+from www.misc.decorators import member_required, common_ajax_response, auto_select_template
 
 from www.cash.interface import CarWashCashBase, CarWashCashRecordBase
 from www.shop.interface import car_wash_manager_required_for_request
@@ -32,14 +32,9 @@ def shop_index(request):
 
 
 @member_required
+@auto_select_template
 @car_wash_manager_required_for_request
-def verify_code(request, car_wash_id, template_name='pc/shop/verify_code.html'):
-
-    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT', ''))
-    # 手机客户端换模板
-    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
-        template_name = 'mobile/shop/verify_code.html'
-
+def verify_code(request, car_wash_id, template_name):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

@@ -8,10 +8,6 @@ todo
 6.微信secret不放入源码管理
 7.注释掉无用的入口url
 
-8.判断user_agent
-device_type:pc phone pad
-device_name:ipad iphone
-os:android ios
 
 9.自动清理30天前的无效订单
 
