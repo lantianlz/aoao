@@ -4,7 +4,9 @@
 
 {% block css %}
 <style type="text/css">
-
+.active a{
+    color: #f23a1a;
+}
 .next-page{
     padding: 8px;
 }
@@ -57,11 +59,11 @@ $(document).ready(function(){
 <div id="fullpage">
 
     <div class="section bgc-f23a1a co5 text-center pr" style="padding-top: 15%;">
-        <div class="f35">专属于年轻人的</div>
-        <div class="f60">洗车平台</div>
+        <div class="f35 fb">专属于年轻人的</div>
+        <div class="f60 fb">洗车平台</div>
         <div class="f14 pl-15 pr-15 pt-20">汇聚你身边的洗车行，为你提供最优惠、最便捷、最时尚的洗车服务</div>
         <div style="padding-top: 15%" >
-            <img class="w100" src="{{MEDIA_URL}}img/about_m/logo.png">
+            <img class="w80" src="{{MEDIA_URL}}img/about_m/logo.png">
         </div>
         <div class="f22 pt-5">嗷嗷洗车</div>
 
@@ -95,7 +97,7 @@ $(document).ready(function(){
         <i class="pa fa fa-angle-double-down co15 f25 next-page" style="bottom: 2%; left: 45%;"></i>
     </div>
 
-    <div class="section bgc-ffffff pr" style="padding-top: 12%;">
+    <div class="section bgc-ffffff pr" style="padding-top: 4%;">
         <div class="text-center co15" style="-webkit-transform: rotateZ(-10deg);">
             <span class="f35 fb">那么，</span>
             <span class="f25 fb">如何使用呢？</span>
@@ -137,7 +139,7 @@ $(document).ready(function(){
         <div class="bgc-f23a1a" style="-webkit-transform: rotateZ(0deg); margin-left: -25px; margin-top: -100px; width: 120%; min-height: 300px;">
         </div>
 
-        <i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom: 2%; left: 45%;"></i>
+        <i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom: 1%; left: 45%;"></i>
     </div>
 
     <div class="section bgc-ffffff text-center pr" style="padding-top: 15%;">
@@ -145,9 +147,11 @@ $(document).ready(function(){
             <img class="w100" src="{{MEDIA_URL}}img/logo.png">
         </div>
         <div class="f22 pt-10 co1">嗷嗷洗车</div>
-        <div class="co15 f20" style="padding-top: 15%;"><i class="fa fa-qq pr-3"></i>390973848</div>
+        <div class="co15 f20" style="padding-top: 15%;">
+            <a href="http://wpa.qq.com/msgrd?v=3&uin=286394973&site=qq&menu=yes"><i class="fa fa-qq pr-3"></i>390973848</a>
+        </div>
         <div class="co15 f20" style="padding-top: 5%;">hz@aoaoxc.com</div>
-        <div class="co1 f12 pa w text-center" style="bottom: 10%;">Copyright &copy; {% if YEAR == "2014" %}{{YEAR}}{% else %}2014 - {{YEAR}}{% endif %} aoaoxc.com. All Rights Reserved.</div>
+        <div class="co12 f12 pa w text-center" style="bottom: 5%;">Copyright &copy; {% if YEAR == "2014" %}{{YEAR}}{% else %}2014 - {{YEAR}}{% endif %} aoaoxc.com. All Rights Reserved.</div>
     </div>
 
 </div>
