@@ -144,7 +144,7 @@ class WexinBase(object):
                 url = u'http://mp.weixin.qq.com/s?__biz=MjM5OTc2NzM0OQ==&mid=203091966&idx=1&sn=9cb0a17772932e0d4564aeaa62286dd1#rd'
                 img_info = u'[{"title": "洗车之前，看看咋用", "description": "%s", "url": "%s", "picurl": "%s"}]' \
                     % (content, url, 'http://static.aoaoxc.com/img/using_guide.jpg')
-                self.send_msg_to_weixin(content, to_user, app_key, msg_type='news', img_info=img_info)
+                self.send_msg_to_weixin(content, from_user, app_key, msg_type='news', img_info=img_info)
 
                 return self.get_subscribe_event_response(to_user, from_user)
             elif event in ('click', ):
