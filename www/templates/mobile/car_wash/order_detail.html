@@ -62,8 +62,10 @@
         </div>
     </div>
 
+    {% if order.check_can_refund %}
     <div class="row mt-20 pl-15 pr-15 pb-20">
         <button class="btn btn-block btn-danger btn-lg">申请退款</button>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

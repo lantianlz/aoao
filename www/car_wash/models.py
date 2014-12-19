@@ -243,6 +243,14 @@ class Order(models.Model):
     def get_url(self):
         return "/car_wash/order/%s" % self.trade_id
 
+    def check_can_refund(self):
+        """
+        @note: 是否能退款检测，如果订单中有已被使用的洗车码，不可退款
+        """
+        if self.order_state != 1 or OrderCode.objects.filter(order=self).exclude(state=0):
+            return False
+        return True
+
 
 class OrderCode(models.Model):
 

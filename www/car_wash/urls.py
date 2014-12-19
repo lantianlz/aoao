@@ -12,6 +12,6 @@ urlpatterns = patterns('www.car_wash.views',
                        url(r'^order/(?P<trade_id>\w+)$', 'order_detail'),
                        url(r'^weixinpay$', 'weixinpay'),
 
-
                        url(r'^get_car_washs$', 'get_car_washs'),
+                       url(r'^refund_order$', 'refund_order'),
                        )

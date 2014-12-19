@@ -21,6 +21,7 @@ spb = interface.ServicePriceBase()
 cb = interface.CouponBase()
 ocb = interface.OrderCodeBase()
 cwmb = interface.CarWashManagerBase()
+ob = interface.OrderBase()
 
 city_id = 1974
 district_id = 3247
@@ -73,7 +74,8 @@ def main():
     # add_cw()
     # add_sp()
     # add_cou()
-    add_cms()
+    # add_cms()
+    print ob.refund_order(order="W2014120416065554820")
 
 
 if __name__ == '__main__':

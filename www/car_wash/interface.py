@@ -38,6 +38,8 @@ dict_err = {
     20304: u'前后端总金额不一致，请重新下单',
     20305: u'洗车码不存在',
     20306: u'洗车码已使用或退款，无法验证',
+    20307: u'订单状态异常，无法申请退款',
+    20308: u'该订单已有洗车码被使用，无法退款',
 
     20401: u'该管理员已存在，请勿重复添加',
     20402: u'I get you，没权限的你怎么进来的',
@@ -498,7 +500,7 @@ def order_required(func):
     def _decorator(self, order, *args, **kwargs):
         order = order
         if not isinstance(order, Order):
-            order = OrderBase().get_order_by_id(order) or OrderBase().get_order_by_trade_id(order)
+            order = OrderBase().get_order_by_trade_id(order) or OrderBase().get_order_by_id(order)
             if not order:
                 return 20301, dict_err.get(20301)
         return func(self, order, *args, **kwargs)
@@ -850,6 +852,54 @@ class OrderBase(object):
                 return []
 
         return objs
+
+    @order_required
+    @transaction.commit_manually(using=DEFAULT_DB)
+    def refund_order(self, order):
+        try:
+            from www.cash.interface import UserCashRecordBase
+
+            if order.order_state != 1:
+                transaction.rollback(using=DEFAULT_DB)
+                return 20307, dict_err.get(20307)
+
+            if not order.check_can_refund():
+                transaction.rollback(using=DEFAULT_DB)
+                return 20308, dict_err.get(20308)
+
+            # 修改优惠券状态
+            coupon = order.coupon
+            if coupon:
+                coupon.state = 1
+                coupon.save()
+
+            # 归还用户现金账户余额
+            refund_fee = order.payed_fee + order.user_cash_fee
+            if refund_fee > 0:
+                errcode, errmsg = UserCashRecordBase().add_record(order.user_id, refund_fee, 0, notes=u"洗车码退款")
+                if errcode != 0:
+                    transaction.rollback(using=DEFAULT_DB)
+                    return errcode, errmsg
+
+            # 更改洗车码状态
+            OrderCode.objects.filter(order=order).update(state=2)
+
+            # 更改订单状态
+            order.order_state = 10
+            order.save()
+
+            # 发送邮件
+            user = UserBase().get_user_by_id(order.user_id)
+            title = u'有小伙伴遗憾的退款了'
+            content = u'用户「%s」申请了「%s」的退款， %.2f元已退还至其账户中' % (user.nick, order.car_wash.name, refund_fee)
+            async_send_email("vip@aoaoxc.com", title, content)
+
+            transaction.commit(using=DEFAULT_DB)
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail_and_send_email(e)
+            transaction.rollback(using=DEFAULT_DB)
+            return 99900, dict_err.get(99900)
 
 
 def car_wash_manager_required(func):

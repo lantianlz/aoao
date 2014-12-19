@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import page, utils
-from www.misc.decorators import member_required
+from www.misc.decorators import member_required, common_ajax_response
 from www.city.interface import CityBase
 from www.car_wash import interface
 
@@ -170,7 +170,6 @@ def location(request, template_name='mobile/car_wash/location.html'):
 
 
 def get_car_washs(request):
-
     city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
     order_by_value = request.REQUEST.get("order_by_value", "0")
     car_washs = cwb.get_car_washs_by_city_id(city_id, order_by_value)
@@ -181,3 +180,9 @@ def get_car_washs(request):
     car_washs = cwb.format_car_washs_for_ajax(page_objs[0])
 
     return HttpResponse(json.dumps(car_washs))
+
+
+@member_required
+@common_ajax_response
+def refund_order(request, trade_id):
+    return ob.refund_order(trade_id)
