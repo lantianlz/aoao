@@ -138,7 +138,8 @@ class CityBase(object):
 
         return 0, dict_err.get(0)
 
-    def get_district_by_id(self, district_id):
+    @cache_required(cache_key='city_district_%s', expire=3600 * 24)
+    def get_district_by_id(self, district_id, must_update_cache=False):
         if district_id:
             districts = self.get_all_districts().filter(id=district_id)
             if districts:
@@ -156,7 +157,7 @@ class CityBase(object):
 
     def search_districts_for_admin(self, district_name, city_name, is_show=None):
         districts = self.get_all_districts()
-        
+
         if is_show is not None:
             districts = districts.filter(is_show=is_show)
 
