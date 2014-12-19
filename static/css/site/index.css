@@ -1,86 +1,86 @@
 .nav>li>a:hover{
-	color: #f23a1a;
-	background-color: transparent;
+    color: #f23a1a;
+    background-color: transparent;
 }
 
 .nav>li>a:focus{
-	background-color: transparent;
+    background-color: transparent;
 }
 
 .navbar-nav>li>a{
-	padding-left: 30px;
-	padding-top: 20px;
-	padding-bottom: 20px;
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .navbar-nav>li.active>a{
-	color: #f23a1a;
+    color: #f23a1a;
 }
 
 a:hover{
-	color: #f23a1a;
-	background-color: transparent;
+    color: #f23a1a;
+    background-color: transparent;
 }
 
 .navbar-brand{
-	height: auto;
+    height: auto;
 }
 
 #fullPage-nav li a, .fullPage-slidesNav li a{
-	color: #bababa;
+    color: #bababa;
 }
 
 #fullPage-nav li .active span, .fullPage-slidesNav .active span{
-	background-color: #bababa;
+    background-color: #bababa;
 }
 
 #fullPage-nav span, .fullPage-slidesNav span{
-	border: 1px solid #bababa;
-	width: 10px;
-	height: 10px;
+    border: 1px solid #bababa;
+    width: 10px;
+    height: 10px;
 }
 
 .float1 {
-	-webkit-animation: float1 5s linear infinite;
-			animation: float1 5s linear infinite;
+    -webkit-animation: float1 5s linear infinite;
+            animation: float1 5s linear infinite;
 }
 @-webkit-keyframes float1{
-    from { top: 130px; }
-    25%  { top: 140px; }
-    50%  { top: 130px; }
-    75%  { top: 120px; }
-    100% { top: 130px; }
+    from { top: 120px; }
+    25%  { top: 130px; }
+    50%  { top: 120px; }
+    75%  { top: 110px; }
+    100% { top: 120px; }
 }
 @keyframes float1{
-    from { top: 130px; }
-    25%  { top: 140px; }
-    50%  { top: 130px; }
-    75%  { top: 120px; }
-    100% { top: 130px; }
+    from { top: 120px; }
+    25%  { top: 130px; }
+    50%  { top: 120px; }
+    75%  { top: 110px; }
+    100% { top: 120px; }
 }
 
 .float2 {
-	-webkit-animation: float2 5s linear infinite;
-		    animation: float2 5s linear infinite;
+    -webkit-animation: float2 5s linear infinite;
+            animation: float2 5s linear infinite;
 }
 @-webkit-keyframes float2{
-    from { top: 170px; }
-    25%  { top: 180px; }
-    50%  { top: 170px; }
-    75%  { top: 160px; }
-    100% { top: 170px; }
+    from { top: 160px; }
+    25%  { top: 170px; }
+    50%  { top: 160px; }
+    75%  { top: 150px; }
+    100% { top: 160px; }
 }
 @keyframes float2{
-    from { top: 170px; }
-    25%  { top: 180px; }
-    50%  { top: 170px; }
-    75%  { top: 160px; }
-    100% { top: 170px; }
+    from { top: 160px; }
+    25%  { top: 170px; }
+    50%  { top: 160px; }
+    75%  { top: 150px; }
+    100% { top: 160px; }
 }
 
 .float3 {
-	-webkit-animation: float3 6s linear infinite;
-			animation: float3 6s linear infinite;
+    -webkit-animation: float3 6s linear infinite;
+            animation: float3 6s linear infinite;
 }
 @-webkit-keyframes float3{
     from { top: 60px; }
@@ -98,8 +98,8 @@ a:hover{
 }
 
 .float4 {
-	-webkit-animation: float4 6s linear infinite;
-			animation: float4 6s linear infinite;
+    -webkit-animation: float4 6s linear infinite;
+            animation: float4 6s linear infinite;
 }
 @-webkit-keyframes float4{
     from { top: 100px; }
@@ -117,8 +117,8 @@ a:hover{
 }
 
 .float5 {
-	-webkit-animation: float5 7s linear infinite;
-			animation: float5 7s linear infinite;
+    -webkit-animation: float5 7s linear infinite;
+            animation: float5 7s linear infinite;
 }
 @-webkit-keyframes float5{
     from { top: 110px; }
@@ -136,8 +136,8 @@ a:hover{
 }
 
 .float6 {
-	-webkit-animation: float6 7s linear infinite;
-			animation: float6 7s linear infinite;
+    -webkit-animation: float6 7s linear infinite;
+            animation: float6 7s linear infinite;
 }
 @-webkit-keyframes float6{
     from { top: 150px; }
