@@ -43,6 +43,8 @@ def main():
     # pprint(wb.send_use_order_code_template_msg(to_user, product_type=u"消费项目", name=u"嗷嗷洗车行", time=u"2013年8月20日 20:38",
     #                                            remark=u"洗车码「0280 1041 3114」已成功使用，欢迎再次购买", app_key=app_key))
 
+    import urllib
+    print urllib.quote_plus("http://mp.weixin.qq.com/s?__biz=MjM5OTc2NzM0OQ==&mid=203091966&idx=1&sn=9cb0a17772932e0d4564aeaa62286dd1#rd")
 
 if __name__ == '__main__':
     main()

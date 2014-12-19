@@ -26,8 +26,8 @@
                 },
                 {
                     "type": "view", 
-                    "name": "新手指导", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d227d4f9b19658a&redirect_uri=http%3A%2F%2F192.168.0.199%3A8002%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=help#wechat_redirect"
+                    "name": "新手指南", 
+                    "url": "http://mp.weixin.qq.com/s?__biz=MjM5OTc2NzM0OQ==&mid=203091966&idx=1&sn=9cb0a17772932e0d4564aeaa62286dd1#rd"
                 },
                 {
                     "type": "view", 
@@ -74,8 +74,8 @@
                 },
                 {
                     "type": "view", 
-                    "name": "新手指导", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx23cca542b396c669&redirect_uri=http%3A%2F%2Fwww.aoaoxc.com%2Faccount%2Foauth%2Fweixin&response_type=code&scope=snsapi_base&state=help#wechat_redirect"
+                    "name": "新手指南", 
+                    "url": "http://mp.weixin.qq.com/s?__biz=MjM5OTc2NzM0OQ==&mid=203091966&idx=1&sn=9cb0a17772932e0d4564aeaa62286dd1#rd"
                 },
                 {
                     "type": "view", 
