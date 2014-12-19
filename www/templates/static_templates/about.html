@@ -49,6 +49,15 @@ $(document).ready(function(){
         $.fn.fullpage.moveSectionDown();
     });
 
+    // 横竖屏判断
+    $(window).bind('orientationchange', function(e){
+        if(window.orientation == 90 || window.orientation == -90){
+            window.alert('为了更好的浏览体验，请使用竖屏浏览');
+        } else {
+            window.location.reload();
+        }
+    })
+
 });
 </script>
 {% endblock %}
@@ -65,36 +74,41 @@ $(document).ready(function(){
         <div style="padding-top: 15%" >
             <img class="w80" src="{{MEDIA_URL}}img/about_m/logo.png">
         </div>
-        <div class="f22 pt-5">嗷嗷洗车</div>
+        <div class="f22 pt-5 tt">嗷嗷洗车</div>
 
-        <i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom:  2%; left: 45%;"></i>
+        <div class="w text-center pa" style="bottom: 2%;">
+            <i class="fa fa-angle-double-down co5 f25 next-page"></i>
+        </div>
     </div>
 
     <div class="section bgc-ffffff co1 pr" style="padding-top: 15%;">
 
-        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 15%">
+        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 50px;">
             <img class="pa w70" style="left: 0px;" src="{{MEDIA_URL}}img/homepage/drop.png">
             <span class="f20 pa f22 co5 fb" style="left: 13px; top: 19px;">省钱</span>
             <div class="pt-15">最心动的折扣和优惠活动</div>
             <div>随时随地，让你洗车更省钱</div>
         </div>
-        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 15%">
+        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 50px;">
             <img class="pa w70" style="left: 0px;" src="{{MEDIA_URL}}img/homepage/drop.png">
             <span class="f20 pa f22 co5 fb" style="left: 13px; top: 19px;">便捷</span>
             <div class="pt-15">汇聚你身边的洗车网点</div>
             <div>无论出行还是在家，让洗车更便捷</div>
         </div>
-        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 15%">
+        <div class="container w300 pr" style="padding-left: 85px; padding-bottom: 50px;">
             <img class="pa w70" style="left: 0px;" src="{{MEDIA_URL}}img/homepage/drop.png">
             <span class="f20 pa f22 co5 fb" style="left: 13px; top: 19px;">时尚</span>
             <div class="pt-15">支持多种在线付款</div>
             <div>告别传统付款方式，让支付更时尚</div>
         </div>
-        <div style="padding-top: 12%;">
+        <div class="container w300 pr" style="padding-top: 12%;">
             <img class="w" src="{{MEDIA_URL}}img/about_m/cars.png">
         </div>
 
-        <i class="pa fa fa-angle-double-down co15 f25 next-page" style="bottom: 2%; left: 45%;"></i>
+        <div class="w text-center pa" style="bottom: 2%;">
+            <i class="fa fa-angle-double-down co15 f25 next-page"></i>
+        </div>
+        
     </div>
 
     <div class="section bgc-ffffff pr" style="padding-top: 4%;">
@@ -139,7 +153,9 @@ $(document).ready(function(){
         <div class="bgc-f23a1a" style="-webkit-transform: rotateZ(0deg); margin-left: -25px; margin-top: -100px; width: 120%; min-height: 300px;">
         </div>
 
-        <i class="pa fa fa-angle-double-down co5 f25 next-page" style="bottom: 1%; left: 45%;"></i>
+        <div class="w text-center pa" style="bottom: 2%;">
+            <i class="fa fa-angle-double-down co5 f25 next-page"></i>
+        </div>
     </div>
 
     <div class="section bgc-ffffff text-center pr" style="padding-top: 15%;">
