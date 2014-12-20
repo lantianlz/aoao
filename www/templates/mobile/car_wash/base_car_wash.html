@@ -54,8 +54,8 @@ a:hover{
 
 	{% block nav %}
 	<ul class="list-inline row mr-0 ml-0 mb-0 h50 w pf bgc-f8f8f8 border-1 bdc-e6e6e6" style="bottom: 0;">
-		<li class="col-xs-3 {% if '/' == request.path %}active{% endif %}">
-			<a href="/" class="w inline-block h50 text-center co1">
+		<li class="col-xs-3 {% if '/' == request.path or '/car_wash/' == request.path %}active{% endif %}">
+			<a href="/car_wash/" class="w inline-block h50 text-center co1">
 				<i class="fa fa-home pt-5 f20"></i>
 				<span class="inline-block w f13">首页</span>
 			</a>
