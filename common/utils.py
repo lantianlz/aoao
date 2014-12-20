@@ -370,7 +370,7 @@ def format_user_agent(user_agent):
         for key in ("pad", "tab", "sch-i800"):
             if key in user_agent:
                 device_type = "pad"
-        for key in ("phone", "android", "mobile", "micromessenger"):    # 注意顺序
+        for key in ("phone", "android", "micromessenger"):    # 注意顺序
             if key in user_agent:
                 device_type = "phone"
 
