@@ -96,13 +96,13 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
 
         if order.pay_type == 1:  # 支付宝支付
             alipay = alipay_mobile.Alipay()
-            flag, token = alipay.get_token(subject=u"嗷嗷洗车", out_trade_no=order.trade_id,
+            flag, token = alipay.get_token(subject=u"嗷嗷洗车订单", out_trade_no=order.trade_id,
                                            total_fee=order.pay_fee, out_user=order.user_id)
             if flag:
                 return HttpResponseRedirect(alipay.get_pay_url())
         if order.pay_type == 2:     # 微信支付
             weixinpay = weixinpay.Weixinpay()
-            flag, prepay_id = weixinpay.get_prepay_id(body=u"嗷嗷洗车", out_trade_no=order.trade_id,
+            flag, prepay_id = weixinpay.get_prepay_id(body=u"嗷嗷洗车订单", out_trade_no=order.trade_id,
                                                       total_fee=int((order.pay_fee + 0.001) * 100),  # 避免0.01转换为0的结果
                                                       openid=ExternalTokenBase().get_weixin_openid_by_user_id(order.user_id))
             # openid="oNYsJj1eg4fnU4tKLvH-f2IXlxJ4")

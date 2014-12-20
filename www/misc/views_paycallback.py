@@ -26,7 +26,7 @@ def alipaycallback_m(request):
     flag = alipay.validate_html_redirect_params(request)
     if flag:
         timeinterval = 3
-        next_url = "/"  # 成功跳转url控制
+        next_url = "/car_wash/"  # 成功跳转url控制
         if request.REQUEST.get("out_trade_no", "").startswith("W"):
             next_url = "/car_wash/order_code"
         if request.REQUEST.get("out_trade_no", "").startswith("R"):
@@ -110,7 +110,7 @@ def weixin_success_info(request):
     @note: 微信支付成功后页面页面提示
     """
     timeinterval = 3
-    next_url = "/"  # 成功跳转url控制
+    next_url = "/car_wash/"  # 成功跳转url控制
     if request.REQUEST.get("out_trade_no", "").startswith("W"):
         next_url = "/car_wash/order_code"
     if request.REQUEST.get("out_trade_no", "").startswith("R"):

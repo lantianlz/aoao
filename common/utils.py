@@ -367,12 +367,12 @@ def format_user_agent(user_agent):
 
         # 设备类型
         device_type = "pc"
-        for key in ("phone", "android"):
-            if key in user_agent:
-                device_type = "phone"
         for key in ("pad", "tab", "sch-i800"):
             if key in user_agent:
                 device_type = "pad"
+        for key in ("phone", "android", "mobile", "micromessenger"):    # 注意顺序
+            if key in user_agent:
+                device_type = "phone"
 
         # 设备名称
         device_name = user_agent.split(" ", 1)[1].split(";")[0].replace("(", "")
@@ -403,6 +403,7 @@ if __name__ == '__main__':
         'Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 820)',
         'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        ' Mozilla/5.0 (Linux; U; Android 4.4.2; zh-cn; Coolpad 8675 Build/KOT49H) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.5 Mobile Safari/533.1 MicroMessenger/6.0.0.56_r856074.501 NetType/cmnet',
     ]
     for user_agent in us:
-        format_user_agent(user_agent)
+        print format_user_agent(user_agent)

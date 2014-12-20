@@ -129,9 +129,9 @@ def oauth_weixin(request):
             else:
                 async_change_profile_from_weixin.delay(user, app_key, openid)
 
-            dict_next = {"home": "/", "order_code": "/car_wash/order_code",  "recharge": "/cash/recharge",
+            dict_next = {"home": "/car_wash/", "order_code": "/car_wash/order_code",  "recharge": "/cash/recharge",
                          "coupon": "/car_wash/coupon", "about": "/s/about", "help": "/s/help", "shop": "/shop/"}
-            next_url = dict_next.get(weixin_state, "/")
+            next_url = dict_next.get(weixin_state, "/car_wash/")
 
             return HttpResponseRedirect(next_url)
         else:

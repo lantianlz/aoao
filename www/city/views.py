@@ -48,4 +48,4 @@ def select_city(request, city_id):
     if request.user.is_authenticated():
         UserBase().change_user_city(request.user.id, city_id)
     request.session["city_id"] = city_id
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/car_wash/")
