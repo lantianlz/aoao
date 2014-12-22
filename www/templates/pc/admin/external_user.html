@@ -46,17 +46,18 @@ $(document).ready(function(){
         },
 
         // 查询
-        search: function(sDate, eDate, pageIndex){
+        search: function(sDate, eDate, nick, pageIndex){
             var me = this;
 
             ajaxSend(
-                "/admin/statistics/external/search", 
-                {'s_date': sDate||'', 'e_date': eDate||''}, 
+                "/admin/user/external/search", 
+                {'s_date': sDate||'', 'e_date': eDate||'', 'nick': nick}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
                     me.sDate = sDate;
                     me.eDate = eDate;
+                    me.nick = nick;
 
                     me.reset($.Global.Utils.dictMapParse(data.data, me._modelMaps));
                 }
@@ -92,7 +93,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.nick
+                'search/' + this.collection.sDate + '/' + this.collection.eDate + '/' + this.collection.nick
             );
 
             $('.s-date').datetimepicker({
@@ -117,9 +118,10 @@ $(document).ready(function(){
 
         search: function(){
             var sDate = this.$('.s-date').val(),
-                eDate = this.$('.e-date').val();
+                eDate = this.$('.e-date').val(),
+                nick = this.$('.nick').val();
 
-            router.navigate(String.format('/search/{0}/{1}/1', sDate, eDate), {trigger: true});
+            router.navigate(String.format('/search/{0}/{1}/{2}/1', sDate, eDate, nick), {trigger: true});
         }
 
     });
@@ -130,12 +132,12 @@ $(document).ready(function(){
 
         routes: {
             "":                     "search",
-            "search/(:sDate)/(:eDate)/:pageIndex":    "search",
+            "search/(:sDate)/(:eDate)/(:nick)/:pageIndex":    "search",
         },
 
         // 查询
-        search: function(sDate, eDate, pageIndex){
-            externals.search(sDate||'', eDate||'', pageIndex||1);
+        search: function(sDate, eDate, nick, pageIndex){
+            externals.search(sDate||'', eDate||'', nick||'', pageIndex||1);
         }
 
     });
@@ -169,8 +171,10 @@ $(document).ready(function(){
             <div class="pl-0 pb-10 col-md-2">
                 <input type="text" class="form-control e-date input-sm" readonly placeholder="结束日期" value="{{today}}">
             </div>
+            <div class="pl-0 pb-10 col-md-2">
+                <input type="text" class="form-control input-sm nick" placeholder="用户呢称" value="">
+            </div>
             <div class="pl-0 pb-10 col-md-1">
-                
                 <button class="btn btn-default btn-sm search" type="submit">查询</button>
             </div>
         </form>

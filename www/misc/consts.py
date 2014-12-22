@@ -65,7 +65,7 @@ PERMISSIONS = [
 
     {'code': 'statistics_manage', 'name': u'统计管理', 'parent': None},
     {'code': 'statistics_active_user', 'name': u'当日活跃用户统计', 'parent': 'statistics_manage'},
-    {'code': 'statistics_external', 'name': u'站外登陆信息统计', 'parent': 'statistics_manage'},
+    # {'code': 'statistics_external', 'name': u'站外登陆信息统计', 'parent': 'statistics_manage'},
  
     {'code': 'coupon_manage', 'name': u'优惠券管理', 'parent': None},
     {'code': 'add_coupon', 'name': u'添加优惠券', 'parent': 'coupon_manage'},
@@ -88,4 +88,7 @@ PERMISSIONS = [
     {'code': 'add_car_wash_manager', 'name': u'添加洗车行管理员', 'parent': 'car_wash_manager_manage'},
     {'code': 'query_car_wash_manager', 'name': u'查询洗车行管理员', 'parent': 'car_wash_manager_manage'},
     {'code': 'delete_car_wash_manager', 'name': u'修改洗车行管理员', 'parent': 'car_wash_manager_manage'}, 
+
+    {'code': 'external_manage', 'name': u'站外用户登录管理', 'parent': None},
+    {'code': 'query_external', 'name': u'查询站外用户登录信息', 'parent': 'external_manage'},
 ]

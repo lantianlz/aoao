@@ -586,7 +586,7 @@ class CouponBase(object):
 
         return objs
 
-    def modify_coupon(self, coupon_id, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash_id=None):
+    def modify_coupon(self, coupon_id, coupon_type, discount, expiry_time, user_id=None, minimum_amount=0, car_wash_id=None, state=1):
         try:
             discount = float(discount)
             minimum_amount = float(minimum_amount)
@@ -611,7 +611,7 @@ class CouponBase(object):
             return 20201, dict_err.get(20201)
 
         ps = dict(coupon_type=coupon_type, discount=discount, expiry_time=expiry_time,
-                  user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash)
+                  user_id=user_id, minimum_amount=minimum_amount, car_wash=car_wash, state=state)
 
         for k, v in ps.items():
             setattr(obj, k, v)

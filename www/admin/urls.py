@@ -10,12 +10,21 @@ urlpatterns = patterns('www.admin.views',
 # 用户
 urlpatterns += patterns('www.admin.views_user',
 
-                        url(r'^user/get_user_by_nick$', 'get_user_by_nick'),
-                        url(r'^user/modify_user$', 'modify_user'),
-                        url(r'^user/get_user_by_id$', 'get_user_by_id'),
-                        url(r'^user/search$', 'search'),
-                        url(r'^user$', 'user'),
+                        url(r'^user/user/get_user_by_nick$', 'get_user_by_nick'),
+                        url(r'^user/user/modify_user$', 'modify_user'),
+                        url(r'^user/user/get_user_by_id$', 'get_user_by_id'),
+                        url(r'^user/user/search$', 'search'),
+                        url(r'^user/user$', 'user'),
                         )
+
+
+# 站外登录用户管理
+urlpatterns += patterns('www.admin.views_external_user',
+
+                        url(r'^user/external/search$', 'get_external'),
+                        url(r'^user/external$', 'external'),
+                        )
+
 
 # 权限
 urlpatterns += patterns('www.admin.views_permission',
@@ -99,8 +108,7 @@ urlpatterns += patterns('www.admin.views_district',
 # 统计
 urlpatterns += patterns('www.admin.views_statistics',
 
-                        url(r'^statistics/external/search$', 'get_external'),
-                        url(r'^statistics/external$', 'external'),
+                        
                         url(r'^statistics/get_active_user$', 'get_active_user'),
                         url(r'^statistics/active_user$', 'active_user'),
                         )

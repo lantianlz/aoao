@@ -533,16 +533,6 @@ $(document).ready(function(){
                 </select>
             </div>
         </div>
-        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-            <label class="col-sm-3 control-label">状态</label>
-            <div class="col-sm-3">
-                <select class="form-control input-sm" required name="state">
-                    {% for choice in state_choices %}
-                    <option value="{{choice.value}}">{{choice.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
         -->
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-3 control-label">优惠幅度</label>
@@ -572,6 +562,16 @@ $(document).ready(function(){
             <label class="col-sm-3 control-label">所属洗车行</label>
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="car_wash_modify" name="car_wash_id" value=''>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+            <label class="col-sm-3 control-label">状态</label>
+            <div class="col-sm-3">
+                <select class="form-control input-sm" required name="state">
+                    {% for choice in state_choices %}
+                    <option value="{{choice.value}}" <% if(state == "{{choice.value}}"){ %>selected<% } %> >{{choice.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">

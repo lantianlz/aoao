@@ -94,10 +94,11 @@ def modify_coupon(request):
     user_id = request.REQUEST.get('user_id')
     minimum_amount = request.REQUEST.get('minimum_amount')
     car_wash_id = request.REQUEST.get('car_wash_id')
+    state = request.REQUEST.get('state')
 
     return CouponBase().modify_coupon(
         coupon_id, coupon_type, discount, expiry_time, 
-        user_id, minimum_amount, car_wash_id
+        user_id, minimum_amount, car_wash_id, state
     )
 
 

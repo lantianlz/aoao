@@ -28,11 +28,11 @@ $(document).ready(function(){
             pageIndex = parseInt(me.data('page_index')),
             strHtml = [
                 '<ul class="list-group col-xs-12 mb-10 pl-15 pr-15">',
-                    '<a class="list-group-item row pl-0 pr-0" href="{0}">',
-                        '<div class="col-xs-2 pl-5 pr-0">',
-                            '<img src="{1}" class="w h50">',
-                        '</div>',
-                        '<div class="col-xs-6 pl-5 pr-0">',
+                    '<a class="list-group-item row pl-0 pr-0 pr" href="{0}">',
+
+                        '<img src="{1}" class="w50 pa" style="left: 10px; top: 10px;">',
+                        
+                        '<div class="col-xs-8 pl-70 pr-0">',
                             '<div class="fb f15">{2}</div>',
                             '<div class="f13 pt-10"><span class="pr-20 co3">{3}</span><span class="co2">{4}</span></div>',
                         '</div>',
@@ -107,11 +107,11 @@ $(document).ready(function(){
     
         {% for car_wash in car_washs %}
         <ul class="list-group col-xs-12 mb-10 pl-15 pr-15">
-            <a class="list-group-item row pl-0 pr-0" href="{{car_wash.get_url}}">
-                <div class="col-xs-2 pl-5 pr-0">
-                    <img src="{{car_wash.get_cover}}" class="w h50">
-                </div>
-                <div class="col-xs-6 pl-5 pr-0">
+            <a class="list-group-item row pl-0 pr-0 pr" href="{{car_wash.get_url}}">
+                <!-- <div class="col-xs-2 pl-5 pr-0"> -->
+                    <img src="{{car_wash.get_cover}}" class="w50 pa" style="left: 10px; top: 10px;">
+                <!-- </div> -->
+                <div class="col-xs-8 pl-70 pr-0">
                     <div class="fb f15">{{car_wash.name}}</div>
                     <div class="f13 pt-10"><span class="pr-20 co3">{{car_wash.get_district.get_short_name}}</span><span class="co2">{{car_wash.get_wash_type_display}}</span></div>
                 </div>

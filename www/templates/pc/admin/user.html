@@ -44,7 +44,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/user/search", 
+                "/admin/user/user/search", 
                 {'email': email||'', 'user_nick': userNick||'', 'page_index': pageIndex||1}, 
                 function(data){
                     
@@ -62,7 +62,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/user/get_user_by_id", 
+                "/admin/user/user/get_user_by_id", 
                 {'user_id': userId},
                 function(data){
                     if(callback){
@@ -77,7 +77,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/user/remove_user", 
+                "/admin/user/user/remove_user", 
                 {'user_id': userId},
                 function(data){
                     if(callback){
@@ -92,7 +92,7 @@ $(document).ready(function(){
             var me = this;
 
             ajaxSend(
-                "/admin/user/modify_user?" + data, 
+                "/admin/user/user/modify_user?" + data, 
                 {},
                 function(data){
                     if(callback){

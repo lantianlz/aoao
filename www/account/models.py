@@ -28,6 +28,8 @@ class User(models.Model):
     def __unicode__(self):
         return '%s, %s' % (self.id, self.email)
 
+    class Meta:
+        ordering = ["-create_time"]
 
 class Profile(models.Model):
 
@@ -175,3 +177,6 @@ class ExternalToken(models.Model):
 
     class Meta:
         unique_together = [("source", "access_token"), ("source", "external_user_id")]
+
+    class Meta:
+        ordering = ["-create_time"]
