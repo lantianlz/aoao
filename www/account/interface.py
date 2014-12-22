@@ -704,7 +704,8 @@ class ExternalTokenBase(object):
 
     def get_external_for_admin(self, s_date, e_date, nick=''):
 
-        objs = ExternalToken.objects.filter(create_time__range=(s_date, e_date))
+        # objs = ExternalToken.objects.filter(create_time__range=(s_date, e_date))
+        objs = ExternalToken.objects.all()
 
         if nick:
             objs = objs.filter(nick=nick)

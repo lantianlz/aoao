@@ -51,7 +51,7 @@ $(document).ready(function(){
 
             ajaxSend(
                 "/admin/user/external/search", 
-                {'s_date': sDate||'', 'e_date': eDate||'', 'nick': nick}, 
+                {'s_date': sDate||'', 'e_date': eDate||'', 'nick': nick, 'page_index': pageIndex}, 
                 function(data){
                     me.pageIndex = pageIndex||1;
                     me.pageCount = data.page_count;
@@ -165,10 +165,10 @@ $(document).ready(function(){
     <!-- 客户经理列表 -->
     <div class="tab-pane fade pt-15 in active" id="external_list">
         <form action="." onsubmit="javascript: return false;">
-            <div class="pl-0 pb-10 col-md-2">
+            <div class="pl-0 pb-10 col-md-2 none">
                 <input type="text" class="form-control s-date input-sm" readonly placeholder="开始日期" value="{{today}}">
             </div>
-            <div class="pl-0 pb-10 col-md-2">
+            <div class="pl-0 pb-10 col-md-2 none">
                 <input type="text" class="form-control e-date input-sm" readonly placeholder="结束日期" value="{{today}}">
             </div>
             <div class="pl-0 pb-10 col-md-2">

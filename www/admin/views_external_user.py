@@ -30,7 +30,7 @@ def get_external(request):
     s_date = (s_date if s_date else datetime.datetime.now().strftime('%Y-%m-%d')) + " 00:00:00"
 
     e_date = request.REQUEST.get('e_date')
-    e_date = (e_date if e_date else datetime.datetime.now().strftime('%Y-%m-%d')) + " 00:00:00"
+    e_date = (e_date if e_date else datetime.datetime.now().strftime('%Y-%m-%d')) + " 23:59:59"
 
     nick = request.REQUEST.get('nick')
 
