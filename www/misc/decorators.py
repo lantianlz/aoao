@@ -186,3 +186,17 @@ def auto_select_template(func):
             kwargs.update(dict(template_name=template_name))
         return func(request, *args, **kwargs)
     return _decorator
+
+
+def log_sensitive_operation(func):
+    '''
+    记录敏感操作流水
+    '''
+    def wrapper(request, *args, **kwargs):
+        from admin.interface import SensitiveOperationLogBase
+
+        SensitiveOperationLogBase().add_log(request.user.id, request.path, str(request.REQUEST))
+        
+        return func(request, *args, **kwargs)
+
+    return wrapper

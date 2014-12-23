@@ -28,3 +28,10 @@ class UserPermission(models.Model):
 
     class Meta:
         unique_together = [('user_id', 'permission')]
+
+
+class SensitiveOperationLog(models.Model):
+    user_id = models.CharField(verbose_name=u'用户', max_length=32, db_index=True)
+    url = models.CharField(verbose_name=u'访问路径', max_length=512)
+    data = models.TextField(verbose_name=u'操作数据')
+    create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True, db_index=True)

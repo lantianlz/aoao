@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
 
-from www.misc.decorators import staff_required, common_ajax_response, verify_permission
+from www.misc.decorators import staff_required, common_ajax_response, verify_permission, log_sensitive_operation
 from www.misc import qiniu_client
 from common import utils, page
 
@@ -68,6 +68,7 @@ def search(request):
     )
 
 @verify_permission('add_user_cash_record')
+@log_sensitive_operation
 @common_ajax_response
 def add_record(request):
     user_id = request.REQUEST.get('user_id')

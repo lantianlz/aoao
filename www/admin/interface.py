@@ -7,7 +7,7 @@ from common import debug, cache
 from www.misc import consts
 from www.misc.decorators import cache_required
 
-from www.admin.models import Permission, UserPermission
+from www.admin.models import Permission, UserPermission, SensitiveOperationLog
 from www.account.interface import UserBase
 
 dict_err = {}
@@ -169,102 +169,10 @@ class FriendlyLinkBase(object):
         return 0, dict_err.get(0)
 
 
-class CoverBase(object):
+class SensitiveOperationLogBase(object):
 
     def __init__(self):
         pass
 
-    def get_home_cover(self):
-        return HomeCover.objects.all()
-
-    def add_cover(self, img, link, sort_num, des=""):
-        if None in (img, link, sort_num):
-            return 99800, dict_err.get(99800)
-
-        try:
-            obj = HomeCover.objects.create(img=img, link=link, sort_num=sort_num, des=des)
-        except Exception, e:
-            debug.get_debug_detail(e)
-            return 99900, dict_err.get(99900)
-
-        return 0, obj.id
-
-    def get_cover_by_id(self, cover_id):
-        if not cover_id:
-            return 99800, dict_err.get(99800)
-
-        return HomeCover.objects.get(id=cover_id)
-
-    def modify_cover(self, cover_id, img, link, sort_num, des=""):
-        if None in (cover_id, link, sort_num):
-            return 99800, dict_err.get(99800)
-
-        try:
-            obj = self.get_cover_by_id(cover_id)
-
-            if img:
-                obj.img = img
-
-            obj.link = link
-            obj.sort_num = sort_num
-            obj.des = des
-            obj.save()
-
-        except Exception, e:
-            debug.get_debug_detail(e)
-            return 99900, dict_err.get(99900)
-
-        return 0, obj.id
-
-    def remove_cover(self, cover_id):
-        if not cover_id:
-            return 99800, dict_err.get(99800)
-
-        try:
-            obj = self.get_cover_by_id(cover_id)
-            obj.delete()
-
-        except Exception, e:
-            debug.get_debug_detail(e)
-            return 99900, dict_err.get(99900)
-
-        return 0, dict_err.get(0)
-
-
-class StaticPageBase(object):
-
-    def __init__(self):
-        pass
-
-    @cache_required(cache_key='static_page_content', expire=0, cache_config=cache.CACHE_STATIC)
-    def get_static_page(self, must_update_cache=False):
-        data = StaticPage.objects.all()
-        if data:
-            data = data[0]
-        return data
-
-    def save_static_page(self, footer_about='', about='', agreement='', contact=''):
-        obj = StaticPage.objects.all()
-
-        try:
-
-            if obj:
-                obj = obj[0]
-
-                obj.footer_about = footer_about
-                obj.about = about
-                obj.agreement = agreement
-                obj.contact = contact
-                obj.save()
-            else:
-                obj = StaticPage.objects.create(
-                    footer_about=footer_about,
-                    about=about,
-                    agreement=agreement,
-                    contact=contact
-                )
-            self.get_static_page(must_update_cache=True)
-
-        except Exception, e:
-            debug.get_debug_detail(e)
-            return 99900, dict_err.get(99900)
+    def add_log(self, user_id, url, data):
+        SensitiveOperationLog.objects.create(user_id=user_id, url=url, data=data)

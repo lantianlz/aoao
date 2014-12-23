@@ -20,7 +20,6 @@ def user(request, template_name='pc/admin/user.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-
 @verify_permission('query_user')
 def search(request):
     user_nick = request.REQUEST.get('user_nick')
