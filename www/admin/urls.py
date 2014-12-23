@@ -136,6 +136,7 @@ urlpatterns += patterns('www.admin.views_coupon',
 # 用户现金管理
 urlpatterns += patterns('www.admin.views_user_cash_record',
 
+                        url(r'^cash/user_cash_record/add_record$', 'add_record'),
                         url(r'^cash/user_cash_record/search$', 'search'),
                         url(r'^cash/user_cash_record$', 'user_cash_record'),
                         )
@@ -143,6 +144,7 @@ urlpatterns += patterns('www.admin.views_user_cash_record',
 # 洗车行现金管理
 urlpatterns += patterns('www.admin.views_car_wash_cash_record',
 
+                        url(r'^cash/car_wash_cash_record/add_record$', 'add_record'),
                         url(r'^cash/car_wash_cash_record/search$', 'search'),
                         url(r'^cash/car_wash_cash_record$', 'car_wash_cash_record'),
                         )

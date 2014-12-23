@@ -70,6 +70,20 @@ $(document).ready(function(){
                     }
                 }
             );
+        },
+
+        addRecord: function(data, callback){
+            var me = this;
+
+            ajaxSend(
+                "/admin/cash/user_cash_record/add_record",  
+                data,
+                function(response){
+                    if(callback){
+                        callback(response);
+                    }
+                }
+            );
         }
     });
 
@@ -118,17 +132,89 @@ $(document).ready(function(){
     });
 
 
+    var AddView = Backbone.View.extend({
+        el: 'body',
+
+        template: _.template($('#add_record_template').html()),
+
+        showPanel: function(){
+            var me = this;
+
+            me.render();
+        },
+
+        userTextBox: null,
+        initUserTextBox: function(name, value){
+            var me = this;
+
+            this.userTextBox = $.Global.TextboxList.create('#user_add', {
+                max: 1,
+                placeholder: '选择用户',
+                url: '/admin/user/user/get_user_by_nick',
+                param: 'nick',
+                loadPlaceholder: '正在加载...'
+            });
+            
+        },
+
+        render: function(){
+            var me = this;
+
+            $('#add_record_modal').remove();
+            
+            $('body').append(this.template());
+
+            // 绑定事件
+            $('#add_record_modal .cancel').bind('click', function(){
+                history.go(-1);
+            });
+            $('#add_record_modal .ok').bind('click', function(){
+                me.addRecord();
+            });
+            
+            $('#add_record_modal').modal({'show': true, 'backdrop': 'static'});
+
+            me.initUserTextBox();
+           
+        },
+
+        addRecord: function(){
+            var me = this;
+            
+            if(!$('#add_record_modal form').valid()){
+                return;
+            }
+
+            records.addRecord($.Global.Utils.formToDict(this.$('form')), function(data){
+                if(data.errcode == "0"){
+                    $('#add_record_modal').modal('hide');
+                    $.Global.Notice.SuccessTopNotice("操作成功");
+                    router.navigate('search//1', {trigger: true});
+                } else {
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
+                }
+            })
+        }
+
+    });
+
+
     // router
     var Router = Backbone.Router.extend({
 
         routes: {
             "":                     "search",
+            'add': 'add',
             "search/(:nick)/:pageIndex":    "search",
         },
 
         // 查询
         search: function(nick, pageIndex){
             records.search(nick||'', pageIndex||1);
+        },
+
+        add: function(){
+            addView.showPanel();
         }
 
     });
@@ -136,6 +222,7 @@ $(document).ready(function(){
     // 初始化
     var records = new Records(),
         listView = new ListView({'collection': records}),
+        addView = new AddView(),
         router = new Router();
  
     Backbone.history.start();
@@ -149,6 +236,9 @@ $(document).ready(function(){
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
         <a href="#record_list" class="black-blue" data-toggle="pill">用户现金记录列表</a>
+    </li>
+    <li class="pull-right">
+        <a href="#add" class="black-blue">添加用户现金记录</a>
     </li>
 </ul>
 
@@ -213,4 +303,52 @@ $(document).ready(function(){
     <% }) %>
 </script>
 
+<script type="text/template" id="add_record_template">
+<div class="modal fade" id="add_record_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pb-5">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+                <h4 class="modal-title">添加用户现金记录</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal record-form" role="form" method="post" action="">
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">用户</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="user_add" required name="user_id" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">操作类型</label>
+                        <div class="col-sm-3">
+                            <select class="form-control input-sm" name="operation">
+                                {% for choice in operation_choices %}
+                                <option value="{{choice.value}}">{{choice.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">操作金额</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control number" required name="value" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="notes" value=''>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
 {% endblock right %}

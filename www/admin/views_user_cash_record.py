@@ -66,3 +66,13 @@ def search(request):
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
         mimetype='application/json'
     )
+
+@verify_permission('add_user_cash_record')
+@common_ajax_response
+def add_record(request):
+    user_id = request.REQUEST.get('user_id')
+    value = request.REQUEST.get('value')
+    operation = request.REQUEST.get('operation')
+    notes = request.REQUEST.get('notes')
+
+    return UserCashRecordBase().add_record_with_transaction(user_id, value, operation, notes)

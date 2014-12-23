@@ -65,3 +65,13 @@ def search(request):
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
         mimetype='application/json'
     )
+
+@verify_permission('add_car_wash_cash_record')
+@common_ajax_response
+def add_record(request):
+    car_wash_id = request.REQUEST.get('car_wash_id')
+    value = request.REQUEST.get('value')
+    operation = request.REQUEST.get('operation')
+    notes = request.REQUEST.get('notes')
+
+    return CarWashCashRecordBase().add_record_with_transaction(car_wash_id, value, operation, notes)

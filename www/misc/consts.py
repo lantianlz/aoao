@@ -74,9 +74,11 @@ PERMISSIONS = [
 
     {'code': 'user_cash_record_manage', 'name': u'用户现金记录管理', 'parent': None},
     {'code': 'query_user_cash_record', 'name': u'查询用户现金记录', 'parent': 'user_cash_record_manage'},
+    {'code': 'add_user_cash_record', 'name': u'添加用户现金记录', 'parent': 'user_cash_record_manage'},
 
     {'code': 'car_wash_cash_record_manage', 'name': u'洗车行现金记录管理', 'parent': None},
     {'code': 'query_car_wash_cash_record', 'name': u'查询洗车行现金记录', 'parent': 'car_wash_cash_record_manage'},
+    {'code': 'add_car_wash_cash_record', 'name': u'添加洗车行现金记录', 'parent': 'car_wash_cash_record_manage'},
 
     {'code': 'order_manage', 'name': u'订单管理', 'parent': None},
     {'code': 'query_order', 'name': u'查询订单', 'parent': 'order_manage'},
