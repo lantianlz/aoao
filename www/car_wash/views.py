@@ -166,6 +166,9 @@ def location(request, template_name='mobile/car_wash/location.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+def map(request, template_name="pc/map.html"):
+    
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
 

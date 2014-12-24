@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('www.car_wash.views',
                        url(r'^$', 'index'),
+                       url(r'^map$', 'map'),
                        url(r'^(?P<car_wash_id>\d+)$', 'car_wash_detail'),
                        url(r'^coupon$', 'my_coupons'),
                        url(r'^location$', 'location'),
