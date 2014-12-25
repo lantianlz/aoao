@@ -30,7 +30,7 @@ $(document).ready(function(){
                 '<ul class="list-group col-xs-12 mb-10 pl-15 pr-15">',
                     '<a class="list-group-item row pl-0 pr-0 pr" href="{0}">',
 
-                        '<img src="{1}" class="w50 pa" style="left: 10px; top: 10px;">',
+                        '<img src="{1}" class="w50 h50 pa" style="left: 10px; top: 10px;">',
                         
                         '<div class="col-xs-8 pl-70 pr-0">',
                             '<div class="fb f15">{2}</div>',
@@ -106,10 +106,10 @@ $(document).ready(function(){
 <div class="row pt-55 pb-50 car-wash-list">
     
         {% for car_wash in car_washs %}
-        <ul class="list-group col-xs-12 mb-10 pl-15 pr-15">
+        <ul class="list-group col-xs-12 mb-10 pl-15 pr-15 {% if not LOCAL_FLAG and car_wash.id == 1 %}none{% endif %}">
             <a class="list-group-item row pl-0 pr-0 pr" href="{{car_wash.get_url}}">
                 <!-- <div class="col-xs-2 pl-5 pr-0"> -->
-                    <img src="{{car_wash.get_cover}}" class="w50 pa" style="left: 10px; top: 10px;">
+                    <img src="{{car_wash.get_cover}}" class="w50 h50 pa" style="left: 10px; top: 10px;">
                 <!-- </div> -->
                 <div class="col-xs-8 pl-70 pr-0">
                     <div class="fb f15">{{car_wash.name}}</div>
