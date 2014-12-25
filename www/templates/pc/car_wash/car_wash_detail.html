@@ -1,0 +1,146 @@
+{% extends "pc/base/base.html" %}
+
+{% block title %}{{car_wash.name}}{% endblock %}
+
+{% block base_css %}
+<style type="text/css">
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+
+.list-group-item{
+    border-left: 0;
+    border-right: 0;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+</style>
+{% endblock %}
+
+{% block base_js %}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=o4O12xsCGirt60xLVt1GLTI6"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var map = new BMap.Map("map"),
+        point = new BMap.Point({{car_wash.longitude}}, {{car_wash.latitude}});
+        marker = new BMap.Marker(point);
+
+    map.centerAndZoom(point, 15);
+    map.enableScrollWheelZoom(true);
+    map.addOverlay(marker);
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+});
+</script>
+{% endblock %}
+
+{% block container %}
+<div class="row pt-50 pl-30 pr-30">
+    <div class="col-md-8 pt-15">
+        <h2 class="co15">{{car_wash.name}}</h2>
+        <!-- 轮播图 -->
+        <div id="carousel-example-generic" class="carousel slide mt-15" data-ride="carousel">
+            {% if car_wash.get_imgs_len > 1 %}
+            <ol class="carousel-indicators">
+                {% for img in car_wash.get_imgs %}
+                <li class="{% if forloop.first %}active{% endif %}" data-slide-to="{{forloop.counter0}}" data-target="#carousel-example-generic"></li>
+                {% endfor %}
+            </ol>
+            {% endif %}
+            
+            <div class="carousel-inner" role="listbox">
+                {% for img in car_wash.get_imgs %}
+                <div class="item {% if forloop.first %}active{% endif %}">
+                    <img class="w h" src="{{img}}">
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if car_wash.get_imgs_len > 1 %}
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="fa fa-chevron-left pa" style="top: 50%;"></span>
+                <span class="sr-only">上一张</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="fa fa-chevron-right pa" style="top: 50%;"></span>
+                <span class="sr-only">下一张</span>
+            </a>
+            {% endif %}
+        </div>
+        <!-- 轮播图结束 -->
+
+        <!-- <div class="border-bottom-2 bdc-bbb pt-20 pb-5">
+            <span class="f16 fb">商家服务</span>
+        </div> -->
+        <div class="border-bottom bdc-f23a1a pb-3 pl-10 mt-25 pt-20">
+            <span class="bgc-f23a1a co5 pb-6 pt-5 pl-10 pr-10">商家服务</span>
+            <span class="co1 pl-15">嗷嗷洗车专属价(洗车码永不过期，请放心购买)</span>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>服务名称</th>
+                    <th>嗷嗷价</th>
+                    <th>门店价</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in service_prices %}
+                <tr>
+                    <td class="f15">{{car_wash.name}} <span class="fb">{{x.service_type.name}}</span></td>
+                    <td class="co15 f20"><i class="fa fa-rmb"></i>{{x.sale_price}}元</td>
+                    <td>
+                        <i class="fa fa-rmb"></i>
+                        <span class="line-through f16">{{x.origin_price}}元</span>
+                    </td>
+                    <td><a href="#" class="btn btn-orange btn-block">立即购买</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="border-bottom bdc-f23a1a pb-3 pl-10 mt-25 pt-20">
+            <span class="bgc-f23a1a co5 pb-6 pt-5 pl-10 pr-10">购买须知</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">洗车行地址</div>
+                <div class="col-md-10 pt-10 pb-10">{{car_wash.addr}}</div>
+            </li>
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">服务电话</div>
+                <div class="col-md-10 pt-10 pb-10">{{car_wash.tel}}</div>
+            </li>
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">营业时间</div>
+                <div class="col-md-10 pt-10 pb-10">{{car_wash.business_hours}}</div>
+            </li>
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">预约信息</div>
+                <div class="col-md-10 pt-10 pb-10">无需预约, 到店即可消费</div>
+            </li>
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">使用规则</div>
+                <div class="col-md-10 pt-10 pb-10">购买洗车码后，洗车后向商家出示即可完成消费</div>
+            </li>
+            <li class="list-group-item row">
+                <div class="col-md-2 pl-20 pr-0 pt-10 pb-10 bgc-f4f4f4">温馨提示</div>
+                <div class="col-md-10 pt-10 pb-10">{{car_wash.note}}</div>
+            </li>
+        </ul>
+
+        <div class="border-bottom bdc-f23a1a pb-3 pl-10 mt-25 pt-20">
+            <span class="bgc-f23a1a co5 pb-6 pt-5 pl-10 pr-10">商家位置</span>
+        </div>
+        <div class="min-h400" id="map"></div>
+
+        <div class="border-bottom bdc-f23a1a pb-3 pl-10 mt-25 pt-20">
+            <span class="bgc-f23a1a co5 pb-6 pt-5 pl-10 pr-10">商家介绍</span>
+        </div>
+        <div class="pt-10 pb-20">
+            {{car_wash.des|safe}}
+        </div>
+    </div>
+</div>
+{% endblock %}
