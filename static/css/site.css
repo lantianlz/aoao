@@ -45,6 +45,7 @@ a:focus {outline: none;-moz-outline: none;}
 .f80{font-size: 80px;}
 
 .line-height-25{line-height: 25px;}
+.line-height-27{line-height: 27px;}
 .line-height-32{line-height: 32px;}
 .line-height-35{line-height: 35px;}
 .line-height-38{line-height: 38px;}
@@ -143,6 +144,7 @@ a:focus {outline: none;-moz-outline: none;}
 .pb-2{padding-bottom: 2px;}
 .pb-3{padding-bottom: 3px;}
 .pb-5{padding-bottom: 5px;}
+.pb-6{padding-bottom: 6px;}
 .pb-10{padding-bottom: 10px;}
 .pb-13{padding-bottom: 13px;}
 .pb-15{padding-bottom: 15px;}
@@ -196,6 +198,7 @@ a:focus {outline: none;-moz-outline: none;}
 .bdc-f36119{border-color: #f36119;}
 .bdc-999999{border-color: #999999;}
 .bdc-65c3ed{border-color: #65c3ed;}
+.bdc-f23a1a{border-color: #f23a1a;} /*红色*/
 
 .bdr-4{border-radius: 4px;}
 .bdr-6{border-radius: 6px;}
