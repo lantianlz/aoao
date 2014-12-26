@@ -1,0 +1,74 @@
+{% extends "mobile/car_wash/base_car_wash.html" %}
+{% block title_all %}嗷嗷洗车{% endblock %}
+{% block bar_title %}洗车网点{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css">
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=o4O12xsCGirt60xLVt1GLTI6&v=1.0"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#map').css({'height': $(window).height()})
+
+    var data = eval({{data_json|safe}});
+
+    // 弹出信息
+    var getContent = function(obj){
+        return String.format([
+                '<div class="f18 pt-5 pb-5">',
+                    '<span class="fb">{0}</span>',
+                    '<a class="co6 pl-5 f12" target="_blank" href="/car_wash/{4}">查看详情»</a>',
+                '</div>',
+                // '<div class="pt-5 pb-5">联系电话: <span class="pl-5">{1}</span></div>',
+                '<div class="pt-5 pb-5">洗车价格: ',
+                    '<span class="co2 f18 fb pl-5"><i class="fa fa-rmb"></i>{3}元</span>',
+                    '<span class="f14 line-through pl-5"><i class="fa fa-rmb"></i>{5}元</span>',
+                '</div>',
+                '<div class="pt-5 pb-5">地址: <span class="pl-5">{2}</span></div>'
+            ].join(''), obj.name, obj.tel, obj.address, obj.lowestSalePrice, obj.id, obj.lowest_origin_price);
+    };
+
+    var map = new BMap.Map("map"), points = [];
+    map.centerAndZoom("{{city.city}}", 13);
+    map.addControl(new BMap.ZoomControl());
+
+    $.map(data, function(i){
+        
+        points.push(new BMap.Point(i.longitude, i.latitude));
+
+        // 创建点
+        var marker = new BMap.Marker(new BMap.Point(i.longitude, i.latitude));
+        
+        map.addOverlay(marker);
+
+        marker.addEventListener("click", function(e){
+            var target = e.target,
+                point = new BMap.Point(target.getPosition().lng, target.getPosition().lat),
+                searchInfoWindow = new BMap.InfoWindow(getContent(i));
+            
+            this.openInfoWindow(searchInfoWindow);
+        });
+        
+    });
+    
+    window.setTimeout(function(){
+        map.setViewport(points);
+    }, 1000);
+    
+});
+</script>
+{% endblock %}
+
+{% block container %}
+<div id="map" class="row">
+
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

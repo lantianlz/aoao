@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import page, utils
-from www.misc.decorators import member_required, common_ajax_response
+from www.misc.decorators import member_required, common_ajax_response, auto_select_template
 from www.city.interface import CityBase
 from www.car_wash import interface
 
@@ -165,9 +165,29 @@ def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+#@auto_select_template
+def map(request, template_name="mobile/car_wash/map.html"):
+    city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
+    city = CityBase().get_city_by_id(city_id)
 
-def map(request, template_name="pc/map.html"):
-    
+    car_washs = cwb.get_car_washs_by_city_id(city_id)
+
+    data = []
+
+    for x in car_washs:
+        data.append({
+            'longitude': x.longitude, 
+            'latitude': x.latitude, 
+            'name': x.name, 
+            'id': x.id, 
+            'tel': x.tel, 
+            'address': x.addr, 
+            'lowestSalePrice': str(x.lowest_sale_price),
+            'lowest_origin_price': str(x.lowest_origin_price)
+        })
+
+    data_json = json.dumps(data)
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
