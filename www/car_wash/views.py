@@ -182,7 +182,8 @@ def map(request, template_name="pc/car_wash/map.html"):
             'id': x.id, 
             'tel': x.tel, 
             'address': x.addr, 
-            'lowestSalePrice': str(x.lowest_sale_price)
+            'lowestSalePrice': str(x.lowest_sale_price),
+            'lowest_origin_price': str(x.lowest_origin_price)
         })
 
     data_json = json.dumps(data)

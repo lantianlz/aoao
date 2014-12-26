@@ -22,6 +22,7 @@
 
 {% block base_js %}
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=o4O12xsCGirt60xLVt1GLTI6"></script>
+
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -36,9 +37,13 @@ $(document).ready(function(){
                     '<span class="fb">{0}</span>',
                     '<a class="co6 pl-5 f12" target="_blank" href="/car_wash/{4}">详情»</a>',
                 '</div>',
-                '<div class="pt-5 pb-5">联系电话: <span class="pl-5">{1}</span></div>',
+                // '<div class="pt-5 pb-5">联系电话: <span class="pl-5">{1}</span></div>',
+                '<div class="pt-5 pb-5">洗车价格: ',
+                    '<span class="co2 f18 fb pl-5"><i class="fa fa-rmb"></i>{3}元</span>',
+                    '<span class="f14 line-through pl-5 co1"><i class="fa fa-rmb"></i>{5}元</span>',
+                '</div>',
                 '<div class="pt-5 pb-5">地址: <span class="pl-5">{2}</span></div>'
-            ].join(''), obj.name, obj.tel, obj.address, obj.lowestSalePrice, obj.id);
+            ].join(''), obj.name, obj.tel, obj.address, obj.lowestSalePrice, obj.id, obj.lowest_origin_price);
     };
 
     var map = new BMap.Map("map"), points = [];
@@ -93,7 +98,7 @@ $(document).ready(function(){
                         title: i.name, //标题
                         panel: "panel", //检索结果面板
                         width: 290,
-                        offset: new BMap.Size(0, 15),
+                        //offset: new BMap.Size(0, 15),
                         enableAutoPan: true, //自动平移
                         searchTypes: [
                             BMAPLIB_TAB_TO_HERE,
@@ -101,7 +106,7 @@ $(document).ready(function(){
                         ]
                     }
                 );
-
+            
             searchInfoWindow.open(point);
         });
         
