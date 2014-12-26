@@ -9,6 +9,10 @@
     box-sizing: content-box;
 }
 
+#map .BMap_bubble_content *{
+    box-sizing: border-box;
+}
+
 #map label{
     max-width: none;
 }
@@ -28,7 +32,10 @@ $(document).ready(function(){
     // 弹出信息
     var getContent = function(obj){
         return String.format([
-                '<div class="co6 f18 pt-5 pb-5"><a target="_blank" href="/car_wash/{4}">{0}</a></div>',
+                '<div class="f18 pt-5 pb-5">',
+                    '<span class="fb">{0}</span>',
+                    '<a class="co6 pl-5 f12" target="_blank" href="/car_wash/{4}">详情»</a>',
+                '</div>',
                 '<div class="pt-5 pb-5">联系电话: <span class="pl-5">{1}</span></div>',
                 '<div class="pt-5 pb-5">地址: <span class="pl-5">{2}</span></div>'
             ].join(''), obj.name, obj.tel, obj.address, obj.lowestSalePrice, obj.id);
