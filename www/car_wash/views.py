@@ -6,6 +6,7 @@ import json
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.conf import settings
 
 from common import page, utils
 from www.misc.decorators import member_required, common_ajax_response, auto_select_template
@@ -175,6 +176,11 @@ def map(request, template_name="mobile/car_wash/map.html"):
     data = []
 
     for x in car_washs:
+
+        # 过滤测试洗车行
+        if not settings.LOCAL_FLAG and x.id == 1:
+            continue
+
         data.append({
             'longitude': x.longitude, 
             'latitude': x.latitude, 
