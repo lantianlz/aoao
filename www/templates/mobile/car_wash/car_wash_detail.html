@@ -62,11 +62,11 @@
             {% for sp in service_prices %}
             <a class="list-group-item pl-5 pt-13 pb-13" href="/car_wash/show_create_order/{{sp.id}}">
                 <div class="row">
-                    <div class="col-xs-6 pl-5 text-left f16">{{sp.service_type.name}}</div>
-                    <div class="col-xs-6 pr-0 text-right">
+                    <div class="col-xs-5 pl-5 pr-0 text-left f16">{{sp.service_type.name}}</div>
+                    <div class="col-xs-7 pr-0 pl-0 text-right">
                         <i class="fa fa-rmb f16 co2 fb"></i><span class="co2 f16 fb">{{sp.sale_price}}</span>
                         <i class="fa fa-rmb line-through co3 f13"></i><span class="line-through co3 f13">{{sp.origin_price}}</span>
-                        <i class="fa fa-angle-right f20 pl-10 co3"></i>
+                        <span class="pl-5 btn btn-orange pr-5 pt-3 pb-3">购买<i class="fa fa-angle-right f18 pl-5"></i></span>
                     </div>
                 </div>
             </a>

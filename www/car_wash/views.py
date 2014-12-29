@@ -6,6 +6,7 @@ import json
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.conf import settings
 
 from common import page, utils
 from www.misc.decorators import member_required, common_ajax_response, auto_select_template
@@ -165,8 +166,8 @@ def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-
-def map(request, template_name="pc/car_wash/map.html"):
+@auto_select_template
+def map(request, template_name="mobile/car_wash/map.html"):
     city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
     city = CityBase().get_city_by_id(city_id)
 
@@ -175,6 +176,11 @@ def map(request, template_name="pc/car_wash/map.html"):
     data = []
 
     for x in car_washs:
+
+        # 过滤测试洗车行
+        if not settings.LOCAL_FLAG and x.id == 1:
+            continue
+
         data.append({
             'longitude': x.longitude, 
             'latitude': x.latitude, 
@@ -187,8 +193,6 @@ def map(request, template_name="pc/car_wash/map.html"):
         })
 
     data_json = json.dumps(data)
-
-    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
 

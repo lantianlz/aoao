@@ -44,7 +44,7 @@ a:hover{
 
 {% block base_container %}
 	{% block topbar %}
-	<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h45 line-height-35 pr">
+	<div class="row pf text-center f14 border-1 bdc-e6e6e6 bgc-f8f8f8 pt-5 pb-5 z99 w h45 line-height-35 pr" style="left: 0; top: 0;">
 		<a class="go-back f15 pa z99 pointer co8" style="left: 15px; top: 5px;"><i class="fa f20 fa-angle-left pr-3"></i>返回</a>
 		<div class="col-xs-12 pr-0 pl-0 text-center">{% block bar_title %}{% endblock %}</div>
 	</div>
@@ -53,7 +53,7 @@ a:hover{
 	{% block container %}{% endblock %}
 
 	{% block nav %}
-	<ul class="list-inline row mr-0 ml-0 mb-0 h50 w pf bgc-f8f8f8 border-1 bdc-e6e6e6" style="bottom: 0;">
+	<ul class="list-inline row mr-0 ml-0 mb-0 h50 w pf bgc-f8f8f8 border-1 bdc-e6e6e6" style="bottom: 0; left: 0;">
 		<li class="col-xs-3 {% if '/' == request.path or '/car_wash/' == request.path %}active{% endif %}">
 			<a href="/car_wash/" class="w inline-block h50 text-center co1">
 				<i class="fa fa-home pt-5 f20"></i>

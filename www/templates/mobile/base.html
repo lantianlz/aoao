@@ -20,11 +20,11 @@
     </head>
 
     <body>
+        {% block body %}
     	<div class="container">
-    	{% block base_container %}
-    	{% endblock %}
+    	   {% block base_container %}{% endblock %}
     	</div>
-    	
+	   {% endblock body %}
         <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.placeholder.js"></script>
     	<script type="text/javascript" src="{{MEDIA_URL}}js/common.js?v={{MEDIA_VERSION}}"></script>
         <script type="text/javascript" src="{{MEDIA_URL}}js/site.js?v={{MEDIA_VERSION}}"></script>
