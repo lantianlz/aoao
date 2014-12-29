@@ -85,7 +85,7 @@ $(document).ready(function(){
 {% block bar_title %}确认订单{% endblock %}
 
 {% block container %}
-<div class="row pt-30 pb-50 pl-15 pr-15">
+<div class="row pt-35 pb-10 pl-15 pr-15">
     <form method="post" action="/car_wash/create_order/{{service_price.id}}">
         <!-- 
         <ul class="col-xs-12 list-group mt-20 pr-0 mb-10">
@@ -107,7 +107,8 @@ $(document).ready(function(){
                     <div class="co3 pt-5">{{service_price.service_type.name}}</div>
                 </div>
                 <div class="col-xs-4 pt-10 text-right pr-0">
-                    <span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 fb unit-price">{{service_price.sale_price|smart_show_float}}</span>
+                    <span class="fa fa-rmb f14 co3"></span>
+                    <span class="f22 pl-3 fb unit-price">{{service_price.sale_price|smart_show_float}}</span>
                 </div>
             </li>
             <li class="list-group-item bdc-d0d0d0 row">
@@ -125,7 +126,8 @@ $(document).ready(function(){
             <li class="list-group-item bdc-d0d0d0 row">
                 <div class="col-xs-6 f16 pt-5 pl-0">需支付</div>
                 <div class="col-xs-6 text-right pr-0">
-                    <span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb total-price">{{service_price.sale_price|smart_show_float}}</span>
+                    <span class="fa fa-rmb f14 co3"></span>
+                    <span class="f22 pl-3 co8 fb total-price">{{service_price.sale_price|smart_show_float}}</span>
                 </div>
             </li>
         </ul>
@@ -161,7 +163,8 @@ $(document).ready(function(){
             <li class="list-group-item bdc-d0d0d0 row">
                 <div class="col-xs-6 f16 pt-5 pl-0">还需支付</div>
                 <div class="col-xs-6 text-right pr-0">
-                    <span class="fa fa-rmb f14 co3"></span><span class="f22 pl-3 co8 fb need-price">0.00</span>
+                    <span class="fa fa-rmb f14 co3"></span>
+                    <span class="f22 pl-3 co8 fb need-price">0.00</span>
                 </div>
             </li>
         </ul>
@@ -172,6 +175,7 @@ $(document).ready(function(){
                 <div class="col-xs-6 line-height-32 f16">微信支付</div>
                 <div class="col-xs-3 line-height-32 text-right pr-0 pt-5">
                     <input type="checkbox" class="pay-type" value="2" name="pay_type">
+                </div>
             </li>
             <li class="list-group-item bdc-d0d0d0 row pay-item">
                 <div class="col-xs-3 pr-0 pl-0 text-center"><img class="h32" src="{{MEDIA_URL}}img/zhifubao.png"></div>
@@ -189,3 +193,5 @@ $(document).ready(function(){
     </form>
 </div>
 {% endblock %}
+
+{% block nav %}{% endblock %}
