@@ -1,0 +1,102 @@
+{% extends "pc/base/base.html" %}
+
+{% block title %}订单{% endblock %}
+
+{% block base_css %}
+<style type="text/css">
+body{
+    background-color: #f1f1f1;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="row pt-60 pl-35 pr-35">
+    <div class="col-md-12 border-1 mt-15 bgc-ffffff bdc-d0d0d0 pt-10" style="box-shadow: 1px 1px 4px #D8D8D8; ">
+
+        <table class="table mb-10">
+            <thead>
+                <tr>
+                    <th>服务项目</th>
+                    <th class="text-center">服务单价</th>
+                    <th class="text-center">购买数量</th>
+                    <th class="text-center">需支付</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="pr">
+                        <img class="w150 pa" src="http://img0.aoaoxc.com/car_wash_dbef5ba08c0711e487f3000c297089d3">
+                        <div class="pl-165">
+                            <div class="f16">成都高新区紫荆洗车站</div>
+                            <div class="f16 fb pt-10">5座洗车服务</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center f20">
+                            <i class="fa fa-rmb"></i>25
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <select class="input-sm">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="text-center f20 co15">
+                            <i class="fa fa-rmb"></i>25
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="border-top bdc-eee pb-5 row mr-0 ml-0">
+            <div class="col-md-3 col-md-offset-9 pl-0 pr-10 pt-15">
+                <div class="text-right">
+                    <span class="pr-5">使用优惠券</span>
+                    <select class="input-sm">
+                        <option>优惠5元</option>
+                        <option>优惠至10元</option>
+                    </select>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> 使用账户余额
+                    </label>
+
+                    <span class="pull-right f15"><i class="fa fa-rmb"></i>100.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top bdc-eee pb-5 row mr-0 ml-0">
+            <div class="text-right pt-10 pb-10">
+                还需支付:
+                <span class="co15 f25 pl-10"><i class="fa fa-rmb"></i>25.00</span>
+            </div>
+        </div>
+
+        <div class="border-top bdc-eee pb-5 row mr-0 ml-0 pt-10 pb-10 text-right">
+            <span>支付方式:</span>
+            <label class="pl-15">
+                <input type="checkbox" checked="checked" disabled> <img class="h32" src="{{MEDIA_URL}}img/zhifubao.png">
+            </label>
+            <span class="co1">(目前仅支持支付宝支付)</span>
+        </div>
+
+        <div class="border-top bdc-eee pb-5 row mr-0 ml-0 pt-10 pb-10 text-right">
+            <button type="submit" class="btn btn-orange">确 认 支 付</button>
+        </div>
+    </div>
+    
+</div>
+{% endblock container %}

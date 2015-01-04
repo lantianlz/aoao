@@ -17,7 +17,7 @@ urlpatterns = patterns('',
                        url(r'^save_img$', 'www.misc.views.save_img'),
                        url(r'^crop_img$', 'www.misc.views.crop_img'),
                        # url(r'^n/(?P<nick>.*)$', 'www.account.views.get_user_by_nick'),
-                       # url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
+                       url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_account'),
                        # url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),
 
 

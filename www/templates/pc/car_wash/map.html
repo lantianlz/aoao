@@ -16,6 +16,37 @@
 #map label{
     max-width: none;
 }
+
+a.list-group-item:hover{
+    background-color: #eee;
+}
+
+.locations .active{
+    background-color: #3291D5;
+    color: white;
+}
+
+.locations .active>a{
+    background-color: #3291D5;
+    color: white;
+}
+
+.list-inline>li{
+    padding: 6px 10px 6px 10px;
+}
+
+.districts>li>a{
+    color: #ffffff;
+}
+
+.districts>li>a:hover{
+    color: #65c3ed;
+}
+
+.districts>li.active>a{
+    color: #65c3ed;
+}
+
 </style>
 {% endblock %}
 
@@ -26,7 +57,8 @@
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#map').css({'height': $(window).height(), 'padding-top': 61})
+    // 
+    $('#map').css({'height': $(window).height()})
 
     var data = eval({{data_json|safe}});
 
@@ -43,10 +75,10 @@ $(document).ready(function(){
                     '<span class="f14 line-through pl-5 co1"><i class="fa fa-rmb"></i>{5}元</span>',
                 '</div>',
                 '<div class="pt-5 pb-5">地址: <span class="pl-5">{2}</span></div>'
-            ].join(''), obj.name, obj.tel, obj.address, obj.lowestSalePrice, obj.id, obj.lowest_origin_price);
+            ].join(''), obj.name, obj.tel, obj.address, obj.lowest_sale_price, obj.id, obj.lowest_origin_price);
     };
 
-    var map = new BMap.Map("map"), points = [];
+    var map = new BMap.Map("map"), points = [], markers = {};
     map.centerAndZoom("{{city.city}}", 13);
     map.enableScrollWheelZoom(true);
 
@@ -98,7 +130,7 @@ $(document).ready(function(){
                         title: i.name, //标题
                         panel: "panel", //检索结果面板
                         width: 290,
-                        //offset: new BMap.Size(0, 15),
+                        offset: new BMap.Size(0, 15),
                         enableAutoPan: true, //自动平移
                         searchTypes: [
                             BMAPLIB_TAB_TO_HERE,
@@ -109,18 +141,108 @@ $(document).ready(function(){
             
             searchInfoWindow.open(point);
         });
+
+        markers[i.id+""] = marker;
         
     });
     
-    map.setViewport(points);
+    window.setTimeout(function(){
+        map.setViewport(points);
+    }, 1200);
     
+
+    $('.list-group-item')
+    .bind('mouseenter', function(){
+        var me = $(this);
+        me.find('.marker').attr('src', '{{MEDIA_URL}}img/blue-marker.png');
+        markers[me.data("car_wash_id")].setIcon(markerBlue);
+        map.panTo(new BMap.Point(me.data("car_wash_longitude"), me.data("car_wash_latitude"))); 
+    })
+    .bind('mouseleave', function(){
+        var me = $(this);
+        me.find('.marker').attr('src', '{{MEDIA_URL}}img/red-marker.png');
+        markers[me.data("car_wash_id")].setIcon(markerRed);
+    });
+
+    $('.location').bind('click', function(){
+        if($('.locations').css('display') == "none"){
+            $('.locations').show('fast');
+        } else {
+            $('.locations').hide('fast');
+        }
+    });
+
+    $('.district').bind('click', function(){
+        if($('.districts').css('display') == "none"){
+            $('.districts').show('fast');
+        } else {
+            $('.districts').hide('fast');
+        }
+    });
 });
 </script>
 {% endblock %}
 
-{% block base_container %}
-<div id="map">
+{% block header %}{% endblock %}
 
+{% block base_container %}
+<div id="map" class="mr-300">
+
+</div>
+
+<!-- logo -->
+<div class="logo pa" style="left:10px; top:0;">
+    <a href="/" class="inline-block pt-15 pb-15 pl-50 pr-20 f25 co15">
+        嗷嗷洗车
+        <img class="w40 pa" style="left: 5px; top: 13px;" src="{{MEDIA_URL}}img/logo.png">
+    </a>
+</div>
+
+<!-- car_wash_list -->
+<div class="pf w300 h bgc-f4f4f4 border-left bdc-e6e6e6" style="box-shadow: -2px 0px 4px #999; right:0; top:0">
+    <div class="pt-10 pl-0 pb-10 border-bottom bdc-e6e6e6 bgc-ffffff row mr-0 ml-0">
+        <div class="col-md-6 f16 pr">
+            <span class="pointer location" onselectstart="return false;">{{city.city}}<i class="fa fa-angle-down pl-5 f18"></i></span>
+            <ul class="locations none w300 list-inline f14 pt-15">
+                {% for open_city in open_citys %}
+                <li {% if city.id == open_city.id %} class="active" {% endif %} >
+                    <a href="/car_wash/map?city_id={{open_city.id}}" class="no-underline">{{open_city.city}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6 text-right none">
+            <span class="co9 district pointer" onselectstart="return false;">
+                <i class="fa fa-map-marker f16 pr-5"></i>选择区域
+            </span>
+        </div>
+    </div>
+    <ul class="districts bgc-888888 co5 none w300 list-inline f14 pt-0 mt-0 mb-0 ml--1">
+        {% for district in districts %}
+        <li>
+            <a href="#" class="no-underline">{{district.district}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <ul class="list-group">
+        {% for car_wash in car_washs %}
+        <a class="list-group-item border-left-0 border-right-0 bgc-f8f8f8" data-car_wash_id="{{car_wash.id}}" data-car_wash_longitude="{{car_wash.longitude}}" data-car_wash_latitude="{{car_wash.latitude}}" href="/car_wash/{{car_wash.id}}" target="_blank">
+            <div class="row pr">
+                <img class="pa marker" style="left:15px; top:20px;" src="{{MEDIA_URL}}img/red-marker.png">
+                <span class="pa co5 inline-block text-center" style="left:15px; top:22px; width: 24px;">{{car_wash.id}}</span>
+                <div class="pl-60 f13 pt-5 pb-5">
+                    <div class="fb f15">{{car_wash.name}}</div>
+                    <div class="pt-5">{{car_wash.addr}}</div>
+                    <div>
+                        洗车价格: 
+                        <span class="co2 f18 fb pl-5"><i class="fa fa-rmb"></i>{{car_wash.lowest_sale_price}}元</span>
+                        <span class="f14 line-through pl-5 co1"><i class="fa fa-rmb"></i>{{car_wash.lowest_origin_price}}元</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
 

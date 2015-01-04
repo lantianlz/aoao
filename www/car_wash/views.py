@@ -51,6 +51,7 @@ def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+@auto_select_template
 def show_create_order(request, service_price_id, warning_msg=None, template_name='mobile/car_wash/show_create_order.html'):
     """
     @note: 显示创建订单页面
@@ -168,9 +169,14 @@ def location(request, template_name='mobile/car_wash/location.html'):
 
 @auto_select_template
 def map(request, template_name="mobile/car_wash/map.html"):
-    city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
+    city_id = request.REQUEST.get('city_id')
+    if not city_id:
+        city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
+    
     city = CityBase().get_city_by_id(city_id)
-
+    open_citys = CityBase().get_all_show_citys()
+    districts = CityBase().get_districts_by_city(city_id)
+    
     car_washs = cwb.get_car_washs_by_city_id(city_id)
 
     data = []
@@ -188,11 +194,13 @@ def map(request, template_name="mobile/car_wash/map.html"):
             'id': x.id, 
             'tel': x.tel, 
             'address': x.addr, 
-            'lowestSalePrice': str(x.lowest_sale_price),
+            'lowest_sale_price': str(x.lowest_sale_price),
             'lowest_origin_price': str(x.lowest_origin_price)
         })
 
     data_json = json.dumps(data)
+    
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
 
