@@ -1,0 +1,90 @@
+{% extends "pc/account/base_user.html" %}
+
+{% block title %}我的洗车码{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+	padding: 12px;
+}
+
+.qx-nav-pills>li>a:hover{
+	color: #428bca;
+}
+</style>
+{% endblock css %}
+
+{% block right %}
+<div class="border-1 bdc-d0d0d0 pl-15 pr-15 bdr-2 bgc-ffffff">
+	<ul class="nav nav-pills pt-15 qx-nav-pills">
+	    <li class="{% if is_valid == '1' %}active{% endif %}">
+	        <a href="/car_wash/order_code" class="black-blue">服务中的洗车码</a>
+	    </li>
+	    <li class="{% if is_valid == '0' %}active{% endif %}">
+	        <a href="/car_wash/order_code?is_valid=0" class="black-blue">已结束的洗车码</a>
+	    </li>
+	</ul>
+	<div class="tab-content pl-15 pr-15">
+	    <div class="tab-pane fade pt-15 {% if is_valid == '1' %}in active{% endif %}" id="active">
+	    	{% if codes %}
+	    	<table class="table table-hover">
+	    		<thead>
+	    			<th>洗车行</th>
+	    			<th>洗车码</th>
+	    			<th>购买时间</th>
+	    			<th>价格</th>
+	    			<th></th>
+	    		</thead>
+	    		<tbody>
+	    			{% for code in codes %}
+	    			<tr>
+	    				<td>
+	    					<a target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
+	    				</td>
+	    				<td>{{code.get_code_display}}</td>
+	    				<td>{{code.order.create_time|date:"Y-m-d H:i"}}</td>
+	    				<td><i class="fa fa-rmb pr-3"></i>{{code.order.pay_fee}}</td>
+	    				<td><a href="{{code.order.get_url}}">订单详情</a></td>
+	    			</tr>
+	    			{% endfor %}
+	    		</tbody>
+	    	</table>
+	    	{% else %}
+	    	<div class="alert alert-info">暂无洗车码，<a href="/car_wash/map">赶快来购买吧</a></div>
+	    	{% endif %}
+	    </div>
+	    <div class="tab-pane fade pt-15 {% if is_valid == '0' %}in active{% endif %}" id="close">
+	    	{% if codes %}
+	    	<table class="table table-hover">
+	    		<thead>
+	    			<th>洗车行</th>
+	    			<th>洗车码</th>
+	    			<th>购买时间</th>
+	    			<th>价格</th>
+	    			<th>使用时间</th>
+	    			<th></th>
+	    		</thead>
+	    		<tbody>
+	    			{% for code in codes %}
+	    			<tr>
+	    				<td>
+	    					<a target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
+	    				</td>
+	    				<td>{{code.get_code_display}}</td>
+	    				<td>{{code.order.create_time|date:"Y-m-d H:i"}}</td>
+	    				<td><i class="fa fa-rmb pr-3"></i>{{code.order.pay_fee}}</td>
+	    				<td>{{code.use_time|date:"Y-m-d H:i"}}</td>
+	    				<td><a href="{{code.order.get_url}}">订单详情</a></td>
+	    			</tr>
+	    			{% endfor %}
+	    		</tbody>
+	    	</table>
+	    	{% else %}
+	    	
+	    	<div class="alert alert-info">暂无</div>
+	    	{% endif %}
+
+	    </div>
+	</div>
+</div>
+{% endblock %}

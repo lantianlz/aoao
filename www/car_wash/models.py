@@ -187,7 +187,7 @@ class Coupon(models.Model):
         '''
         note = u'全场通用，无限制条件'
         if self.coupon_type == 0:
-            note = u"凭此优惠券，下单时可立减现金%s元" % utils.smart_show_float(self.discount)
+            note = u"凭此优惠券，可立减现金%s元" % utils.smart_show_float(self.discount)
         elif self.coupon_type == 1:
             note = u"凭此优惠券，可享受%s元洗车" % utils.smart_show_float(self.discount)
 
@@ -195,7 +195,7 @@ class Coupon(models.Model):
             note += u' (最低消费%s元)' % utils.smart_show_float(self.minimum_amount)
         car_wash = self.car_wash
         if car_wash:
-            note += u' 仅限洗车行<a href="%s">%s</a>使用' % (car_wash.get_url(), car_wash.name)
+            note += u' <br/><i class="fa fa-exclamation-circle f14 pr-5"></i>限<a class="pl-3 pr-3" href="%s">%s</a>' % (car_wash.get_url(), car_wash.name)
         return note
 
     def get_display(self):

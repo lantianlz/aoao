@@ -1,0 +1,85 @@
+{% extends "pc/account/base_user.html" %}
+{% load custom_filters %}
+
+{% block title %}我的优惠券{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.coupons .bg{
+	background-color: #EF8A55;
+}
+
+.coupons .bg-other{
+	background-color: #8EC8FF;
+}
+
+.coupons .state{
+	color: #919191;
+}
+
+.coupons .des{
+	color: #919191;
+}
+
+.coupons .title{
+	color: #222;
+}
+
+.coupons .un-active .bg{
+	background-color: #e6e6e6;
+}
+
+.coupons .un-active .bg-other{
+	background-color: #e6e6e6;
+}
+
+.coupons .un-active .state{
+	color: #d7d7d7;
+}
+
+.coupons .un-active .des{
+	color: #d7d7d7;
+}
+
+.coupons .un-active .title{
+	color: #d7d7d7;
+}
+
+</style>
+{% endblock css %}
+
+{% block right %}
+<div class=" pl-0 pr-0 ">
+	<div class="row coupons mr-0">
+		{% for coupon in coupons %}
+		<div class="col-md-6 pb-15 pr-0 {% if coupon.state == 1 and not coupon.check_is_expiry %}{% else %}un-active{% endif %}">
+			<div class="pl-0 pr-0 border-1 bdc-d0d0d0 bdr-2 bgc-ffffff">
+				<div class="row ml-0 mr-0 pl-10 pr-5 pt-10 pb-10 border-bottom bdc-eee">
+					<div class="col-xs-3 pl-0 pr-0 {% if coupon.coupon_type == 0 %}bg{% else %}bg-other{% endif %} h70">
+						<div class="line-height-70 text-center">
+						<i class="fa fa-rmb f25 co5"></i>
+						<span class="f25 co5">{{coupon.discount|smart_show_float}}</span>
+						</div>
+					</div>
+					<div class="col-xs-9 pl-10 pr-0 des">
+						<div class="f16 title">{{coupon.get_service_group_display}}</div>
+						<div class="f13 pt-7 line-height-20">{{coupon.get_note|safe}}</div>
+					</div>
+				</div>
+				<div class="row co1 f12 ml-0 mr-0 state bgc-f4f4f4 pt-5 pb-5 pl-5 pr-5">
+					<span class="state pull-left pl-5">{{coupon.get_state_show}}</span>
+					<span class="pull-right pr-5">
+						<i class="fa fa-clock-o pr-3 f14"></i>
+						有效期至 {{coupon.expiry_time|date:"Y-m-d"}}
+					</span>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+
+		{% if not coupons %}
+		<div class="alert alert-info">请留意站内活动，不定期获取优惠券</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

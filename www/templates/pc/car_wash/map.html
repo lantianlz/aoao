@@ -80,6 +80,12 @@ $(document).ready(function(){
 
     var map = new BMap.Map("map"), points = [], markers = {};
     map.centerAndZoom("{{city.city}}", 13);
+    map.addControl(
+        new BMap.NavigationControl({
+            anchor: BMAP_ANCHOR_TOP_RIGHT, 
+            type: BMAP_NAVIGATION_CONTROL_SMALL
+        })
+    );
     map.enableScrollWheelZoom(true);
 
     var markerRed = new BMap.Icon("{{MEDIA_URL}}img/marker.gif", new BMap.Size(24, 31)),

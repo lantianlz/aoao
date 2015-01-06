@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import utils
-from www.misc.decorators import member_required
+from www.misc.decorators import member_required, auto_select_template
 from www.cash import interface
 
 ucb = interface.UserCashBase()
@@ -18,13 +18,15 @@ def cash_index(request, template_name='mobile/cash/cash_index.html'):
     user_cash = ucb.get_user_cash_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-
+@auto_select_template
 def user_cash_record(request, template_name='mobile/cash/user_cash_record.html'):
     records = ucrb.get_records_by_user_id(request.user.id)
+    user_cash = ucb.get_user_cash_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
 @member_required
+@auto_select_template
 def recharge(request, template_name='mobile/cash/recharge.html'):
     from common.alipay import alipay_mobile
     from common.weixinpay import weixinpay

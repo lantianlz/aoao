@@ -46,6 +46,7 @@ def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/ca
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
+@auto_select_template
 def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
     coupons = cb.get_coupons_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -138,7 +139,7 @@ def weixinpay(request, template_name='mobile/car_wash/weixinpay.html'):
 
     return render_to_response(template_name, params, context_instance=RequestContext(request))
 
-
+@auto_select_template
 def order_code(request, province_id=None, template_name='mobile/car_wash/order_code_list.html'):
     is_valid = request.REQUEST.get("is_valid") or "1"
     if is_valid == "1":
@@ -150,6 +151,7 @@ def order_code(request, province_id=None, template_name='mobile/car_wash/order_c
 
 
 @member_required
+@auto_select_template
 def order_detail(request, trade_id, template_name="mobile/car_wash/order_detail.html"):
     order = ob.get_order_by_trade_id(trade_id)
     if not order:

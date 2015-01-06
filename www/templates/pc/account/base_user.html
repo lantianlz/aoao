@@ -39,7 +39,7 @@ body{
 {% endblock %}
 
 {% block container %}
-<div class="row pt-50 pl-15 pr-15">
+<div class="row pt-50 pl-20 pr-15">
     <div class="col-md-3 mt-25 bgc-ffffff border-1 bdc-d0d0d0 pl-0 pr-0 bdr-2 co1">
         <div class="text-center pt-40 pb-20 bgc-f8f8f8">
             <img class="img-circle avatar-100" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!100m100">
@@ -48,21 +48,21 @@ body{
             <span class="fb f20 co16">Stranger</span>
         </div>
         <ul class="list-group nav-account mb-0">
-            <a href="#" class="list-group-item border-left-0 border-right-0 ">
+            <a href="/car_wash/order_code" class="list-group-item border-left-0 border-right-0 {% if '/car_wash/order' in request.path %}active{% endif %}">
                 <div class="pl-50 pr pb-5 pt-5">
                     <i class="fa fa-barcode pr-5 pa f18" style="left: 15px; top: 7px;"></i>
                     我的洗车码
                     <i class="fa fa-angle-right pa f16 arrow" style="right: 15px; top: 7px;"></i>
                 </div>
             </a>
-            <a href="#" class="list-group-item border-left-0 border-right-0">
+            <a href="/car_wash/coupon" class="list-group-item border-left-0 border-right-0 {% if request.path == '/car_wash/coupon' %}active{% endif %}">
                 <div class="pl-50 pr pb-5 pt-5">
                     <i class="fa fa-rmb pr-5 pa f18" style="left: 18px; top: 7px;"></i>
                     我的优惠券
                     <i class="fa fa-angle-right pa f16 arrow" style="right: 15px; top: 7px;"></i>
                 </div>
             </a>
-            <a href="#" class="list-group-item border-left-0 border-right-0 active">
+            <a href="/cash/user_cash_record" class="list-group-item border-left-0 border-right-0 {% if '/cash/' in request.path %}active{% endif %}">
                 <div class="pl-50 pr pb-5 pt-5">
                     <i class="fa fa-user pr-5 pa f18" style="left: 16px; top: 7px;"></i>
                     我的账户
@@ -71,7 +71,7 @@ body{
             </a>
         </ul>
     </div>
-    <div class="col-md-9 mt-25">
+    <div class="col-md-9 mt-25 pl-30 pr-0">
         {% block right %}{% endblock %}
     </div>
 </div>

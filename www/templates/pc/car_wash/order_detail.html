@@ -1,0 +1,82 @@
+{% extends "pc/account/base_user.html" %}
+{% load custom_filters %}
+{% block title %}订单详情{% endblock %}
+
+{% block right %}
+<div class="border-1 bdc-d0d0d0 pl-0 pr-0 bdr-2 bgc-ffffff">
+    <div class="bgc-f8f8f8 pt-15 pb-15 pl-15 pr-15 border-bottom bdc-d0d0d0">
+        <span class="f20 pl-5">订单详情</span>
+    </div>
+    <div class="pl-30 pr-30">
+        <form class="form-horizontal auth-form f15" role="form" method="post" action="/auth_custom_manager" enctype="multipart/form-data" novalidate="novalidate">
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">洗车行</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{order.car_wash.name}}</p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">消费类型</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{order.service_price.service_type.name}}</p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">门店价</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static f16">
+                        <i class="fa fa-rmb pr-3"></i>{{order.service_price.origin_price}}
+                    </p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">嗷嗷会员价</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static co15 f16">
+                        <i class="fa fa-rmb pr-3"></i>{{order.service_price.sale_price}}
+                    </p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">嗷嗷洗车码</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static">
+                    {% for code in codes %}
+                        {% if code.state == 0 %}
+                        <span class="co17 f16">{{code.get_code_display}}({{code.get_state_display}})</span>
+                        <br/>
+                        {% else %}
+                        <span class="co1 f16">{{code.get_code_display}}({{code.get_state_display}})</span>
+                        <br/>
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">订单号</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{order.trade_id}}</p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">付款时间</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static">{{order.pay_time|date:"Y-m-d H:i"}}</p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">付款金额</label>
+                <div class="col-sm-6">
+                    <p class="form-control-static co15">
+                        <i class="fa fa-rmb pr-3"></i>{{order.pay_fee|smart_show_float}}
+                    </p>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 pl-30 border-bottom bdc-eee">
+                <button class="btn btn-orange">申 请 退 款</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

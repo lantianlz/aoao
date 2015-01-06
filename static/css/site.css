@@ -44,6 +44,7 @@ a:focus {outline: none;-moz-outline: none;}
 .f75{font-size: 75px;}
 .f80{font-size: 80px;}
 
+.line-height-20{line-height: 20px;}
 .line-height-25{line-height: 25px;}
 .line-height-27{line-height: 27px;}
 .line-height-32{line-height: 32px;}
@@ -69,6 +70,7 @@ a:focus {outline: none;-moz-outline: none;}
 .co14{color: #D76427;} /*橙色*/
 .co15{color: #f23a1a;} /*红色*/
 .co16{color: #444444;}
+.co17{color: #428bca;}
 
 .mr-0{margin-right: 0px;}
 .mr-5{margin-right: 5px;}
