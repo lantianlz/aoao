@@ -42,10 +42,10 @@ body{
 <div class="row pt-50 pl-20 pr-15">
     <div class="col-md-3 mt-25 bgc-ffffff border-1 bdc-d0d0d0 pl-0 pr-0 bdr-2 co1">
         <div class="text-center pt-40 pb-20 bgc-f8f8f8">
-            <img class="img-circle avatar-100" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!100m100">
+            <img class="img-circle avatar-100" src="{{request.user.get_avatar}}">
         </div>
         <div class="text-center bgc-f8f8f8 pb-30">
-            <span class="fb f20 co16">Stranger</span>
+            <span class="fb f20 co16">{{request.user.nick}}</span>
         </div>
         <ul class="list-group nav-account mb-0">
             <a href="/car_wash/order_code" class="list-group-item border-left-0 border-right-0 {% if '/car_wash/order' in request.path %}active{% endif %}">

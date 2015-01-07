@@ -82,8 +82,7 @@ $(document).ready(function(){
     map.centerAndZoom("{{city.city}}", 13);
     map.addControl(
         new BMap.NavigationControl({
-            anchor: BMAP_ANCHOR_TOP_RIGHT, 
-            type: BMAP_NAVIGATION_CONTROL_SMALL
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT
         })
     );
     map.enableScrollWheelZoom(true);
