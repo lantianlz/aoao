@@ -36,6 +36,7 @@ def index(request, template_name='mobile/car_wash/index.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
 @auto_select_template
 def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/car_wash_detail.html'):
     car_wash = cwb.get_car_wash_by_id(car_wash_id)
@@ -116,7 +117,7 @@ def create_order(request, service_price_id, template_name='mobile/car_wash/show_
         return render_to_response('error.html', locals(), context_instance=RequestContext(request))
     else:
         warning_msg = errmsg
-        return show_create_order(request, service_price_id, warning_msg)
+        return show_create_order(request, service_price_id, warning_msg, template_name='mobile/car_wash/show_create_order.html')
 
 
 @member_required
@@ -138,6 +139,7 @@ def weixinpay(request, template_name='mobile/car_wash/weixinpay.html'):
     params["trade_id"] = trade_id
 
     return render_to_response(template_name, params, context_instance=RequestContext(request))
+
 
 @auto_select_template
 def order_code(request, province_id=None, template_name='mobile/car_wash/order_code_list.html'):
@@ -169,16 +171,17 @@ def location(request, template_name='mobile/car_wash/location.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
 @auto_select_template
 def map(request, template_name="mobile/car_wash/map.html"):
     city_id = request.REQUEST.get('city_id')
     if not city_id:
         city_id = request.user.get_city_id() if request.user.is_authenticated() else request.session.get("city_id", 1974)
-    
+
     city = CityBase().get_city_by_id(city_id)
     open_citys = CityBase().get_all_show_citys()
     districts = CityBase().get_districts_by_city(city_id)
-    
+
     car_washs = cwb.get_car_washs_by_city_id(city_id)
 
     data = []
@@ -190,18 +193,18 @@ def map(request, template_name="mobile/car_wash/map.html"):
             continue
 
         data.append({
-            'longitude': x.longitude, 
-            'latitude': x.latitude, 
-            'name': x.name, 
-            'id': x.id, 
-            'tel': x.tel, 
-            'address': x.addr, 
+            'longitude': x.longitude,
+            'latitude': x.latitude,
+            'name': x.name,
+            'id': x.id,
+            'tel': x.tel,
+            'address': x.addr,
             'lowest_sale_price': str(x.lowest_sale_price),
             'lowest_origin_price': str(x.lowest_origin_price)
         })
 
     data_json = json.dumps(data)
-    
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
