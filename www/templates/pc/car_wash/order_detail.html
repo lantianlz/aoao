@@ -10,7 +10,13 @@
     <div class="pl-30 pr-30">
         <form class="form-horizontal auth-form f15" role="form" method="post" action="/auth_custom_manager" enctype="multipart/form-data" novalidate="novalidate">
             <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
-                <label class="col-sm-3 control-label">洗车行</label>
+                <label class="col-sm-3 control-label">商户图片</label>
+                <div class="col-sm-6">
+                    <img class="w250" src="{{order.car_wash.get_cover}}">
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-3 control-label">商户名称</label>
                 <div class="col-sm-6">
                     <p class="form-control-static">{{order.car_wash.name}}</p>
                 </div>
@@ -73,8 +79,10 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group pt-20 pb-20 mb-0 pl-30 border-bottom bdc-eee">
-                <button class="btn btn-orange">申 请 退 款</button>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <div class="col-sm-3 text-right">
+                    <button class="btn btn-orange">申 请 退 款</button>
+                </div>
             </div>
         </form>
     </div>

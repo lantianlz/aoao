@@ -31,6 +31,8 @@ def recharge(request, template_name='mobile/cash/recharge.html'):
     from common.alipay import alipay_mobile
     from common.weixinpay import weixinpay
     from www.account.interface import ExternalTokenBase
+    
+    user_cash = ucb.get_user_cash_by_user_id(request.user.id)
 
     if request.POST:
         pay_type = request.POST.get("pay_type")

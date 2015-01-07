@@ -11,12 +11,31 @@
 {% block right %}
 <div class="border-1 bdc-d0d0d0 pl-0 pr-0 bdr-2">
 	<div class="bgc-f8f8f8 pt-15 pb-15 pl-15 pr-15 border-bottom bdc-d0d0d0">
-		<span class="f20 pl-5">您当前嗷嗷洗车余额: </span>
-		<span class="co15 f20 pl-5"><i class="fa fa-rmb"></i>888.00元</span>
-		<a class="btn btn-orange btn-sm ml-25" href="#">立即充值</a>
+		<span class="f20 pl-5">账户充值</span>
 	</div>
 	<div class="pl-15 pr-15 bgc-ffffff">
-		
+		<form class="form-horizontal" method="post" action="/cash/recharge">
+			<div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-2 control-label">充值金额</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" placeholder="充值金额 0-999 之间" />
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <label class="col-sm-2 control-label">支付方式</label>
+                <div class="col-sm-8">
+                    <label class="pl-15">
+		                <input type="checkbox" checked="checked" disabled=""> <img class="h32" src="/static/img/zhifubao.png">
+		            </label>
+		            <span class="co1">(目前仅支持支付宝支付)</span>
+                </div>
+            </div>
+            <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                <div class="col-sm-2 text-right">
+                	<button class="btn btn-orange" type="submit">确认充值</button>
+                </div>
+            </div>
+		</form>
 	</div>
 </div>
 {% endblock %}
