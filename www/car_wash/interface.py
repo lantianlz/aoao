@@ -120,10 +120,15 @@ class CarWashBase(object):
             return 99900, dict_err.get(99900)
         return 0, car_wash
 
-    def get_car_washs_by_city_id(self, city_id, order_by_value="0"):
+    def get_car_washs_by_city_id(self, city_id, district_id=None, order_by_value="0"):
         dict_order_by = {"0": "id", "1": "lowest_sale_price", "2": "-order_count"}
         order_by_field = dict_order_by.get(order_by_value)
-        return CarWash.objects.filter(city_id=city_id, state=True).order_by("-sort_num", order_by_field)
+        objs = CarWash.objects.filter(city_id=city_id, state=True)
+
+        if district_id is not None:
+            objs = objs.filter(district_id=district_id)
+
+        return objs.order_by("-sort_num", order_by_field)
 
     def search_car_washs_for_admin(self, name="", state=True):
         return CarWash.objects.filter(name__contains=name, state=state)

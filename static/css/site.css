@@ -182,6 +182,7 @@ a:focus {outline: none;-moz-outline: none;}
 .bgc-f2f3f8{background-color: #f2f3f8;} /*商户结算灰色*/
 .bgc-d31623{background-color: #d31623;} /*导航红色*/
 .bgc-f23a1a{background-color: #f23a1a;} /*红色*/
+.bgc-bbbbbb{background-color: #bbbbbb;}
 
 .border-1{border: solid 1px;}
 .border-5{border: solid 5px;}
@@ -380,26 +381,4 @@ a:focus {outline: none;-moz-outline: none;}
 
 .white-white:hover, .white-white:focus {
   color: white;
-}
-
-.pagination>.active>a, 
-.pagination>.active>span, 
-.pagination>.active>a:hover, 
-.pagination>.active>span:hover, 
-.pagination>.active>a:focus, 
-.pagination>.active>span:focus{
-  background-color: #EF8A55;
-  border-color: #EF8A55;
-}
-
-.pagination>li>a:hover, 
-.pagination>li>span:hover, 
-.pagination>li>a:focus, 
-.pagination>li>span:focus{
-  color: #EF8A55;
-}
-
-.pagination>li>a, 
-.pagination>li>span{
-  color: #EF8A55;
 }

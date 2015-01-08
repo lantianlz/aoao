@@ -193,7 +193,10 @@ def map(request, template_name="mobile/car_wash/map.html"):
     open_citys = CityBase().get_all_show_citys()
     districts = CityBase().get_districts_by_city(city_id)
 
-    car_washs = cwb.get_car_washs_by_city_id(city_id)
+    district_id = request.REQUEST.get('district_id')
+    district_id = int(district_id) if district_id else None
+
+    car_washs = cwb.get_car_washs_by_city_id(city_id, district_id)
 
     data = []
 

@@ -40,11 +40,14 @@ a.list-group-item:hover{
 }
 
 .districts>li>a:hover{
-    color: #65c3ed;
+    color: #428bca;
 }
 
 .districts>li.active>a{
-    color: #65c3ed;
+    color: #428bca;
+    border: solid 1px #428bca;
+    padding: 2px;
+    border-radius: 3px;
 }
 
 </style>
@@ -216,16 +219,19 @@ $(document).ready(function(){
                 {% endfor %}
             </ul>
         </div>
-        <div class="col-md-6 text-right none">
+        <div class="col-md-6 text-right">
             <span class="co9 district pointer" onselectstart="return false;">
                 <i class="fa fa-map-marker f16 pr-5"></i>选择区域
             </span>
         </div>
     </div>
-    <ul class="districts bgc-888888 co5 none w300 list-inline f14 pt-0 mt-0 mb-0 ml--1">
+    <ul class="districts bgc-bbbbbb co5 {% if not district_id %} none {% endif %} w300 list-inline f14 pt-10 mt-0 mb-0 ml--1 pb-10 pl-10">
+        <li {% if not district_id %} class="active" {% endif %}>
+            <a href="/car_wash/map?city_id={{city.id}}" class="no-underline">全部</a>
+        </li>
         {% for district in districts %}
-        <li>
-            <a href="#" class="no-underline">{{district.district}}</a>
+        <li {% if district_id == district.id %} class="active" {% endif %} >
+            <a href="/car_wash/map?city_id={{city.id}}&district_id={{district.id}}" class="no-underline">{{district.district}}</a>
         </li>
         {% endfor %}
     </ul>
