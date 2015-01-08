@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect  # HttpResponse,Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from common import utils
+from common import utils, page
 from www.misc.decorators import member_required, auto_select_template
 from www.cash import interface
 
@@ -20,8 +20,16 @@ def cash_index(request, template_name='mobile/cash/cash_index.html'):
 
 @auto_select_template
 def user_cash_record(request, template_name='mobile/cash/user_cash_record.html'):
-    records = ucrb.get_records_by_user_id(request.user.id)
+
     user_cash = ucb.get_user_cash_by_user_id(request.user.id)
+
+    records = ucrb.get_records_by_user_id(request.user.id)
+
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(records, count=10, page=page_num).info
+    records = page_objs[0]
+    page_params = (page_objs[1], page_objs[4])
+    
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

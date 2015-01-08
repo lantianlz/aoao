@@ -1,5 +1,5 @@
 {% extends "pc/account/base_user.html" %}
-
+{% load custom_filters %}
 {% block title %}我的洗车码{% endblock %}
 
 {% block css %}
@@ -9,7 +9,17 @@
 }
 
 .qx-nav-pills>li>a:hover{
-	color: #428bca;
+	color: #EF8A55;
+	border-bottom: 2px solid #EF8A55;
+}
+
+.qx-nav-pills>li.active>a{
+	color: #EF8A55;
+	border-bottom: 2px solid #EF8A55;
+}
+
+.qx-nav-pills>li.active>a:hover{
+	color: #EF8A55;
 }
 </style>
 {% endblock css %}
@@ -39,16 +49,17 @@
 	    			{% for code in codes %}
 	    			<tr>
 	    				<td>
-	    					<a target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
+	    					<a class="co8" target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
 	    				</td>
 	    				<td>{{code.get_code_display}}</td>
 	    				<td>{{code.order.create_time|date:"Y-m-d H:i"}}</td>
 	    				<td><i class="fa fa-rmb pr-3"></i>{{code.order.pay_fee}}</td>
-	    				<td><a href="{{code.order.get_url}}">订单详情</a></td>
+	    				<td><a class="co8" href="{{code.order.get_url}}">订单详情</a></td>
 	    			</tr>
 	    			{% endfor %}
 	    		</tbody>
 	    	</table>
+	    	{{page_params|paging:request}}
 	    	{% else %}
 	    	<div class="alert alert-info">暂无洗车码，<a href="/car_wash/map">赶快来购买吧</a></div>
 	    	{% endif %}
@@ -68,17 +79,18 @@
 	    			{% for code in codes %}
 	    			<tr>
 	    				<td>
-	    					<a target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
+	    					<a class="co8" target="_blank" href="{{code.car_wash.get_url}}">{{code.car_wash.name}}</a>
 	    				</td>
 	    				<td>{{code.get_code_display}}</td>
 	    				<td>{{code.order.create_time|date:"Y-m-d H:i"}}</td>
 	    				<td><i class="fa fa-rmb pr-3"></i>{{code.order.pay_fee}}</td>
 	    				<td>{{code.use_time|date:"Y-m-d H:i"}}</td>
-	    				<td><a href="{{code.order.get_url}}">订单详情</a></td>
+	    				<td><a class="co8" href="{{code.order.get_url}}">订单详情</a></td>
 	    			</tr>
 	    			{% endfor %}
 	    		</tbody>
 	    	</table>
+	    	{{page_params|paging:request}}
 	    	{% else %}
 	    	
 	    	<div class="alert alert-info">暂无</div>

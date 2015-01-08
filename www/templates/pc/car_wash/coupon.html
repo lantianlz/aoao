@@ -53,7 +53,7 @@
 	<div class="row coupons mr-0">
 		{% for coupon in coupons %}
 		<div class="col-md-6 pb-15 pr-0 {% if coupon.state == 1 and not coupon.check_is_expiry %}{% else %}un-active{% endif %}">
-			<div class="pl-0 pr-0 border-1 bdc-d0d0d0 bdr-2 bgc-ffffff">
+			<div class="pl-0 pr-0 border-1 bdc-d0d0d0 bdr-2 bgc-ffffff" style="box-shadow: 2px 2px 4px #DBDBDB">
 				<div class="row ml-0 mr-0 pl-10 pr-5 pt-10 pb-10 border-bottom bdc-eee">
 					<div class="col-xs-3 pl-0 pr-0 {% if coupon.coupon_type == 0 %}bg{% else %}bg-other{% endif %} h70">
 						<div class="line-height-70 text-center">
@@ -76,6 +76,8 @@
 			</div>
 		</div>
 		{% endfor %}
+		
+		{{page_params|paging:request}}
 
 		{% if not coupons %}
 		<div class="alert alert-info">请留意站内活动，不定期获取优惠券</div>

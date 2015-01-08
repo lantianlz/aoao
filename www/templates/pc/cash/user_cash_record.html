@@ -1,4 +1,5 @@
 {% extends "pc/account/base_user.html" %}
+{% load custom_filters %}
 
 {% block title %}我的账户{% endblock %}
 
@@ -42,6 +43,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		{{page_params|paging:request}}
 	</div>
 </div>
 {% endblock %}
