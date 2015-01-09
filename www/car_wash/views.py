@@ -25,7 +25,7 @@ def index(request, template_name='mobile/car_wash/index.html'):
     city = CityBase().get_city_by_id(city_id)
 
     order_by_value = request.REQUEST.get("order_by_value") or "0"
-    car_washs = cwb.get_car_washs_by_city_id(city_id, order_by_value)
+    car_washs = cwb.get_car_washs_by_city_id(city_id, order_by_value=order_by_value)
 
     # 分页
     page_num = int(request.REQUEST.get('page', 1))
