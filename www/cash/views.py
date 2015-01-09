@@ -18,6 +18,7 @@ def cash_index(request, template_name='mobile/cash/cash_index.html'):
     user_cash = ucb.get_user_cash_by_user_id(request.user.id)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
 @auto_select_template
 def user_cash_record(request, template_name='mobile/cash/user_cash_record.html'):
 
@@ -25,11 +26,12 @@ def user_cash_record(request, template_name='mobile/cash/user_cash_record.html')
 
     records = ucrb.get_records_by_user_id(request.user.id)
 
-    page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(records, count=10, page=page_num).info
-    records = page_objs[0]
-    page_params = (page_objs[1], page_objs[4])
-    
+    if not request.is_phone:
+        page_num = int(request.REQUEST.get('page', 1))
+        page_objs = page.Cpt(records, count=10, page=page_num).info
+        records = page_objs[0]
+        page_params = (page_objs[1], page_objs[4])
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
@@ -39,7 +41,7 @@ def recharge(request, template_name='mobile/cash/recharge.html'):
     from common.alipay import alipay_mobile
     from common.weixinpay import weixinpay
     from www.account.interface import ExternalTokenBase
-    
+
     user_cash = ucb.get_user_cash_by_user_id(request.user.id)
 
     if request.POST:
