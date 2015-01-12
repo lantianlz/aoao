@@ -1,5 +1,5 @@
 {% extends "mobile/car_wash/base_car_wash.html" %}
-
+{% load custom_filters %}
 {% block title_all %}嗷嗷洗车{% endblock %}
 
 {% block css %}
@@ -19,7 +19,8 @@
 {% block bar_title %}消费记录{% endblock %}
 
 {% block container %}
-<ul class="list-group pt-55 pb-50 pl-15 pr-15">
+<div class="pb-50 pt-55">
+<ul class="list-group pl-15 pr-15">
 	{% for record in records %}
 	<li class="list-group-item row">
 		<div class="col-xs-12 pl-0 pr-0 row">
@@ -34,8 +35,12 @@
 		</div>
 	</li>
 	{% endfor %}
+
 	{% if not records %}
    	<div class="alert alert-info mr-5 ml-5">暂无</div>
 	{% endif %}
 </ul>
+
+{{page_params|small_paging:request}}
+</div>
 {% endblock %}

@@ -39,6 +39,7 @@ def verify_code(request, car_wash_id, template_name):
 
 
 @member_required
+@auto_select_template
 @car_wash_manager_required_for_request
 def shop_cash(request, car_wash_id, template_name='pc/shop/shop_cash.html'):
     car_wash_cash = CarWashCashBase().get_car_wash_cash_by_car_wash_id(car_wash_id)

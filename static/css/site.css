@@ -75,6 +75,8 @@ a:focus {outline: none;-moz-outline: none;}
 .mr-0{margin-right: 0px;}
 .mr-5{margin-right: 5px;}
 .mr-10{margin-right: 10px;}
+.mr-15{margin-right: 15px;}
+.mr-20{margin-right: 20px;}
 .mr-300{margin-right: 300px;}
 .ml--1{margin-left: -1px;}
 .ml-0{margin-left: 0;}
@@ -183,6 +185,7 @@ a:focus {outline: none;-moz-outline: none;}
 .bgc-d31623{background-color: #d31623;} /*导航红色*/
 .bgc-f23a1a{background-color: #f23a1a;} /*红色*/
 .bgc-bbbbbb{background-color: #bbbbbb;}
+.bgc-5A9BC3{background-color: #5A9BC3;}
 
 .border-1{border: solid 1px;}
 .border-5{border: solid 5px;}

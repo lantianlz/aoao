@@ -4,9 +4,98 @@
 
 {% block css %}
 <style type="text/css">
+.btn .fa-check-square{
+    display: none;
+}
 
+.btn:focus .fa-check-square, .btn.active .fa-check-square{
+    display: block;
+}
+
+.btn-5A9BC3{
+    color: #5A9BC3;
+    background-color: transparent;
+    border-color: #5A9BC3;
+    transition: all 0.3s;
+}
+
+.btn-5A9BC3:hover, .btn-5A9BC3:focus, .btn-5A9BC3.active{
+    color: #fff;
+    background-color: #5A9BC3;
+    border-color: #5A9BC3;
+}
+
+.btn-5DC35A{
+    color: #5DC35A;
+    background-color: transparent;
+    border-color: #5DC35A;
+    transition: all 0.3s;
+}
+
+.btn-5DC35A:hover, .btn-5DC35A:focus, .btn-5DC35A.active{
+    color: #fff;
+    background-color: #5DC35A;
+    border-color: #5DC35A;
+}
+
+.btn-EF8A55{
+    color: #EF8A55;
+    background-color: transparent;
+    border-color: #EF8A55;
+    transition: all 0.3s;
+}
+
+.btn-EF8A55:hover, .btn-EF8A55:focus, .btn-EF8A55.active{
+    color: #fff;
+    background-color: #EF8A55;
+    border-color: #EF8A55;
+}
 </style>
 {% endblock css %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.btn-price').bind('click', function(){
+        $('.btn-price').removeClass('active');
+        $(this).addClass('active');
+
+        $('.other-price').val('');
+        $('#total_fee_id').val($(this).data('price'));
+    });
+
+    $('.other-price').bind('input', function(){
+        $('.btn-price').removeClass('active');
+        var price = $(this).val();
+
+        if(!price){
+            $('#total_fee_id').val(0);
+            return;
+        }
+
+        if(/^(\d{1,3}\.\d{1,2}|\d{1,3})$/.test(price)){
+            price = parseFloat(price);
+
+            if(price <= 0){
+                alert("请输入正确的金额");
+                return;
+            }
+
+            $('#total_fee_id').val(price);
+
+        } else {
+            $('#total_fee_id').val(0);
+            alert("请输入正确的金额");
+        }
+        
+    });
+
+    // 默认选中100
+    $('.btn-price').eq(2).click();
+
+});
+</script>
+{% endblock %}
 
 {% block right %}
 <div class="border-1 bdc-d0d0d0 pl-0 pr-0 bdr-2">
@@ -18,7 +107,22 @@
 			<div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                 <label class="col-sm-2 control-label">充值金额</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" placeholder="充值金额 0-999 之间" />
+                    <a href="#" class="btn btn-5A9BC3 mr-20 pr btn-price" data-price="500">
+                        500元
+                        <i class="fa fa-check-square f12 pa" style="bottom: 0; right: 1px;"></i>
+                    </a>
+                    <a href="#" class="btn btn-5DC35A mr-20 pr btn-price" data-price="200">
+                        200元
+                        <i class="fa fa-check-square f12 pa" style="bottom: 0; right: 1px;"></i>
+                    </a>
+                    <a href="#" class="btn btn-EF8A55 pr btn-price" data-price="100">
+                        100元
+                        <i class="fa fa-check-square f12 pa" style="bottom: 0; right: 1px;"></i>
+                    </a>
+                </div>
+                <div class="col-sm-4 pl-130 pr">
+                    <span class="pa" style="left: 30px; top:7px;">充值其他金额</span>
+                    <input type="text" class="form-control other-price" maxlength="6" placeholder="0-999 之间" />
                 </div>
             </div>
             <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -32,6 +136,7 @@
             </div>
             <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                 <div class="col-sm-2 text-right">
+                    <input type="hidden" value="" name="total_fee" id="total_fee_id" />
                 	<button class="btn btn-orange" type="submit">确认充值</button>
                 </div>
             </div>

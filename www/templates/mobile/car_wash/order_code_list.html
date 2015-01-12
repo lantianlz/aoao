@@ -1,5 +1,5 @@
 {% extends "mobile/car_wash/base_car_wash.html" %}
-
+{% load custom_filters %}
 {% block title_all %}嗷嗷洗车{% endblock %}
 
 {% block css %}
@@ -67,6 +67,9 @@
         </a>
     </ul>
     {% endfor %}
+
+    {{page_params|small_paging:request}}
+    
     {% else %}
     <div class="blank10"></div>
     {% if is_valid == "1" %}

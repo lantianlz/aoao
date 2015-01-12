@@ -166,3 +166,30 @@ def answers_list(answers_list_params, request):
 from common.utils import time_format, smart_show_float
 register.filter('time_format', time_format)
 register.filter('smart_show_float', smart_show_float)
+
+
+@register.filter('small_paging')
+def small_paging(page_params, request, get_page_onclick=None, page_onclick_params={}):
+    """
+    @attention: 根据总页数和页码分页
+    """
+
+    if not page_params:
+        return u'paging params can not be null'
+
+    if isinstance(page_params, Page):
+        page_index = page_params.number
+        total_page = page_params.paginator.num_pages
+    else:
+        page_index = int(page_params[0] if page_params[0] else 1)
+        page_index = 1 if page_index < 1 else page_index
+        total_page = int(page_params[1])
+
+    if total_page == 1:
+        return ''
+
+    url = request.get_full_path()
+    pre_url = get_page_url(url, page_index - 1)
+    next_url = get_page_url(url, page_index + 1)
+
+    return mark_safe(render_to_response('mobile/include/_small_paging.html', locals()).content)
