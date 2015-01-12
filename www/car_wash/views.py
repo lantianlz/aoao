@@ -51,11 +51,11 @@ def car_wash_detail(request, car_wash_id=None, template_name='mobile/car_wash/ca
 def my_coupons(request, template_name='mobile/car_wash/coupon.html'):
     coupons = cb.get_coupons_by_user_id(request.user.id)
 
-    if not request.is_phone:
-        page_num = int(request.REQUEST.get('page', 1))
-        page_objs = page.Cpt(coupons, count=10, page=page_num).info
-        coupons = page_objs[0]
-        page_params = (page_objs[1], page_objs[4])
+    # if not request.is_phone:
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(coupons, count=10, page=page_num).info
+    coupons = page_objs[0]
+    page_params = (page_objs[1], page_objs[4])
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -156,11 +156,11 @@ def order_code(request, province_id=None, template_name='mobile/car_wash/order_c
     else:
         codes = ocb.get_complete_order_codes_by_user_id(request.user.id)
 
-    if not request.is_phone:
-        page_num = int(request.REQUEST.get('page', 1))
-        page_objs = page.Cpt(codes, count=10, page=page_num).info
-        codes = page_objs[0]
-        page_params = (page_objs[1], page_objs[4])
+    # if not request.is_phone:
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(codes, count=10, page=page_num).info
+    codes = page_objs[0]
+    page_params = (page_objs[1], page_objs[4])
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
