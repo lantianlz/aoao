@@ -171,6 +171,7 @@ def auto_select_template(func):
         template_name = kwargs.get("template_name")
         if template_name:
             dict_user_agent = utils.format_user_agent(request.META.get('HTTP_USER_AGENT'))
+            request.is_phone = False
             if dict_user_agent['device_type'] in ('pc', 'pad'):
                 ps = template_name.split("/")
                 if ps.__len__() > 1:
@@ -182,6 +183,7 @@ def auto_select_template(func):
                 if ps.__len__() > 1:
                     ps[0] = "mobile"
                 template_name = "/".join(ps)
+                request.is_phone = True
 
             kwargs.update(dict(template_name=template_name))
         return func(request, *args, **kwargs)
@@ -196,7 +198,7 @@ def log_sensitive_operation(func):
         from admin.interface import SensitiveOperationLogBase
 
         SensitiveOperationLogBase().add_log(request.user.id, request.path, str(request.REQUEST))
-        
+
         return func(request, *args, **kwargs)
 
     return wrapper
