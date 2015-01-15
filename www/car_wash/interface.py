@@ -119,6 +119,11 @@ class CarWashBase(object):
 
         try:
             car_wash = CarWash.objects.create(**ps)
+
+            # 更新公司洗车行数量
+            if company_id:
+                CompanyBase().update_company_count(company_id)
+
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
@@ -155,11 +160,20 @@ class CarWashBase(object):
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
                   wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
 
+        old_company_id = obj.company.id
+
         for k, v in ps.items():
             setattr(obj, k, v)
 
         try:
             obj.save()
+
+            CompanyBase().update_company_count(old_company_id)
+            
+            # 更新公司洗车行数量
+            if company_id:
+                CompanyBase().update_company_count(company_id)
+
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
@@ -1105,6 +1119,11 @@ class CompanyBase(object):
 
         return objs[:10]
 
+    def update_company_count(self, company_id):
+        count = CarWash.objects.filter(state=True, company__id=company_id).count()
+        obj = self.get_company_by_id(company_id)
+        obj.car_wash_count = count
+        obj.save()
 
 class CompanyManagerBase(object):
 
