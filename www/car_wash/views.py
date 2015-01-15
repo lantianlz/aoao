@@ -195,6 +195,10 @@ def map(request, template_name="mobile/car_wash/map.html"):
     data_json = json.dumps(data)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def shop_list_of_company(request, template_name='pc/company/shop_list.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
 

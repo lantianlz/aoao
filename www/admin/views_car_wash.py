@@ -56,6 +56,8 @@ def format_car_wash(objs, num):
             'vip_info': x.vip_info,
             'sort_num': x.sort_num,
             'state': x.state,
+            'company_id': x.company.id if x.company else '',
+            'company_name': x.company.name if x.company else '',
             'create_time': str(x.create_time)
         })
 
@@ -86,6 +88,7 @@ def search(request):
 @common_ajax_response
 def add_car_wash(request):
     city_id = request.REQUEST.get('city_id')
+    company_id = request.REQUEST.get("company_id")
     district_id = request.REQUEST.get('district_id')
     name = request.REQUEST.get('name')
     business_hours = request.REQUEST.get('business_hours')
@@ -105,7 +108,7 @@ def add_car_wash(request):
 
     flag, msg = CarWashBase().add_car_wash(city_id, district_id, name, business_hours, tel, 
         addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
-        wash_type, des, note, sort_num, state)
+        wash_type, des, note, sort_num, state, company_id)
 
     return flag, msg.id if flag == 0 else msg
 
@@ -129,6 +132,7 @@ def get_car_wash_by_id(request):
 def modify_car_wash(request):
 
     car_wash_id = request.REQUEST.get("car_wash_id")
+    company_id = request.REQUEST.get("company_id")
     city_id = request.REQUEST.get('city_id')
     district_id = request.REQUEST.get('district_id')
     name = request.REQUEST.get('name')
@@ -149,7 +153,7 @@ def modify_car_wash(request):
 
     return CarWashBase().modify_car_wash(car_wash_id, city_id, district_id, name, business_hours, tel, 
         addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
-        wash_type, des, note, sort_num, state)
+        wash_type, des, note, sort_num, state, company_id)
 
 
 def get_car_washs_by_name(request):

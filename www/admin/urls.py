@@ -165,3 +165,23 @@ urlpatterns += patterns('www.admin.views_order_code',
                         url(r'^order_code/search$', 'search'),
                         url(r'^order_code$', 'order_code'),
                         )
+
+# 公司管理
+urlpatterns += patterns('www.admin.views_company',
+                        url(r'^company/company/get_companys_by_name$', 'get_companys_by_name'),
+                        url(r'^company/company/modify_company$', 'modify_company'),
+                        url(r'^company/company/add_company$', 'add_company'),
+                        url(r'^company/company/get_company_by_id$', 'get_company_by_id'),
+                        url(r'^company/company/search$', 'search'),
+                        url(r'^company/company$', 'company'),
+                        )
+
+# 公司管理员
+urlpatterns += patterns('www.admin.views_company_manager',
+                        url(r'^company/manager/delete_manager$', 'delete_manager'),
+                        url(r'^company/manager/add_manager$', 'add_manager'),
+                        url(r'^company/manager/modify_manager$', 'modify_manager'),
+                        url(r'^company/manager/get_manager_by_id$', 'get_manager_by_id'),
+                        url(r'^company/manager/search$', 'search'),
+                        url(r'^company/manager$', 'manager'),
+                        )

@@ -12,6 +12,14 @@ class Company(models.Model):
     name = models.CharField(max_length=32, unique=True)
     car_wash_count = models.IntegerField(default=0)  # 旗下洗车行数量
 
+class CompanyManager(models.Model):
+
+    company = models.ForeignKey("Company")
+    user_id = models.CharField(max_length=32, db_index=True)
+    role = models.IntegerField(default=0, db_index=True)    # 角色，扩展字段
+
+    class Meta:
+        unique_together = [("company", "user_id"), ]
 
 class CarWash(models.Model):
 

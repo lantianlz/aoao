@@ -1,0 +1,124 @@
+{% extends "pc/shop/base_shop.html" %}
+{% block title %}账户流水{% endblock %}
+{% load custom_filters %}
+{% block page_title %}账户流水{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.pagination>li>a, .pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus{
+    color: #EF8A55;
+}
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
+    background-color: #EF8A55;
+    border-color: #EF8A55;
+}
+
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th{
+    background-color: #e1e1e1; 
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.start-date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
+    $('.end-date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
+    var checkDate = function(){
+        
+        var sDate = new Date($('.start-date').val()),
+            eDate = new Date($('.end-date').val()),
+            timedelta = eDate - sDate;
+
+        // 开始日期 小于 结束日期
+        if(timedelta > 0){
+            // 日期间隔需要3个月之间
+            if(timedelta > 3*30*24*60*60*1000){
+                $.Global.Notice.InfoTopNotice('最多只能查询3个月内的流水');
+                $('.search').attr('disabled', true);
+            } else {
+                $('.search').attr('disabled', false);
+            }
+        } else {
+            $.Global.Notice.InfoTopNotice('结束时期应该大于开始日期');
+            $('.search').attr('disabled', true);
+        }
+    };
+
+    $('.start-date').bind('change', function(){
+        checkDate();
+    });
+    $('.end-date').bind('change', function(){
+        checkDate();
+    });
+
+});
+</script>
+{% endblock %}
+
+{% block right %}
+<div class="row mr-0 ml-0">
+    <div class="col-md-8 pt-20 pb-10">
+        <span class="pr-15 f20">当前账户余额: <span class="co8 fb">{{car_wash_cash.balance}} 元</span></span>
+    </div>
+    <div class="col-md-8 pt-20 pb-20">
+        <form class="form-inline" role="form" method="post">
+            <div class="input-group">
+                <div class="input-group-addon">开始日期</div>
+                <input type="text" class="input form-control start-date" value="{{start_date}}" name="start_date">
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">结束日期</div>
+                <input type="text" class="input form-control end-date" value="{{end_date}}" name="end_date">
+            </div>
+            <div class="input-group">
+                <button class="btn btn-default search" type="submit">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-hover mb-0 mt-10">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>消费时间</th>
+                    <th>消费内容</th>
+                    <th>消费金额</th>
+                    <th>账户余额</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{record.index}}</td>
+                    <td>{{record.create_time}}</td>
+                    <td>{{record.notes}}</td>
+                    <td class="{% if record.operation == 0 %}co10{% else %}co8{% endif %}">{% if record.operation == 0 %}+{% else %}-{% endif %}{{record.value}}</td>
+                    <td>{{record.current_balance}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {{page_params|paging:request}}
+
+        <div class="border-top-2 bdc-ddd text-right pr-0 pt-10 f15">
+            <span class="pr-15 co1">{{start_date}} 到 {{end_date}}</span>
+            <span class="pr-15">总兑换次数: <span class="co8 fb">{{in_reords_count}}</span></span>
+            <span class="pr-15">总收入: <span class="co8 fb">{{total_fee}} 元</span></span>
+        </div>
+    </div>
+</div>
+{% endblock %}

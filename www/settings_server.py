@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     'www.city',
     'www.car_wash',
     'www.cash',
+    'www.shop',
 )
 
 AUTHENTICATION_BACKENDS = ('www.middleware.user_backend.AuthBackend',)

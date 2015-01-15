@@ -93,4 +93,14 @@ PERMISSIONS = [
 
     {'code': 'external_manage', 'name': u'站外用户登录管理', 'parent': None},
     {'code': 'query_external', 'name': u'查询站外用户登录信息', 'parent': 'external_manage'},
+
+    {'code': 'company_manage', 'name': u'公司管理', 'parent': None},
+    {'code': 'query_company', 'name': u'查询公司信息', 'parent': 'company_manage'},
+    {'code': 'add_company', 'name': u'添加公司信息', 'parent': 'company_manage'},
+    {'code': 'modify_company', 'name': u'修改公司信息', 'parent': 'company_manage'},
+
+    {'code': 'company_manager_manage', 'name': u'公司管理员管理', 'parent': None},
+    {'code': 'query_company_manager', 'name': u'查询公司管理员', 'parent': 'company_manager_manage'},
+    {'code': 'add_company_manager', 'name': u'添加公司管理员', 'parent': 'company_manager_manage'},
+    {'code': 'remove_company_manager', 'name': u'删除公司管理员', 'parent': 'company_manager_manage'},
 ]

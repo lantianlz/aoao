@@ -29,6 +29,7 @@ urlpatterns = patterns('',
                        url(r'^city/', include('www.city.urls')),
                        url(r'^cash/', include('www.cash.urls')),
                        url(r'^shop/', include('www.shop.urls')),
+                       url(r'^company/', 'www.car_wash.views.shop_list_of_company'),
 
 
                        url(r'^(?P<txt_file_name>\w+)\.txt$', 'www.misc.views.txt_view'),
