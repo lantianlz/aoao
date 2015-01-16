@@ -203,6 +203,15 @@ class CarWashBase(object):
         return objs
 
 
+    def get_car_wash_by_company_id(self, company_id, name=''):
+        objs = CarWash.objects.filter(state=True, company__id=company_id)
+
+        if name:
+            objs = objs.filter(name__contains=name)
+
+        return objs
+
+
 class ServicePriceBase(object):
 
     @car_wash_required
@@ -1067,6 +1076,28 @@ class OrderCodeBase(object):
         return objs
 
 
+
+
+def company_manager_required_for_request(func):
+    """
+    @note: 过滤器, 公司后台使用
+    """
+    def _decorator(request, company_id, *args, **kwargs):
+        is_cm = CompanyManagerBase().check_user_is_cm(company_id, request.user)
+        if not is_cm:
+            if request.is_ajax():
+                return HttpResponse('{}')
+            err_msg = u'权限不足，你还不是公司管理员，如有疑问请联系嗷嗷客服'
+            return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+        company = CompanyBase().get_company_by_id(company_id)
+        if not company:
+            raise Http404
+
+        request.company = company
+        return func(request, company_id, *args, **kwargs)
+    return _decorator
+
 class CompanyBase(object):
     
     def search_companys_for_admin(self, name):
@@ -1127,16 +1158,24 @@ class CompanyBase(object):
 
 class CompanyManagerBase(object):
 
+    def get_cm_by_user_id(self, user_id):
+        """
+        @note: 获取用户管理的第一个洗车行，用于自动跳转到管理的洗车行
+        """
+        cms = list(CompanyManager.objects.select_related("company").filter(user_id=user_id))
+        if cms:
+            return cms[0]
 
-    def check_user_is_cm(self, car_wash_id, user):
+    def check_user_is_cm(self, company_id, user):
         """
         @note: 判断用户是否是某个洗车行管理员
         """
         if isinstance(user, (str, unicode)):
             user = UserBase().get_user_by_id(user)
-        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash_id, user.id)
-        return True if (cwm or user.is_staff()) else False
 
+        cm = CompanyManager.objects.filter(company__id=company_id, user_id=user.id)
+
+        return True if (cm or user.is_staff()) else False
 
     def add_company_manager(self, company_id, user_id):
         if user_id and not UserBase().get_user_login_by_id(user_id):

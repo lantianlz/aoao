@@ -2,7 +2,7 @@
 
 {% block base_js %}
 <script type="text/javascript">
-
+var COMPANY_ID = {{request.company.id}};
 </script>
     {% block javascript %}{% endblock %}
 {% endblock %}
@@ -66,16 +66,16 @@ body,html{
     <div class="pa w300 bgc-e57e31 h">
         <div class="h100 bgc-e57e31 w pa pl-80 pt-20 z99">
             <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
-            <div class="f20 co5 fb">嗷嗷洗车 企业平台</div>
+            <div class="f20 co5 fb">嗷嗷洗车 公司平台</div>
             <div class="f15 co5 pt-2 pr-5">成都置信精典汽车</div>
         </div>
         <div class="frame-left bgc-293541 h pt-100">
             <ul class="list-group nav-bar pl-15 pr-15 pt-15 mb-0">
-                <a class="{% if '/company' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/company/">
+                <a class="{% if '/shop_list' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/company/{{request.company.id}}/shop_list">
                     <i class="fa fa-barcode pr-10"></i>洗车行列表
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>
-                <a class="{% if '/shop_cash' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/{{request.car_wash.id}}/shop_cash">
+                <a class="{% if '/company_cash' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/company/{{request.company.id}}/company_cash">
                     <i class="fa fa-list-alt pr-10"></i>洗车行流水汇总
                     <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
                 </a>

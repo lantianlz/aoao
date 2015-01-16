@@ -175,6 +175,16 @@ class CarWashCashRecordBase(object):
             ps.update(dict(operation=operation))
         return CarWashCashRecord.objects.select_related("car_wash_cash").filter(**ps)
 
+    def get_company_records_by_range_date(self, company_id, start_date, end_date, operation=None):
+        
+        # 获取公司下属所有洗车行id
+        car_wash_ids = [x.id for x in CarWashBase().get_car_wash_by_company_id(company_id)]
+
+        ps = dict(car_wash_cash__car_wash_id__in=car_wash_ids, create_time__gt=start_date, create_time__lt=end_date)
+        if operation is not None:
+            ps.update(dict(operation=operation))
+        return CarWashCashRecord.objects.select_related("car_wash_cash").filter(**ps)
+
     def format_records_with_day(self, records):
         """
         @note: 将流水按天汇总

@@ -1,7 +1,7 @@
-{% extends "pc/shop/base_shop.html" %}
-{% block title %}账户流水{% endblock %}
+{% extends "pc/company/base_company.html" %}
+{% block title %}洗车行流水汇总{% endblock %}
 {% load custom_filters %}
-{% block page_title %}账户流水{% endblock %}
+{% block page_title %}洗车行流水汇总{% endblock %}
 
 {% block css %}
 <style type="text/css">
@@ -70,9 +70,9 @@ $(document).ready(function(){
 
 {% block right %}
 <div class="row mr-0 ml-0">
-    <div class="col-md-8 pt-20 pb-10">
+    <!-- <div class="col-md-8 pt-20 pb-10">
         <span class="pr-15 f20">当前账户余额: <span class="co8 fb">{{car_wash_cash.balance}} 元</span></span>
-    </div>
+    </div> -->
     <div class="col-md-8 pt-20 pb-20">
         <form class="form-inline" role="form" method="post">
             <div class="input-group">
@@ -93,6 +93,7 @@ $(document).ready(function(){
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>所属洗车行</th>
                     <th>消费时间</th>
                     <th>消费内容</th>
                     <th>消费金额</th>
@@ -103,6 +104,7 @@ $(document).ready(function(){
                 {% for record in records %}
                 <tr>
                     <td>{{record.index}}</td>
+                    <td>{{record.car_wash_name}}</td>
                     <td>{{record.create_time}}</td>
                     <td>{{record.notes}}</td>
                     <td class="{% if record.operation == 0 %}co10{% else %}co8{% endif %}">{% if record.operation == 0 %}+{% else %}-{% endif %}{{record.value}}</td>
