@@ -31,6 +31,7 @@ class User(models.Model):
     class Meta:
         ordering = ["-create_time"]
 
+
 class Profile(models.Model):
 
     '''
@@ -177,6 +178,4 @@ class ExternalToken(models.Model):
 
     class Meta:
         unique_together = [("source", "access_token"), ("source", "external_user_id")]
-
-    class Meta:
         ordering = ["-create_time"]
