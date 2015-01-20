@@ -37,8 +37,6 @@ def shop_index(request):
     err_msg = u'权限不足，你还不是嗷嗷商户管理员，如有疑问请联系嗷嗷客服'
     return render_to_response('error.html', locals(), context_instance=RequestContext(request))
 
-    
-
 
 @member_required
 @auto_select_template
