@@ -160,7 +160,7 @@ class CarWashBase(object):
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
                   wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
 
-        old_company_id = obj.company.id
+        old_company_id = obj.company.id if obj.company else None
 
         for k, v in ps.items():
             setattr(obj, k, v)
@@ -168,9 +168,11 @@ class CarWashBase(object):
         try:
             obj.save()
 
-            CompanyBase().update_company_count(old_company_id)
+            # 修改老公司的洗车行数量
+            if old_company_id:
+                CompanyBase().update_company_count(old_company_id)
             
-            # 更新公司洗车行数量
+            # 修改新公司的洗车行数量
             if company_id:
                 CompanyBase().update_company_count(company_id)
 
