@@ -23,12 +23,21 @@ def login_shop(request, template_name='pc/shop/login_shop.html'):
 
 @member_required
 def shop_index(request):
-    cwm = cwmb.get_cwm_by_user_id(request.user.id)
-    if not cwm:
-        err_msg = u'权限不足，你还不是嗷嗷商户管理员，如有疑问请联系嗷嗷客服'
-        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
 
-    return HttpResponseRedirect("/shop/%s/verify_code" % cwm.car_wash.id)
+    # 判断是否是公司管理员
+    cm = interface.CompanyManagerBase().get_cm_by_user_id(request.user.id)
+    if cm:
+        return HttpResponseRedirect("/company/%s/shop_list" % cm.company.id)
+
+    # 是否是商户管理员
+    cwm = cwmb.get_cwm_by_user_id(request.user.id)
+    if cwm:
+        return HttpResponseRedirect("/shop/%s/verify_code" % cwm.car_wash.id)
+
+    err_msg = u'权限不足，你还不是嗷嗷商户管理员，如有疑问请联系嗷嗷客服'
+    return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+    
 
 
 @member_required
