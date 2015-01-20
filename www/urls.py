@@ -30,7 +30,7 @@ urlpatterns = patterns('',
                        url(r'^cash/', include('www.cash.urls')),
                        url(r'^shop/', include('www.shop.urls')),
 
-                       
+
                        url(r'^company/$', 'www.car_wash.views.company_index'),
                        url(r'^company/(?P<company_id>\d+)/shop_list$', 'www.car_wash.views.shop_list_of_company'),
                        url(r'^company/(?P<company_id>\d+)/company_cash$', 'www.car_wash.views.company_cash'),
