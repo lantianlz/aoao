@@ -113,14 +113,20 @@ urlpatterns += patterns('www.admin.views_statistics',
                         url(r'^statistics/active_user$', 'active_user'),
                         )
 
-# 常用工具
+# 缓存管理
 urlpatterns += patterns('www.admin.views_caches',
-
-                        # 缓存管理
+                        
                         url(r'^tools/caches/get_cache$', 'get_cache'),
                         url(r'^tools/caches/remove_cache$', 'remove_cache'),
                         url(r'^tools/caches/modify_cache$', 'modify_cache'),
                         url(r'^tools/caches$', 'caches'),
+                        )
+
+# 缓存管理
+urlpatterns += patterns('www.admin.views_sensitive_operation_log',
+
+                        url(r'^tools/get_sensitive_operation_log$', 'get_sensitive_operation_log'),
+                        url(r'^tools/sensitive_operation_log$', 'sensitive_operation_log'),
                         )
 
 # 优惠券
