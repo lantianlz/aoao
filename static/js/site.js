@@ -501,7 +501,7 @@ $(document).ready(function(){
 
     // 统一返回按钮事件处理
     $('.go-back').bind('click', function(){
-        if(document.referrer.indexOf('192.168.') > -1 || document.referrer.indexOf('aoaoxc.com') > -1){
+        if(document.referrer.indexOf('172.16.') > -1 || document.referrer.indexOf('aoaoxc.com') > -1){
             history.go(-1);
         } else {
             if(typeof(PARENT_URL) != "undefined" && PARENT_URL != ""){

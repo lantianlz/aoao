@@ -365,3 +365,43 @@ a:focus {outline: none;-moz-outline: none;}
 .white-white:hover, .white-white:focus {
   color: white;
 }
+
+
+
+/******************MX4 微信链接颜色样式*******************/
+.gray-orange-a a:hover{
+  color: #919191;
+}
+
+.gray-orange-a a:visited{
+  color: #919191;
+}
+
+.gray-orange-a .active a:visited{
+  color: #EF8A55;
+}
+
+.white-orange-a a:hover{
+  color: #EF8A55;
+}
+
+.white-orange-a a:visited{
+  color: #EF8A55;
+}
+
+.white-orange-a a.active:visited{
+  color: #ffffff;
+}
+
+.orange-orange-a a:hover{
+  color: #EF8A55;
+}
+
+.orange-orange-a a:visited{
+  color: #EF8A55;
+}
+
+.orange-orange-a .active a:visited{
+  color: #EF8A55;
+}
+/*************************************/
