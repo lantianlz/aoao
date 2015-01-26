@@ -8,6 +8,20 @@
 </style>
 {% endblock %}
 
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.refund-form').bind('submit', function(){
+        if(confirm('确认要退款吗？')){
+            return true;
+        } else {
+            return false;
+        }
+    });
+});
+</script>
+{% endblock %}
+
 {% block bar_title %}{{order.car_wash.name}}{% endblock %}
 
 {% block container %}
@@ -64,7 +78,9 @@
 
     {% if order.check_can_refund %}
     <div class="row mt-20 pl-15 pr-15 pb-20">
-        <button class="btn btn-block btn-danger btn-lg">申请退款</button>
+        <form class="refund-form" action="/car_wash/refund_order/{{order.trade_id}}" method="post">
+            <button type="submit" class="btn btn-block btn-danger btn-lg refund">申请退款</button>
+        </form>
     </div>
     {% endif %}
 </div>

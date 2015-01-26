@@ -281,6 +281,22 @@ def get_car_washs(request):
 
 
 @member_required
-@common_ajax_response
+#@common_ajax_response
 def refund_order(request, trade_id):
-    return ob.refund_order(trade_id)
+    #return ob.refund_order(trade_id)
+
+    trade = ob.get_order_by_trade_id(trade_id)
+    if not trade or trade.user_id != request.user.id:
+        err_msg = u"此订单不属于你"
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+    flag, msg = ob.refund_order(trade_id)
+
+    if flag == 0:
+        success_msg = u"订单 [%s] 退款成功" % trade_id
+        next_url = "/car_wash/order/%s" % trade_id
+        timeinterval = 3
+        return render_to_response('success.html', locals(), context_instance=RequestContext(request))
+    else:
+        err_msg = msg
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
