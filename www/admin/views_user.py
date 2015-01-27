@@ -20,6 +20,7 @@ def user(request, template_name='pc/admin/user.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+
 @verify_permission('query_user')
 def search(request):
     user_nick = request.REQUEST.get('user_nick')
@@ -44,7 +45,7 @@ def search(request):
         data.append({
             'num': num,
             'user_id': user.id,
-            'user_avatar': user.get_avatar_25(),
+            'user_avatar': user.get_avatar_65(),
             'user_nick': user.nick,
             'user_des': user.des,
             'user_email': user.email,
@@ -105,6 +106,7 @@ def modify_user(request):
     user = UserBase().get_user_by_id(user_id)
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
+
 
 @member_required
 def get_user_by_nick(request):
