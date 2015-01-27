@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import utils, page
-from misc.decorators import staff_required, common_ajax_response, verify_permission
+from misc.decorators import staff_required, common_ajax_response, verify_permission, member_required
 
 from www.car_wash.interface import CarWashBase
 from www.city.interface import CityBase
@@ -155,7 +155,7 @@ def modify_car_wash(request):
         addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
         wash_type, des, note, sort_num, state, company_id)
 
-
+@member_required
 def get_car_washs_by_name(request):
     '''
     根据名字查询洗车行

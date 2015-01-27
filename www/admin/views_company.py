@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
 
-from www.misc.decorators import staff_required, common_ajax_response, verify_permission
+from www.misc.decorators import staff_required, common_ajax_response, verify_permission, member_required
 from www.misc import qiniu_client
 from common import utils, page
 
@@ -85,7 +85,7 @@ def add_company(request):
 
     return flag, msg.id if flag == 0 else msg
 
-
+@member_required
 def get_companys_by_name(request):
     '''
     根据名字查询公司

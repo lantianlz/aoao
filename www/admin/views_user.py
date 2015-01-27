@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import utils, page
-from misc.decorators import staff_required, common_ajax_response, verify_permission
+from misc.decorators import staff_required, common_ajax_response, verify_permission, member_required
 
 from www.account.interface import UserBase, UserCountBase
 
@@ -106,7 +106,7 @@ def modify_user(request):
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
 
-
+@member_required
 def get_user_by_nick(request):
     '''
     根据名字查询用户
