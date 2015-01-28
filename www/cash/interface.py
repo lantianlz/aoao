@@ -112,6 +112,19 @@ class CarWashCashBase(object):
                 return CarWashCash.objects.create(car_wash_id=car_wash_id)
 
 
+    def search_balances_for_admin(self, car_wash_name):
+        objs = CarWashCash.objects.all().order_by('-balance')
+
+        if car_wash_name:
+            car_wash = CarWashBase().get_car_washs_by_name(car_wash_name, None)
+            if car_wash:
+                objs = objs.filter(car_wash_id=car_wash[0].id)
+            else:
+                objs = []
+
+        return objs
+
+
 class CarWashCashRecordBase(object):
 
     def validate_record_info(self, value, operation, notes):

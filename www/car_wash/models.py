@@ -94,7 +94,7 @@ class CarWashBank(models.Model):
     """
     @note: 洗车行结算信息
     """
-    car_wash = models.ForeignKey("CarWash", unique=True)
+    car_wash = models.ForeignKey("CarWash", unique=True, related_name="banks")
     manager_name = models.CharField(max_length=16)
     mobile = models.CharField(max_length=16)
     tel = models.CharField(max_length=16)
