@@ -137,8 +137,23 @@ if (!String.format) {
 
         // 转换
         _.map($(selector).serializeArray(), function(i){
+            // 是否有值
             if(i.value){
-                postData[i.name] = i.value
+                
+                // 是否已经存在此name的值，主要用于name相同的控件
+                if(!$.isEmptyObject(postData[i.name])){
+                    
+                    // 是否第一次添加
+                    if(!(postData[i.name] instanceof Array)){
+                        var temp = postData[i.name]
+                        postData[i.name] = [temp]
+                    }
+                        
+                    postData[i.name].push(i.value);
+                    
+                } else {
+                    postData[i.name] = i.value;
+                }
             }
         });
 
