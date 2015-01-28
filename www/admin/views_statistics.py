@@ -49,7 +49,7 @@ def get_active_user(request):
         data.append({
             'num': num,
             'user_id': user.id,
-            'user_avatar': user.get_avatar_25(),
+            'user_avatar': user.get_avatar_65(),
             'user_nick': user.nick,
             'user_email': user.email,
             'source': user.last_active_source,
