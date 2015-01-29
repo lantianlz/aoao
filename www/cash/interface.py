@@ -112,6 +112,19 @@ class CarWashCashBase(object):
                 return CarWashCash.objects.create(car_wash_id=car_wash_id)
 
 
+    def search_balances_for_admin(self, car_wash_name):
+        objs = CarWashCash.objects.all().order_by('-balance')
+
+        if car_wash_name:
+            car_wash = CarWashBase().get_car_washs_by_name(car_wash_name, None)
+            if car_wash:
+                objs = objs.filter(car_wash_id=car_wash[0].id)
+            else:
+                objs = []
+
+        return objs
+
+
 class CarWashCashRecordBase(object):
 
     def validate_record_info(self, value, operation, notes):
@@ -171,6 +184,16 @@ class CarWashCashRecordBase(object):
 
     def get_records_by_range_date(self, car_wash_id, start_date, end_date, operation=None):
         ps = dict(car_wash_cash__car_wash_id=car_wash_id, create_time__gt=start_date, create_time__lt=end_date)
+        if operation is not None:
+            ps.update(dict(operation=operation))
+        return CarWashCashRecord.objects.select_related("car_wash_cash").filter(**ps)
+
+    def get_company_records_by_range_date(self, company_id, start_date, end_date, operation=None):
+        
+        # 获取公司下属所有洗车行id
+        car_wash_ids = [x.id for x in CarWashBase().get_car_wash_by_company_id(company_id)]
+
+        ps = dict(car_wash_cash__car_wash_id__in=car_wash_ids, create_time__gt=start_date, create_time__lt=end_date)
         if operation is not None:
             ps.update(dict(operation=operation))
         return CarWashCashRecord.objects.select_related("car_wash_cash").filter(**ps)

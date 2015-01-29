@@ -49,12 +49,17 @@ def upload_img(file_data, img_type='other', file_name=None):
     # extra.mime_type = "image/jpeg"
 
     # data 可以是str或readable对象
-    data = StringIO.StringIO(file_data.read())
+    if isinstance(file_data, (unicode, str)):
+        data = StringIO.StringIO(file_data)
+    else:
+        data = StringIO.StringIO(file_data.read())
+
     uptoken = get_upload_token(img_type=img_type)
     key = '%s_%s' % (img_type, file_name or utils.uuid_without_dash())
     ret, err = qiniu.io.put(uptoken, key, data)
+
     if err is not None:
-        logging.error('upload_img error is:%s' % err)
+        logging.error('upload_img error is:%s\n ret is %s' % (err, ret))
         return False, err
 
     key = ret.get('key', '')

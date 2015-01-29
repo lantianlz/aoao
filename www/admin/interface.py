@@ -176,3 +176,17 @@ class SensitiveOperationLogBase(object):
 
     def add_log(self, user_id, url, data):
         SensitiveOperationLog.objects.create(user_id=user_id, url=url, data=data)
+
+    def search_logs_for_admin(self, nick=''):
+
+        objs = SensitiveOperationLog.objects.all()
+
+        if nick:
+            user = UserBase().get_user_by_nick(nick)
+
+            if user:
+                objs = objs.filter(user_id=user.id)
+            else:
+                objs = []
+                
+        return objs

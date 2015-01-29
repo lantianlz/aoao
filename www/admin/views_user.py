@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from common import utils, page
-from misc.decorators import staff_required, common_ajax_response, verify_permission
+from misc.decorators import staff_required, common_ajax_response, verify_permission, member_required
 
 from www.account.interface import UserBase, UserCountBase
 
@@ -19,6 +19,7 @@ def user(request, template_name='pc/admin/user.html'):
     states = [{'name': x[1], 'value': x[0]} for x in User.state_choices]
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 
 @verify_permission('query_user')
 def search(request):
@@ -44,7 +45,7 @@ def search(request):
         data.append({
             'num': num,
             'user_id': user.id,
-            'user_avatar': user.get_avatar_25(),
+            'user_avatar': user.get_avatar_65(),
             'user_nick': user.nick,
             'user_des': user.des,
             'user_email': user.email,
@@ -107,6 +108,7 @@ def modify_user(request):
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
 
 
+@member_required
 def get_user_by_nick(request):
     '''
     根据名字查询用户

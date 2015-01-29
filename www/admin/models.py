@@ -35,3 +35,6 @@ class SensitiveOperationLog(models.Model):
     url = models.CharField(verbose_name=u'访问路径', max_length=512)
     data = models.TextField(verbose_name=u'操作数据')
     create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-create_time"]

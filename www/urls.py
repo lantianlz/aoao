@@ -31,6 +31,11 @@ urlpatterns = patterns('',
                        url(r'^shop/', include('www.shop.urls')),
 
 
+                       url(r'^company/$', 'www.car_wash.views.company_index'),
+                       url(r'^company/(?P<company_id>\d+)/shop_list$', 'www.car_wash.views.shop_list_of_company'),
+                       url(r'^company/(?P<company_id>\d+)/company_cash$', 'www.car_wash.views.company_cash'),
+
+
                        url(r'^(?P<txt_file_name>\w+)\.txt$', 'www.misc.views.txt_view'),
                        url(r'^s/(?P<template_name>.*)$', 'www.misc.views.static_view'),
                        url(r'^500$', 'www.misc.views.test500'),

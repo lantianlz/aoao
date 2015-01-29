@@ -125,6 +125,16 @@ a.list-group-item.active{
             </ul>
         </li>
 
+        <li class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/company' in request.path %}active{% endif %}">
+            <span class="co11">公司管理</span><span class="fa fa-chevron-right pull-right f12 mt-3 co11"></span>
+            
+            <ul class="sub-admin-nav list-group pa none box-shadow-224">
+
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/company/company' == request.path %}active{% endif %}" href="/admin/company/company">公司信息管理</a>
+
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/company/manager' == request.path %}active{% endif %}" href="/admin/company/manager">公司管理员管理</a>
+            </ul>
+        </li>
         
         <li class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/car_wash' in request.path %}active{% endif %}">
             <span class="co11">洗车行管理</span><span class="fa fa-chevron-right pull-right f12 mt-3 co11"></span>
@@ -175,7 +185,7 @@ a.list-group-item.active{
             <ul class="sub-admin-nav list-group pa none box-shadow-224">
                 <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/statistics/active_user' in request.path %}active{% endif %}" href="/admin/statistics/active_user">当日活跃用户统计</a>
 
-                <!-- <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/statistics/external' in request.path %}active{% endif %}" href="/admin/statistics/external">站外登陆信息统计</a> -->
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/statistics/retention' in request.path %}active{% endif %}" href="/admin/statistics/retention">用户留存率统计</a>
             </ul>
         </li>
 
@@ -184,6 +194,8 @@ a.list-group-item.active{
             
             <ul class="sub-admin-nav list-group pa none box-shadow-224">
                 <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/tools/caches' in request.path %}active{% endif %}" href="/admin/tools/caches">缓存管理</a>
+
+                <a class="list-group-item bgc-e9e9e9 box-shadow-224 border-1 bdc-fff {% if '/admin/tools/sensitive_operation_log' in request.path %}active{% endif %}" href="/admin/tools/sensitive_operation_log">敏感操作日志管理</a>
             </ul>
         </li>
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import logging
 import time
 from django.db import transaction
 from django.utils.encoding import smart_unicode
@@ -540,6 +541,8 @@ class UserBase(object):
         @note: 通过微信资料修改
         '''
         try:
+            import urllib2
+            from www.misc import qiniu_client
             from www.weixin.interface import dict_weixin_app, WexinBase
 
             if user.nick.startswith("weixin_"):
@@ -554,6 +557,17 @@ class UserBase(object):
                     if errcode != 0:
                         return errcode, errmsg
 
+                    weixin_img_url = weixin_user_info.get("headimgurl")
+                    user_avatar = ''
+                    if weixin_img_url:
+                        # 上传图片
+
+                        flag, img_name = qiniu_client.upload_img(urllib2.urlopen(weixin_img_url, timeout=20), img_type='weixin_avatar')
+                        if flag:
+                            user_avatar = '%s/%s' % (settings.IMG0_DOMAIN, img_name)
+                        else:
+                            logging.error(u'转换微信图片失败，weixin_img_url is %s' % weixin_img_url)
+
                     ets = list(ExternalToken.objects.filter(app_id=app_id, external_user_id=openid, source="weixin"))
                     if ets:
                         et = ets[0]
@@ -563,6 +577,7 @@ class UserBase(object):
                     nick = self.generate_nick_by_external_nick(nick)
                     user = self.get_user_by_id(user_id)
                     user.nick = nick
+                    user.avatar = user_avatar
                     user.gender = int(gender)
                     user.save()
 

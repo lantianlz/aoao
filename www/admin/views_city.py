@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
 
-from www.misc.decorators import staff_required, common_ajax_response, verify_permission
+from www.misc.decorators import staff_required, common_ajax_response, verify_permission, member_required
 from www.misc import qiniu_client
 from common import utils, page
 
@@ -118,7 +118,7 @@ def get_districts_by_city(request):
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
-
+@member_required
 def get_citys_by_name(request):
     '''
     根据名字查询城市
@@ -135,7 +135,7 @@ def get_citys_by_name(request):
 
     return HttpResponse(json.dumps(result), mimetype='application/json')
 
-
+@member_required
 def get_districts_by_city(request):
     city_id = request.REQUEST.get('city_id')
     data = []

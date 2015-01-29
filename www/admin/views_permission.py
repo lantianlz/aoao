@@ -32,7 +32,7 @@ def get_all_administrators(request):
             'num': num,
             'user_id': x.id,
             'user_nick': x.nick,
-            'user_avatar': x.get_avatar_25()
+            'user_avatar': x.get_avatar_65()
         })
 
     return HttpResponse(json.dumps(data), mimetype='application/json')

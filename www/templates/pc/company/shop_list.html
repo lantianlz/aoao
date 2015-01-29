@@ -1,0 +1,78 @@
+{% extends "pc/company/base_company.html" %}
+
+{% load custom_tags %}
+{% load custom_filters %}
+
+{% block title %}洗车行列表{% endblock %}
+
+{% block page_title %}洗车行列表{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.list-inline>li{
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-top: 20px;
+}
+
+.pagination>li>a, .pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus{
+    color: #EF8A55;
+}
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
+    background-color: #EF8A55;
+    border-color: #EF8A55;
+}
+</style>
+{% endblock %}
+
+{% block right %}
+<div class="row mr-0 ml-0">
+    <div class="col-md-12 pt-30 pl-20">
+        <form method="get" action="">
+            <div class="col-md-4">
+                <input type="text" class="form-control code" name="name" value="{{name}}" placeholder="输入洗车行名称">
+            </div>
+            <div class="col-md-2 pl-0">
+                <button type="submit" class="btn btn-default search">查 询</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-12 pt-0 pl-30 pr-50 order-detail">
+        <div class="border-bottom-2 bdc-bbb pt-30 pb-5 f16 pl-5">
+            下属洗车行共 <span class="f20 co8 fb">{{car_washs_count}}</span> 家
+        </div>
+        <ul class="list-inline row ml-0 mr-0">
+            {% for car_wash in car_washs %}
+            <li class="col-md-4">
+                <div class="bgc-ffffff" style="box-shadow: 2px 2px 6px #CFCFCF">
+                    <div>
+                        <a href="/shop/{{car_wash.id}}/shop_cash" target="_blank">
+                            <img class="w h155" src="{{car_wash.get_cover}}">
+                        </a>
+                    </div>
+                    <div class="f16 pt-10 pl-10 pr-10">
+                        <a href="/shop/{{car_wash.id}}/shop_cash" target="_blank">
+                            {{car_wash.name}}
+                        </a>
+                    </div>
+                    <div class="co1 pt-10 pl-10 pr-10 pr pl-35">
+                        <i class="pa fa fa-map-marker f16" style="left: 13px; top: 10px;"></i>
+                        <span>{{car_wash.addr}}</span>
+                    </div>
+                    <div class="co1 pt-3 pl-10 pr-10 pr pl-35">
+                        <i class="pa fa fa-car" style="left: 10px; top: 5px;"></i>
+                        <span>订单数: {{car_wash.order_count}}</span>
+                    </div>
+                    <div class="co1 pt-3 pl-10 pr-10 pb-5 pr pl-35">
+                        <i class="pa fa fa-rmb f15" style="left: 13px; top: 5px;"></i>
+                        <span>账户金额: <span class="fb co8">{{car_wash.balance}}</span></span>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {{page_params|paging:request}}
+    </div>
+</div>
+{% endblock %}

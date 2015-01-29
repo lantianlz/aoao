@@ -11,7 +11,7 @@ from www.misc import qiniu_client
 from common import utils, page
 
 from www.car_wash.interface import CarWashBase
-from www.cash.interface import CarWashCashRecordBase
+from www.cash.interface import CarWashCashRecordBase, CarWashCashBase
 
 @verify_permission('')
 def car_wash_cash_record(request, template_name='pc/admin/car_wash_cash_record.html'):
@@ -60,6 +60,47 @@ def search(request):
     # 格式化json
     num = 10 * (page_index - 1)
     data = format_record(page_objs[0], num)
+
+    return HttpResponse(
+        json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
+        mimetype='application/json'
+    )
+
+
+def format_balance(objs, num):
+    data = []
+
+    for x in objs:
+        num += 1
+
+        car_wash = CarWashBase().get_car_wash_by_id(x.car_wash_id, None)
+
+        data.append({
+            'num': num,
+            'balance_id': x.id,
+            'car_wash_id': car_wash.id,
+            'car_wash_name': car_wash.name,
+            'balance': str(x.balance),
+            'car_wash_bank_id': car_wash.banks.all()[0].id if car_wash.banks.all() else ''
+        })
+
+    return data
+
+@verify_permission('query_car_wash_cash_record')
+def search_balance(request):
+    data = []
+
+    car_wash_name = request.REQUEST.get('car_wash_name')
+
+    page_index = int(request.REQUEST.get('page_index'))
+
+    objs = CarWashCashBase().search_balances_for_admin(car_wash_name)
+
+    page_objs = page.Cpt(objs, count=10, page=page_index).info
+
+    # 格式化json
+    num = 10 * (page_index - 1)
+    data = format_balance(page_objs[0], num)
 
     return HttpResponse(
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),

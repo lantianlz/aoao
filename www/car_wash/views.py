@@ -2,6 +2,7 @@
 
 import time
 import json
+import datetime
 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
@@ -11,13 +12,16 @@ from django.conf import settings
 from common import page, utils
 from www.misc.decorators import member_required, common_ajax_response, auto_select_template
 from www.city.interface import CityBase
+from www.cash.interface import CarWashCashBase, CarWashCashRecordBase
 from www.car_wash import interface
+from www.car_wash.interface import company_manager_required_for_request
 
 cwb = interface.CarWashBase()
 spb = interface.ServicePriceBase()
 cb = interface.CouponBase()
 ob = interface.OrderBase()
 ocb = interface.OrderCodeBase()
+cmb = interface.CompanyManagerBase()
 
 
 def index(request, template_name='mobile/car_wash/index.html'):
@@ -222,6 +226,71 @@ def map(request, template_name="mobile/car_wash/map.html"):
     data_json = json.dumps(data)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+@member_required
+def company_index(request):
+    cm = cmb.get_cm_by_user_id(request.user.id)
+    if not cm:
+        err_msg = u'权限不足，你还不是嗷嗷商户管理员，如有疑问请联系嗷嗷客服'
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+    return HttpResponseRedirect("/company/%s/shop_list" % cm.company.id)
+
+@member_required
+@company_manager_required_for_request
+def shop_list_of_company(request, company_id, template_name='pc/company/shop_list.html'):
+
+    name = request.REQUEST.get('name', '')
+
+    car_washs = cwb.get_car_wash_by_company_id(company_id, name)
+    car_washs_count = car_washs.count()
+
+    for x in car_washs:
+        x.balance = CarWashCashBase().get_car_wash_cash_by_car_wash_id(x.id).balance
+
+    # 分页
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(car_washs, count=10, page=page_num).info
+    car_washs = page_objs[0]
+    page_params = (page_objs[1], page_objs[4])
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+@member_required
+@company_manager_required_for_request
+def company_cash(request, company_id, template_name='pc/company/company_cash.html'):
+    end_date = datetime.datetime.now().date() + datetime.timedelta(days=1)
+    start_date = datetime.datetime.strptime('%s-%s-01' % (end_date.year, end_date.month), '%Y-%m-%d').date()
+
+    if request.POST.get("start_date"):
+        end_date = datetime.datetime.strptime(request.POST.get("end_date"), '%Y-%m-%d').date()
+        start_date = datetime.datetime.strptime(request.POST.get("start_date"), '%Y-%m-%d').date()
+
+    records = CarWashCashRecordBase().get_company_records_by_range_date(company_id, start_date, end_date)
+    in_reords = CarWashCashRecordBase().get_company_records_by_range_date(company_id, start_date, end_date, operation=0)
+    in_reords_count = in_reords.count()
+    total_fee = sum([r.value for r in in_reords])
+
+    # 分页
+    page_count = 20
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(records, count=page_count, page=page_num).info
+    page_params = (page_objs[1], page_objs[4])
+    records = page_objs[0]
+
+    count = (page_num - 1) * page_count
+    for x in records:
+        count += 1
+
+        car_wash = cwb.get_car_wash_by_id(x.car_wash_cash.car_wash_id)
+
+        x.index = count
+        x.car_wash_name = car_wash.name
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 # ===================================================ajax部分=================================================================#
 
 
@@ -239,6 +308,22 @@ def get_car_washs(request):
 
 
 @member_required
-@common_ajax_response
+#@common_ajax_response
 def refund_order(request, trade_id):
-    return ob.refund_order(trade_id)
+    #return ob.refund_order(trade_id)
+
+    trade = ob.get_order_by_trade_id(trade_id)
+    if not trade or trade.user_id != request.user.id:
+        err_msg = u"此订单不属于你"
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+    flag, msg = ob.refund_order(trade_id)
+
+    if flag == 0:
+        success_msg = u"订单 [%s] 退款成功" % trade_id
+        next_url = "/car_wash/order/%s" % trade_id
+        timeinterval = 3
+        return render_to_response('success.html', locals(), context_instance=RequestContext(request))
+    else:
+        err_msg = msg
+        return render_to_response('error.html', locals(), context_instance=RequestContext(request))

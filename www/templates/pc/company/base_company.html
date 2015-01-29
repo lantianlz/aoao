@@ -1,0 +1,108 @@
+{% extends "pc/base/base.html" %}
+
+{% block base_js %}
+<script type="text/javascript">
+var COMPANY_ID = {{request.company.id}};
+</script>
+    {% block javascript %}{% endblock %}
+{% endblock %}
+
+{% block base_css %}
+<style type="text/css">
+body,html{
+    margin:0px;
+    height:100%;
+    background-color: #f2f3f8;
+}
+
+.nav-bar .list-group-item{
+    background-color: #293541;
+    border: 0;
+    border-top: solid 1px #4A4A4A;
+    color: #6a737a;
+    margin-bottom: 0;
+}
+.nav-bar .list-group-item:hover{
+    background-color: #34404c; 
+    color: #fffffd;
+}
+
+.nav-bar .active.list-group-item{
+    background-color: #34404c; 
+    color: #fffffd;
+    border-color: #555;
+}
+
+.nav-bar .fa-arrow-circle-o-right{
+    display: none;
+}
+
+.nav-bar .list-group-item:hover .fa-arrow-circle-o-right{
+    display: block;
+    color: #6a737a;
+}
+
+.nav-bar .active.list-group-item .fa-arrow-circle-o-right{
+    display: block;
+    color: #6a737a;
+}
+
+.nav-bar .list-group-item:first-child{
+    border-top: 0;
+    border-radius: 0px;
+}
+
+.nav-bar .list-group-item:last-child{
+    border-radius: 0px;
+}
+</style>
+    {% block css %}{% endblock %}
+{% endblock %}
+
+{% block header %}{% endblock header %}
+
+{% block base_container %}
+<div class="container-fluid pr pl-0 pr-0 min-h">
+    <div class="pa w300 bgc-e57e31 h">
+        <div class="h100 bgc-e57e31 w pa pl-80 pt-20 z99">
+            <img style="left: 15px; top: 20px;" class="w60 pa" src="{{MEDIA_URL}}img/logo_white_1.png">
+            <div class="f20 co5 fb">嗷嗷洗车 公司平台</div>
+            <div class="f15 co5 pt-2 pr-5">成都置信精典汽车</div>
+        </div>
+        <div class="frame-left bgc-293541 h pt-100">
+            <ul class="list-group nav-bar pl-15 pr-15 pt-15 mb-0">
+                <a class="{% if '/shop_list' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/company/{{request.company.id}}/shop_list">
+                    <i class="fa fa-barcode pr-10"></i>洗车行列表
+                    <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
+                </a>
+                <a class="{% if '/company_cash' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/company/{{request.company.id}}/company_cash">
+                    <i class="fa fa-list-alt pr-10"></i>洗车行流水汇总
+                    <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
+                </a>
+                <!-- <a class="{% if '/chart' in request.path %}active{% endif %} list-group-item pt-15 pb-15 pl-20 pr-20" href="/shop/{{request.car_wash.id}}/chart">
+                    <i class="fa fa-area-chart pr-10"></i>洗车行账务统计
+                    <i class="fa fa-arrow-circle-o-right pull-right f20"></i>
+                </a> -->
+            </ul>
+        </div>
+        <div class="pf text-center w300 co1 pl-15 pr-15" style="left:0; bottom:10px;">
+            使用中遇到任何疑问, 请拨打客服电话: 15208411129
+        </div>
+    </div>
+    <div class="pl-300 w h">
+        <div class="h100 bgc-ffffff w mr-0 ml-0 row pa pl-300" style="left: 0;">
+            <div class="col-md-3 f22 pt-30 pl-35 co9">{% block page_title %}{% endblock %}</div>
+            <div class="col-md-9 text-right pt-30">
+                <img class="img-circle avatar-35" src="{{request.user.get_avatar_65}}">
+                <span>{{request.user.nick}}</span>
+                <a class="co8 pl-10" href="/logout"><i class="fa fa-sign-out"></i>退出</a>
+            </div>
+        </div>
+        <div class="frame-right pt-100 bgc-f2f3f8 pt-0">
+            {% block right %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

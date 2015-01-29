@@ -137,8 +137,22 @@ if (!String.format) {
 
         // 转换
         _.map($(selector).serializeArray(), function(i){
+            // 是否有值
             if(i.value){
-                postData[i.name] = i.value
+                
+                // 是否已经存在此name的值，主要用于name相同的控件
+                if(!$.isEmptyObject(postData[i.name])){
+                    
+                    // 是否第一次添加
+                    if(!(postData[i.name] instanceof Array)){
+                        postData[i.name] = [postData[i.name]];
+                    }
+                        
+                    postData[i.name].push(i.value);
+                    
+                } else {
+                    postData[i.name] = i.value;
+                }
             }
         });
 
@@ -501,7 +515,7 @@ $(document).ready(function(){
 
     // 统一返回按钮事件处理
     $('.go-back').bind('click', function(){
-        if(document.referrer.indexOf('192.168.') > -1 || document.referrer.indexOf('aoaoxc.com') > -1){
+        if(document.referrer.indexOf('172.16.') > -1 || document.referrer.indexOf('aoaoxc.com') > -1){
             history.go(-1);
         } else {
             if(typeof(PARENT_URL) != "undefined" && PARENT_URL != ""){

@@ -48,6 +48,8 @@ $(document).ready(function(){
             'vipInfo': 'vip_info',
             'sortNum': 'sort_num',
             'state': 'state',
+            'companyName': 'company_name',
+            'companyId': 'company_id',
             'createTime': 'create_time'
         },
 
@@ -136,7 +138,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.name
+                'search/' + this.collection.name + '/' + this.collection.state
             );
         },
 
@@ -221,12 +223,30 @@ $(document).ready(function(){
 
         },
 
+        companyTextBox: null,
+        initCompanyTextBox: function(name, value){
+            var me = this;
+
+            this.companyTextBox = $.Global.TextboxList.create('#company_modify', {
+                max: 1,
+                placeholder: '选择所属公司',
+                url: '/admin/company/company/get_companys_by_name',
+                param: 'company_name',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.companyTextBox.add(name, value);
+            }
+        },
+
         // 渲染
         render: function(data){
             this.$el.html(this.template(data));
 
             this.initCityTextBox(data.cityName, data.cityId);
             this.initDistrict(data.cityId, data.districtId);
+            this.initCompanyTextBox(data.companyName, data.companyId);
             createEditor('#img_modify', "car_wash");
             createEditor('#des_modify', "car_wash");
         },
@@ -314,6 +334,23 @@ $(document).ready(function(){
 
         },
 
+        companyTextBox: null,
+        initCompanyTextBox: function(name, value){
+            var me = this;
+
+            this.companyTextBox = $.Global.TextboxList.create('#company_add', {
+                max: 1,
+                placeholder: '选择所属公司',
+                url: '/admin/company/company/get_companys_by_name',
+                param: 'company_name',
+                loadPlaceholder: '正在加载...'
+            });
+
+            if(value){
+                this.companyTextBox.add(name, value);
+            }
+        },
+
         showPanel: function(){
             var me = this;
 
@@ -338,6 +375,7 @@ $(document).ready(function(){
             $('#add_car_wash_modal').modal({'show': true, 'backdrop': 'static'});
 
             me.initCityTextBox();
+            me.initCompanyTextBox();
             createEditor('#img_add', "car_wash");
         },
 
@@ -493,6 +531,12 @@ $(document).ready(function(){
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">所属公司</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="company_modify" required name="company_id" value=''>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">营业时间</label>
         <div class="col-sm-3">
             <input type="text" class="form-control" name="business_hours" required maxlength="50" value='<%= businessHours %>'>
@@ -536,6 +580,11 @@ $(document).ready(function(){
         <div class="col-sm-3">
             <input type="text" class="form-control" name="longitude" value='<%= longitude %>'>
         </div>
+        <div class="col-sm-6">
+            <p class="form-control-static">
+                <a href="http://api.map.baidu.com/lbsapi/getpoint/index.html?qq-pf-to=pcqq.c2c" target="_blank">去百度地图获取坐标</a>
+            </p>
+        </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">纬度</label>
@@ -563,7 +612,7 @@ $(document).ready(function(){
         <label class="col-sm-2 control-label">轮播图</label>
         <div class="col-sm-10">
             <textarea style="height: 200px;" class="form-control" id="img_modify" name="imgs"><%= imgs %></textarea>
-            <p class="help-block">建议尺寸为：640 X 280</p>
+            <p class="help-block">建议尺寸为：640 X 320</p>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -638,9 +687,15 @@ $(document).ready(function(){
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">所属公司</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="company_add" required name="company_id" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">营业时间</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" required name="business_hours" value=''>
+                            <input type="text" class="form-control" required name="business_hours" value='09:00-18:00'>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -681,6 +736,11 @@ $(document).ready(function(){
                         <div class="col-sm-3">
                             <input type="text" class="form-control" name="longitude" value=''>
                         </div>
+                        <div class="col-sm-6">
+                            <p class="form-control-static">
+                                <a href="http://api.map.baidu.com/lbsapi/getpoint/index.html?qq-pf-to=pcqq.c2c" target="_blank">去百度地图获取坐标</a>
+                            </p>
+                        </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">纬度</label>
@@ -708,7 +768,7 @@ $(document).ready(function(){
                         <label class="col-sm-2 control-label">轮播图</label>
                         <div class="col-sm-10">
                             <textarea style="height: 200px;" class="form-control" id="img_add" name="imgs"></textarea>
-                            <p class="help-block">建议尺寸为：640 X 280</p>
+                            <p class="help-block">建议尺寸为：640 X 320</p>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">

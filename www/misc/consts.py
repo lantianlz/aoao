@@ -62,6 +62,7 @@ PERMISSIONS = [
     {'code': 'get_cache', 'name': u'查询缓存', 'parent': 'tools'},
     {'code': 'remove_cache', 'name': u'删除缓存', 'parent': 'tools'},
     {'code': 'modify_cache', 'name': u'修改缓存', 'parent': 'tools'},
+    {'code': 'query_sensitive_operation_log', 'name': u'查询敏感操作日志', 'parent': 'tools'},
 
     {'code': 'statistics_manage', 'name': u'统计管理', 'parent': None},
     {'code': 'statistics_active_user', 'name': u'当日活跃用户统计', 'parent': 'statistics_manage'},
@@ -93,4 +94,14 @@ PERMISSIONS = [
 
     {'code': 'external_manage', 'name': u'站外用户登录管理', 'parent': None},
     {'code': 'query_external', 'name': u'查询站外用户登录信息', 'parent': 'external_manage'},
+
+    {'code': 'company_manage', 'name': u'公司管理', 'parent': None},
+    {'code': 'query_company', 'name': u'查询公司信息', 'parent': 'company_manage'},
+    {'code': 'add_company', 'name': u'添加公司信息', 'parent': 'company_manage'},
+    {'code': 'modify_company', 'name': u'修改公司信息', 'parent': 'company_manage'},
+
+    {'code': 'company_manager_manage', 'name': u'公司管理员管理', 'parent': None},
+    {'code': 'query_company_manager', 'name': u'查询公司管理员', 'parent': 'company_manager_manage'},
+    {'code': 'add_company_manager', 'name': u'添加公司管理员', 'parent': 'company_manager_manage'},
+    {'code': 'remove_company_manager', 'name': u'删除公司管理员', 'parent': 'company_manager_manage'},
 ]

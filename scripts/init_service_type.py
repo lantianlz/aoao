@@ -14,7 +14,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 def init_service_type():
     from www.car_wash.interface import ServiceTypeBase
-    datas = [u"标准洗车(5座)", u"标准洗车(7座)", u"精致洗车(5座)", u"精致洗车(7座)"]
+    datas = [u"标准洗车(5座)", u"标准洗车(SUV或7座)", u"精致洗车(5座)", u"精致洗车(SUV或7座)"]
     for data in datas:
         ServiceTypeBase().add_service_type(data)
     print 'ok'

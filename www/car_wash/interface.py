@@ -11,7 +11,7 @@ from www.misc import consts
 from www.tasks import async_send_email
 from www.account.interface import UserBase
 from www.car_wash.models import CarWash, ServicePrice, ServiceType, CarWashBank
-from www.car_wash.models import Coupon, Order, OrderCode, CarWashManager
+from www.car_wash.models import Coupon, Order, OrderCode, CarWashManager, Company, CompanyManager
 
 dict_err = {
     20100: u'服务类型名称重复',
@@ -43,6 +43,9 @@ dict_err = {
 
     20401: u'该管理员已存在，请勿重复添加',
     20402: u'I get you，没权限的你怎么进来的',
+
+    20501: u'该公司已存在，请勿重复添加',
+    20502: u'没有找到对应的公司',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -101,7 +104,8 @@ class CarWashBase(object):
         assert lowest_sale_price <= lowest_origin_price
 
     def add_car_wash(self, city_id, district_id, name, business_hours, tel, addr,
-                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
+                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                     wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         try:
             self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs)
         except:
@@ -111,10 +115,15 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num)
+                  wash_type=wash_type, note=note, sort_num=sort_num, company_id=company_id, state=state)
 
         try:
             car_wash = CarWash.objects.create(**ps)
+
+            # 更新公司洗车行数量
+            if company_id:
+                CompanyBase().update_company_count(company_id)
+
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
@@ -134,7 +143,8 @@ class CarWashBase(object):
         return CarWash.objects.filter(name__contains=name, state=state)
 
     def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
-                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, wash_type=0, des=None, note=None, sort_num=0, state=True):
+                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                        wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         if not car_wash_id:
             return 99800, dict_err.get(99800)
 
@@ -153,13 +163,24 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num, state=state)
+                  wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
+
+        old_company_id = obj.company.id if obj.company else None
 
         for k, v in ps.items():
             setattr(obj, k, v)
 
         try:
             obj.save()
+
+            # 修改老公司的洗车行数量
+            if old_company_id:
+                CompanyBase().update_company_count(old_company_id)
+
+            # 修改新公司的洗车行数量
+            if company_id:
+                CompanyBase().update_company_count(company_id)
+
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
@@ -185,6 +206,14 @@ class CarWashBase(object):
 
         if name:
             objs = objs.filter(name=name)
+
+        return objs
+
+    def get_car_wash_by_company_id(self, company_id, name=''):
+        objs = CarWash.objects.filter(state=True, company__id=company_id)
+
+        if name:
+            objs = objs.filter(name__contains=name)
 
         return objs
 
@@ -437,13 +466,20 @@ class CarWashManagerBase(object):
         if cwms:
             return cwms[0]
 
-    def check_user_is_cwm(self, car_wash_id, user):
+    def check_user_is_cwm(self, car_wash, user):
         """
         @note: 判断用户是否是某个洗车行管理员
         """
         if isinstance(user, (str, unicode)):
             user = UserBase().get_user_by_id(user)
-        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash_id, user.id)
+
+        if not isinstance(car_wash, CarWash):
+            car_wash = CarWashBase().get_car_wash_by_id(car_wash)
+
+        # 公司管理员可以查看所有旗下洗车行数据
+        if car_wash.company_id and CompanyManagerBase().check_user_is_cm(car_wash.company_id, user):
+            return True
+        cwm = self.get_cwm_by_car_wash_and_user_id(car_wash, user.id)
         return True if (cwm or user.is_staff()) else False
 
     @car_wash_required
@@ -1051,3 +1087,144 @@ class OrderCodeBase(object):
             else:
                 return []
         return objs
+
+
+def company_manager_required_for_request(func):
+    """
+    @note: 过滤器, 公司后台使用
+    """
+    def _decorator(request, company_id, *args, **kwargs):
+        from django.http import HttpResponse, Http404
+        from django.shortcuts import render_to_response
+        from django.template import RequestContext
+
+        is_cm = CompanyManagerBase().check_user_is_cm(company_id, request.user)
+        if not is_cm:
+            if request.is_ajax():
+                return HttpResponse('{}')
+            err_msg = u'权限不足，你还不是公司管理员，如有疑问请联系嗷嗷客服'
+            return render_to_response('error.html', locals(), context_instance=RequestContext(request))
+
+        company = CompanyBase().get_company_by_id(company_id)
+        if not company:
+            raise Http404
+
+        request.company = company
+        return func(request, company_id, *args, **kwargs)
+    return _decorator
+
+
+class CompanyBase(object):
+
+    def search_companys_for_admin(self, name):
+        objs = Company.objects.all()
+
+        if name:
+            objs = objs.filter(name__contains=name)
+
+        return objs
+
+    def get_company_by_id(self, id):
+        try:
+            ps = dict(id=id)
+
+            return Company.objects.get(**ps)
+        except Company.DoesNotExist:
+            return ""
+
+    def add_company(self, name):
+
+        if not name:
+            return 99800, dict_err.get(99800)
+        if Company.objects.filter(name=name):
+            return 20501, dict_err.get(20501)
+
+        obj = Company.objects.create(name=name)
+
+        return 0, obj
+
+    def modify_company(self, company_id, name):
+        if not name:
+            return 99800, dict_err.get(99800)
+
+        obj = self.get_company_by_id(company_id)
+        if not obj:
+            return 20502, dict_err.get(20502)
+
+        if obj.name != name and Company.objects.filter(name=name):
+            return 20501, dict_err.get(20501)
+
+        obj.name = name
+        obj.save()
+        return 0, dict_err.get(0)
+
+    def get_companys_by_name(self, name=""):
+        objs = Company.objects.all()
+
+        if name:
+            objs = objs.filter(name__contains=name)
+
+        return objs[:10]
+
+    def update_company_count(self, company_id):
+        count = CarWash.objects.filter(state=True, company__id=company_id).count()
+        obj = self.get_company_by_id(company_id)
+        obj.car_wash_count = count
+        obj.save()
+
+
+class CompanyManagerBase(object):
+
+    def get_cm_by_user_id(self, user_id):
+        """
+        @note: 获取用户管理的第一个洗车行，用于自动跳转到管理的洗车行
+        """
+        cms = list(CompanyManager.objects.select_related("company").filter(user_id=user_id))
+        if cms:
+            return cms[0]
+
+    def check_user_is_cm(self, company_id, user):
+        """
+        @note: 判断用户是否是某个洗车行管理员
+        """
+        if isinstance(user, (str, unicode)):
+            user = UserBase().get_user_by_id(user)
+
+        cm = CompanyManager.objects.filter(company__id=company_id, user_id=user.id)
+
+        return True if (cm or user.is_staff()) else False
+
+    def add_company_manager(self, company_id, user_id):
+        if user_id and not UserBase().get_user_login_by_id(user_id):
+            return 99600, dict_err.get(99600)
+
+        if CompanyManager.objects.filter(user_id=user_id, company__id=company_id):
+            return 20401, dict_err.get(20401)
+
+        cm = CompanyManager.objects.create(user_id=user_id, company_id=company_id)
+        return 0, cm
+
+    def search_managers_for_admin(self, company_name):
+        objs = CompanyManager.objects.select_related("company").all()
+
+        if company_name:
+            objs = objs.filter(company__name__contains=company_name)
+
+        return objs
+
+    def get_manager_by_id(self, manager_id):
+        try:
+            return CompanyManager.objects.select_related("company").get(id=manager_id)
+        except CompanyManager.DoesNotExist:
+            pass
+
+    def delete_company_manager(self, manager_id):
+        if not manager_id:
+            return 99800, dict_err.get(99800)
+
+        try:
+            CompanyManager.objects.get(id=manager_id).delete()
+        except Exception:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)

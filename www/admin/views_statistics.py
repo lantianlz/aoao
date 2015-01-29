@@ -21,6 +21,10 @@ def active_user(request, template_name='pc/admin/statistics_active_user.html'):
     sources = [{'value': x[0], 'name': x[1]} for x in LastActive.last_active_source_choices]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+@verify_permission('')
+def retention(request, template_name='pc/admin/statistics_retention.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 @verify_permission('statistics_active_user')
 def get_active_user(request):
     page_index = int(request.REQUEST.get('page_index', 1))
@@ -45,7 +49,7 @@ def get_active_user(request):
         data.append({
             'num': num,
             'user_id': user.id,
-            'user_avatar': user.get_avatar_25(),
+            'user_avatar': user.get_avatar_65(),
             'user_nick': user.nick,
             'user_email': user.email,
             'source': user.last_active_source,
