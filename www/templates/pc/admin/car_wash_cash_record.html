@@ -189,7 +189,7 @@ $(document).ready(function(){
         render: function(){
             var data = this.collection.toJSON();
 
-            this.showPanel();
+            // this.showPanel();
 
             this.$('tbody').html(this.template({'balances': data}));
 
@@ -284,20 +284,25 @@ $(document).ready(function(){
     var Router = Backbone.Router.extend({
 
         routes: {
-            "":                     "search",
+            "":                     "init",
             "add":       "add",
             "search/(:carWashName)/:pageIndex":    "search",
             "search_balance/(:carWashName)/:pageIndex":    "searchBalance",
         },
 
+        init: function(){
+            balances.searchBalance('', 1);
+            records.search('', 1);
+        },
+
         // 查询
         search: function(carWashName, pageIndex){
             records.search(carWashName||'', pageIndex||1);
-            //balances.searchBalance(carWashName||'', pageIndex||1);
         },
 
         searchBalance: function(carWashName, pageIndex){
             balances.searchBalance(carWashName||'', pageIndex||1);
+            balanceListView.showPanel();
         },
 
         add: function(){

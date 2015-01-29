@@ -145,8 +145,7 @@ if (!String.format) {
                     
                     // 是否第一次添加
                     if(!(postData[i.name] instanceof Array)){
-                        var temp = postData[i.name]
-                        postData[i.name] = [temp]
+                        postData[i.name] = [postData[i.name]];
                     }
                         
                     postData[i.name].push(i.value);
