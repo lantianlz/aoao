@@ -385,7 +385,7 @@ $(document).ready(function(){
                 return;
             }
 
-            carWashs.addCarWash($.Global.Utils.formToDict(this.$('form')), function(data){
+            carWashs.addCarWash($.Global.Utils.formToDict($('#add_car_wash_modal form')), function(data){
                 if(data.errcode === 0){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_car_wash_modal').modal('hide');

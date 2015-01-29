@@ -337,7 +337,7 @@ $(document).ready(function(){
                 return;
             }
 
-            managers.addManager($.Global.Utils.formToDict(this.$('form')), function(data){
+            managers.addManager($.Global.Utils.formToDict($('#add_manager_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_manager_modal').modal('hide');

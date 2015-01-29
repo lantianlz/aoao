@@ -286,12 +286,12 @@ $(document).ready(function(){
 
         addBank: function(){
             var me = this;
-            
+
             if(!$('#add_bank_modal form').valid()){
                 return;
             }
 
-            banks.addBank($.Global.Utils.formToDict(this.$('form')), function(data){
+            banks.addBank($.Global.Utils.formToDict($('#add_bank_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_bank_modal').modal('hide');

@@ -315,7 +315,7 @@ $(document).ready(function(){
                 return;
             }
 
-            prices.addPrice($.Global.Utils.formToDict(this.$('form')), function(data){
+            prices.addPrice($.Global.Utils.formToDict($('#add_price_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_price_modal').modal('hide');

@@ -237,7 +237,7 @@ $(document).ready(function(){
                 return;
             }
 
-            types.addType($.Global.Utils.formToDict(this.$('form')), function(data){
+            types.addType($.Global.Utils.formToDict($('#add_type_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_type_modal').modal('hide');

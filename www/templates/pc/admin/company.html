@@ -237,7 +237,7 @@ $(document).ready(function(){
                 return;
             }
 
-            companys.addCompany($.Global.Utils.formToDict(this.$('form')), function(data){
+            companys.addCompany($.Global.Utils.formToDict($('#add_company_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_company_modal').modal('hide');
