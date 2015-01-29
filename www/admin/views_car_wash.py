@@ -161,10 +161,12 @@ def get_car_washs_by_name(request):
     根据名字查询洗车行
     '''
     car_wash_name = request.REQUEST.get('car_wash_name')
+    state = request.REQUEST.get('state')
+    state = None if state == "0" else True
 
     result = []
 
-    car_washs = CarWashBase().get_car_washs_by_name(car_wash_name)
+    car_washs = CarWashBase().get_car_washs_by_name(car_wash_name, state)
 
     if car_washs:
         for x in car_washs:
