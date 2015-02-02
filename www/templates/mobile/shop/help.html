@@ -1,0 +1,51 @@
+{% extends "mobile/base.html" %}
+
+{% block title %}商户使用帮助{% endblock title %}
+
+{% block base_css %}
+<style type="text/css">
+body{
+	/*background-color: #dddddd;*/
+	color: #595959;
+}
+
+.container{
+	
+}
+
+p{
+	padding-top: 20px;
+	font-size: 16px;
+}
+</style>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+<div class="container bgc-ffffff">
+	<p class="f20 pt-50 text-center pb-20">嗷嗷洗车 商户使用帮助</p>
+	<p>1. 使用电脑浏览器访问 <a href="http://www.aoaoxc.com">www.aoaoxc.com</a>，进入嗷嗷洗车官网</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-1.png"></p>
+	<p>点击右上角的［商户登录］按钮。</p>
+	<p class="pt-50">2. 使用微信扫一扫功能，扫描页面中间的二维码，即可进入商户管理页面，无需输入帐号和密码。</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-2.png"></p>
+	<p class="pt-50">3. 进入商户管理页面后，根据用户出示的洗车码，即可在这里完成验证工作。</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-3.png"></p>
+	<p>流程如下：</p>
+	<p>a. 输入用户出示的洗车码，点击［查询］按钮</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-4.png"></p>
+	<p>b. 确认信息为“未消费”后，点击［确认消费］</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-5.png"></p>
+	<p>c. 跳转至账户流水页面，并显示消费金额增加，即证明消费成功</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-6.png"></p>
+	<p>d. 愉快的给用户提供服务吧！</p>
+	<p class="pt-50">4. 核对账目，进入［ 账户流水］ 页面，可以随时核对商户收入和用户消费信息。</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-7.png"></p>
+	<p class="pt-50">5. 账户统计查询，进入［ 账户统计］ 页面，即可查询收入趋势等。</p>
+	<p><img class="w" src="{{MEDIA_URL}}img/help/help-8.png"></p>
+	<p class="pt-50 pb-30">6. 嗷嗷洗车会按照合同约定时间，为商户结算收入。</p>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
