@@ -160,7 +160,7 @@ class UserBase(object):
             transaction.commit(using=ACCOUNT_DB)
 
             # 发送验证邮件
-            self.send_confirm_email(user)
+            # self.send_confirm_email(user)
 
             return 0, profile
         except Exception, e:
