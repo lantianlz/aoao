@@ -17,7 +17,7 @@ def batch_info(request, template_name='pc/admin/company_batch_info.html'):
     service_types = [{'value': x.id, 'name': x.name} for x in ServiceTypeBase().get_all_types(True)]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-@verify_permission('')
+@verify_permission('batch_save_info')
 @common_ajax_response
 def save_info(request):
 	company_id = request.REQUEST.get('company_id')

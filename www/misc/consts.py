@@ -104,4 +104,8 @@ PERMISSIONS = [
     {'code': 'query_company_manager', 'name': u'查询公司管理员', 'parent': 'company_manager_manage'},
     {'code': 'add_company_manager', 'name': u'添加公司管理员', 'parent': 'company_manager_manage'},
     {'code': 'remove_company_manager', 'name': u'删除公司管理员', 'parent': 'company_manager_manage'},
+
+    {'code': 'company_batch_manage', 'name': u'公司批量处理管理', 'parent': None},
+    {'code': 'batch_save_info', 'name': u'批量修改洗车行信息', 'parent': 'company_batch_manage'},
+    {'code': 'batch_save_price', 'name': u'批量修改服务价格', 'parent': 'company_batch_manage'},
 ]

@@ -17,7 +17,7 @@ def batch_price(request, template_name='pc/admin/company_batch_price.html'):
     service_types = [{'value': x.id, 'name': x.name} for x in ServiceTypeBase().get_all_types(True)]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
-@verify_permission('')
+@verify_permission('batch_save_price')
 @common_ajax_response
 def save_price(request):
 	company_id = request.REQUEST.get('company_id')
