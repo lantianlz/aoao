@@ -22,7 +22,7 @@ PERMISSIONS = [
     {'code': 'cancel_admin', 'name': u'取消管理员', 'parent': 'permission_manage'},
 
     {'code': 'user_manage', 'name': u'用户管理', 'parent': None},
-    #{'code': 'add_user', 'name': u'添加用户', 'parent': 'user_manage'},
+    {'code': 'add_user', 'name': u'添加用户', 'parent': 'user_manage'},
     {'code': 'query_user', 'name': u'查询用户', 'parent': 'user_manage'},
     {'code': 'modify_user', 'name': u'修改用户', 'parent': 'user_manage'},
     {'code': 'remove_user', 'name': u'删除用户', 'parent': 'user_manage'},

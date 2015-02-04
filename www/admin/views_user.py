@@ -107,6 +107,17 @@ def modify_user(request):
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
 
+@verify_permission('add_user')
+@common_ajax_response
+def add_user(request):
+    email = request.POST.get('email', '').strip()
+    nick = request.POST.get('nick', '').strip()
+    password = request.POST.get('password', '').strip()
+    re_password = request.POST.get('re_password', '').strip()
+    ip = utils.get_clientip(request)
+
+    flag, msg = UserBase().regist_user(email, nick, password, re_password, ip)
+    return flag, msg.id if flag == 0 else msg
 
 @member_required
 def get_user_by_nick(request):
