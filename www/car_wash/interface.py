@@ -1172,6 +1172,63 @@ class CompanyBase(object):
         obj.save()
 
 
+    def batch_save_price(self, company_id, service_type_id, sale_price, origin_price, clear_price, sort_num=0):
+        
+        count = 0
+        total = 0
+
+        obj = self.get_company_by_id(company_id)
+        if not obj:
+            return 20502, dict_err.get(20502)
+
+        for car_wash in CarWash.objects.filter(company__id=company_id):
+
+            total += 1
+
+            flag, msg = ServicePriceBase().add_service_price(car_wash, service_type_id, sale_price, origin_price, clear_price, sort_num)
+            
+            if flag == 0:
+                count += 1
+
+        return 0, u"共处理[ %s ]家洗车行,成功[ %s ]家" % (total, count)
+
+
+    def batch_save_info(self, company_id, business_hours, lowest_sale_price, lowest_origin_price, imgs, des, note):
+        
+        count = 0
+        total = 0
+
+        obj = self.get_company_by_id(company_id)
+        if not obj:
+            return 20502, dict_err.get(20502)
+
+        for car_wash in CarWash.objects.filter(company__id=company_id):
+
+            total += 1
+
+            if business_hours:
+                car_wash.business_hours = business_hours
+            if lowest_sale_price:
+                car_wash.lowest_sale_price = lowest_sale_price
+            if lowest_origin_price:
+                car_wash.lowest_origin_price = lowest_origin_price
+            if imgs:
+                car_wash.imgs = imgs
+            if des:
+                car_wash.des = des
+            if note:
+                car_wash.note = note
+
+            try:
+                car_wash.save()
+                count += 1
+            except Exception:
+                continue
+
+        return 0, u"共处理[ %s ]家洗车行,成功[ %s ]家" % (total, count)
+
+
+
 class CompanyManagerBase(object):
 
     def get_cm_by_user_id(self, user_id):

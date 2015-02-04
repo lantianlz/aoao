@@ -193,3 +193,15 @@ urlpatterns += patterns('www.admin.views_company_manager',
                         url(r'^company/manager/search$', 'search'),
                         url(r'^company/manager$', 'manager'),
                         )
+
+# 公司旗下洗车行服务价格管理
+urlpatterns += patterns('www.admin.views_company_batch_price',
+                        url(r'^company/batch_price/save_price$', 'save_price'),
+                        url(r'^company/batch_price$', 'batch_price'),
+                        )
+
+# 公司旗下洗车行服务价格管理
+urlpatterns += patterns('www.admin.views_company_batch_info',
+                        url(r'^company/batch_info/save_info$', 'save_info'),
+                        url(r'^company/batch_info$', 'batch_info'),
+                        )
