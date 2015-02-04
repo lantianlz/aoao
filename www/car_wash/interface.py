@@ -600,9 +600,9 @@ class CouponBase(object):
         coupons = Coupon.objects.filter(user_id=user_id, state=1)
         datas = []
         for coupon in coupons:
-            if coupon.check_is_expiry():
+            if not coupon.check_is_expiry():
                 datas.append(coupon)
-        return coupons
+        return datas
 
     def search_coupons_for_admin(self, car_wash_name, nick, state=None):
 
