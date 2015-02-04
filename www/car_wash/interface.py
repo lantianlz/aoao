@@ -23,6 +23,7 @@ dict_err = {
     20106: u'该洗车行已添加此服务价格',
     20107: u'该洗车行银行信息已存在',
     20108: u'该洗车行银行信息不存在或者已删除',
+    20109: u'该洗车行价格已经产生订单，无法删除',
 
     20201: u'优惠券不存在',
     20202: u'不是你的优惠券不要用',
@@ -307,6 +308,9 @@ class ServicePriceBase(object):
     def remove_service_price(self, price_id):
         if not price_id:
             return 99800, dict_err.get(99800)
+
+        if Order.objects.filter(service_price__id=price_id).count() > 0:
+            return 20109, dict_err.get(20109)
 
         try:
             ServicePrice.objects.get(id=price_id).delete()
