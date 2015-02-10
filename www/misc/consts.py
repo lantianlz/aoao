@@ -26,6 +26,7 @@ PERMISSIONS = [
     {'code': 'query_user', 'name': u'查询用户', 'parent': 'user_manage'},
     {'code': 'modify_user', 'name': u'修改用户', 'parent': 'user_manage'},
     {'code': 'remove_user', 'name': u'删除用户', 'parent': 'user_manage'},
+    {'code': 'change_pwd', 'name': u'修改用户密码', 'parent': 'user_manage'},
 
     {'code': 'city_manage', 'name': u'城市管理', 'parent': None},
     #{'code': 'add_city', 'name': u'添加城市', 'parent': 'city_manage'},

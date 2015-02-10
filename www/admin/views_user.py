@@ -134,3 +134,12 @@ def get_user_by_nick(request):
         result.append([user.id, user.nick, None, user.nick])
 
     return HttpResponse(json.dumps(result), mimetype='application/json')
+
+@verify_permission('change_pwd')
+@common_ajax_response
+def change_pwd(request):
+
+    user_id = request.REQUEST.get('user_id')
+    pwd = request.REQUEST.get('pwd')
+
+    return UserBase().change_pwd_by_admin(user_id, pwd)

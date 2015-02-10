@@ -113,6 +113,18 @@ $(document).ready(function(){
                     }
                 }
             );
+        },
+
+        changePwd: function(userId, pwd, callback){
+            ajaxSend(
+                "/admin/user/user/change_pwd", 
+                {"user_id": userId, "pwd": pwd},
+                function(response){
+                    if(callback){
+                        callback(response);
+                    }
+                }
+            );
         }
         
     });
@@ -284,12 +296,67 @@ $(document).ready(function(){
     });
 
 
+    var ChangePwdView = Backbone.View.extend({
+        el: 'body',
+
+        template: _.template($('#change_pwd_template').html()),
+
+        userId: "",
+
+        showPanel: function(userId){
+            var me = this;
+            me.userId = userId;
+
+            me.render();
+        },
+
+        render: function(){
+            var me = this;
+
+            $('#change_pwd_modal').remove();
+            
+            $('body').append(this.template());
+
+            // 绑定事件
+            $('#change_pwd_modal .cancel').bind('click', function(){
+                history.go(-1);
+            });
+            $('#change_pwd_modal .ok').bind('click', function(){
+                me.changePwd();
+            });
+            
+            $('#change_pwd_modal').modal({'show': true, 'backdrop': 'static'});
+
+        },
+
+        changePwd: function(){
+            var me = this;
+            
+            if(!$('#change_pwd_modal form').valid()){
+                return;
+            }
+
+            users.changePwd(me.userId, $('#change_pwd_modal .pwd').val(), function(data){
+                if(data.errcode == "0"){
+                    $('#change_pwd_modal').modal('hide');
+                    $.Global.Notice.SuccessTopNotice("操作成功");
+                    router.navigate('modify/' + me.userId, {'trigger': true});
+                } else {
+                    $.Global.Notice.ErrorTopNotice(data.errmsg);
+                }
+            })
+        }
+
+    });
+
+
     var Router = Backbone.Router.extend({
         routes: {
             "":                              "search",
             "search/(:email)/(:userNick)/:pageIndex": "search",
             "modify/:userId":                "modify",
-            "add":                   "add"
+            "add":                   "add",
+            "changePwd/:userId":             "changePwd"
         },
 
         // 获取推荐用户
@@ -303,6 +370,10 @@ $(document).ready(function(){
 
         add: function(){
             addView.showPanel();
+        },
+
+        changePwd: function(userId){
+            changePwdView.showPanel(userId);
         }
 
     });
@@ -311,6 +382,7 @@ $(document).ready(function(){
         listView = new ListView({collection: users}),
         modifyView = new ModifyView({collection: users}),
         addView = new AddView(),
+        changePwdView = new ChangePwdView(),
         router = new Router();
 
     Backbone.history.start();
@@ -484,6 +556,8 @@ $(document).ready(function(){
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <div class="col-sm-12">
             <button type="button" class="btn btn-primary save">提交你的修改</button>
+
+            <a href="#changePwd/<%= userId %>" class="btn btn-orange change-pwd ml-25">修改用户密码</a>
         </div>
     </div>
 </form>
@@ -521,6 +595,34 @@ $(document).ready(function(){
                         <label class="col-sm-2 control-label">确认密码</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" name='re_password' value=''>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+
+<script type="text/template" id="change_pwd_template">
+<div class="modal fade" id="change_pwd_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pb-5">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+                <h4 class="modal-title">修改用户密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" method="post" action="">
+                    <div class="form-group pt-20 pb-20 mb-0">
+                        <label class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control pwd" name='password' value=''>
                         </div>
                     </div>
                 </form>

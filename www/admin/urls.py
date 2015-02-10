@@ -10,6 +10,7 @@ urlpatterns = patterns('www.admin.views',
 # 用户
 urlpatterns += patterns('www.admin.views_user',
 
+                        url(r'^user/user/change_pwd$', 'change_pwd'),
                         url(r'^user/user/add_user$', 'add_user'),
                         url(r'^user/user/get_user_by_nick$', 'get_user_by_nick'),
                         url(r'^user/user/modify_user$', 'modify_user'),
