@@ -57,9 +57,14 @@ $(document).ready(function(){
         
     });
     
-    window.setTimeout(function(){
-        map.setViewport(points);
-    }, 1000);
+    // window.setTimeout(function(){
+    //     map.setViewport(points);
+    // }, 1000);
+
+    navigator.geolocation.getCurrentPosition(function(position){
+        map.setCenter(new BMap.Point(position.coords.longitude, position.coords.latitude));
+        map.setZoom(13);
+    });
     
 });
 </script>
