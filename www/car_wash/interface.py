@@ -84,7 +84,7 @@ class CarWashBase(object):
             datas.append(dict(id=obj.id, url=obj.get_url(), name=obj.name, cover=obj.get_cover(),
                               district=obj.get_district().district, wash_type=obj.get_wash_type_display(),
                               lowest_sale_price=obj.lowest_sale_price, lowest_origin_price=obj.lowest_origin_price,
-                              price_minus=obj.get_price_minus()
+                              price_minus=str(obj.get_price_minus())
                               ))
         return datas
 
