@@ -625,7 +625,6 @@ class UserBase(object):
         
         try:
             user = self.get_user_login_by_id(user_id)
-            print user
             user.password = self.set_password(pwd)
             user.save()
 
