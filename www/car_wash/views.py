@@ -224,7 +224,7 @@ def shop_list_of_company(request, company_id, template_name='pc/company/shop_lis
 
     # 分页
     page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(car_washs, count=10, page=page_num).info
+    page_objs = page.Cpt(car_washs, count=9, page=page_num).info
     car_washs = page_objs[0]
     page_params = (page_objs[1], page_objs[4])
 
