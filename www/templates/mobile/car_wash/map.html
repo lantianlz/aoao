@@ -12,6 +12,7 @@
 {% block javascript %}
 <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=o4O12xsCGirt60xLVt1GLTI6&v=1.0"></script> -->
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=o4O12xsCGirt60xLVt1GLTI6"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -73,25 +74,34 @@ $(document).ready(function(){
     // }, 1000);
 
     navigator.geolocation.getCurrentPosition(function(position){
-        // 平移位置
-        map.setCenter(new BMap.Point(position.coords.longitude, position.coords.latitude));
-        map.setZoom(13);
+        var gpsPoint = new BMap.Point(position.coords.longitude, position.coords.latitude),
+            baiduPoint = null;
 
-        // 添加当前位置标注
-        var iconBlue = new BMap.Icon("{{MEDIA_URL}}img/marker.gif", new BMap.Size(24, 31));
-        iconBlue.setAnchor(new BMap.Size(14, 32));
-        iconBlue.setImageOffset(new BMap.Size(0, -31));
+        // 将gps坐标转换成百度坐标
+        BMap.Convertor.translate(gpsPoint, 0, function(point){
+            baiduPoint = point;
 
-        map.addOverlay(
-            new BMap.Marker(
-                new BMap.Point(position.coords.longitude, position.coords.latitude),
-                {"icon": iconBlue}
-            )
-        );
+            // 平移位置
+            map.setCenter(baiduPoint);
+            map.setZoom(13);
 
-        // 绑定事件
-        $('.origin').bind('click', function(){
-            map.panTo(new BMap.Point(position.coords.longitude, position.coords.latitude));
+            // 添加当前位置标注
+            var iconBlue = new BMap.Icon("{{MEDIA_URL}}img/marker.gif", new BMap.Size(24, 31));
+            iconBlue.setAnchor(new BMap.Size(14, 32));
+            iconBlue.setImageOffset(new BMap.Size(0, -31));
+
+            map.addOverlay(
+                new BMap.Marker(
+                    baiduPoint,
+                    {"icon": iconBlue}
+                )
+            );
+
+            // 绑定事件
+            $('.origin').bind('click', function(){
+                map.panTo(baiduPoint);
+            });
+
         });
 
     });
