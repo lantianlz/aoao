@@ -624,6 +624,12 @@ class UserBase(object):
     def change_pwd_by_admin(self, user_id, pwd):
         
         try:
+
+            try:
+                validators.vpassword(pwd)
+            except Exception, e:
+                return 99900, smart_unicode(e)
+                
             user = self.get_user_login_by_id(user_id)
             user.password = self.set_password(pwd)
             user.save()

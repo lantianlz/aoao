@@ -48,6 +48,7 @@ def format_car_wash(objs, num):
             'lowest_sale_price': x.lowest_sale_price,
             'lowest_origin_price': x.lowest_origin_price,
             'imgs': x.imgs,
+            'cover': x.cover,
             'rating': x.rating,
             'order_count': x.order_count,
             'valid_date_start': str(x.valid_date_start),
@@ -99,6 +100,7 @@ def add_car_wash(request):
     longitude = request.REQUEST.get('longitude')
     latitude = request.REQUEST.get('latitude')
     imgs = request.REQUEST.get('imgs')
+    cover = request.REQUEST.get('cover')
     wash_type = request.REQUEST.get('wash_type')
     des = request.REQUEST.get('des')
     note = request.REQUEST.get('note')
@@ -107,7 +109,7 @@ def add_car_wash(request):
     state = True if state == "1" else False
 
     flag, msg = CarWashBase().add_car_wash(city_id, district_id, name, business_hours, tel, 
-        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
+        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
         wash_type, des, note, sort_num, state, company_id)
 
     return flag, msg.id if flag == 0 else msg
@@ -144,6 +146,7 @@ def modify_car_wash(request):
     longitude = request.REQUEST.get('longitude')
     latitude = request.REQUEST.get('latitude')
     imgs = request.REQUEST.get('imgs')
+    cover = request.REQUEST.get('cover')
     wash_type = request.REQUEST.get('wash_type')
     des = request.REQUEST.get('des')
     note = request.REQUEST.get('note')
@@ -152,7 +155,7 @@ def modify_car_wash(request):
     state = True if state == "1" else False
 
     return CarWashBase().modify_car_wash(car_wash_id, city_id, district_id, name, business_hours, tel, 
-        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, 
+        addr, lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
         wash_type, des, note, sort_num, state, company_id)
 
 @member_required

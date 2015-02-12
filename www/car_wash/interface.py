@@ -105,7 +105,7 @@ class CarWashBase(object):
         assert lowest_sale_price <= lowest_origin_price
 
     def add_car_wash(self, city_id, district_id, name, business_hours, tel, addr,
-                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
                      wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         try:
             self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs)
@@ -116,7 +116,7 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num, company_id=company_id, state=state)
+                  cover=cover, wash_type=wash_type, note=note, sort_num=sort_num, company_id=company_id, state=state)
 
         try:
             car_wash = CarWash.objects.create(**ps)
@@ -139,7 +139,7 @@ class CarWashBase(object):
         return CarWash.objects.filter(name__contains=name, state=state)
 
     def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
-                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
                         wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         if not car_wash_id:
             return 99800, dict_err.get(99800)
@@ -159,7 +159,7 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
+                  cover=cover, wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
 
         old_company_id = obj.company.id if obj.company else None
 

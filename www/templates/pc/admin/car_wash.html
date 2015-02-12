@@ -50,7 +50,8 @@ $(document).ready(function(){
             'state': 'state',
             'companyName': 'company_name',
             'companyId': 'company_id',
-            'createTime': 'create_time'
+            'createTime': 'create_time',
+            'cover': 'cover'
         },
 
         search: function(name, state, pageIndex){
@@ -248,6 +249,7 @@ $(document).ready(function(){
             this.initDistrict(data.cityId, data.districtId);
             this.initCompanyTextBox(data.companyName, data.companyId);
             createEditor('#img_modify', "car_wash");
+            createEditor('#cover_modify', "car_wash");
         },
 
         // 显示提问信息
@@ -376,6 +378,7 @@ $(document).ready(function(){
             me.initCityTextBox();
             me.initCompanyTextBox();
             createEditor('#img_add', "car_wash");
+            createEditor('#cover_add', "car_wash");
         },
 
         addCarWash: function(){
@@ -608,10 +611,17 @@ $(document).ready(function(){
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+        <label class="col-sm-2 control-label">封面</label>
+        <div class="col-sm-7">
+            <textarea style="height: 150px;" class="form-control" id="cover_modify" name="cover"><%= cover %></textarea>
+            <p class="help-block">建议尺寸为：100 X 100</p>
+        </div>
+    </div>
+    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
         <label class="col-sm-2 control-label">轮播图</label>
         <div class="col-sm-10">
             <textarea style="height: 200px;" class="form-control" id="img_modify" name="imgs"><%= imgs %></textarea>
-            <p class="help-block">建议尺寸为：640 X 320</p>
+            <p class="help-block">建议尺寸为：640 X 280</p>
         </div>
     </div>
     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -761,6 +771,13 @@ $(document).ready(function(){
                         <label class="col-sm-2 control-label">地址</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" required name="addr" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
+                        <label class="col-sm-2 control-label">封面</label>
+                        <div class="col-sm-10">
+                            <textarea style="height: 150px;" class="form-control" id="cover_add" name="cover"></textarea>
+                            <p class="help-block">建议尺寸为：100 X 100</p>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
