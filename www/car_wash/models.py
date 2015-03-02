@@ -73,18 +73,9 @@ class CarWash(models.Model):
         return self.lowest_origin_price - self.lowest_sale_price
 
     def get_cover(self):
-        # if self.cover:
-        #     return self.cover
-
-        # self.imgs = self.imgs or ""
-        # tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
-        # imgs = tag_img.findall(self.imgs)
-        # if imgs:
-        #     return imgs[0]
-
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
-        cover = self.imgs if not self.cover else self.cover
-        
+        cover = self.cover or self.imgs
+        cover = cover or ""
         imgs = tag_img.findall(cover)
         if imgs:
             return imgs[0]
