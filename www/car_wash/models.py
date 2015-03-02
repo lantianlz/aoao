@@ -84,7 +84,7 @@ class CarWash(models.Model):
 
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
         cover = self.imgs if not self.cover else self.cover
-        print 'cover', cover
+        
         imgs = tag_img.findall(cover)
         if imgs:
             return imgs[0]
