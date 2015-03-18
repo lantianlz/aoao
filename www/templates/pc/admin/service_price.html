@@ -191,7 +191,7 @@ $(document).ready(function(){
             this.carWashTextBox = $.Global.TextboxList.create('#car_wash_modify', {
                 max: 1,
                 placeholder: '选择所属洗车行',
-                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name?state=0',
                 param: 'car_wash_name',
                 loadPlaceholder: '正在加载...'
             });
@@ -281,7 +281,7 @@ $(document).ready(function(){
             this.carWashTextBox = $.Global.TextboxList.create('#car_wash_add', {
                 max: 1,
                 placeholder: '选择所属洗车行',
-                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name?state=0',
                 param: 'car_wash_name',
                 loadPlaceholder: '正在加载...'
             });
@@ -315,7 +315,7 @@ $(document).ready(function(){
                 return;
             }
 
-            prices.addPrice($.Global.Utils.formToDict(this.$('form')), function(data){
+            prices.addPrice($.Global.Utils.formToDict($('#add_price_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_price_modal').modal('hide');

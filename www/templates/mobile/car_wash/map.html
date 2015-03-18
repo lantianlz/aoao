@@ -10,7 +10,9 @@
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=o4O12xsCGirt60xLVt1GLTI6&v=1.0"></script>
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=o4O12xsCGirt60xLVt1GLTI6&v=1.0"></script> -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=o4O12xsCGirt60xLVt1GLTI6"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -36,7 +38,15 @@ $(document).ready(function(){
 
     var map = new BMap.Map("map"), points = [];
     map.centerAndZoom("{{city.city}}", 13);
-    map.addControl(new BMap.ZoomControl());
+    // map.addControl(new BMap.ZoomControl());
+    map.enableScrollWheelZoom(true);
+    map.addControl(
+        new BMap.NavigationControl({
+            offset: new BMap.Size(10, 70),
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT, 
+            type: BMAP_NAVIGATION_CONTROL_SMALL}
+        )
+    );
 
     $.map(data, function(i){
         
@@ -50,16 +60,51 @@ $(document).ready(function(){
         marker.addEventListener("click", function(e){
             var target = e.target,
                 point = new BMap.Point(target.getPosition().lng, target.getPosition().lat),
-                searchInfoWindow = new BMap.InfoWindow(getContent(i));
+                searchInfoWindow = new BMap.InfoWindow(getContent(i), {
+                    'enableMessage': false
+                });
             
             this.openInfoWindow(searchInfoWindow);
         });
         
     });
     
-    window.setTimeout(function(){
-        map.setViewport(points);
-    }, 1000);
+    // window.setTimeout(function(){
+    //     map.setViewport(points);
+    // }, 1000);
+
+    navigator.geolocation.getCurrentPosition(function(position){
+        var gpsPoint = new BMap.Point(position.coords.longitude, position.coords.latitude),
+            baiduPoint = null;
+
+        // 将gps坐标转换成百度坐标
+        BMap.Convertor.translate(gpsPoint, 0, function(point){
+            baiduPoint = point;
+
+            // 平移位置
+            map.setCenter(baiduPoint);
+            map.setZoom(13);
+
+            // 添加当前位置标注
+            var iconBlue = new BMap.Icon("{{MEDIA_URL}}img/marker.gif", new BMap.Size(24, 31));
+            iconBlue.setAnchor(new BMap.Size(14, 32));
+            iconBlue.setImageOffset(new BMap.Size(0, -31));
+
+            map.addOverlay(
+                new BMap.Marker(
+                    baiduPoint,
+                    {"icon": iconBlue}
+                )
+            );
+
+            // 绑定事件
+            $('.origin').bind('click', function(){
+                map.panTo(baiduPoint);
+            });
+
+        });
+
+    });
     
 });
 </script>
@@ -69,6 +114,10 @@ $(document).ready(function(){
 <div id="map" class="row pt-50 pb-50">
 
 </div>
+
+<span class="pa f23 co9 bgc-ffffff origin" style="left: 10px; bottom: 80px; padding: 7px; opacity: 0.9; border: 1px solid #D5D5D5; box-shadow: 1px 1px 1px #D8D8D8;">
+    <i class="fa fa-crosshairs"></i>
+</span>
 {% endblock %}
 
 {% block footer %}{% endblock %}

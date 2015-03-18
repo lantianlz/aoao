@@ -341,7 +341,7 @@ $(document).ready(function(){
                 return;
             }
 
-            coupons.addCoupon($.Global.Utils.formToDict(this.$('form')), function(data){
+            coupons.addCoupon($.Global.Utils.formToDict($('#add_coupon_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_coupon_modal').modal('hide');

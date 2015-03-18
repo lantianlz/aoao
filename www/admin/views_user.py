@@ -107,6 +107,17 @@ def modify_user(request):
 
     return UserBase().change_profile(user, nick, gender, birthday, des, state)
 
+@verify_permission('add_user')
+@common_ajax_response
+def add_user(request):
+    email = request.POST.get('email', '').strip()
+    nick = request.POST.get('nick', '').strip()
+    password = request.POST.get('password', '').strip()
+    re_password = request.POST.get('re_password', '').strip()
+    ip = utils.get_clientip(request)
+
+    flag, msg = UserBase().regist_user(email, nick, password, re_password, ip)
+    return flag, msg.id if flag == 0 else msg
 
 @member_required
 def get_user_by_nick(request):
@@ -123,3 +134,12 @@ def get_user_by_nick(request):
         result.append([user.id, user.nick, None, user.nick])
 
     return HttpResponse(json.dumps(result), mimetype='application/json')
+
+@verify_permission('change_pwd')
+@common_ajax_response
+def change_pwd(request):
+
+    user_id = request.REQUEST.get('user_id')
+    pwd = request.REQUEST.get('pwd')
+
+    return UserBase().change_pwd_by_admin(user_id, pwd)

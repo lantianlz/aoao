@@ -160,7 +160,7 @@ class UserBase(object):
             transaction.commit(using=ACCOUNT_DB)
 
             # 发送验证邮件
-            self.send_confirm_email(user)
+            # self.send_confirm_email(user)
 
             return 0, profile
         except Exception, e:
@@ -620,6 +620,26 @@ class UserBase(object):
         cache_obj.set(key, [errcode, errmsg, user_id], time_out=300)
 
         return errcode, errmsg
+
+    def change_pwd_by_admin(self, user_id, pwd):
+        
+        try:
+
+            try:
+                validators.vpassword(pwd)
+            except Exception, e:
+                return 99900, smart_unicode(e)
+                
+            user = self.get_user_login_by_id(user_id)
+            user.password = self.set_password(pwd)
+            user.save()
+
+            # 更新缓存
+            self.get_user_by_id(user.id, must_update_cache=True)
+        except Exception:
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
 
 
 def user_profile_required(func):

@@ -185,7 +185,7 @@ $(document).ready(function(){
                 return;
             }
 
-            records.addRecord($.Global.Utils.formToDict(this.$('form')), function(data){
+            records.addRecord($.Global.Utils.formToDict($('#add_record_modal form')), function(data){
                 if(data.errcode == "0"){
                     $('#add_record_modal').modal('hide');
                     $.Global.Notice.SuccessTopNotice("操作成功");

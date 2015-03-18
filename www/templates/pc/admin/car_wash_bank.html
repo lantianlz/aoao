@@ -188,7 +188,7 @@ $(document).ready(function(){
             this.carWashTextBox = $.Global.TextboxList.create('#car_wash_modify', {
                 max: 1,
                 placeholder: '选择所属洗车行',
-                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name?state=0',
                 param: 'car_wash_name',
                 loadPlaceholder: '正在加载...'
             });
@@ -251,7 +251,7 @@ $(document).ready(function(){
             this.carWashTextBox = $.Global.TextboxList.create('#car_wash_add', {
                 max: 1,
                 placeholder: '选择所属洗车行',
-                url: '/admin/car_wash/car_wash/get_car_washs_by_name',
+                url: '/admin/car_wash/car_wash/get_car_washs_by_name?state=0',
                 param: 'car_wash_name',
                 loadPlaceholder: '正在加载...'
             });
@@ -286,12 +286,12 @@ $(document).ready(function(){
 
         addBank: function(){
             var me = this;
-            
+
             if(!$('#add_bank_modal form').valid()){
                 return;
             }
 
-            banks.addBank($.Global.Utils.formToDict(this.$('form')), function(data){
+            banks.addBank($.Global.Utils.formToDict($('#add_bank_modal form')), function(data){
                 if(data.errcode == "0"){
                     router.navigate('modify/' + data.errmsg, {trigger: true});
                     $('#add_bank_modal').modal('hide');
@@ -362,12 +362,14 @@ $(document).ready(function(){
     <!-- 客户经理列表 -->
     <div class="tab-pane fade pt-15 in active" id="bank_list">
         <div class="pl-0 pb-10 col-md-3">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
-                <span class="input-group-btn">
-                    <button class="btn btn-default search" type="submit">查询</button>
-                </span>
-            </div>
+            <form onsubmit="javascript:return false;">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control border-radius-0 key-word" placeholder="输入洗车行名称..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default search" type="submit">查询</button>
+                    </span>
+                </div>
+            </form>
         </div>
         <table class="table table-hover">
             <thead>
@@ -426,7 +428,7 @@ $(document).ready(function(){
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">经理名称</label>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <input type="text" class="form-control" required name="manager_name" value='<%= managerName %>'>
             </div>
         </div>
@@ -450,7 +452,7 @@ $(document).ready(function(){
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">银行名称</label>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <input type="text" class="form-control" required name="bank_name" value='<%= bankName %>'>
             </div>
         </div>
@@ -483,13 +485,13 @@ $(document).ready(function(){
                 <form class="form-horizontal" role="form" method="post" action="">
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">洗车行</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-6">
                             <input type="text" class="form-control" id="car_wash_add" required name="car_wash_id" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">经理名称</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <input type="text" class="form-control" required name="manager_name" value=''>
                         </div>
                     </div>
@@ -513,7 +515,7 @@ $(document).ready(function(){
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
                         <label class="col-sm-2 control-label">银行名称</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <input type="text" class="form-control" required name="bank_name" value=''>
                         </div>
                     </div>

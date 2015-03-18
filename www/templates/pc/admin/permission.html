@@ -334,7 +334,7 @@ $(document).ready(function(){
                 userId = modal.find('.user-name').data('user_id'),
                 me = this;
             
-            modifyUserPermissionView.collection.saveUserPermission(userId, modal.find('form').serialize(), function(data){
+            modifyUserPermissionView.collection.saveUserPermission(userId, $.Global.Utils.formToDict(modal.find('form')), function(data){
                 if(data.errcode === 0){
                     router.navigate('modifyUserPermission/' + userId, {trigger: true});
                     modal.modal('hide');

@@ -19,7 +19,7 @@ def home_welcome(request, template_name='pc/index.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-def login(request, template_name='pc/account/login.html'):
+def login(request, template_name='pc/shop/login_shop.html'):
     email = request.POST.get('email', '').strip()
     password = request.POST.get('password', '').strip()
 

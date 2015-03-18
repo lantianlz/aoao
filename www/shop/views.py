@@ -112,6 +112,9 @@ def _format_objs_set_index(objs, page_num, page_count):
         obj.index = (page_num - 1) * page_count + i + 1
 
 
+@auto_select_template
+def help(request, template_name='pc/shop/help.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 # ===================================================ajax部分=================================================================#
 
 @member_required

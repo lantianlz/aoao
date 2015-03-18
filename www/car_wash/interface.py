@@ -23,6 +23,7 @@ dict_err = {
     20106: u'该洗车行已添加此服务价格',
     20107: u'该洗车行银行信息已存在',
     20108: u'该洗车行银行信息不存在或者已删除',
+    20109: u'该洗车行价格已经产生订单，无法删除',
 
     20201: u'优惠券不存在',
     20202: u'不是你的优惠券不要用',
@@ -56,7 +57,7 @@ def car_wash_required(func):
     def _decorator(self, car_wash, *args, **kwargs):
         car_wash = car_wash
         if not isinstance(car_wash, CarWash):
-            car_wash = CarWashBase().get_car_wash_by_id(car_wash)
+            car_wash = CarWashBase().get_car_wash_by_id(car_wash, state=None)
             if not car_wash:
                 return 20103, dict_err.get(20103)
         return func(self, car_wash, *args, **kwargs)
@@ -83,7 +84,7 @@ class CarWashBase(object):
             datas.append(dict(id=obj.id, url=obj.get_url(), name=obj.name, cover=obj.get_cover(),
                               district=obj.get_district().district, wash_type=obj.get_wash_type_display(),
                               lowest_sale_price=obj.lowest_sale_price, lowest_origin_price=obj.lowest_origin_price,
-                              price_minus=obj.get_price_minus()
+                              price_minus=str(obj.get_price_minus())
                               ))
         return datas
 
@@ -104,7 +105,7 @@ class CarWashBase(object):
         assert lowest_sale_price <= lowest_origin_price
 
     def add_car_wash(self, city_id, district_id, name, business_hours, tel, addr,
-                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                     lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
                      wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         try:
             self.validate_car_wash_info(district_id, name, business_hours, tel, addr, lowest_sale_price, lowest_origin_price, imgs)
@@ -115,7 +116,7 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num, company_id=company_id, state=state)
+                  cover=cover, wash_type=wash_type, note=note, sort_num=sort_num, company_id=company_id, state=state)
 
         try:
             car_wash = CarWash.objects.create(**ps)
@@ -143,7 +144,7 @@ class CarWashBase(object):
         return CarWash.objects.filter(name__contains=name, state=state)
 
     def modify_car_wash(self, car_wash_id, city_id, district_id, name, business_hours, tel, addr,
-                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs,
+                        lowest_sale_price, lowest_origin_price, longitude, latitude, imgs, cover,
                         wash_type=0, des=None, note=None, sort_num=0, state=True, company_id=None):
         if not car_wash_id:
             return 99800, dict_err.get(99800)
@@ -163,7 +164,7 @@ class CarWashBase(object):
 
         ps = dict(city_id=city_id, district_id=district_id, name=name, business_hours=business_hours, tel=tel, addr=addr, des=des,
                   lowest_sale_price=lowest_sale_price, lowest_origin_price=lowest_origin_price, longitude=longitude, latitude=latitude, imgs=imgs,
-                  wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
+                  cover=cover, wash_type=wash_type, note=note, sort_num=sort_num, state=state, company_id=company_id)
 
         old_company_id = obj.company.id if obj.company else None
 
@@ -312,6 +313,9 @@ class ServicePriceBase(object):
     def remove_service_price(self, price_id):
         if not price_id:
             return 99800, dict_err.get(99800)
+
+        if Order.objects.filter(service_price__id=price_id).count() > 0:
+            return 20109, dict_err.get(20109)
 
         try:
             ServicePrice.objects.get(id=price_id).delete()
@@ -605,9 +609,9 @@ class CouponBase(object):
         coupons = Coupon.objects.filter(user_id=user_id, state=1)
         datas = []
         for coupon in coupons:
-            if coupon.check_is_expiry():
+            if not coupon.check_is_expiry():
                 datas.append(coupon)
-        return coupons
+        return datas
 
     def search_coupons_for_admin(self, car_wash_name, nick, state=None):
 
@@ -1171,6 +1175,63 @@ class CompanyBase(object):
         obj = self.get_company_by_id(company_id)
         obj.car_wash_count = count
         obj.save()
+
+
+    def batch_save_price(self, company_id, service_type_id, sale_price, origin_price, clear_price, sort_num=0):
+        
+        count = 0
+        total = 0
+
+        obj = self.get_company_by_id(company_id)
+        if not obj:
+            return 20502, dict_err.get(20502)
+
+        for car_wash in CarWash.objects.filter(company__id=company_id):
+
+            total += 1
+
+            flag, msg = ServicePriceBase().add_service_price(car_wash, service_type_id, sale_price, origin_price, clear_price, sort_num)
+            
+            if flag == 0:
+                count += 1
+
+        return 0, u"共处理[ %s ]家洗车行,成功[ %s ]家" % (total, count)
+
+
+    def batch_save_info(self, company_id, business_hours, lowest_sale_price, lowest_origin_price, imgs, des, note):
+        
+        count = 0
+        total = 0
+
+        obj = self.get_company_by_id(company_id)
+        if not obj:
+            return 20502, dict_err.get(20502)
+
+        for car_wash in CarWash.objects.filter(company__id=company_id):
+
+            total += 1
+
+            if business_hours:
+                car_wash.business_hours = business_hours
+            if lowest_sale_price:
+                car_wash.lowest_sale_price = lowest_sale_price
+            if lowest_origin_price:
+                car_wash.lowest_origin_price = lowest_origin_price
+            if imgs:
+                car_wash.imgs = imgs
+            if des:
+                car_wash.des = des
+            if note:
+                car_wash.note = note
+
+            try:
+                car_wash.save()
+                count += 1
+            except Exception:
+                continue
+
+        return 0, u"共处理[ %s ]家洗车行,成功[ %s ]家" % (total, count)
+
 
 
 class CompanyManagerBase(object):

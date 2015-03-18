@@ -10,6 +10,8 @@ urlpatterns = patterns('www.admin.views',
 # 用户
 urlpatterns += patterns('www.admin.views_user',
 
+                        url(r'^user/user/change_pwd$', 'change_pwd'),
+                        url(r'^user/user/add_user$', 'add_user'),
                         url(r'^user/user/get_user_by_nick$', 'get_user_by_nick'),
                         url(r'^user/user/modify_user$', 'modify_user'),
                         url(r'^user/user/get_user_by_id$', 'get_user_by_id'),
@@ -191,4 +193,16 @@ urlpatterns += patterns('www.admin.views_company_manager',
                         url(r'^company/manager/get_manager_by_id$', 'get_manager_by_id'),
                         url(r'^company/manager/search$', 'search'),
                         url(r'^company/manager$', 'manager'),
+                        )
+
+# 公司旗下洗车行服务价格管理
+urlpatterns += patterns('www.admin.views_company_batch_price',
+                        url(r'^company/batch_price/save_price$', 'save_price'),
+                        url(r'^company/batch_price$', 'batch_price'),
+                        )
+
+# 公司旗下洗车行服务价格管理
+urlpatterns += patterns('www.admin.views_company_batch_info',
+                        url(r'^company/batch_info/save_info$', 'save_info'),
+                        url(r'^company/batch_info$', 'batch_info'),
                         )

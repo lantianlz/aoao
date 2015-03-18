@@ -22,10 +22,11 @@ PERMISSIONS = [
     {'code': 'cancel_admin', 'name': u'取消管理员', 'parent': 'permission_manage'},
 
     {'code': 'user_manage', 'name': u'用户管理', 'parent': None},
-    #{'code': 'add_user', 'name': u'添加用户', 'parent': 'user_manage'},
+    {'code': 'add_user', 'name': u'添加用户', 'parent': 'user_manage'},
     {'code': 'query_user', 'name': u'查询用户', 'parent': 'user_manage'},
     {'code': 'modify_user', 'name': u'修改用户', 'parent': 'user_manage'},
     {'code': 'remove_user', 'name': u'删除用户', 'parent': 'user_manage'},
+    {'code': 'change_pwd', 'name': u'修改用户密码', 'parent': 'user_manage'},
 
     {'code': 'city_manage', 'name': u'城市管理', 'parent': None},
     #{'code': 'add_city', 'name': u'添加城市', 'parent': 'city_manage'},
@@ -104,4 +105,8 @@ PERMISSIONS = [
     {'code': 'query_company_manager', 'name': u'查询公司管理员', 'parent': 'company_manager_manage'},
     {'code': 'add_company_manager', 'name': u'添加公司管理员', 'parent': 'company_manager_manage'},
     {'code': 'remove_company_manager', 'name': u'删除公司管理员', 'parent': 'company_manager_manage'},
+
+    {'code': 'company_batch_manage', 'name': u'公司批量处理管理', 'parent': None},
+    {'code': 'batch_save_info', 'name': u'批量修改洗车行信息', 'parent': 'company_batch_manage'},
+    {'code': 'batch_save_price', 'name': u'批量修改服务价格', 'parent': 'company_batch_manage'},
 ]

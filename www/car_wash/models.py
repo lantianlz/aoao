@@ -12,6 +12,7 @@ class Company(models.Model):
     name = models.CharField(max_length=32, unique=True)
     car_wash_count = models.IntegerField(default=0)  # 旗下洗车行数量
 
+
 class CompanyManager(models.Model):
 
     company = models.ForeignKey("Company")
@@ -20,6 +21,7 @@ class CompanyManager(models.Model):
 
     class Meta:
         unique_together = [("company", "user_id"), ]
+
 
 class CarWash(models.Model):
 
@@ -43,6 +45,7 @@ class CarWash(models.Model):
     note = models.TextField(null=True)   # 温馨提示，使用提醒
     lowest_sale_price = models.FloatField(db_index=True)  # 最低售价
     lowest_origin_price = models.FloatField()  # 最低原价
+    cover = models.CharField(max_length=256, null=True)  # 封面
     imgs = models.TextField(null=True)  # 多张轮播图融为一个字段
     rating = models.IntegerField(default=0, db_index=True)  # 评分
     order_count = models.IntegerField(default=0, db_index=True)  # 订单数量
@@ -70,11 +73,13 @@ class CarWash(models.Model):
         return self.lowest_origin_price - self.lowest_sale_price
 
     def get_cover(self):
-        self.imgs = self.imgs or ""
         tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
-        imgs = tag_img.findall(self.imgs)
+        cover = self.cover or self.imgs
+        cover = cover or ""
+        imgs = tag_img.findall(cover)
         if imgs:
             return imgs[0]
+
         return '%simg/default_car_wash_100.png' % settings.MEDIA_URL
 
     def get_imgs(self):

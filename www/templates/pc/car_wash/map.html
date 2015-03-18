@@ -235,7 +235,7 @@ $(document).ready(function(){
         </li>
         {% endfor %}
     </ul>
-    <ul class="list-group">
+    <ul class="list-group h pb-50" style="overflow-y: auto">
         {% for car_wash in car_washs %}
         <a class="list-group-item border-left-0 border-right-0 bgc-f8f8f8" data-car_wash_id="{{car_wash.id}}" data-car_wash_longitude="{{car_wash.longitude}}" data-car_wash_latitude="{{car_wash.latitude}}" href="/car_wash/{{car_wash.id}}" target="_blank">
             <div class="row pr">
