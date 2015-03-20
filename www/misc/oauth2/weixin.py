@@ -41,8 +41,13 @@ class Consumer(object):
 
         access_token_url = ('%(api_url)s/sns/oauth2/access_token?grant_type=%(grant_type)s&'
                             'appid=%(appid)s&secret=%(client_secret)s&code=%(code)s') % self.dict_format
+        for i in range(3):
+            try:
+                rep = requests.get(access_token_url, timeout=5, verify=False)
+                break
+            except:
+                pass
 
-        rep = requests.get(access_token_url, timeout=30, verify=False)
         content = rep.text
         dict_result = json.loads(content)
         return dict_result

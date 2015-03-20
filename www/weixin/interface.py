@@ -181,7 +181,14 @@ class WexinBase(object):
 
         access_token = self.get_weixin_access_token(app_key)
         url = '%s/cgi-bin/message/custom/send?access_token=%s' % (weixin_api_url, access_token)
-        r = requests.post(url, data=data, timeout=30, verify=False)
+
+        for i in range(3):
+            try:
+                r = requests.post(url, data=data, timeout=5, verify=False)
+                break
+            except:
+                pass
+
         r.raise_for_status()
         content = json.loads(r.content)
         logging.error('send msg to weixin resp is %s' % (content,))
