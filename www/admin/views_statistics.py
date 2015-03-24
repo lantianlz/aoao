@@ -63,3 +63,7 @@ def get_active_user(request):
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
         mimetype='application/json'
     )
+
+@verify_permission('')
+def register_user(request, template_name='pc/admin/statistics_register_user.html'):
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))

@@ -39,6 +39,7 @@ a:focus {outline: none;-moz-outline: none;}
 .f40{font-size: 40px;}
 .f45{font-size: 45px;}
 .f50{font-size: 50px;}
+.f55{font-size: 55px;}
 .f60{font-size: 60px;}
 .f65{font-size: 65px;}
 .f70{font-size: 70px;}
@@ -289,7 +290,11 @@ a:focus {outline: none;-moz-outline: none;}
 
 .z99{
 	z-index: 99;
-} 
+}
+
+.z100{
+  z-index: 100;
+}
 
 .btn-orange{
 	color: #fff;
