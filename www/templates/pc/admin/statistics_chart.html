@@ -1,7 +1,7 @@
 {% extends "pc/base/base_admin.html" %}
 {% load custom_tags %}
 {% load custom_filters %}
-{% block title %}注册用户统计{% endblock %}
+{% block title %}图表统计{% endblock %}
 
 {% block base_css %}
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/animate/animate.min.css" />
@@ -59,15 +59,28 @@ require(
     function(ec){
         echarts = ec;
         
-        registerCountChart();
-        todayRegisterCountChart();
-        todayOrderCountChart();
-        todayBalanceChart();
+        // registerCountChart();
+        // todayRegisterCountChart();
+        // todayOrderCountChart();
+        // todayBalanceChart();
     }
 );
 
 var echarts,
-    registerCountChart = function(){
+
+    calculatePercent = function(length){
+        if(length <= 90){
+            return 0;
+        } else if(90 < length && length <= 180){
+            return 25;
+        } else if(180 < length && length <= 270){
+            return 50;
+        } else if(270 < length && length <= 360){
+            return 75;
+        }
+    },
+
+    registerCountChart = function(xData, yData){
         var main = echarts.init(document.getElementById('register-count-chart'));
 
         main.setOption({
@@ -92,18 +105,27 @@ var echarts,
             toolbox: {
                 show: false
             },
+            dataZoom : {
+                show : true,
+                realtime : true,
+                start : calculatePercent(xData.length),
+                end : 100,
+                handleColor: 'rgba(230, 106, 93, 0.8)',
+                fillerColor: 'rgba(230, 106, 93, 0.2)'
+            },
             calculable: false,
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: [
-                    '01-01', '01-02', '01-03', '01-04', '01-05',
-                    '01-06', '01-07', '01-08', '01-09', '01-10',
-                    '01-11', '01-12', '01-13', '01-14', '01-15',
-                    '01-16', '01-17', '01-18', '01-19', '01-20',
-                    '01-21', '01-22', '01-23', '01-24', '01-25',
-                    '01-26', '01-27', '01-28', '01-29', '01-30'
-                ],
+                // data: [
+                //     '01-01', '01-02', '01-03', '01-04', '01-05',
+                //     '01-06', '01-07', '01-08', '01-09', '01-10',
+                //     '01-11', '01-12', '01-13', '01-14', '01-15',
+                //     '01-16', '01-17', '01-18', '01-19', '01-20',
+                //     '01-21', '01-22', '01-23', '01-24', '01-25',
+                //     '01-26', '01-27', '01-28', '01-29', '01-30'
+                // ],
+                data: xData,
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -152,19 +174,20 @@ var echarts,
                         }
                     }
                 },
-                data: [
-                    '122', '135', '148', '151', '169',
-                    '188', '201', '249', '253', '287',
-                    '365', '399', '421', '466', '574',
-                    '425', '682', '324', '151', '169',
-                    '457', '201', '125', '774', '569',
-                    '224', '423', '220', '124', '856'
-                ]
+                // data: [
+                //     '122', '135', '148', '151', '169',
+                //     '188', '201', '249', '253', '287',
+                //     '365', '399', '421', '466', '574',
+                //     '425', '682', '324', '151', '169',
+                //     '457', '201', '125', '774', '569',
+                //     '224', '423', '220', '124', '856'
+                // ]
+                data: yData
             }]
         });
     },
 
-    todayRegisterCountChart = function(){
+    todayRegisterCountChart = function(xData, yData){
         var main = echarts.init(document.getElementById('today-register-count-chart'));
         
         main.setOption({
@@ -181,7 +204,7 @@ var echarts,
                       type: 'solid'
                     }
                 },
-                formatter: '{b}<br />{a}: {c} '
+                formatter: '今日 {b} 点<br />{a}: {c} '
             },
             legend: {
                 data:['用户数']
@@ -193,11 +216,12 @@ var echarts,
             xAxis : [{
                 type: 'category',
                 boundaryGap: false,
-                data: [
-                    '01-01', '01-02', '01-03', '01-04', '01-05',
-                    '01-06', '01-07', '01-08', '01-09', '01-10',
-                    '01-11', '01-12', '01-13', '01-14', '01-15'
-                ],
+                // data: [
+                //     '01-01', '01-02', '01-03', '01-04', '01-05',
+                //     '01-06', '01-07', '01-08', '01-09', '01-10',
+                //     '01-11', '01-12', '01-13', '01-14', '01-15'
+                // ],
+                data: xData,
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -246,16 +270,17 @@ var echarts,
                         }
                     }
                 },
-                data: [
-                    '25', '14', '19', '32', '22',
-                    '23', '12', '8', '21', '16',
-                    '13', '32', '49', '22', '17'
-                ]
+                // data: [
+                //     '25', '14', '19', '32', '22',
+                //     '23', '12', '8', '21', '16',
+                //     '13', '32', '49', '22', '17'
+                // ]
+                data: yData
             }]
         });
     },
 
-    todayOrderCountChart = function(){
+    todayOrderCountChart = function(xData, yData){
         var main = echarts.init(document.getElementById('today-order-count-chart'));
         
         main.setOption({
@@ -284,11 +309,12 @@ var echarts,
             xAxis : [{
                 type: 'category',
                 boundaryGap: true,
-                data: [
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                    '10', '11', '12', '13', '14', '15', '16', '17', '18',
-                    '19', '20', '21', '22', '23'
-                ],
+                // data: [
+                //     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                //     '10', '11', '12', '13', '14', '15', '16', '17', '18',
+                //     '19', '20', '21', '22', '23'
+                // ],
+                data: xData,
                 axisLine: {
                     show: true,
                     lineStyle: {
@@ -329,18 +355,19 @@ var echarts,
             series : [{
                 name: '订单数',
                 type: 'bar',
-                data: [
-                    '12', '8', '10', '3', '2',
-                    '18', '35', '38', '39', '55',
-                    '98', '100', '121', '85', '79',
-                    '88', '102', '130', '80', '40',
-                    '42', '30', '28', '10'
-                ]
+                // data: [
+                //     '12', '8', '10', '3', '2',
+                //     '18', '35', '38', '39', '55',
+                //     '98', '100', '121', '85', '79',
+                //     '88', '102', '130', '80', '40',
+                //     '42', '30', '28', '10'
+                // ]
+                data: yData
             }]
         });
     },
 
-    todayBalanceChart = function(){
+    todayBalanceChart = function(xData, yData){
         var main = echarts.init(document.getElementById('today-balance-chart'));
         
         main.setOption({
@@ -369,11 +396,12 @@ var echarts,
             xAxis : [{
                 type: 'category',
                 boundaryGap: true,
-                data: [
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                    '10', '11', '12', '13', '14', '15', '16', '17', '18',
-                    '19', '20', '21', '22', '23'
-                ],
+                // data: [
+                //     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                //     '10', '11', '12', '13', '14', '15', '16', '17', '18',
+                //     '19', '20', '21', '22', '23'
+                // ],
+                data: xData,
                 axisLine: {
                     show: true,
                     lineStyle: {
@@ -414,13 +442,14 @@ var echarts,
             series : [{
                 name: '订单金额(元)',
                 type: 'bar',
-                data: [
-                    '12', '8', '10', '3', '2',
-                    '18', '35', '38', '39', '55',
-                    '98', '100', '121', '85', '79',
-                    '88', '102', '130', '80', '40',
-                    '42', '30', '28', '10'
-                ]
+                // data: [
+                //     '12', '8', '10', '3', '2',
+                //     '18', '35', '38', '39', '55',
+                //     '98', '100', '121', '85', '79',
+                //     '88', '102', '130', '80', '40',
+                //     '42', '30', '28', '10'
+                // ]
+                data: yData
             }]
         });
     };
@@ -429,10 +458,14 @@ $(document).ready(function(){
     
     var sheepVoice = $('#sheep-voice')[0],
         moneyVoice = $('#money-voice')[0],
-        registerCount = new countUp("register-count"),
-        todayRegisterCount = new countUp("today-register-count", 0, 32).start(),
-        todayOrderCount = new countUp("today-order-count", 0, 68).start(),
-        todayBalance = new countUp("today-balance", 0, 885.42, 2).start(),
+        register = "",
+        registerCount = new countUp("register-count", 0),
+        todayRegister = "",
+        todayRegisterCount = new countUp("today-register-count", 0),
+        todayOrder = "",
+        todayOrderCount = new countUp("today-order-count", 0),
+        todayBalance = "",
+        todayBalanceCount = new countUp("today-balance", 0, 0, 2),
         // 自动切换图表
         autoChangeCard = function(){
             var index = 0, cards = $('.card');
@@ -444,26 +477,103 @@ $(document).ready(function(){
             });
 
             cards.eq(index).click();
+        },
+        playVoice = function(personCount, orderCount){
+            // 如果人数有变化
+            if(personCount !== register){
+                sheepVoice.src = sheepVoice.src;
+                sheepVoice.play();
+                return;
+            }
+
+            // 如果钱有变化
+            if(orderCount !== todayOrder){
+                moneyVoice.src = moneyVoice.src;
+                moneyVoice.play();
+            }
+        },
+        ajaxRefreshData = function(){
+            ajaxSend(
+                "/admin/statistics/get_chart_data", 
+                {}, 
+                function(data){
+                    
+                    // 播放声音
+                    playVoice(data['register_count'], data['today_order_count']);
+
+                    // 绘制图表
+                    refreshRegisterData(data['register_count'], data['register_count_chart_data']);
+                    refreshTodayRegisterData(data['today_register_count'], data['today_register_count_chart_data']);
+                    refreshTodayOrderData(data['today_order_count'], data['today_order_count_chart_data']);
+                    refreshTodayBalanceData(data['today_balance'], data['today_balance_chart_data']);
+                }
+            );
+        },
+        // 设置总注册用户数
+        refreshRegisterData = function(count, chartData){
+
+            if(register !== count){
+                // 控制图表
+                registerCountChart(chartData[0], chartData[1]);
+
+                // 控制数字
+                registerCount.startVal = register;
+                registerCount.endVal = count;
+                registerCount.start();
+
+                register = count;
+            }
+
+        },
+        // 设置今日注册用户数
+        refreshTodayRegisterData = function(count, chartData){
+            
+            if(todayRegister !== count){
+                // 控制图表
+                todayRegisterCountChart(chartData[0], chartData[1]);
+
+                // 控制数字
+                todayRegisterCount.startVal = todayRegister;
+                todayRegisterCount.endVal = count;
+                todayRegisterCount.start();
+
+                todayRegister = count;
+            }
+
+        },
+        // 设置今日订单数
+        refreshTodayOrderData = function(count, chartData){
+            
+            if(todayOrder !== count){
+                // 控制图表
+                todayOrderCountChart(chartData[0], chartData[1]);
+
+                // 控制数字
+                todayOrderCount.startVal = todayOrder;
+                todayOrderCount.endVal = count;
+                todayOrderCount.start();
+
+                todayOrder = count;
+            }
+
+        },
+        // 设置今日订单总额
+        refreshTodayBalanceData = function(count, chartData){
+            
+            if(todayBalance !== count){
+                // 控制图表
+                todayBalanceChart(chartData[0], chartData[1]);
+
+                // 控制数字
+                todayBalanceCount.startVal = todayBalance;
+                todayBalanceCount.endVal = count;
+                todayBalanceCount.start();
+
+                todayBalance = count;
+            }
+
         };
 
-    var c = 1024;
-    
-    registerCount.startVal = 0;
-    registerCount.endVal = c;
-    registerCount.start();
-    window.setInterval(function(){
-
-        registerCount.reset();
-        registerCount.startVal = c;
-        c += Math.round(Math.random() * 30 + 3);
-        registerCount.endVal = c;
-        registerCount.start();
-        
-        // 播放声音
-        sheepVoice.src = sheepVoice.src;
-        // sheepVoice.play();
-
-    }, 5000);
 
     // 点击卡片
     $('.card').bind('click', function(){
@@ -482,8 +592,14 @@ $(document).ready(function(){
         $('#' + $(this).data('chart')).css({'opacity': 1, 'z-index': 100}).addClass("rollIn");
     });
 
-    // 每隔13秒自动切换图表
+    // 每隔 13 秒自动切换图表
     window.setInterval(autoChangeCard, 13000);
+    // 每隔 60 秒获取一次数据
+    window.setInterval(ajaxRefreshData, 60*1000);
+
+    // 第一次加载数据
+    window.setTimeout(ajaxRefreshData, 1000);
+    
 });
 
 </script>

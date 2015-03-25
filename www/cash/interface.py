@@ -328,3 +328,45 @@ class CashOrderBase(object):
             debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
+
+
+    def get_toady_count_group_by_create_time(self):
+        '''
+        查询当天订单数量 按创建时间分组
+        数据格式：
+        [09, 15], [10, 23]
+        '''
+        sql = """
+            select DATE_FORMAT(create_time, "%%H"), COUNT(*) 
+            from www_aoaoxc.cash_cashorder 
+            where %s <= create_time and create_time <= %s
+            group by DATE_FORMAT(create_time, "%%H")
+        """
+        now = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        from django.db import connections
+        cursor = connections['default'].cursor()
+        cursor.execute(sql, [now + ' 00:00:00', now + ' 23:59:59'])
+        result = cursor.fetchall()
+        return result
+
+
+    def get_toady_balance_group_by_create_time(self):
+        '''
+        查询当天订单金额 按创建时间分组
+        数据格式：
+        [09, 50.00], [10, 59.00]
+        '''
+        sql = """
+            select DATE_FORMAT(create_time, "%%H"), sum(total_fee) 
+            from www_aoaoxc.cash_cashorder 
+            where %s <= create_time and create_time <= %s
+            group by DATE_FORMAT(create_time, "%%H")
+        """
+        now = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        from django.db import connections
+        cursor = connections['default'].cursor()
+        cursor.execute(sql, [now + ' 00:00:00', now + ' 23:59:59'])
+        result = cursor.fetchall()
+        return result

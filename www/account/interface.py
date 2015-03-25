@@ -642,6 +642,48 @@ class UserBase(object):
         return 0, dict_err.get(0)
 
 
+    def get_count_group_by_create_time(self, count=360):
+        '''
+        查询用户数量 按创建时间分组
+        数据格式：
+        [2014-01-01, 15], [2014-01-02, 23]
+        '''
+        sql = """
+            select DATE_FORMAT(create_time, "%%Y-%%m-%%d"), COUNT(*) 
+            from account_aoaoxc.account_user 
+            group by DATE_FORMAT(create_time, "%%Y-%%m-%%d")
+            limit 0, %s
+        """
+        
+        from django.db import connections
+        cursor = connections['account'].cursor()
+        cursor.execute(sql, [count])
+        result = cursor.fetchall()
+        return result
+
+
+    def get_toady_count_group_by_create_time(self):
+        '''
+        查询当天用户数量 按创建时间分组
+        数据格式：
+        [09, 15], [10, 23]
+        '''
+        sql = """
+            select DATE_FORMAT(create_time, "%%H"), COUNT(*) 
+            from account_aoaoxc.account_user 
+            where %s <= create_time and create_time <= %s
+            group by DATE_FORMAT(create_time, "%%H")
+        """
+        now = datetime.datetime.now().strftime('%Y-%m-%d')
+        # now = '2015-01-23'
+
+        from django.db import connections
+        cursor = connections['account'].cursor()
+        cursor.execute(sql, [now + ' 00:00:00', now + ' 23:59:59'])
+        result = cursor.fetchall()
+        return result
+
+
 def user_profile_required(func):
     '''
     @note: 访问用户控件装饰器

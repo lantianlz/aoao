@@ -65,5 +65,69 @@ def get_active_user(request):
     )
 
 @verify_permission('')
-def register_user(request, template_name='pc/admin/statistics_register_user.html'):
+def chart(request, template_name='pc/admin/statistics_chart.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+def get_chart_data(request):
+    from account.interface import UserBase
+    from cash.interface import CashOrderBase
+
+    #=================== 获取总注册用户数的数据
+    register_x_data = []
+    register_y_data = []
+    data_length = 360
+    register_count_data = dict(UserBase().get_count_group_by_create_time(data_length))
+    
+    for i in range(data_length):
+        temp_date = datetime.datetime.now().date() - datetime.timedelta(data_length-i)
+        temp_date = temp_date.strftime('%Y-%m-%d')
+        register_x_data.append(temp_date)
+        register_y_data.append(register_count_data.get(temp_date, 0))
+    
+
+    #=================== 获取今日注册用户数的数据
+    today_register_x_data = []
+    today_register_y_data = []
+    today_register_data = dict(UserBase().get_toady_count_group_by_create_time())
+    
+    for i in range(24):
+        temp_hour = '%02d' % i
+        today_register_x_data.append(temp_hour)
+        today_register_y_data.append(today_register_data.get(temp_hour, 0))
+
+
+    #=================== 获取今日订单数的数据
+    today_order_x_data = []
+    today_order_y_data = []
+    today_order_data = dict(CashOrderBase().get_toady_count_group_by_create_time())
+    
+    for i in range(24):
+        temp_hour = '%02d' % i
+        today_order_x_data.append(temp_hour)
+        today_order_y_data.append(today_order_data.get(temp_hour, 0))
+
+
+    #=================== 获取今日订单总额的数据
+    today_balance_x_data = []
+    today_balance_y_data = []
+    today_balance_data = dict(CashOrderBase().get_toady_balance_group_by_create_time())
+    
+    for i in range(24):
+        temp_hour = '%02d' % i
+        today_balance_x_data.append(temp_hour)
+        today_balance_y_data.append(today_balance_data.get(temp_hour, 0))
+
+
+    return HttpResponse(
+        json.dumps({
+            'register_count': UserBase().get_all_users().count(),
+            'register_count_chart_data': [register_x_data, register_y_data],
+            'today_register_count': sum(today_register_data.values()),
+            'today_register_count_chart_data': [today_register_x_data, today_register_y_data],
+            'today_order_count': sum(today_order_data.values()),
+            'today_order_count_chart_data': [today_order_x_data, today_order_y_data],
+            'today_balance': sum(today_balance_data.values()),
+            'today_balance_chart_data': [today_balance_x_data, today_balance_y_data]
+        }),
+        mimetype='application/json'
+    ) 
