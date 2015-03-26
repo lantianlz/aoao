@@ -116,7 +116,7 @@ def get_chart_data(request):
     for i in range(24):
         temp_hour = '%02d' % i
         today_balance_x_data.append(temp_hour)
-        today_balance_y_data.append(today_balance_data.get(temp_hour, 0))
+        today_balance_y_data.append(float(today_balance_data.get(temp_hour, 0)))
 
 
     #=================== 获取缓存增量

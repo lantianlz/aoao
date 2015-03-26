@@ -338,7 +338,7 @@ class CashOrderBase(object):
         '''
         sql = """
             select DATE_FORMAT(create_time, "%%H"), COUNT(*) 
-            from www_aoaoxc.cash_cashorder 
+            from www_aoaoxc.car_wash_order 
             where %s <= create_time and create_time <= %s
             group by DATE_FORMAT(create_time, "%%H")
         """
@@ -359,7 +359,7 @@ class CashOrderBase(object):
         '''
         sql = """
             select DATE_FORMAT(create_time, "%%H"), sum(total_fee) 
-            from www_aoaoxc.cash_cashorder 
+            from www_aoaoxc.car_wash_order 
             where %s <= create_time and create_time <= %s
             group by DATE_FORMAT(create_time, "%%H")
         """
