@@ -85,7 +85,7 @@ var echarts,
 
         main.setOption({
             title: {
-                text: '注册总用户数'
+                text: '总用户数'
             },
             tooltip: {
                 trigger: 'axis',
@@ -192,7 +192,7 @@ var echarts,
         
         main.setOption({
             title: {
-                text: '今日注册用户数'
+                text: '今日新增用户数'
             },
             tooltip : {
                 trigger: 'axis',
@@ -372,7 +372,7 @@ var echarts,
         
         main.setOption({
             title: {
-                text: '今日订单金额'
+                text: '今日订单总金额'
             },
             tooltip : {
                 trigger: 'axis',
@@ -630,11 +630,11 @@ $(document).ready(function(){
     <div class="container">
         <div class="row co5 text-center pl-80">
             <div class="col-md-4 pt-45 h200 bdr-1 card active" data-chart="register-count-chart">
-                <div class="f16 pb-5">注册总用户数</div>
+                <div class="f16 pb-5">总用户数</div>
                 <div class="f60" id="register-count">0</div>
             </div>
             <div class="col-md-2 pt-45 h200 bdr-1 card" data-chart="today-register-count-chart">
-                <div class="f16 pb-5">今日注册用户数</div>
+                <div class="f16 pb-5">今日新增用户数</div>
                 <div class="f60" id="today-register-count">0</div>
             </div>
             <div class="col-md-2 pt-45 h200 bdr-1 card" data-chart="today-order-count-chart">
@@ -642,7 +642,7 @@ $(document).ready(function(){
                 <div class="f60" id="today-order-count">0</div>
             </div>
             <div class="col-md-3 pt-45 h200 card pl-0 pr-0" data-chart="today-balance-chart">
-                <div class="f16 pb-5">今日订单金额</div>
+                <div class="f16 pb-5">今日订单总金额</div>
                 <div>
                     <i class="fa fa-rmb f55"></i>
                     <span class="f60" id="today-balance">0.00</span>
