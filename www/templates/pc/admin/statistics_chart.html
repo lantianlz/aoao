@@ -465,7 +465,7 @@ $(document).ready(function(){
         todayOrder = "",
         todayOrderCount = new countUp("today-order-count", 0),
         todayBalance = "",
-        todayBalanceCount = new countUp("today-balance", 0, 0, 2),
+        todayBalanceCount = new countUp("today-balance", 0),
         // 自动切换图表
         autoChangeCard = function(){
             var index = 0, cards = $('.card');
@@ -643,7 +643,7 @@ $(document).ready(function(){
                 <div class="f16 pb-5">今日订单总金额</div>
                 <div>
                     <i class="fa fa-rmb f55"></i>
-                    <span class="f60" id="today-balance">0.00</span>
+                    <span class="f60" id="today-balance">0</span>
                 </div>
             </div>
         </div>
