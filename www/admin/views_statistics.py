@@ -9,7 +9,7 @@ from django.conf import settings
 
 from www.misc.decorators import staff_required, common_ajax_response, verify_permission
 from www.misc import qiniu_client
-from common import utils, page
+from common import utils, page, cache
 from www.custom_tags.templatetags.custom_filters import str_display
 
 from www.account.interface import UserBase, ExternalTokenBase
@@ -118,15 +118,25 @@ def get_chart_data(request):
         today_balance_y_data.append(today_balance_data.get(temp_hour, 0))
 
 
+    #=================== 获取缓存增量
+    cache_obj = cache.Cache(cache.CACHE_STATIC)
+    cache_str = cache_obj.get('statistics_chart') or '0,0,0,0'
+    cache_str = cache_str.split(',')
+
+    register_cache = int(cache_str[0].strip()) 
+    today_register_cache = int(cache_str[1].strip()) 
+    today_order_cache = int(cache_str[2].strip()) 
+    today_balance_cache = int(cache_str[3].strip())
+
     return HttpResponse(
         json.dumps({
-            'register_count': UserBase().get_all_users().count(),
+            'register_count': UserBase().get_all_users().count() + register_cache,
             'register_count_chart_data': [register_x_data, register_y_data],
-            'today_register_count': sum(today_register_data.values()),
+            'today_register_count': sum(today_register_data.values()) + today_register_cache,
             'today_register_count_chart_data': [today_register_x_data, today_register_y_data],
-            'today_order_count': sum(today_order_data.values()),
+            'today_order_count': sum(today_order_data.values()) + today_order_cache,
             'today_order_count_chart_data': [today_order_x_data, today_order_y_data],
-            'today_balance': sum(today_balance_data.values()),
+            'today_balance': sum(today_balance_data.values()) + today_balance_cache,
             'today_balance_chart_data': [today_balance_x_data, today_balance_y_data]
         }),
         mimetype='application/json'
