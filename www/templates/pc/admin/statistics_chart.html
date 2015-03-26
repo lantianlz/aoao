@@ -517,6 +517,7 @@ $(document).ready(function(){
                 registerCountChart(chartData[0], chartData[1]);
 
                 // 控制数字
+                registerCount.reset();
                 registerCount.startVal = register;
                 registerCount.endVal = count;
                 registerCount.start();
@@ -533,6 +534,7 @@ $(document).ready(function(){
                 todayRegisterCountChart(chartData[0], chartData[1]);
 
                 // 控制数字
+                todayRegisterCount.reset();
                 todayRegisterCount.startVal = todayRegister;
                 todayRegisterCount.endVal = count;
                 todayRegisterCount.start();
@@ -549,6 +551,7 @@ $(document).ready(function(){
                 todayOrderCountChart(chartData[0], chartData[1]);
 
                 // 控制数字
+                todayOrderCount.reset();
                 todayOrderCount.startVal = todayOrder;
                 todayOrderCount.endVal = count;
                 todayOrderCount.start();
@@ -565,6 +568,7 @@ $(document).ready(function(){
                 todayBalanceChart(chartData[0], chartData[1]);
 
                 // 控制数字
+                todayBalanceCount.reset();
                 todayBalanceCount.startVal = todayBalance;
                 todayBalanceCount.endVal = count;
                 todayBalanceCount.start();
@@ -592,8 +596,8 @@ $(document).ready(function(){
         $('#' + $(this).data('chart')).css({'opacity': 1, 'z-index': 100}).addClass("rollIn");
     });
 
-    // 每隔 13 秒自动切换图表
-    window.setInterval(autoChangeCard, 13000);
+    // 每隔 33 秒自动切换图表
+    window.setInterval(autoChangeCard, 33000);
     // 每隔 60 秒获取一次数据
     window.setInterval(ajaxRefreshData, 60*1000);
 
