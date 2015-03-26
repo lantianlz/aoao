@@ -68,6 +68,7 @@ def get_active_user(request):
 def chart(request, template_name='pc/admin/statistics_chart.html'):
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
+@verify_permission('statistics_active_user')
 def get_chart_data(request):
     from account.interface import UserBase
     from cash.interface import CashOrderBase
