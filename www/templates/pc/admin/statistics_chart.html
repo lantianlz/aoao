@@ -481,14 +481,12 @@ $(document).ready(function(){
         playVoice = function(personCount, orderCount){
             // 如果人数有变化
             if(personCount !== register){
-                sheepVoice.src = sheepVoice.src;
                 sheepVoice.play();
                 return;
             }
 
             // 如果钱有变化
             if(orderCount !== todayOrder){
-                moneyVoice.src = moneyVoice.src;
                 moneyVoice.play();
             }
         },
