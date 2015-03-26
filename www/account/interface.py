@@ -7,7 +7,7 @@ from django.db import transaction
 from django.utils.encoding import smart_unicode
 from django.conf import settings
 
-from common import utils, debug, validators, cache
+from common import utils, debug, validators, cache, raw_sql
 from www.misc.decorators import cache_required
 from www.misc import consts
 from www.tasks import async_send_email
@@ -649,17 +649,13 @@ class UserBase(object):
         [2014-01-01, 15], [2014-01-02, 23]
         '''
         sql = """
-            select DATE_FORMAT(create_time, "%%Y-%%m-%%d"), COUNT(*) 
-            from account_aoaoxc.account_user 
-            group by DATE_FORMAT(create_time, "%%Y-%%m-%%d")
-            limit 0, %s
+            SELECT DATE_FORMAT(create_time, "%%Y-%%m-%%d"), COUNT(*) 
+            FROM account_aoaoxc.account_user 
+            GROUP BY DATE_FORMAT(create_time, "%%Y-%%m-%%d")
+            LIMIT 0, %s
         """
         
-        from django.db import connections
-        cursor = connections['account'].cursor()
-        cursor.execute(sql, [count])
-        result = cursor.fetchall()
-        return result
+        return raw_sql.exec_sql(sql, [count], 'account')
 
 
     def get_toady_count_group_by_create_time(self):
@@ -669,19 +665,14 @@ class UserBase(object):
         [09, 15], [10, 23]
         '''
         sql = """
-            select DATE_FORMAT(create_time, "%%H"), COUNT(*) 
-            from account_aoaoxc.account_user 
-            where %s <= create_time and create_time <= %s
-            group by DATE_FORMAT(create_time, "%%H")
+            SELECT DATE_FORMAT(create_time, "%%H"), COUNT(*) 
+            FROM account_aoaoxc.account_user 
+            WHERE %s <= create_time AND create_time <= %s
+            GROUP BY DATE_FORMAT(create_time, "%%H")
         """
         now = datetime.datetime.now().strftime('%Y-%m-%d')
-        # now = '2015-01-23'
 
-        from django.db import connections
-        cursor = connections['account'].cursor()
-        cursor.execute(sql, [now + ' 00:00:00', now + ' 23:59:59'])
-        result = cursor.fetchall()
-        return result
+        return raw_sql.exec_sql(sql, [now + ' 00:00:00', now + ' 23:59:59'], 'account')
 
 
 def user_profile_required(func):

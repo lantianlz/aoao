@@ -6,7 +6,7 @@ from django.db import transaction
 from django.conf import settings
 from decimal import Decimal
 
-from common import utils, debug
+from common import utils, debug, raw_sql
 from www.misc import consts
 from www.tasks import async_send_email
 from www.account.interface import UserBase
@@ -940,6 +940,40 @@ class OrderBase(object):
             debug.get_debug_detail_and_send_email(e)
             transaction.rollback(using=DEFAULT_DB)
             return 99900, dict_err.get(99900)
+
+
+    def get_toady_count_group_by_create_time(self):
+        '''
+        查询当天订单数量 按创建时间分组
+        数据格式：
+        [09, 15], [10, 23]
+        '''
+        sql = """
+            SELECT DATE_FORMAT(create_time, "%%H"), COUNT(*) 
+            FROM www_aoaoxc.car_wash_order 
+            WHERE %s <= create_time AND create_time <= %s 
+            GROUP BY DATE_FORMAT(create_time, "%%H")
+        """
+        now = datetime.datetime.now().strftime('%Y-%m-%d')
+        
+        return raw_sql.exec_sql(sql, [now + ' 00:00:00', now + ' 23:59:59'])
+
+
+    def get_toady_balance_group_by_create_time(self):
+        '''
+        查询当天订单金额 按创建时间分组
+        数据格式：
+        [09, 50.00], [10, 59.00]
+        '''
+        sql = """
+            SELECT DATE_FORMAT(create_time, "%%H"), SUM(total_fee) 
+            FROM www_aoaoxc.car_wash_order 
+            WHERE %s <= create_time AND create_time <= %s 
+            GROUP BY DATE_FORMAT(create_time, "%%H")
+        """
+        now = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        return raw_sql.exec_sql(sql, [now + ' 00:00:00', now + ' 23:59:59'])
 
 
 def car_wash_manager_required(func):

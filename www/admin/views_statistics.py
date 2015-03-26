@@ -71,7 +71,7 @@ def chart(request, template_name='pc/admin/statistics_chart.html'):
 @verify_permission('statistics_active_user')
 def get_chart_data(request):
     from account.interface import UserBase
-    from cash.interface import CashOrderBase
+    from car_wash.interface import OrderBase
 
     #=================== 获取总注册用户数的数据
     register_x_data = []
@@ -100,7 +100,7 @@ def get_chart_data(request):
     #=================== 获取今日订单数的数据
     today_order_x_data = []
     today_order_y_data = []
-    today_order_data = dict(CashOrderBase().get_toady_count_group_by_create_time())
+    today_order_data = dict(OrderBase().get_toady_count_group_by_create_time())
     
     for i in range(24):
         temp_hour = '%02d' % i
@@ -111,7 +111,7 @@ def get_chart_data(request):
     #=================== 获取今日订单总额的数据
     today_balance_x_data = []
     today_balance_y_data = []
-    today_balance_data = dict(CashOrderBase().get_toady_balance_group_by_create_time())
+    today_balance_data = dict(OrderBase().get_toady_balance_group_by_create_time())
     
     for i in range(24):
         temp_hour = '%02d' % i

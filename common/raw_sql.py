@@ -11,7 +11,7 @@
 from django.db import connection, connections
 
 
-def exec_sql(sql, database="default"):
+def exec_sql(sql, params=None ,database="default"):
     cursor = connections[database].cursor()
-    cursor.execute(sql)
+    cursor.execute(sql, params)
     return cursor.fetchall()
