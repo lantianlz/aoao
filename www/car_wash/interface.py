@@ -749,7 +749,7 @@ class OrderBase(object):
 
             pay_fee = total_fee - discount_fee
             user_cash = UserCashBase().get_user_cash_by_user_id(user_id)    # 是否使用账户余额
-            user_cash_fee = min(pay_fee, user_cash.balance) if use_user_cash else 0
+            user_cash_fee = min(pay_fee, float(user_cash.balance)) if use_user_cash else 0
             pay_fee = pay_fee - user_cash_fee
             trade_id = self.generate_order_trade_id(pr="W")
             pay_type = 0 if pay_fee == 0 else pay_type

@@ -53,7 +53,7 @@ $(document).ready(function(){
         } else {
             needPrice = Math.abs(price);
         }
-
+        
         $('.total-price').html(totalPrice);
         $('.need-price').html($.Global.Utils.formatPrice(needPrice));
 
@@ -63,7 +63,7 @@ $(document).ready(function(){
         } else {
             $('.pay-item').show();
         }
-        $("#page_show_pay_fee_id").val(needPrice);
+        $("#page_show_pay_fee_id").val($.Global.Utils.formatPrice(needPrice));
     };
 
     // 绑定触发支付事件
