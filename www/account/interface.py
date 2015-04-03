@@ -622,14 +622,14 @@ class UserBase(object):
         return errcode, errmsg
 
     def change_pwd_by_admin(self, user_id, pwd):
-        
+
         try:
 
             try:
                 validators.vpassword(pwd)
             except Exception, e:
                 return 99900, smart_unicode(e)
-                
+
             user = self.get_user_login_by_id(user_id)
             user.password = self.set_password(pwd)
             user.save()
@@ -640,7 +640,6 @@ class UserBase(object):
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
-
 
     def get_count_group_by_create_time(self, count=360):
         '''
@@ -654,9 +653,8 @@ class UserBase(object):
             GROUP BY DATE_FORMAT(create_time, "%%Y-%%m-%%d")
             LIMIT 0, %s
         """
-        
-        return raw_sql.exec_sql(sql, [count], 'account')
 
+        return raw_sql.exec_sql(sql, [count], 'account')
 
     def get_toady_count_group_by_create_time(self):
         '''
