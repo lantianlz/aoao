@@ -78,6 +78,11 @@ $(document).ready(function(){
     });
 
     calculatePrice();
+
+    $('form').on('submit', function(){
+        alert('弹尽，暂停运营。明天会更好，不是吗？未尽事宜请联系 15208411129 ');
+        return false;
+    });
 });
 </script>
 {% endblock %}
