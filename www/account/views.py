@@ -52,6 +52,7 @@ def login_weixin(request, template_name='pc/account/login_weixin.html'):
     wb = WexinBase()
     ticket_info = WexinBase().get_qr_code_ticket(wb.init_app_key())
     if not ticket_info:
+        raise Http404
         raise Exception, u"获取微信登陆二维码异常"
     ticket = ticket_info["ticket"]
     expire = ticket_info["expire_seconds"]
