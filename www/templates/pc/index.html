@@ -5,7 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/fullpage/jquery.fullPage.css" />
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/animate/animate.min.css" />
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/site/index.css?v={{MEDIA_VERSION}}" />
+<style type="text/css">
+    .frendlink a{
+        color: white;
+    }
 
+</style>
 {% endblock %}
 
 {% block base_js %}
@@ -232,12 +237,14 @@ $(document).ready(function(){
                     </div>
                     <div class="co5 pt-10">hz@aoaoxc.com</div>
                     <div class="co5 pt-10">成都市高新区天府软件园G区</div>
+                    <div class="co5 pt-10 frendlink"><a href="https://www.trackingmore.com/" target="_blank">国际快递查询</a></div>
                 </div>
                 <div class="col-md-4 pr pt-50 pl-100">
                     <a class="weixin" href="#"><img src="{{MEDIA_URL}}img/homepage/weixin.png"></a>
                     <a class="weibo" href="http://www.weibo.com/aoaoxc" target="_blank"><img class="pl-25" src="{{MEDIA_URL}}img/homepage/weibo.png"></a>
                     <img class="pa none qrcode" style="top: -52px; left: 80px; width: 90px;" src="{{MEDIA_URL}}img/homepage/qrcode_arrow.png">
                 </div>
+
             </div>
         </div>
     </div>
